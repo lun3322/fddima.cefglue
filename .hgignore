@@ -1,0 +1,13 @@
+relre:^build/
+relre:^chromiumembedded/tools/cefglue/
+relre:^chromiumembedded/(?!include|tools|README\.txt)
+relre:/bin/
+relre:/obj/
+relre:\.suo$
+relre:\.sdf$
+relre:\.opensdf$
+relre:\.Cache$
+relre:\.user$
+relre:\.pyc$
+relre:\.pdb/
+relre:^CefGlue.shfbproj_\w*$
