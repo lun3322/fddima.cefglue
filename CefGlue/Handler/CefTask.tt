@@ -1,0 +1,15 @@
+﻿<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefTask",
+        StructName = "cef_task_t",
+		
+		Disposable = false,
+    };
+
+    def.AddProperty("execute");
+
+    WriteHandler(def);
+#>

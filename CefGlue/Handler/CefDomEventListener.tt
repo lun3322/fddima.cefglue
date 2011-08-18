@@ -1,0 +1,13 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefDomEventListener",
+        StructName = "cef_domevent_listener_t",
+    };
+
+    def.AddProperty("handle_event");
+
+    WriteHandler(def);
+#>

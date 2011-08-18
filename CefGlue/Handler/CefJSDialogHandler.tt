@@ -1,0 +1,15 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefJSDialogHandler",
+        StructName = "cef_jsdialog_handler_t",
+    };
+
+    def.AddProperty("on_jsalert");
+    def.AddProperty("on_jsconfirm");
+    def.AddProperty("on_jsprompt");
+
+    WriteHandler(def);
+#>

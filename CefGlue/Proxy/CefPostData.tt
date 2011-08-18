@@ -1,0 +1,17 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefPostData",
+        StructName = "cef_post_data_t",
+    };
+
+    def.AddMethod("get_element_count");
+    def.AddMethod("get_elements");
+    def.AddMethod("remove_element");
+    def.AddMethod("add_element");
+    def.AddMethod("remove_elements");
+
+    WriteProxy(def);
+#>

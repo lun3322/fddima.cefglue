@@ -1,0 +1,14 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefFocusHandler",
+        StructName = "cef_focus_handler_t",
+    };
+
+    def.AddProperty("on_take_focus");
+    def.AddProperty("on_set_focus");
+
+    WriteHandler(def);
+#>

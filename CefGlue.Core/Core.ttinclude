@@ -1,0 +1,35 @@
+﻿<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #><#+
+
+    public class StructDef
+    {
+		public StructDef()
+		{
+			Name = null;
+			HasBase = true;
+			HasSize = true;
+			HasClear = false;
+		}
+		
+		public StructDef(string name)
+		{
+			Name = name;
+			HasBase = true;
+			HasSize = true;
+			HasClear = false;
+		}
+		
+        public StructDef(string name, bool hasBase = true, bool hasSize = true, bool hasClear = false)
+        {
+            Name = name;
+            HasBase = hasBase;
+            HasSize = hasSize || hasBase;
+            HasClear = hasClear;
+        }
+
+        public string Name { get; private set; }
+        public bool HasBase { get; private set; }
+        public bool HasSize { get; private set; }
+        public bool HasClear { get; private set; }
+    }
+#>

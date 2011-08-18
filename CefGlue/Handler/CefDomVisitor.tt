@@ -1,0 +1,13 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefDomVisitor",
+        StructName = "cef_domvisitor_t",
+    };
+
+    def.AddProperty("visit");
+
+    WriteHandler(def);
+#>

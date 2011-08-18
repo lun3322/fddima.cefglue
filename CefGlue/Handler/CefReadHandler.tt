@@ -1,0 +1,16 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefReadHandler",
+        StructName = "cef_read_handler_t",
+    };
+
+    def.AddProperty("read");
+    def.AddProperty("seek");
+    def.AddProperty("tell");
+    def.AddProperty("eof");
+
+    WriteHandler(def);
+#>

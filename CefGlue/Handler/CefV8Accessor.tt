@@ -1,0 +1,14 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefV8Accessor",
+        StructName = "cef_v8accessor_t",
+    };
+
+    def.AddProperty("get");
+    def.AddProperty("set");
+
+    WriteHandler(def);
+#>

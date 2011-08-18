@@ -1,0 +1,15 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefMenuHandler",
+        StructName = "cef_menu_handler_t",
+    };
+
+    def.AddProperty("on_before_menu");
+    def.AddProperty("get_menu_label");
+    def.AddProperty("on_menu_action");
+
+    WriteHandler(def);
+#>

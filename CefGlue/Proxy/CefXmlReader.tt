@@ -1,0 +1,41 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefXmlReader",
+        StructName = "cef_xml_reader_t",
+    };
+
+    def.AddMethod("move_to_next_node");
+    def.AddMethod("close");
+    def.AddMethod("has_error");
+    def.AddMethod("get_error");
+    def.AddMethod("get_type");
+    def.AddMethod("get_depth");
+    def.AddMethod("get_local_name");
+    def.AddMethod("get_prefix");
+    def.AddMethod("get_qualified_name");
+    def.AddMethod("get_namespace_uri");
+    def.AddMethod("get_base_uri");
+    def.AddMethod("get_xml_lang");
+    def.AddMethod("is_empty_element");
+    def.AddMethod("has_value");
+    def.AddMethod("get_value");
+    def.AddMethod("has_attributes");
+    def.AddMethod("get_attribute_count");
+    def.AddMethod("get_attribute_byindex");
+    def.AddMethod("get_attribute_byqname");
+    def.AddMethod("get_attribute_bylname");
+    def.AddMethod("get_inner_xml");
+    def.AddMethod("get_outer_xml");
+    def.AddMethod("get_line_number");
+    def.AddMethod("move_to_attribute_byindex");
+    def.AddMethod("move_to_attribute_byqname");
+    def.AddMethod("move_to_attribute_bylname");
+    def.AddMethod("move_to_first_attribute");
+    def.AddMethod("move_to_next_attribute");
+    def.AddMethod("move_to_carrying_element");
+
+    WriteProxy(def);
+#>

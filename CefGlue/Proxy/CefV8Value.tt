@@ -1,0 +1,44 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefV8Value",
+        StructName = "cef_v8value_t",
+    };
+
+    def.AddMethod("is_undefined");
+    def.AddMethod("is_null");
+    def.AddMethod("is_bool");
+    def.AddMethod("is_int");
+    def.AddMethod("is_double");
+    def.AddMethod("is_date");
+    def.AddMethod("is_string");
+    def.AddMethod("is_object");
+    def.AddMethod("is_array");
+    def.AddMethod("is_function");
+    def.AddMethod("is_same");
+    def.AddMethod("get_bool_value");
+    def.AddMethod("get_int_value");
+    def.AddMethod("get_double_value");
+    def.AddMethod("get_date_value");
+    def.AddMethod("get_string_value");
+    def.AddMethod("has_value_bykey");
+    def.AddMethod("has_value_byindex");
+    def.AddMethod("delete_value_bykey");
+    def.AddMethod("delete_value_byindex");
+    def.AddMethod("get_value_bykey");
+    def.AddMethod("get_value_byindex");
+    def.AddMethod("set_value_bykey");
+    def.AddMethod("set_value_byindex");
+    def.AddMethod("set_value_byaccessor");
+    def.AddMethod("get_keys");
+    def.AddMethod("get_user_data");
+    def.AddMethod("get_array_length");
+    def.AddMethod("get_function_name");
+    def.AddMethod("get_function_handler");
+    def.AddMethod("execute_function");
+    def.AddMethod("execute_function_with_context");
+
+    WriteProxy(def);
+#>

@@ -1,0 +1,13 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefSchemeHandlerFactory",
+        StructName = "cef_scheme_handler_factory_t",
+    };
+
+    def.AddProperty("create");
+
+    WriteHandler(def);
+#>

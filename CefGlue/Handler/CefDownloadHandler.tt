@@ -1,0 +1,14 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefDownloadHandler",
+        StructName = "cef_download_handler_t",
+    };
+
+    def.AddProperty("received_data");
+    def.AddProperty("complete");
+
+    WriteHandler(def);
+#>

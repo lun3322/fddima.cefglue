@@ -1,0 +1,16 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefStreamReader",
+        StructName = "cef_stream_reader_t",
+    };
+
+    def.AddMethod("read");
+    def.AddMethod("seek");
+    def.AddMethod("tell");
+    def.AddMethod("eof");
+
+    WriteProxy(def);
+#>

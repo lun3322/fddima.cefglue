@@ -1,0 +1,15 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefSchemeHandler",
+        StructName = "cef_scheme_handler_t",
+    };
+
+    def.AddProperty("process_request");
+    def.AddProperty("cancel");
+    def.AddProperty("read_response");
+
+    WriteHandler(def);
+#>

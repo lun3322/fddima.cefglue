@@ -1,0 +1,20 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefDomEvent",
+        StructName = "cef_domevent_t",
+    };
+
+    def.AddMethod("get_type");
+    def.AddMethod("get_category");
+    def.AddMethod("get_phase");
+    def.AddMethod("can_bubble");
+    def.AddMethod("can_cancel");
+    def.AddMethod("get_document");
+    def.AddMethod("get_target");
+    def.AddMethod("get_current_target");
+
+    WriteProxy(def);
+#>

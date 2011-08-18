@@ -1,0 +1,14 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefPrintHandler",
+        StructName = "cef_print_handler_t",
+    };
+
+    def.AddProperty("get_print_options");
+    def.AddProperty("get_print_header_footer");
+
+    WriteHandler(def);
+#>

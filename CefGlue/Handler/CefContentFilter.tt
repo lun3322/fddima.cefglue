@@ -1,0 +1,14 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Handler.ttinclude" #><#
+    var def = new HandlerDef()
+    {
+        ClassName = "CefContentFilter",
+        StructName = "cef_content_filter_t",
+    };
+
+    def.AddProperty("process_data");
+    def.AddProperty("drain");
+
+    WriteHandler(def);
+#>

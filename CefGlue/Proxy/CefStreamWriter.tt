@@ -1,0 +1,16 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefStreamWriter",
+        StructName = "cef_stream_writer_t",
+    };
+
+    def.AddMethod("write");
+    def.AddMethod("seek");
+    def.AddMethod("tell");
+    def.AddMethod("flush");
+
+    WriteProxy(def);
+#>

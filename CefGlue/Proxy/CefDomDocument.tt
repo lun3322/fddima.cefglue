@@ -1,0 +1,28 @@
+<#@ template language="C#" hostspecific="false" debug="false" #>
+<#@ output extension=".g.cs" #>
+<#@ include file="Proxy.ttinclude" #><#
+    var def = new ProxyDef()
+    {
+        ClassName = "CefDomDocument",
+        StructName = "cef_domdocument_t",
+    };
+
+    def.AddMethod("get_type");
+    def.AddMethod("get_document");
+    def.AddMethod("get_body");
+    def.AddMethod("get_head");
+    def.AddMethod("get_title");
+    def.AddMethod("get_element_by_id");
+    def.AddMethod("get_focused_node");
+    def.AddMethod("has_selection");
+    def.AddMethod("get_selection_start_node");
+    def.AddMethod("get_selection_start_offset");
+    def.AddMethod("get_selection_end_node");
+    def.AddMethod("get_selection_end_offset");
+    def.AddMethod("get_selection_as_markup");
+    def.AddMethod("get_selection_as_text");
+    def.AddMethod("get_base_url");
+    def.AddMethod("get_complete_url");
+
+    WriteProxy(def);
+#>
