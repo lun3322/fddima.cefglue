@@ -16,7 +16,7 @@
                 this.control = control;
             }
 
-            protected override PopupCreation OnBeforePopup(CefBrowser parentBrowser, CefPopupFeatures popupFeatures, CefWindowInfo windowInfo, string url, out CefClient client, CefBrowserSettings settings)
+            protected override PopupCreation OnBeforePopup(CefBrowser parentBrowser, CefPopupFeatures popupFeatures, CefWindowInfo windowInfo, string url, ref CefClient client, CefBrowserSettings settings)
             {
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "LifeSpanHandler.OnBeforePopup");
@@ -56,7 +56,6 @@
     #endif
                 */
 
-                client = null;
                 return PopupCreation.Proceed;
             }
 

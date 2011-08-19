@@ -28,9 +28,10 @@
             var m_url = cef_string_t.ToString(url);
             var m_settings = CefBrowserSettings.FromPointer(settings);
 
-            var result = this.OnBeforePopup(m_parentBrowser, m_popupFeatures, m_windowInfo, m_url, out m_client, m_settings);
+            var o_client = m_client;
+            var result = this.OnBeforePopup(m_parentBrowser, m_popupFeatures, m_windowInfo, m_url, ref m_client, m_settings);
 
-            if (m_client != null)
+            if (m_client != o_client && m_client != null)
             {
                 *client = m_client.GetNativePointerAndAddRef();
             }
@@ -57,11 +58,10 @@
             CefPopupFeatures popupFeatures,
             CefWindowInfo windowInfo,
             string url,
-            out CefClient client,
+            ref CefClient client,
             CefBrowserSettings settings
             )
         {
-            client = null;
             return PopupCreation.Proceed;
         }
 
