@@ -73,10 +73,18 @@
         {
             ThrowIfObjectDisposed();
 
-            // TODO: CefDisplayHandler.on_tooltip
             var m_browser = CefBrowser.FromPointer(browser);
+            var m_text = cef_string_t.ToString(text);
 
-            return 0;
+            var o_text = m_text;
+            var result = this.OnTooltip(m_browser, ref m_text);
+
+            if (result == false && (object)m_text != o_text)
+            {
+                cef_string_t.Copy(m_text, text);
+            }
+
+            return result ? 1 : 0;
         }
 
         /// <summary>
@@ -125,10 +133,13 @@
         {
             ThrowIfObjectDisposed();
 
-            // TODO: CefDisplayHandler.on_console_message
             var m_browser = CefBrowser.FromPointer(browser);
+            var m_message = cef_string_t.ToString(message);
+            var m_source = cef_string_t.ToString(source);
 
-            return 0;
+            var result = this.OnConsoleMessage(m_browser, m_message, m_source, line);
+
+            return result ? 1 : 0;
         }
 
         /// <summary>
