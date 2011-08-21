@@ -197,9 +197,24 @@
         public bool_t accelerated_layers_disabled;
 
         ///
+        // Set to true (1) to disable accelerated video.
+        ///
+        public bool_t accelerated_video_disabled;
+
+        ///
         // Set to true (1) to disable accelerated 2d canvas.
         ///
         public bool_t accelerated_2d_canvas_disabled;
+
+        ///
+        // Set to true (1) to disable accelerated drawing.
+        ///
+        public bool_t accelerated_drawing_disabled;
+
+        ///
+        // Set to true (1) to disable accelerated plugins.
+        ///
+        public bool_t accelerated_plugins_disabled;
 
         ///
         // Set to true (1) to disable developer tools (WebKit inspector).

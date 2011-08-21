@@ -13,6 +13,7 @@ namespace CefGlue
         /// </summary>
         private int get(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefV8Accessor.get
             throw new NotImplementedException();
         }
@@ -25,6 +26,7 @@ namespace CefGlue
         /// </summary>
         private int set(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefV8Accessor.set
             throw new NotImplementedException();
         }

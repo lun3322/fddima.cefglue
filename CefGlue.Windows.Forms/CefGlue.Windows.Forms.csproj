@@ -69,7 +69,8 @@
     <Compile Include="CefWebBrowser+LoadHandler.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CefStatusMessageEventArgs.cs" />
+    <Compile Include="ConsoleMessageEventArgs.cs" />
+    <Compile Include="StatusMessageEventArgs.cs" />
     <Compile Include="CefWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>

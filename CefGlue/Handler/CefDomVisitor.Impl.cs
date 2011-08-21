@@ -14,6 +14,7 @@ namespace CefGlue
         /// </summary>
         private void visit(cef_domvisitor_t* self, cef_domdocument_t* document)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefDomVisitor.visit
             throw new NotImplementedException();
         }

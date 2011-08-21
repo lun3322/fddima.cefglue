@@ -14,6 +14,7 @@ namespace CefGlue
         /// </summary>
         private int execute(cef_v8handler_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefV8Handler.execute
             throw new NotImplementedException();
         }

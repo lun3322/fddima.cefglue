@@ -11,6 +11,7 @@ namespace CefGlue
         /// </summary>
         private int on_jsalert(cef_jsdialog_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, /*const*/ cef_string_t* message)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefJSDialogHandler.on_jsalert
             throw new NotImplementedException();
         }
@@ -23,6 +24,7 @@ namespace CefGlue
         /// </summary>
         private int on_jsconfirm(cef_jsdialog_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, /*const*/ cef_string_t* message, int* retval)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefJSDialogHandler.on_jsconfirm
             throw new NotImplementedException();
         }
@@ -35,6 +37,7 @@ namespace CefGlue
         /// </summary>
         private int on_jsprompt(cef_jsdialog_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, /*const*/ cef_string_t* message, /*const*/ cef_string_t* defaultValue, int* retval, cef_string_t* result)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefJSDialogHandler.on_jsprompt
             throw new NotImplementedException();
         }

@@ -10,6 +10,7 @@ namespace CefGlue
         /// </summary>
         private int write(cef_write_handler_t* self, /*const*/ void* ptr, int size, int n)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefWriteHandler.write
             throw new NotImplementedException();
         }
@@ -20,6 +21,7 @@ namespace CefGlue
         /// </summary>
         private int seek(cef_write_handler_t* self, long offset, int whence)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefWriteHandler.seek
             throw new NotImplementedException();
         }
@@ -29,6 +31,7 @@ namespace CefGlue
         /// </summary>
         private long tell(cef_write_handler_t* self)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefWriteHandler.tell
             throw new NotImplementedException();
         }
@@ -38,6 +41,7 @@ namespace CefGlue
         /// </summary>
         private int flush(cef_write_handler_t* self)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefWriteHandler.flush
             throw new NotImplementedException();
         }

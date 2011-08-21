@@ -2,12 +2,12 @@
 {
     using System;
 
-    public sealed class CefStatusMessageEventArgs : EventArgs
+    public sealed class StatusMessageEventArgs : EventArgs
     {
         private readonly CefHandlerStatusType type;
         private readonly string value;
 
-        public CefStatusMessageEventArgs(CefHandlerStatusType type, string value)
+        public StatusMessageEventArgs(CefHandlerStatusType type, string value)
         {
             this.type = type;
             this.value = value;

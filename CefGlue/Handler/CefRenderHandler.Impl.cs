@@ -11,6 +11,7 @@ namespace CefGlue
         /// </summary>
         private int get_view_rect(cef_render_handler_t* self, cef_browser_t* browser, cef_rect_t* rect)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.get_view_rect
             throw new NotImplementedException();
         }
@@ -21,6 +22,7 @@ namespace CefGlue
         /// </summary>
         private int get_screen_rect(cef_render_handler_t* self, cef_browser_t* browser, cef_rect_t* rect)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.get_screen_rect
             throw new NotImplementedException();
         }
@@ -32,6 +34,7 @@ namespace CefGlue
         /// </summary>
         private int get_screen_point(cef_render_handler_t* self, cef_browser_t* browser, int viewX, int viewY, int* screenX, int* screenY)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.get_screen_point
             throw new NotImplementedException();
         }
@@ -43,6 +46,7 @@ namespace CefGlue
         /// </summary>
         private void on_popup_show(cef_render_handler_t* self, cef_browser_t* browser, int show)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.on_popup_show
             throw new NotImplementedException();
         }
@@ -53,6 +57,7 @@ namespace CefGlue
         /// </summary>
         private void on_popup_size(cef_render_handler_t* self, cef_browser_t* browser, /*const*/ cef_rect_t* rect)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.on_popup_size
             throw new NotImplementedException();
         }
@@ -67,6 +72,7 @@ namespace CefGlue
         /// </summary>
         private void on_paint(cef_render_handler_t* self, cef_browser_t* browser, cef_paint_element_type_t type, /*const*/ cef_rect_t* dirtyRect, /*const*/ void* buffer)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.on_paint
             throw new NotImplementedException();
         }
@@ -76,6 +82,7 @@ namespace CefGlue
         /// </summary>
         private void on_cursor_change(cef_render_handler_t* self, cef_browser_t* browser, cef_cursor_handle_t cursor)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRenderHandler.on_cursor_change
             throw new NotImplementedException();
         }

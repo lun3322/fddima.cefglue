@@ -14,6 +14,7 @@ namespace CefGlue
         /// </summary>
         private void on_take_focus(cef_focus_handler_t* self, cef_browser_t* browser, int next)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefFocusHandler.on_take_focus
             throw new NotImplementedException();
         }
@@ -26,6 +27,7 @@ namespace CefGlue
         /// </summary>
         private int on_set_focus(cef_focus_handler_t* self, cef_browser_t* browser, int isWidget)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefFocusHandler.on_set_focus
             throw new NotImplementedException();
         }

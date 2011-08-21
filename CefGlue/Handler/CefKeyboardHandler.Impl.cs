@@ -17,6 +17,7 @@ namespace CefGlue
         /// </summary>
         private int on_key_event(cef_keyboard_handler_t* self, cef_browser_t* browser, cef_handler_keyevent_type_t type, int code, int modifiers, int isSystemKey)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefKeyboardHandler.on_key_event
             throw new NotImplementedException();
         }

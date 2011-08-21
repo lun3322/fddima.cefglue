@@ -11,6 +11,7 @@ namespace CefGlue
         /// </summary>
         private int on_before_browse(cef_request_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, cef_request_t* request, cef_handler_navtype_t navType, int isRedirect)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRequestHandler.on_before_browse
             throw new NotImplementedException();
         }
@@ -28,6 +29,7 @@ namespace CefGlue
         /// </summary>
         private int on_before_resource_load(cef_request_handler_t* self, cef_browser_t* browser, cef_request_t* request, cef_string_t* redirectUrl, cef_stream_reader_t** resourceStream, cef_response_t* response, int loadFlags)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRequestHandler.on_before_resource_load
             throw new NotImplementedException();
         }
@@ -39,6 +41,7 @@ namespace CefGlue
         /// </summary>
         private void on_resource_response(cef_request_handler_t* self, cef_browser_t* browser, /*const*/ cef_string_t* url, cef_response_t* response, cef_content_filter_t** filter)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRequestHandler.on_resource_response
             throw new NotImplementedException();
         }
@@ -56,6 +59,7 @@ namespace CefGlue
         /// </summary>
         private int on_protocol_execution(cef_request_handler_t* self, cef_browser_t* browser, /*const*/ cef_string_t* url, int* allowOSExecution)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRequestHandler.on_protocol_execution
             throw new NotImplementedException();
         }
@@ -72,6 +76,7 @@ namespace CefGlue
         /// </summary>
         private int get_download_handler(cef_request_handler_t* self, cef_browser_t* browser, /*const*/ cef_string_t* mimeType, /*const*/ cef_string_t* fileName, long contentLength, cef_download_handler_t** handler)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRequestHandler.get_download_handler
             throw new NotImplementedException();
         }
@@ -85,9 +90,11 @@ namespace CefGlue
         /// </summary>
         private int get_auth_credentials(cef_request_handler_t* self, cef_browser_t* browser, int isProxy, /*const*/ cef_string_t* host, /*const*/ cef_string_t* realm, /*const*/ cef_string_t* scheme, cef_string_t* username, cef_string_t* password)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefRequestHandler.get_auth_credentials
             throw new NotImplementedException();
         }
+
 
     }
 }

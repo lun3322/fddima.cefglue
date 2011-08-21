@@ -20,12 +20,23 @@
         private const string homeUrl = "https://bitbucket.org/fddima/cefglue";
         private const string chromiumEmbeddedUrl = "http://code.google.com/p/chromiumembedded";
 
+        private ConsoleForm consoleForm;
+        private BindingList<ConsoleMessageEventArgs> consoleMessages = new BindingList<ConsoleMessageEventArgs>();
+
         public MainForm()
         {
             InitializeComponent();
 
             this.caption = this.Text;
 
+            this.consoleForm = new ConsoleForm();
+            consoleForm.BindData(consoleMessages);
+
+            this.browser = CreateBrowserControl();
+        }
+
+        private CefWebBrowser CreateBrowserControl()
+        {
             var settings = new CefBrowserSettings();
             // settings.WebSecurityDisabled = true;
             // settings.DragDropDisabled = true;
@@ -39,19 +50,21 @@
             // settings.EncodingDetectorEnabled = false;
             // settings.DeveloperToolsDisabled = true;
 
-            this.browser = new CefWebBrowser(settings, homeUrl);
-            this.browser.Parent = this;
-            this.browser.Dock = DockStyle.Fill;
-            this.browser.BringToFront();
+            var browser = new CefWebBrowser(settings, homeUrl);
+            browser.Parent = this;
+            browser.Dock = DockStyle.Fill;
+            browser.BringToFront();
 
-            this.browser.BackColor = Color.White;
+            browser.BackColor = Color.White;
 
-            this.browser.CanGoBackChanged += new EventHandler(browser_CanGoBackChanged);
-            this.browser.CanGoForwardChanged += new EventHandler(browser_CanGoForwardChanged);
-            this.browser.AddressChanged += new EventHandler(browser_AddressChanged);
-            this.browser.TitleChanged += new EventHandler(browser_TitleChanged);
-            this.browser.StatusMessage += new EventHandler<CefStatusMessageEventArgs>(browser_StatusMessage);
+            browser.CanGoBackChanged += new EventHandler(browser_CanGoBackChanged);
+            browser.CanGoForwardChanged += new EventHandler(browser_CanGoForwardChanged);
+            browser.AddressChanged += new EventHandler(browser_AddressChanged);
+            browser.TitleChanged += new EventHandler(browser_TitleChanged);
+            browser.StatusMessage += new EventHandler<StatusMessageEventArgs>(browser_StatusMessage);
+            browser.ConsoleMessage += new EventHandler<ConsoleMessageEventArgs>(browser_ConsoleMessage);
 
+            return browser;
         }
 
         void browser_CanGoBackChanged(object sender, EventArgs e)
@@ -86,7 +99,7 @@
             }
         }
 
-        void browser_StatusMessage(object sender, CefStatusMessageEventArgs e)
+        void browser_StatusMessage(object sender, StatusMessageEventArgs e)
         {
             var browser = (CefWebBrowser)sender;
             this.statusLabel.Visible = true;
@@ -98,6 +111,11 @@
             {
                 this.statusLabel.Text = string.Format("{0}: {1}", e.Type, e.Value);
             }
+        }
+
+        void browser_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
+        {
+            this.consoleMessages.Add(e);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -188,5 +206,39 @@
             if (e.KeyChar == '\r') goButton.PerformClick();
         }
 
+        private void consoleShowOrHideMenuItem_Click(object sender, EventArgs e)
+        {
+            var menuItem = (ToolStripMenuItem)sender;
+            if (this.consoleForm.Visible)
+            {
+                this.consoleForm.Hide();
+                menuItem.Text = "&Show";
+            }
+            else
+            {
+                this.consoleForm.Show();
+                menuItem.Text = "&Hide";
+            }
+        }
+
+        private void consoleClearMenuItem_Click(object sender, EventArgs e)
+        {
+            this.consoleMessages.Clear();
+        }
+
+        private void browserZoomInMenuItem_Click(object sender, EventArgs e)
+        {
+            this.browser.ZoomLevel += 1;
+        }
+
+        private void browserZoomOutMenuItem_Click(object sender, EventArgs e)
+        {
+            this.browser.ZoomLevel -= 1;
+        }
+
+        private void browserResetZoomMenuItem_Click(object sender, EventArgs e)
+        {
+            this.browser.ZoomLevel = 0;
+        }
     }
 }

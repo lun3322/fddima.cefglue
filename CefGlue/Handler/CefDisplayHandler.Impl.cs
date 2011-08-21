@@ -79,12 +79,12 @@
             var o_text = m_text;
             var result = this.OnTooltip(m_browser, ref m_text);
 
-            if (result == false && (object)m_text != o_text)
+            if (result == TooltipHandling.Default && (object)m_text != (object)o_text)
             {
                 cef_string_t.Copy(m_text, text);
             }
 
-            return result ? 1 : 0;
+            return (int)result;
         }
 
         /// <summary>
@@ -93,10 +93,15 @@
         /// To handle the display of the tooltip yourself return true.
         /// Otherwise, you can optionally modify |text| and then return false to allow the browser to display the tooltip.
         /// </summary>
-        protected virtual bool OnTooltip(CefBrowser browser, ref string text)
+        protected virtual TooltipHandling OnTooltip(CefBrowser browser, ref string text)
         {
-            // FIXME: API must return enum
-            return false;
+            return TooltipHandling.Default;
+        }
+
+        protected enum TooltipHandling
+        {
+            Default = 0,
+            Custom = 1,
         }
 
         /// <summary>
@@ -137,21 +142,22 @@
             var m_message = cef_string_t.ToString(message);
             var m_source = cef_string_t.ToString(source);
 
-            var result = this.OnConsoleMessage(m_browser, m_message, m_source, line);
-
-            return result ? 1 : 0;
+            return (int)this.OnConsoleMessage(m_browser, m_message, m_source, line);
         }
 
         /// <summary>
         /// Called to display a console message.
         /// Return true to stop the message from being output to the console.
         /// </summary>
-        protected virtual bool OnConsoleMessage(CefBrowser browser, string message, string source, int line)
+        protected virtual ConsoleMessageHandling OnConsoleMessage(CefBrowser browser, string message, string source, int line)
         {
-            // FIXME: API 
-            return false;
+            return ConsoleMessageHandling.Default;
         }
 
-
+        protected enum ConsoleMessageHandling
+        {
+            Default = 0,
+            Custom = 1,
+        }
     }
 }

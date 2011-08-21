@@ -65,6 +65,19 @@
             return PopupCreation.Proceed;
         }
 
+        protected enum PopupCreation
+        {
+            /// <summary>
+            /// Create the new popup window based on the parameters in windowInfo.
+            /// </summary>
+            Proceed = 0,
+
+            /// <summary>
+            /// Cancel creation of the popup window
+            /// </summary>
+            Cancel = 1
+        }
+
         /// <summary>
         /// Called after a new window is created.
         /// </summary>
@@ -104,6 +117,12 @@
             return ModalLoop.Default;
         }
 
+        protected enum ModalLoop
+        {
+            Default = 0,
+            Custom = 1
+        }
+
         /// <summary>
         /// Called when a window has recieved a request to close. Return false to
         /// proceed with the window close or true to cancel the window close. If
@@ -128,6 +147,19 @@
         protected virtual WindowClose DoClose(CefBrowser browser)
         {
             return WindowClose.Proceed;
+        }
+
+        protected enum WindowClose
+        {
+            /// <summary>
+            /// Proceed with the window close.
+            /// </summary>
+            Proceed = 0,
+
+            /// <summary>
+            /// Cancel the window close.
+            /// </summary>
+            Cancel = 1,
         }
 
         /// <summary>

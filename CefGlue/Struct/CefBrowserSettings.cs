@@ -213,7 +213,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable loading of fonts from remote sources.
+        /// Set to true to disable loading of fonts from remote sources.
         /// </summary>
         public bool RemoteFontsDisabled
         {
@@ -243,7 +243,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to attempt automatic detection of content encoding.
+        /// Set to true to attempt automatic detection of content encoding.
         /// </summary>
         public bool EncodingDetectorEnabled
         {
@@ -258,7 +258,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable JavaScript.
+        /// Set to true to disable JavaScript.
         /// </summary>
         public bool JavaScriptDisabled
         {
@@ -303,7 +303,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disallow JavaScript from accessing the clipboard.
+        /// Set to true to disallow JavaScript from accessing the clipboard.
         /// </summary>
         public bool JavaScriptAccessClipboardDisallowed
         {
@@ -318,7 +318,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable DOM pasting in the editor. DOM pasting also
+        /// Set to true to disable DOM pasting in the editor. DOM pasting also
         /// depends on |javascript_cannot_access_clipboard| being false (0).
         /// </summary>
         public bool DomPasteDisabled
@@ -334,7 +334,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to enable drawing of the caret position.
+        /// Set to true to enable drawing of the caret position.
         /// </summary>
         public bool CaretBrowsingEnabled
         {
@@ -349,7 +349,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable Java.
+        /// Set to true to disable Java.
         /// </summary>
         public bool JavaDisabled
         {
@@ -379,7 +379,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to allow access to all URLs from file URLs.
+        /// Set to true to allow access to all URLs from file URLs.
         /// </summary>
         public bool UniversalAccessFromFileUrlsAllowed
         {
@@ -394,7 +394,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to allow access to file URLs from other file URLs.
+        /// Set to true to allow access to file URLs from other file URLs.
         /// </summary>
         public bool FileAccessFromFileUrlsAllowed
         {
@@ -409,8 +409,8 @@
         }
 
         /// <summary>
-        /// Set to true (1) to allow risky security behavior such as cross-site
-        /// scripting (XSS). Use with extreme care.
+        /// Set to true to allow risky security behavior such as cross-site scripting (XSS).
+        /// Use with extreme care.
         /// </summary>
         public bool WebSecurityDisabled
         {
@@ -440,8 +440,8 @@
         }
 
         /// <summary>
-        /// Set to true (1) to suppress the network load of image URLs.  A cached
-        /// image will still be rendered if requested.
+        /// Set to true to suppress the network load of image URLs.
+        /// A cached image will still be rendered if requested.
         /// </summary>
         public bool ImageLoadDisabled
         {
@@ -456,7 +456,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to shrink standalone images to fit the page.
+        /// Set to true to shrink standalone images to fit the page.
         /// </summary>
         public bool ShrinkStandaloneImagesToFit
         {
@@ -471,7 +471,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable browser backwards compatibility features.
+        /// Set to true to disable browser backwards compatibility features.
         /// </summary>
         public bool SiteSpecificQuirksDisabled
         {
@@ -486,7 +486,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable resize of text areas.
+        /// Set to true to disable resize of text areas.
         /// </summary>
         public bool TextAreaResizeDisabled
         {
@@ -516,7 +516,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to not have the tab key advance focus to links.
+        /// Set to true to not have the tab key advance focus to links.
         /// </summary>
         public bool TabToLinksDisabled
         {
@@ -531,7 +531,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable hyperlink pings (&lt;a ping&gt; and window.sendPing).
+        /// Set to true to disable hyperlink pings (&lt;a ping&gt; and window.sendPing).
         /// </summary>
         public bool HyperlinkAuditingDisabled
         {
@@ -575,7 +575,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable style sheets.
+        /// Set to true to disable style sheets.
         /// </summary>
         public bool AuthorAndUserStylesDisabled
         {
@@ -590,7 +590,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable local storage.
+        /// Set to true to disable local storage.
         /// </summary>
         public bool LocalStorageDisabled
         {
@@ -605,7 +605,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable databases.
+        /// Set to true to disable databases.
         /// </summary>
         public bool DatabasesDisabled
         {
@@ -620,7 +620,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable application cache.
+        /// Set to true to disable application cache.
         /// </summary>
         public bool ApplicationCacheDisabled
         {
@@ -635,7 +635,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable WebGL.
+        /// Set to true to disable WebGL.
         /// </summary>
         public bool WebGLDisabled
         {
@@ -650,7 +650,7 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable accelerated compositing.
+        /// Set to true to disable accelerated compositing.
         /// </summary>
         public bool AcceleratedCompositingDisabled
         {
@@ -665,8 +665,8 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable accelerated layers.This affects features like
-        /// 3D CSS transforms.
+        /// Set to true to disable accelerated layers.
+        /// This affects features like 3D CSS transforms.
         /// </summary>
         public bool AcceleratedLayersDisabled
         {
@@ -681,7 +681,22 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable accelerated 2d canvas.
+        /// Set to true to disable accelerated video.
+        /// </summary>
+        public bool AcceleratedVideoDisabled
+        {
+            get
+            {
+                return this._ptr->accelerated_video_disabled;
+            }
+            set
+            {
+                this._ptr->accelerated_video_disabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Set to true to disable accelerated 2d canvas.
         /// </summary>
         public bool Accelerated2DCanvasDisabled
         {
@@ -696,7 +711,37 @@
         }
 
         /// <summary>
-        /// Set to true (1) to disable developer tools (WebKit inspector).
+        /// Set to true to disable accelerated drawing.
+        /// </summary>
+        public bool AcceleratedDrawingDisabled
+        {
+            get
+            {
+                return this._ptr->accelerated_drawing_disabled;
+            }
+            set
+            {
+                this._ptr->accelerated_drawing_disabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Set to true to disable accelerated plugins.
+        /// </summary>
+        public bool AcceleratedPluginsDisabled
+        {
+            get
+            {
+                return this._ptr->accelerated_plugins_disabled;
+            }
+            set
+            {
+                this._ptr->accelerated_plugins_disabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Set to true to disable developer tools (WebKit inspector).
         /// </summary>
         public bool DeveloperToolsDisabled
         {

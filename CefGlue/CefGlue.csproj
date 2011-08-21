@@ -71,9 +71,6 @@
     <Compile Include="Diagnostics\LogTarget.cs" />
     <Compile Include="Diagnostics\ObjectCt.cs" />
     <Compile Include="Enum\CefThreadId.cs" />
-    <Compile Include="Enum\ModalLoop.cs" />
-    <Compile Include="Enum\PopupCreation.cs" />
-    <Compile Include="Enum\WindowClose.cs" />
     <Compile Include="Handler\CefContentFilter.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

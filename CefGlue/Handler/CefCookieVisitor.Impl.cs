@@ -14,6 +14,7 @@ namespace CefGlue
         /// </summary>
         private int visit(cef_cookie_visitor_t* self, /*const*/ cef_cookie_t* cookie, int count, int total, int* deleteCookie)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefCookieVisitor.visit
             throw new NotImplementedException();
         }

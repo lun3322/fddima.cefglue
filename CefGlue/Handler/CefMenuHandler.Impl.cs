@@ -11,6 +11,7 @@ namespace CefGlue
         /// </summary>
         private int on_before_menu(cef_menu_handler_t* self, cef_browser_t* browser, /*const*/ cef_handler_menuinfo_t* menuInfo)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefMenuHandler.on_before_menu
             throw new NotImplementedException();
         }
@@ -22,6 +23,7 @@ namespace CefGlue
         /// </summary>
         private void get_menu_label(cef_menu_handler_t* self, cef_browser_t* browser, cef_handler_menuid_t menuId, cef_string_t* label)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefMenuHandler.get_menu_label
             throw new NotImplementedException();
         }
@@ -33,6 +35,7 @@ namespace CefGlue
         /// </summary>
         private int on_menu_action(cef_menu_handler_t* self, cef_browser_t* browser, cef_handler_menuid_t menuId)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefMenuHandler.on_menu_action
             throw new NotImplementedException();
         }

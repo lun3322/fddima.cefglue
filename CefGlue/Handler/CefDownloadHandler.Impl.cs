@@ -12,6 +12,7 @@ namespace CefGlue
         /// </summary>
         private int received_data(cef_download_handler_t* self, void* data, int data_size)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefDownloadHandler.received_data
             throw new NotImplementedException();
         }
@@ -21,6 +22,7 @@ namespace CefGlue
         /// </summary>
         private void complete(cef_download_handler_t* self)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefDownloadHandler.complete
             throw new NotImplementedException();
         }

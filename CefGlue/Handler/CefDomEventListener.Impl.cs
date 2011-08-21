@@ -14,6 +14,7 @@ namespace CefGlue
         /// </summary>
         private void handle_event(cef_domevent_listener_t* self, cef_domevent_t* @event)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefDomEventListener.handle_event
             throw new NotImplementedException();
         }

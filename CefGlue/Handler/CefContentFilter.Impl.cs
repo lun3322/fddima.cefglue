@@ -11,6 +11,7 @@ namespace CefGlue
         /// </summary>
         private void process_data(cef_content_filter_t* self, /*const*/ void* data, int data_size, cef_stream_reader_t** substitute_data)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefContentFilter.process_data
             throw new NotImplementedException();
         }
@@ -22,6 +23,7 @@ namespace CefGlue
         /// </summary>
         private void drain(cef_content_filter_t* self, cef_stream_reader_t** remainder)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefContentFilter.drain
             throw new NotImplementedException();
         }

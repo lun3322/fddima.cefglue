@@ -42,6 +42,9 @@
             this.bookmarksCefGlueHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksCefHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksGoogleSearchMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.consoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.consoleShowOrHideMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.consoleClearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.goBackButton = new System.Windows.Forms.ToolStripButton();
@@ -53,6 +56,10 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.browserZoomInMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.browserZoomOutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.browserResetZoomMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -62,8 +69,9 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenuItem,
+            this.bookmarksMenuItem,
             this.browserMenuItem,
-            this.bookmarksMenuItem});
+            this.consoleToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(1008, 24);
@@ -91,7 +99,11 @@
             this.miCloseBrowser,
             this.toolStripSeparator1,
             this.browserShowDevToolsMenuItem,
-            this.browserCloseDevToolsMenuItem});
+            this.browserCloseDevToolsMenuItem,
+            this.toolStripSeparator2,
+            this.browserZoomInMenuItem,
+            this.browserZoomOutMenuItem,
+            this.browserResetZoomMenuItem});
             this.browserMenuItem.Name = "browserMenuItem";
             this.browserMenuItem.Size = new System.Drawing.Size(61, 20);
             this.browserMenuItem.Text = "&Browser";
@@ -152,6 +164,29 @@
             this.bookmarksGoogleSearchMenuItem.Size = new System.Drawing.Size(254, 22);
             this.bookmarksGoogleSearchMenuItem.Text = "Google &Search";
             this.bookmarksGoogleSearchMenuItem.Click += new System.EventHandler(this.bookmarksGoogleSearchMenuItem_Click);
+            // 
+            // consoleToolStripMenuItem
+            // 
+            this.consoleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.consoleShowOrHideMenuItem,
+            this.consoleClearMenuItem});
+            this.consoleToolStripMenuItem.Name = "consoleToolStripMenuItem";
+            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.consoleToolStripMenuItem.Text = "&Console";
+            // 
+            // consoleShowOrHideMenuItem
+            // 
+            this.consoleShowOrHideMenuItem.Name = "consoleShowOrHideMenuItem";
+            this.consoleShowOrHideMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.consoleShowOrHideMenuItem.Text = "&Show";
+            this.consoleShowOrHideMenuItem.Click += new System.EventHandler(this.consoleShowOrHideMenuItem_Click);
+            // 
+            // consoleClearMenuItem
+            // 
+            this.consoleClearMenuItem.Name = "consoleClearMenuItem";
+            this.consoleClearMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.consoleClearMenuItem.Text = "&Clear";
+            this.consoleClearMenuItem.Click += new System.EventHandler(this.consoleClearMenuItem_Click);
             // 
             // imageList
             // 
@@ -260,6 +295,32 @@
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.statusLabel.Visible = false;
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(188, 6);
+            // 
+            // browserZoomInMenuItem
+            // 
+            this.browserZoomInMenuItem.Name = "browserZoomInMenuItem";
+            this.browserZoomInMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserZoomInMenuItem.Text = "Zoom In";
+            this.browserZoomInMenuItem.Click += new System.EventHandler(this.browserZoomInMenuItem_Click);
+            // 
+            // browserZoomOutMenuItem
+            // 
+            this.browserZoomOutMenuItem.Name = "browserZoomOutMenuItem";
+            this.browserZoomOutMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserZoomOutMenuItem.Text = "Zoom Out";
+            this.browserZoomOutMenuItem.Click += new System.EventHandler(this.browserZoomOutMenuItem_Click);
+            // 
+            // browserResetZoomMenuItem
+            // 
+            this.browserResetZoomMenuItem.Name = "browserResetZoomMenuItem";
+            this.browserResetZoomMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserResetZoomMenuItem.Text = "Reset Zoom";
+            this.browserResetZoomMenuItem.Click += new System.EventHandler(this.browserResetZoomMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -307,6 +368,13 @@
         private System.Windows.Forms.ToolStripMenuItem bookmarksGoogleSearchMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.ToolStripMenuItem bookmarksCefHomeMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem consoleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem consoleShowOrHideMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem consoleClearMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem browserZoomInMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem browserZoomOutMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem browserResetZoomMenuItem;
     }
 }
 

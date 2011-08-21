@@ -14,7 +14,8 @@
         public event EventHandler CanGoBackChanged;
         public event EventHandler CanGoForwardChanged;
         public event EventHandler AddressChanged;
-        public event EventHandler<CefStatusMessageEventArgs> StatusMessage;
+        public event EventHandler<StatusMessageEventArgs> StatusMessage;
+        public event EventHandler<ConsoleMessageEventArgs> ConsoleMessage;
 
         protected virtual void OnTitleChanged(EventArgs e)
         {
@@ -76,14 +77,29 @@
             }
         }
 
-        protected virtual void OnStatusMessage(CefStatusMessageEventArgs e)
+        protected virtual void OnStatusMessage(StatusMessageEventArgs e)
         {
             var handler = StatusMessage;
             if (handler != null)
             {
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(new Action<CefStatusMessageEventArgs>(this.OnStatusMessage), e);
+                    this.Invoke(new Action<StatusMessageEventArgs>(this.OnStatusMessage), e);
+                    return;
+                }
+
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnConsoleMessage(ConsoleMessageEventArgs e)
+        {
+            var handler = ConsoleMessage;
+            if (handler != null)
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action<ConsoleMessageEventArgs>(this.OnConsoleMessage), e);
                     return;
                 }
 

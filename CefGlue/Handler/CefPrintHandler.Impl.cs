@@ -15,6 +15,7 @@ namespace CefGlue
         /// </summary>
         private int get_print_options(cef_print_handler_t* self, cef_browser_t* browser, cef_print_options_t* printOptions)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefPrintHandler.get_print_options
             throw new NotImplementedException();
         }
@@ -33,6 +34,7 @@ namespace CefGlue
         /// </summary>
         private int get_print_header_footer(cef_print_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, /*const*/ cef_print_info_t* printInfo, /*const*/ cef_string_t* url, /*const*/ cef_string_t* title, int currentPage, int maxPages, cef_string_t* topLeft, cef_string_t* topCenter, cef_string_t* topRight, cef_string_t* bottomLeft, cef_string_t* bottomCenter, cef_string_t* bottomRight)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefPrintHandler.get_print_header_footer
             throw new NotImplementedException();
         }

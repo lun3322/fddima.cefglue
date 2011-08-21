@@ -10,6 +10,7 @@ namespace CefGlue
         /// </summary>
         private int read(cef_read_handler_t* self, void* ptr, int size, int n)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefReadHandler.read
             throw new NotImplementedException();
         }
@@ -20,6 +21,7 @@ namespace CefGlue
         /// </summary>
         private int seek(cef_read_handler_t* self, long offset, int whence)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefReadHandler.seek
             throw new NotImplementedException();
         }
@@ -29,6 +31,7 @@ namespace CefGlue
         /// </summary>
         private long tell(cef_read_handler_t* self)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefReadHandler.tell
             throw new NotImplementedException();
         }
@@ -38,6 +41,7 @@ namespace CefGlue
         /// </summary>
         private int eof(cef_read_handler_t* self)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefReadHandler.eof
             throw new NotImplementedException();
         }

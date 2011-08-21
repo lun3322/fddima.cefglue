@@ -15,6 +15,7 @@ namespace CefGlue
         /// </summary>
         private void on_find_result(cef_find_handler_t* self, cef_browser_t* browser, int identifier, int count, /*const*/ cef_rect_t* selectionRect, int activeMatchOrdinal, int finalUpdate)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefFindHandler.on_find_result
             throw new NotImplementedException();
         }

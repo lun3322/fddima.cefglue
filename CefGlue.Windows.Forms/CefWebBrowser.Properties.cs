@@ -95,6 +95,17 @@
             }
         }
 
+        public double ZoomLevel
+        {
+            get
+            {
+                return this.browser.ZoomLevel;
+            }
+            set
+            {
+                this.browser.ZoomLevel = value;
+            }
+        }
 
     }
 }

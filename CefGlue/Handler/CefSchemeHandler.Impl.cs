@@ -21,6 +21,7 @@ namespace CefGlue
         /// </summary>
         private int process_request(cef_scheme_handler_t* self, cef_request_t* request, cef_string_t* redirectUrl, cef_response_t* response, int* response_length)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefSchemeHandler.process_request
             throw new NotImplementedException();
         }
@@ -30,6 +31,7 @@ namespace CefGlue
         /// </summary>
         private void cancel(cef_scheme_handler_t* self)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefSchemeHandler.cancel
             throw new NotImplementedException();
         }
@@ -42,6 +44,7 @@ namespace CefGlue
         /// </summary>
         private int read_response(cef_scheme_handler_t* self, void* data_out, int bytes_to_read, int* bytes_read)
         {
+            ThrowIfObjectDisposed();
             // TODO: CefSchemeHandler.read_response
             throw new NotImplementedException();
         }
