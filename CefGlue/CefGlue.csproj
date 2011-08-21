@@ -70,7 +70,29 @@
     <Compile Include="Diagnostics\LogSeverity.cs" />
     <Compile Include="Diagnostics\LogTarget.cs" />
     <Compile Include="Diagnostics\ObjectCt.cs" />
+    <Compile Include="Enum\CefDomDocumentType.cs" />
+    <Compile Include="Enum\CefDomEventCategory.cs" />
+    <Compile Include="Enum\CefDomEventPhase.cs" />
+    <Compile Include="Enum\CefDomNodeType.cs" />
+    <Compile Include="Enum\CefHandlerKeyEventModifiers.cs" />
+    <Compile Include="Enum\CefHandlerKeyEventType.cs" />
+    <Compile Include="Enum\CefHandlerMenuCapabilityBits.cs" />
+    <Compile Include="Enum\CefHandlerMenuId.cs" />
+    <Compile Include="Enum\CefHandlerMenuTypeBits.cs" />
+    <Compile Include="Enum\CefHandlerNavType.cs" />
+    <Compile Include="Enum\CefKeyType.cs" />
+    <Compile Include="Enum\CefMouseButtonType.cs" />
+    <Compile Include="Enum\CefPageOrientation.cs" />
+    <Compile Include="Enum\CefPaintElementType.cs" />
+    <Compile Include="Enum\CefPaperType.cs" />
+    <Compile Include="Enum\CefPostDataElementType.cs" />
     <Compile Include="Enum\CefThreadId.cs" />
+    <Compile Include="Enum\CefV8AccessControl.cs" />
+    <Compile Include="Enum\CefV8PropertyAttribute.cs" />
+    <Compile Include="Enum\CefWebUrlRequestFlags.cs" />
+    <Compile Include="Enum\CefWebUrlRequestState.cs" />
+    <Compile Include="Enum\CefXmlEncodingType.cs" />
+    <Compile Include="Enum\CefXmlNodeType.cs" />
     <Compile Include="Handler\CefContentFilter.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -292,6 +314,7 @@
     <Compile Include="CefGlueException.cs" />
     <Compile Include="Enum\CefHandlerErrorCode.cs" />
     <Compile Include="Enum\CefLogSeverity.cs" />
+    <Compile Include="Struct\CefRect.cs" />
     <Compile Include="Struct\CefSettings.cs" />
     <Compile Include="Enum\CefHandlerStatusType.cs" />
     <Compile Include="Struct\CefWindowInfo.cs" />
@@ -417,6 +440,14 @@
       <DependentUpon>CefFrame.tt</DependentUpon>
     </Compile>
     <Compile Include="Struct\CefPopupFeatures.cs" />
+    <Compile Include="Struct\CefCookie.cs" />
+    <Compile Include="Struct\CefHandlerMenuInfo.cs" />
+    <Compile Include="Struct\CefPaperMetrics.cs" />
+    <Compile Include="Struct\CefPrintInfo.cs" />
+    <Compile Include="Struct\CefPrintMargins.cs" />
+    <Compile Include="Struct\CefPrintOptions.cs" />
+    <Compile Include="Struct\CefTime.cs" />
+    <Compile Include="Struct\CefUrlParts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CefGlue.snk">

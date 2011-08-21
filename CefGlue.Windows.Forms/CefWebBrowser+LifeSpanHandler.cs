@@ -16,7 +16,7 @@
                 this.control = control;
             }
 
-            protected override PopupCreation OnBeforePopup(CefBrowser parentBrowser, CefPopupFeatures popupFeatures, CefWindowInfo windowInfo, string url, ref CefClient client, CefBrowserSettings settings)
+            protected override bool OnBeforePopup(CefBrowser parentBrowser, CefPopupFeatures popupFeatures, CefWindowInfo windowInfo, string url, ref CefClient client, CefBrowserSettings settings)
             {
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "LifeSpanHandler.OnBeforePopup");
@@ -56,7 +56,7 @@
     #endif
                 */
 
-                return PopupCreation.Proceed;
+                return false;
             }
 
             protected override void OnAfterCreated(CefBrowser browser)
@@ -73,20 +73,20 @@
                 }
             }
 
-            protected override ModalLoop RunModal(CefBrowser browser)
+            protected override bool RunModal(CefBrowser browser)
             {
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "LifeSpanHandler.RunModal");
 #endif
-                return ModalLoop.Default;
+                return false;
             }
 
-            protected override WindowClose DoClose(CefBrowser browser)
+            protected override bool DoClose(CefBrowser browser)
             {
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "LifeSpanHandler.DoClose");
 #endif
-                return WindowClose.Proceed;
+                return false;
             }
 
             protected override void OnBeforeClose(CefBrowser browser)

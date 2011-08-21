@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefPostDataElement proxy from pointer.
         /// </summary>
-        internal static CefPostDataElement FromPointer(cef_post_data_element_t* ptr)
+        internal static CefPostDataElement From(cef_post_data_element_t* ptr)
         {
 			return new CefPostDataElement(ptr, false);
         }

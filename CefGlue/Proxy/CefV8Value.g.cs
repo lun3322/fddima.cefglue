@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefV8Value proxy from pointer.
         /// </summary>
-        internal static CefV8Value FromPointer(cef_v8value_t* ptr)
+        internal static CefV8Value From(cef_v8value_t* ptr)
         {
 			return new CefV8Value(ptr, false);
         }

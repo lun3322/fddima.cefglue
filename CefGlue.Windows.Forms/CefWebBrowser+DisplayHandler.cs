@@ -51,12 +51,12 @@
                 }
             }
 
-            protected override TooltipHandling OnTooltip(CefBrowser browser, ref string text)
+            protected override bool OnTooltip(CefBrowser browser, ref string text)
             {
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnTooltip: Text=[{0}]", text);
 #endif
-                return TooltipHandling.Default;
+                return false;
             }
 
             protected override void OnStatusMessage(CefBrowser browser, string value, CefHandlerStatusType type)
@@ -76,13 +76,13 @@
                 this.control.OnStatusMessage(new StatusMessageEventArgs(type, value ?? ""));
             }
 
-            protected override ConsoleMessageHandling OnConsoleMessage(CefBrowser browser, string message, string source, int line)
+            protected override bool OnConsoleMessage(CefBrowser browser, string message, string source, int line)
             {
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnConsoleMessage: Message=[{0}] Source=[{1}] Line=[{2}]", message, source, line);
 #endif
                 this.control.OnConsoleMessage(new ConsoleMessageEventArgs(message, source, line));
-                return ConsoleMessageHandling.Custom;
+                return true;
             }
 
             private static void GetMostImportantStatusMessage(Dictionary<CefHandlerStatusType, string> messages, out CefHandlerStatusType type, out string value)

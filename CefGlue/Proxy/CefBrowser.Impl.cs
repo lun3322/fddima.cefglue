@@ -158,7 +158,7 @@ namespace CefGlue
         /// </summary>
         public CefClient GetClient()
         {
-            return CefClient.FromPointer(
+            return CefClient.From(
                 this.get_client(this.ptr)
                 );
         }
@@ -168,7 +168,7 @@ namespace CefGlue
         /// </summary>
         public CefFrame GetMainFrame()
         {
-            return CefFrame.FromPointer(
+            return CefFrame.From(
                 this.get_main_frame(this.ptr)
                 );
         }
@@ -179,7 +179,7 @@ namespace CefGlue
         /// </summary>
         public CefFrame GetFocusedFrame()
         {
-            return CefFrame.FromPointer(
+            return CefFrame.From(
                 this.get_focused_frame(this.ptr)
                 );
         }
@@ -207,17 +207,21 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Search for |searchText|. |identifier| can be used to have multiple
-        /// searches running simultaniously. |forward| indicates whether to
-        /// search forward or backward within the page. |matchCase| indicates
-        /// whether the search should be case-sensitive. |findNext| indicates
-        /// whether this is the first request or a follow-up.
+        /// Search for |searchText|.
+        /// |identifier| can be used to have multiple searches running simultaniously.
+        /// |forward| indicates whether to search forward or backward within the page.
+        /// |matchCase| indicates whether the search should be case-sensitive.
+        /// |findNext| indicates whether this is the first request or a follow-up.
         /// </summary>
-        /* FIXME: public */
-        void Find(int identifier, /*const*/ cef_string_t* searchText, int forward, int matchCase, int findNext)
+        public void Find(int identifier, string searchText, bool forward, bool matchCase, bool findNext)
         {
-            // TODO: CefBrowser.Find
-            throw new NotImplementedException();
+            // TODO: check CefBrowser.Find
+            cef_string_t n_searchText;
+            cef_string_t.Copy(searchText, &n_searchText);
+
+            this.find(this.ptr, identifier, &n_searchText, forward ? 1 : 0, matchCase ? 1 : 0, findNext ? 1 : 0);
+
+            cef_string_t.Clear(&n_searchText);
         }
 
         /// <summary>

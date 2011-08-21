@@ -13,9 +13,9 @@
     internal unsafe partial struct cef_print_info_t
     {
         // HDC m_hDC;
-        IntPtr m_hDC;
+        public IntPtr m_hDC;
         //RECT m_Rect;
-        RECT m_Rect;
-        double m_Scale;
+        public RECT m_Rect;
+        public double m_Scale;
     }
 }

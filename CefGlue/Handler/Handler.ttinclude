@@ -53,8 +53,6 @@ class HandlerDef
 	/// Stable - means that native object pointer never changes when passed to us from CEF.
 	/// I.e. when we pass handler struct to cef - other methods returns same pointer.
 	/// This is depends from implementation of CToCpp/CppToC wrappers.
-	/// 
-	/// FIXME: still unused
 	/// </summary>
 	public bool StableNativePointer
 	{
@@ -62,9 +60,7 @@ class HandlerDef
 	}
 
 	/// <summary>
-	/// Implement FromPointer native method. It lookup native pointers table and get object.
-	/// 
-	/// FIXME: still unused
+	/// Implement From native method. It lookup native pointers table and get object.
 	/// </summary>
 	public bool FromPointer
 	{
@@ -198,10 +194,10 @@ namespace CefGlue
         /// <summary>
         /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
         /// </summary>
-        internal static <#=def.ClassName#> FromPointer(<#=def.StructName#>* pointer)
+        internal static <#=def.ClassName#> From(<#=def.StructName#>* pointer)
         {
 #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, pointer, "FromPointer");
+            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, pointer, "From");
 #endif
             <#=def.ClassName#> value;
             if (pointers.TryGetValue((IntPtr)pointer, out value))
@@ -213,7 +209,7 @@ namespace CefGlue
         }
 		
 <#+ } else if (!def.StableNativePointer && !def.FromPointer) { #>
-<#+ } else { throw new NotSupportedException("FromPointer can't be implemented when we don't have StableNativePointer."); } #>
+<#+ } else { throw new NotSupportedException("From can't be implemented when we don't have StableNativePointer."); } #>
 
 
         private int refct;

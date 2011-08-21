@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefDomDocument proxy from pointer.
         /// </summary>
-        internal static CefDomDocument FromPointer(cef_domdocument_t* ptr)
+        internal static CefDomDocument From(cef_domdocument_t* ptr)
         {
 			return new CefDomDocument(ptr, false);
         }

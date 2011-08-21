@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefWebUrlRequest proxy from pointer.
         /// </summary>
-        internal static CefWebUrlRequest FromPointer(cef_web_urlrequest_t* ptr)
+        internal static CefWebUrlRequest From(cef_web_urlrequest_t* ptr)
         {
 			return new CefWebUrlRequest(ptr, false);
         }

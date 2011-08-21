@@ -17,8 +17,8 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
-            var m_frame = CefFrame.FromPointer(frame);
+            var m_browser = CefBrowser.From(browser);
+            var m_frame = CefFrame.From(frame);
             this.OnLoadStart(m_browser, m_frame);
         }
 
@@ -45,8 +45,8 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
-            var m_frame = CefFrame.FromPointer(frame);
+            var m_browser = CefBrowser.From(browser);
+            var m_frame = CefFrame.From(frame);
             this.OnLoadEnd(m_browser, m_frame, httpStatusCode);
         }
 
@@ -73,8 +73,8 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
-            var m_frame = CefFrame.FromPointer(frame);
+            var m_browser = CefBrowser.From(browser);
+            var m_frame = CefFrame.From(frame);
             var m_failedUrl = cef_string_t.ToString(failedUrl);
             var m_errorText = cef_string_t.ToString(errorText);
             var c_errorText = m_errorText;

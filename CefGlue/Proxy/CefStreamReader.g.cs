@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefStreamReader proxy from pointer.
         /// </summary>
-        internal static CefStreamReader FromPointer(cef_stream_reader_t* ptr)
+        internal static CefStreamReader From(cef_stream_reader_t* ptr)
         {
 			return new CefStreamReader(ptr, false);
         }

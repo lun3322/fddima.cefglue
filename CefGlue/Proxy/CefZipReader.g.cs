@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefZipReader proxy from pointer.
         /// </summary>
-        internal static CefZipReader FromPointer(cef_zip_reader_t* ptr)
+        internal static CefZipReader From(cef_zip_reader_t* ptr)
         {
 			return new CefZipReader(ptr, false);
         }

@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefBrowser proxy from pointer.
         /// </summary>
-        internal static CefBrowser FromPointer(cef_browser_t* ptr)
+        internal static CefBrowser From(cef_browser_t* ptr)
         {
 			return new CefBrowser(ptr, false);
         }

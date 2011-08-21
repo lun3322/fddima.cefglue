@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefFrame proxy from pointer.
         /// </summary>
-        internal static CefFrame FromPointer(cef_frame_t* ptr)
+        internal static CefFrame From(cef_frame_t* ptr)
         {
 			return new CefFrame(ptr, false);
         }

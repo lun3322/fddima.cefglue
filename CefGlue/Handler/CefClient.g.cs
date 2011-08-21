@@ -21,10 +21,10 @@ namespace CefGlue
         /// <summary>
         /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
         /// </summary>
-        internal static CefClient FromPointer(cef_client_t* pointer)
+        internal static CefClient From(cef_client_t* pointer)
         {
 #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefClient, pointer, "FromPointer");
+            Cef.Logger.Trace(LogTarget.CefClient, pointer, "From");
 #endif
             CefClient value;
             if (pointers.TryGetValue((IntPtr)pointer, out value))

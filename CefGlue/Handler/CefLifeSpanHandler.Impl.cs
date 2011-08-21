@@ -21,17 +21,17 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_client = CefClient.FromPointer(*client);
-            var m_parentBrowser = CefBrowser.FromPointer(parentBrowser);
-            var m_popupFeatures = CefPopupFeatures.FromPointer(popupFeatures);
-            var m_windowInfo = CefWindowInfo.FromPointer(windowInfo);
+            var m_client = CefClient.From(*client);
+            var m_parentBrowser = CefBrowser.From(parentBrowser);
+            var m_popupFeatures = CefPopupFeatures.From(popupFeatures);
+            var m_windowInfo = CefWindowInfo.From(windowInfo);
             var m_url = cef_string_t.ToString(url);
-            var m_settings = CefBrowserSettings.FromPointer(settings);
+            var m_settings = CefBrowserSettings.From(settings);
 
             var o_client = m_client;
-            var result = this.OnBeforePopup(m_parentBrowser, m_popupFeatures, m_windowInfo, m_url, ref m_client, m_settings);
+            var handled = this.OnBeforePopup(m_parentBrowser, m_popupFeatures, m_windowInfo, m_url, ref m_client, m_settings);
 
-            if (m_client != o_client && m_client != null)
+            if (!handled && m_client != o_client && m_client != null)
             {
                 *client = m_client.GetNativePointerAndAddRef();
             }
@@ -40,7 +40,7 @@
             m_windowInfo.Dispose();
             m_settings.Dispose();
 
-            return (int)result;
+            return handled ? 1 : 0;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@
         /// To change the client for the new window modify the object that |client| points to.
         /// To change the settings for the new window modify the |settings| structure.
         /// </summary>
-        protected virtual PopupCreation OnBeforePopup(
+        protected virtual bool OnBeforePopup(
             CefBrowser parentBrowser,
             CefPopupFeatures popupFeatures,
             CefWindowInfo windowInfo,
@@ -62,20 +62,7 @@
             CefBrowserSettings settings
             )
         {
-            return PopupCreation.Proceed;
-        }
-
-        protected enum PopupCreation
-        {
-            /// <summary>
-            /// Create the new popup window based on the parameters in windowInfo.
-            /// </summary>
-            Proceed = 0,
-
-            /// <summary>
-            /// Cancel creation of the popup window
-            /// </summary>
-            Cancel = 1
+            return false;
         }
 
         /// <summary>
@@ -85,7 +72,7 @@
         {
             ThrowIfObjectDisposed();
 
-            this.OnAfterCreated(CefBrowser.FromPointer(browser));
+            this.OnAfterCreated(CefBrowser.From(browser));
         }
 
         /// <summary>
@@ -104,7 +91,11 @@
         {
             ThrowIfObjectDisposed();
 
-            return (int)this.RunModal(CefBrowser.FromPointer(browser));
+            var m_browser = CefBrowser.From(browser);
+
+            var handled = this.RunModal(m_browser); 
+
+            return handled ? 1 : 0;
         }
 
         /// <summary>
@@ -112,15 +103,9 @@
         /// Return true if you ran your own modal loop and false to use the default.
         /// You can also use this event to know when a modal window is about to start.
         /// </summary>
-        protected virtual ModalLoop RunModal(CefBrowser browser)
+        protected virtual bool RunModal(CefBrowser browser)
         {
-            return ModalLoop.Default;
-        }
-
-        protected enum ModalLoop
-        {
-            Default = 0,
-            Custom = 1
+            return false;
         }
 
         /// <summary>
@@ -134,7 +119,11 @@
         {
             ThrowIfObjectDisposed();
 
-            return (int)this.DoClose(CefBrowser.FromPointer(browser));
+            var m_browser = CefBrowser.From(browser);
+
+            var handled = this.DoClose(m_browser);
+
+            return handled ? 1 : 0;
         }
 
         /// <summary>
@@ -144,22 +133,9 @@
         /// provided in RunModal() this callback should be used to restore the
         /// opener window to a usable state.
         /// </summary>
-        protected virtual WindowClose DoClose(CefBrowser browser)
+        protected virtual bool DoClose(CefBrowser browser)
         {
-            return WindowClose.Proceed;
-        }
-
-        protected enum WindowClose
-        {
-            /// <summary>
-            /// Proceed with the window close.
-            /// </summary>
-            Proceed = 0,
-
-            /// <summary>
-            /// Cancel the window close.
-            /// </summary>
-            Cancel = 1,
+            return false;
         }
 
         /// <summary>
@@ -170,7 +146,7 @@
         {
             ThrowIfObjectDisposed();
 
-            this.OnBeforeClose(CefBrowser.FromPointer(browser));
+            this.OnBeforeClose(CefBrowser.From(browser));
         }
 
         /// <summary>

@@ -8,7 +8,7 @@
 
     public sealed unsafe class CefBrowserSettings
     {
-        internal static CefBrowserSettings FromPointer(cef_browser_settings_t* pointer)
+        internal static CefBrowserSettings From(cef_browser_settings_t* pointer)
         {
             return new CefBrowserSettings(pointer);
         }

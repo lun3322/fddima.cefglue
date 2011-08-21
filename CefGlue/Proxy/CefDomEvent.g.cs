@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefDomEvent proxy from pointer.
         /// </summary>
-        internal static CefDomEvent FromPointer(cef_domevent_t* ptr)
+        internal static CefDomEvent From(cef_domevent_t* ptr)
         {
 			return new CefDomEvent(ptr, false);
         }

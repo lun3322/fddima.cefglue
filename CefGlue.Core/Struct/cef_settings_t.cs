@@ -57,7 +57,6 @@
         // List of fully qualified paths to plugins (including plugin name) that will
         // be loaded in addition to any plugins found in the default search paths.
         ///
-        // cef_string_list_t extra_plugin_paths;
         public cef_string_list_t extra_plugin_paths;
 
         ///

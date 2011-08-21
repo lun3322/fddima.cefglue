@@ -12,7 +12,8 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
+            var m_browser = CefBrowser.From(browser);
+
             this.OnNavStateChange(m_browser, canGoBack != 0, canGoForward != 0);
         }
 
@@ -30,9 +31,10 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
-            var m_frame = CefFrame.FromPointer(frame);
+            var m_browser = CefBrowser.From(browser);
+            var m_frame = CefFrame.From(frame);
             var m_url = cef_string_t.ToString(url);
+
             this.OnAddressChange(m_browser, m_frame, m_url);
         }
 
@@ -50,8 +52,9 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
+            var m_browser = CefBrowser.From(browser);
             var m_title = cef_string_t.ToString(title);
+
             this.OnTitleChange(m_browser, m_title);
         }
 
@@ -73,18 +76,18 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
+            var m_browser = CefBrowser.From(browser);
             var m_text = cef_string_t.ToString(text);
 
             var o_text = m_text;
-            var result = this.OnTooltip(m_browser, ref m_text);
+            var handled = this.OnTooltip(m_browser, ref m_text);
 
-            if (result == TooltipHandling.Default && (object)m_text != (object)o_text)
+            if (!handled && (object)m_text != (object)o_text)
             {
                 cef_string_t.Copy(m_text, text);
             }
 
-            return (int)result;
+            return handled ? 1 : 0;
         }
 
         /// <summary>
@@ -93,15 +96,9 @@
         /// To handle the display of the tooltip yourself return true.
         /// Otherwise, you can optionally modify |text| and then return false to allow the browser to display the tooltip.
         /// </summary>
-        protected virtual TooltipHandling OnTooltip(CefBrowser browser, ref string text)
+        protected virtual bool OnTooltip(CefBrowser browser, ref string text)
         {
-            return TooltipHandling.Default;
-        }
-
-        protected enum TooltipHandling
-        {
-            Default = 0,
-            Custom = 1,
+            return false;
         }
 
         /// <summary>
@@ -116,9 +113,10 @@
             // also this optimization can be done if we store state per-browser, not per-handler
             // or we can do it per-handler
 
-            var m_browser = CefBrowser.FromPointer(browser);
+            var m_browser = CefBrowser.From(browser);
             var m_value = cef_string_t.ToString(value);
             var m_type = (CefHandlerStatusType)type;
+
             this.OnStatusMessage(m_browser, m_value, m_type);
         }
 
@@ -138,26 +136,22 @@
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.FromPointer(browser);
+            var m_browser = CefBrowser.From(browser);
             var m_message = cef_string_t.ToString(message);
             var m_source = cef_string_t.ToString(source);
 
-            return (int)this.OnConsoleMessage(m_browser, m_message, m_source, line);
+            var handled = this.OnConsoleMessage(m_browser, m_message, m_source, line);
+
+            return handled ? 1 : 0;
         }
 
         /// <summary>
         /// Called to display a console message.
         /// Return true to stop the message from being output to the console.
         /// </summary>
-        protected virtual ConsoleMessageHandling OnConsoleMessage(CefBrowser browser, string message, string source, int line)
+        protected virtual bool OnConsoleMessage(CefBrowser browser, string message, string source, int line)
         {
-            return ConsoleMessageHandling.Default;
-        }
-
-        protected enum ConsoleMessageHandling
-        {
-            Default = 0,
-            Custom = 1,
+            return false;
         }
     }
 }

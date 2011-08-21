@@ -73,7 +73,7 @@ namespace CefGlue
         /// <summary>
         /// Create <#=def.ClassName#> proxy from pointer.
         /// </summary>
-        internal static <#=def.ClassName#> FromPointer(<#=def.StructName#>* ptr)
+        internal static <#=def.ClassName#> From(<#=def.StructName#>* ptr)
         {
 			return new <#=def.ClassName#>(ptr, false);
         }

@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefXmlReader proxy from pointer.
         /// </summary>
-        internal static CefXmlReader FromPointer(cef_xml_reader_t* ptr)
+        internal static CefXmlReader From(cef_xml_reader_t* ptr)
         {
 			return new CefXmlReader(ptr, false);
         }

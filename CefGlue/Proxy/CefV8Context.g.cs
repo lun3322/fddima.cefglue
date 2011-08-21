@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefV8Context proxy from pointer.
         /// </summary>
-        internal static CefV8Context FromPointer(cef_v8context_t* ptr)
+        internal static CefV8Context From(cef_v8context_t* ptr)
         {
 			return new CefV8Context(ptr, false);
         }

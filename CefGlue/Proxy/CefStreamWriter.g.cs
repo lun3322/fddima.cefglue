@@ -19,7 +19,7 @@ namespace CefGlue
         /// <summary>
         /// Create CefStreamWriter proxy from pointer.
         /// </summary>
-        internal static CefStreamWriter FromPointer(cef_stream_writer_t* ptr)
+        internal static CefStreamWriter From(cef_stream_writer_t* ptr)
         {
 			return new CefStreamWriter(ptr, false);
         }

@@ -8,7 +8,7 @@
 
     public sealed unsafe class CefWindowInfo : IDisposable
     {
-        internal static CefWindowInfo FromPointer(cef_window_info_t* pointer)
+        internal static CefWindowInfo From(cef_window_info_t* pointer)
         {
             return new CefWindowInfo(pointer);
         }

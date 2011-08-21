@@ -15,7 +15,7 @@
         ///
         // Values from the cef_handler_menutypebits_t enumeration.
         ///
-        public int typeFlags;
+        public cef_handler_menutypebits_t typeFlags;
 
         ///
         // If window rendering is enabled |x| and |y| will be in screen coordinates.
@@ -34,7 +34,7 @@
         ///
         // Values from the cef_handler_menucapabilitybits_t enumeration.
         ///
-        public int editFlags;
+        public cef_handler_menucapabilitybits_t editFlags;
 
         public cef_string_t securityInfo;
     }

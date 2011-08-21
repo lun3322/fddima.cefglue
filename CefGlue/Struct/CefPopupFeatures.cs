@@ -8,7 +8,7 @@
 
     public sealed unsafe class CefPopupFeatures : IDisposable
     {
-        internal static CefPopupFeatures FromPointer(cef_popup_features_t* pointer)
+        internal static CefPopupFeatures From(cef_popup_features_t* pointer)
         {
             return new CefPopupFeatures(pointer);
         }
