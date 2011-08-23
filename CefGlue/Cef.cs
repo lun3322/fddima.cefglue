@@ -173,5 +173,6 @@
         {
             if (!IsInitialized) throw new CefGlueException("CEF is not initialized.");
         }
+
     }
 }

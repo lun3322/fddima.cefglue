@@ -8,144 +8,143 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefRequest object.
         /// </summary>
-        /* FIXME: CefRequest.CreateRequest public */
-        static cef_request_t* CreateRequest()
+        public static CefRequest Create()
         {
-            // TODO: CefRequest.CreateRequest
-            throw new NotImplementedException();
+            return CefRequest.From(
+                libcef.request_create()
+                );
         }
 
         /// <summary>
         /// Get the fully qualified URL.
         /// </summary>
-        /* FIXME: CefRequest.GetURL public */
-        cef_string_userfree_t GetURL()
+        public string GetURL()
         {
-            // TODO: CefRequest.GetURL
-            throw new NotImplementedException();
+            var n_result = this.get_url(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Set the fully qualified URL.
         /// </summary>
-        /* FIXME: CefRequest.SetURL public */
-        void SetURL(/*const*/ cef_string_t* url)
+        public void SetURL(string url)
         {
-            // TODO: CefRequest.SetURL
-            throw new NotImplementedException();
+            fixed (char* url_str = url)
+            {
+                var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
+                this.set_url(this.ptr, &n_url);
+            }
         }
 
         /// <summary>
-        /// Get the request method type. The value will default to POST if post
-        /// data is provided and GET otherwise.
+        /// Get the request method type.
+        /// The value will default to POST if post data is provided and GET otherwise.
         /// </summary>
-        /* FIXME: CefRequest.GetMethod public */
-        cef_string_userfree_t GetMethod()
+        public string GetMethod()
         {
-            // TODO: CefRequest.GetMethod
-            throw new NotImplementedException();
+            var n_result = this.get_method(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Set the request method type.
         /// </summary>
-        /* FIXME: CefRequest.SetMethod public */
-        void SetMethod(/*const*/ cef_string_t* method)
+        public void SetMethod(string method)
         {
-            // TODO: CefRequest.SetMethod
-            throw new NotImplementedException();
+            fixed (char* method_str = method)
+            {
+                var n_method = new cef_string_t(method_str, method != null ? method.Length : 0);
+                this.set_method(this.ptr, &n_method);
+            }
         }
 
         /// <summary>
         /// Get the post data.
         /// </summary>
-        /* FIXME: CefRequest.GetPostData public */
-        cef_post_data_t* GetPostData()
+        public CefPostData GetPostData()
         {
-            // TODO: CefRequest.GetPostData
-            throw new NotImplementedException();
+            return CefPostData.From(
+                this.get_post_data(this.ptr)
+                );
         }
 
         /// <summary>
         /// Set the post data.
         /// </summary>
-        /* FIXME: CefRequest.SetPostData public */
-        void SetPostData(cef_post_data_t* postData)
+        public void SetPostData(CefPostData postData)
         {
-            // TODO: CefRequest.SetPostData
-            throw new NotImplementedException();
+            this.set_post_data(this.ptr, postData.GetNativePointerAndAddRef());
         }
 
         /// <summary>
         /// Get the header values.
         /// </summary>
-        /* FIXME: CefRequest.GetHeaderMap public */
-        void GetHeaderMap(cef_string_map_t headerMap)
+        public CefStringMap GetHeaderMap()
         {
-            // TODO: CefRequest.GetHeaderMap
-            throw new NotImplementedException();
+            var map = new CefStringMap();
+            this.get_header_map(this.ptr, map.GetNativeHandle());
+            return map;
         }
 
         /// <summary>
         /// Set the header values.
         /// </summary>
-        /* FIXME: CefRequest.SetHeaderMap public */
-        void SetHeaderMap(cef_string_map_t headerMap)
+        public void SetHeaderMap(CefStringMap headerMap)
         {
-            // TODO: CefRequest.SetHeaderMap
-            throw new NotImplementedException();
+            this.set_header_map(this.ptr, headerMap.GetNativeHandle());
         }
 
         /// <summary>
         /// Set all values at one time.
         /// </summary>
-        /* FIXME: CefRequest.Set public */
-        void Set(/*const*/ cef_string_t* url, /*const*/ cef_string_t* method, cef_post_data_t* postData, cef_string_map_t headerMap)
+        public void Set(string url, string method, CefPostData postData, CefStringMap headerMap)
         {
-            // TODO: CefRequest.Set
-            throw new NotImplementedException();
+            fixed (char* url_str = url)
+            fixed (char* method_str = method)
+            {
+                var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
+                var n_method = new cef_string_t(method_str, method != null ? method.Length : 0);
+
+                this.set(this.ptr, &n_url, &n_method, postData.GetNativePointerAndAddRef(), headerMap.GetNativeHandle());
+            }
         }
 
         /// <summary>
         /// Get the flags used in combination with CefWebURLRequest.
         /// </summary>
-        /* FIXME: CefRequest.GetFlags public */
-        cef_weburlrequest_flags_t GetFlags()
+        public CefWebUrlRequestFlags GetFlags()
         {
-            // TODO: CefRequest.GetFlags
-            throw new NotImplementedException();
+            return (CefWebUrlRequestFlags)this.get_flags(this.ptr);
         }
 
         /// <summary>
         /// Set the flags used in combination with CefWebURLRequest.
         /// </summary>
-        /* FIXME: CefRequest.SetFlags public */
-        void SetFlags(cef_weburlrequest_flags_t flags)
+        public void SetFlags(CefWebUrlRequestFlags flags)
         {
-            // TODO: CefRequest.SetFlags
-            throw new NotImplementedException();
+            this.set_flags(this.ptr, (cef_weburlrequest_flags_t)flags);
         }
 
         /// <summary>
-        /// Set the URL to the first party for cookies used in combination with
-        /// CefWebURLRequest.
+        /// Set the URL to the first party for cookies used in combination with CefWebUrlRequest.
         /// </summary>
-        /* FIXME: CefRequest.GetFirstPartyForCookies public */
-        cef_string_userfree_t GetFirstPartyForCookies()
+        public string GetFirstPartyForCookies()
         {
-            // TODO: CefRequest.GetFirstPartyForCookies
-            throw new NotImplementedException();
+            var n_result = this.get_first_party_for_cookies(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Get the URL to the first party for cookies used in combination with
-        /// CefWebURLRequest.
+        /// Get the URL to the first party for cookies used in combination with CefWebUrlRequest.
         /// </summary>
-        /* FIXME: CefRequest.SetFirstPartyForCookies public */
-        void SetFirstPartyForCookies(/*const*/ cef_string_t* url)
+        public void SetFirstPartyForCookies(string url)
         {
-            // TODO: CefRequest.SetFirstPartyForCookies
-            throw new NotImplementedException();
+            fixed (char* url_str = url)
+            {
+                var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
+
+                this.set_first_party_for_cookies(this.ptr, &n_url);
+            }
         }
 
 

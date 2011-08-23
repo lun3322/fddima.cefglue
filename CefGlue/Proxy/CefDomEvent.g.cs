@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefDomEvent From(cef_domevent_t* ptr)
         {
-			return new CefDomEvent(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefDomEvent(ptr);
+        }
+		
+        internal static CefDomEvent FromOrDefault(cef_domevent_t* ptr)
+        {
+            if (ptr != null) return new CefDomEvent(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefDomEvent proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefDomEvent Create(cef_domevent_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefDomEvent(ptr, addRefCount);
+            throw new NullReferenceException("CefDomEvent");
         }
 
         private cef_domevent_t* ptr;
 
-        private CefDomEvent(cef_domevent_t* ptr, bool addRefCount)
+        private CefDomEvent(cef_domevent_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefDomEvent, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

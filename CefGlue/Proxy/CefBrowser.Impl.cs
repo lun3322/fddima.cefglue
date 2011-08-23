@@ -1,7 +1,9 @@
 namespace CefGlue
 {
     using System;
+    using System.Collections.Generic;
     using Core;
+    using Diagnostics;
 
     unsafe partial class CefBrowser
     {
@@ -12,30 +14,42 @@ namespace CefGlue
         /// </summary>
         public static void Create(CefWindowInfo windowInfo, CefClient client, string url, CefBrowserSettings settings)
         {
-            cef_string_t n_url;
-            cef_string_t.Copy(url, &n_url);
+            fixed (char* url_str = url)
+            {
+                cef_string_t n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
 
-            var result = libcef.browser_create(
-                windowInfo.NativePointer,
-                client.GetNativePointerAndAddRef(),
-                &n_url,
-                settings.NativePointer
-                );
+                var result = libcef.browser_create(
+                    windowInfo.NativePointer,
+                    client.GetNativePointerAndAddRef(),
+                    &n_url,
+                    settings.NativePointer
+                    );
 
-            cef_string_t.Clear(&n_url);
-
-            if (result == 0) throw new InvalidOperationException("CefBrowser.Create error.");
+                if (result == 0) throw new InvalidOperationException("CefBrowser.Create error.");
+            }
         }
 
         /// <summary>
         /// Create a new browser window using the window parameters specified by |windowInfo|.
         /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: CefBrowser.CreateBrowserSync public */
-        static cef_browser_t* CreateBrowserSync(cef_window_info_t* windowInfo, cef_client_t* client, /*const*/ cef_string_t* url, /*const*/ cef_browser_settings_t* settings)
+        public static CefBrowser CreateSync(CefWindowInfo windowInfo, CefClient client, string url, CefBrowserSettings settings)
         {
-            // TODO: CefBrowser.CreateBrowserSync
-            throw new NotImplementedException();
+            fixed (char* url_str = url)
+            {
+                cef_string_t n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
+
+                var browser = libcef.browser_create_sync(
+                    windowInfo.NativePointer,
+                    client.GetNativePointerAndAddRef(),
+                    &n_url,
+                    settings.NativePointer
+                    );
+
+                if (browser == null) throw new InvalidOperationException("CefBrowser.CreateSync error.");
+
+                return CefBrowser.From(browser);
+            }
         }
 
         /// <summary>
@@ -185,25 +199,29 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Returns the frame with the specified name, or NULL if not found. This
-        /// method should only be called on the UI thread.
+        /// Returns the frame with the specified name, or NULL if not found.
+        /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: public */
-        cef_frame_t* GetFrame( /*const*/ cef_string_t* name)
+        public CefFrame GetFrame(string name)
         {
-            // TODO: CefBrowser.GetFrame
-            throw new NotImplementedException();
+            fixed (char* str = name)
+            {
+                var n_name = new cef_string_t(str, name != null ? name.Length : 0);
+                return CefFrame.FromOrDefault(
+                    this.get_frame(this.ptr, &n_name)
+                    );
+            }
         }
 
         /// <summary>
-        /// Returns the names of all existing frames. This method should only be
-        /// called on the UI thread.
+        /// Returns the names of all existing frames.
+        /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: public */
-        void GetFrameNames(cef_string_list_t names)
+        public CefStringList GetFrameNames()
         {
-            // TODO: CefBrowser.GetFrameNames
-            throw new NotImplementedException();
+            var list = new CefStringList();
+            this.get_frame_names(this.ptr, list.GetNativeHandle());
+            return list;
         }
 
         /// <summary>
@@ -215,23 +233,19 @@ namespace CefGlue
         /// </summary>
         public void Find(int identifier, string searchText, bool forward, bool matchCase, bool findNext)
         {
-            // TODO: check CefBrowser.Find
-            cef_string_t n_searchText;
-            cef_string_t.Copy(searchText, &n_searchText);
-
-            this.find(this.ptr, identifier, &n_searchText, forward ? 1 : 0, matchCase ? 1 : 0, findNext ? 1 : 0);
-
-            cef_string_t.Clear(&n_searchText);
+            fixed (char* str = searchText)
+            {
+                var n_searchText = new cef_string_t(str, searchText != null ? searchText.Length : 0);
+                this.find(this.ptr, identifier, &n_searchText, forward ? 1 : 0, matchCase ? 1 : 0, findNext ? 1 : 0);
+            }
         }
 
         /// <summary>
         /// Cancel all searches that are currently going on.
         /// </summary>
-        /* FIXME: public */
-        void StopFinding(int clearSelection)
+        public void StopFinding(bool clearSelection)
         {
-            // TODO: CefBrowser.StopFinding
-            throw new NotImplementedException();
+            this.stop_finding(this.ptr, clearSelection ? 1 : 0);
         }
 
         /// <summary>
@@ -281,22 +295,26 @@ namespace CefGlue
         /// Get the size of the specified element.
         /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: public */
-        int GetSize(cef_paint_element_type_t type, int* width, int* height)
+        public bool GetSize(CefPaintElementType type, out int width, out int height)
         {
-            // TODO: CefBrowser.GetSize
-            throw new NotImplementedException();
+            int m_width;
+            int m_height;
+
+            var result = this.get_size(this.ptr, (cef_paint_element_type_t)type, &m_width, &m_height);
+
+            width = m_width;
+            height = m_height;
+
+            return result != 0;
         }
 
         /// <summary>
         /// Set the size of the specified element.
         /// This method is only used when window rendering is disabled.
         /// </summary>
-        /* FIXME: public */
-        void SetSize(cef_paint_element_type_t type, int width, int height)
+        public void SetSize(CefPaintElementType type, int width, int height)
         {
-            // TODO: CefBrowser.SetSize
-            throw new NotImplementedException();
+            this.set_size(this.ptr, (cef_paint_element_type_t)type, width, height);
         }
 
         /// <summary>
@@ -320,93 +338,77 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Invalidate the |dirtyRect| region of the view. This method is only
-        /// used when window rendering is disabled and will result in a call to
-        /// HandlePaint().
+        /// Invalidate the |dirtyRect| region of the view.
+        /// This method is only used when window rendering is disabled and will result in a call to HandlePaint().
         /// </summary>
-        /* FIXME: public */
-        void Invalidate( /*const*/ cef_rect_t* dirtyRect)
+        public void Invalidate(CefRect dirtyRect)
         {
-            // TODO: CefBrowser.Invalidate
-            throw new NotImplementedException();
+            cef_rect_t n_dirtyRect;
+            dirtyRect.To(&n_dirtyRect);
+
+            this.invalidate(this.ptr, &n_dirtyRect);
         }
 
         /// <summary>
-        /// Get the raw image data contained in the specified element without
-        /// performing validation. The specified |width| and |height| dimensions
-        /// must match the current element size. On Windows |buffer| must be
-        /// width*height*4 bytes in size and represents a BGRA image with an
-        /// upper-left origin. This method should only be called on the UI
-        /// thread.
+        /// Get the raw image data contained in the specified element without performing validation.
+        /// The specified |width| and |height| dimensions must match the current element size.
+        /// On Windows |buffer| must be width*height*4 bytes in size and represents a BGRA image with an upper-left origin.
+        /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: public */
-        int GetImage(cef_paint_element_type_t type, int width, int height, void* buffer)
+        public bool GetImage(CefPaintElementType type, int width, int height, IntPtr buffer)
         {
-            // TODO: CefBrowser.GetImage
-            throw new NotImplementedException();
+            return this.get_image(this.ptr, (cef_paint_element_type_t)type, width, height, (void*)buffer) != 0;
         }
 
         /// <summary>
         /// Send a key event to the browser.
         /// </summary>
-        /* FIXME: public */
-        void SendKeyEvent(cef_key_type_t type, int key, int modifiers, int sysChar, int imeChar)
+        public void SendKeyEvent(CefKeyType type, int key, CefHandlerKeyEventModifiers modifiers, bool sysChar, bool imeChar)
         {
-            // TODO: CefBrowser.SendKeyEvent
-            throw new NotImplementedException();
+            this.send_key_event(this.ptr, (cef_key_type_t)type, key, (int)modifiers, sysChar ? 1 : 0, imeChar ? 1 : 0);
         }
 
         /// <summary>
-        /// Send a mouse click event to the browser. The |x| and |y| coordinates
-        /// are relative to the upper-left corner of the view.
+        /// Send a mouse click event to the browser.
+        /// The |x| and |y| coordinates are relative to the upper-left corner of the view.
         /// </summary>
-        /* FIXME: public */
-        void SendMouseClickEvent(int x, int y, cef_mouse_button_type_t type, int mouseUp, int clickCount)
+        public void SendMouseClickEvent(int x, int y, CefMouseButtonType type, bool mouseUp, int clickCount)
         {
-            // TODO: CefBrowser.SendMouseClickEvent
-            throw new NotImplementedException();
+            this.send_mouse_click_event(this.ptr, x, y, (cef_mouse_button_type_t)type, mouseUp ? 1 : 0, clickCount);
         }
 
         /// <summary>
-        /// Send a mouse move event to the browser. The |x| and |y| coordinates
-        /// are relative to the upper-left corner of the view.
+        /// Send a mouse move event to the browser.
+        /// The |x| and |y| coordinates are relative to the upper-left corner of the view.
         /// </summary>
-        /* FIXME: public */
-        void SendMouseMoveEvent(int x, int y, int mouseLeave)
+        public void SendMouseMoveEvent(int x, int y, bool mouseLeave)
         {
-            // TODO: CefBrowser.SendMouseMoveEvent
-            throw new NotImplementedException();
+            this.send_mouse_move_event(this.ptr, x, y, mouseLeave ? 1 : 0);
         }
 
         /// <summary>
-        /// Send a mouse wheel event to the browser. The |x| and |y| coordinates
-        /// are relative to the upper-left corner of the view.
+        /// Send a mouse wheel event to the browser.
+        /// The |x| and |y| coordinates are relative to the upper-left corner of the view.
         /// </summary>
-        /* FIXME: public */
-        void SendMouseWheelEvent(int x, int y, int delta)
+        public void SendMouseWheelEvent(int x, int y, int delta)
         {
-            // TODO: CefBrowser.SendMouseWheelEvent
-            throw new NotImplementedException();
+            this.send_mouse_wheel_event(this.ptr, x, y, delta);
         }
 
         /// <summary>
         /// Send a focus event to the browser.
         /// </summary>
-        /* FIXME: public */
-        void SendFocusEvent(int setFocus)
+        public void SendFocusEvent(bool setFocus)
         {
-            // TODO: CefBrowser.SendFocusEvent
-            throw new NotImplementedException();
+            this.send_focus_event(this.ptr, setFocus ? 1 : 0);
         }
 
         /// <summary>
         /// Send a capture lost event to the browser.
         /// </summary>
-        /* FIXME: public */
-        void SendCaptureLostEvent()
+        public void SendCaptureLostEvent()
         {
-            // TODO: CefBrowser.SendCaptureLostEvent
-            throw new NotImplementedException();
+            this.send_capture_lost_event(this.ptr);
         }
     }
 }

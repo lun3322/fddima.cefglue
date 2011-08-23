@@ -21,7 +21,7 @@ namespace CefGlue
 
             var m_browser = CefBrowser.From(browser);
             var m_type = (CefHandlerKeyEventType)type;
-            var m_isSystemKey = isSystemKey != 0 ? true : false;
+            var m_isSystemKey = isSystemKey != 0;
 
             var handled = this.OnKeyEvent(m_browser, m_type, code, (CefHandlerKeyEventModifiers)modifiers, m_isSystemKey);
 

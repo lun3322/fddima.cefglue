@@ -1,6 +1,7 @@
 namespace CefGlue
 {
     using System;
+    using System.IO;
     using Core;
 
     unsafe partial class CefWriteHandler
@@ -11,9 +12,14 @@ namespace CefGlue
         private int write(cef_write_handler_t* self, /*const*/ void* ptr, int size, int n)
         {
             ThrowIfObjectDisposed();
-            // TODO: CefWriteHandler.write
-            throw new NotImplementedException();
+
+            using (var m_stream = new UnmanagedMemoryStream((byte*)ptr, size * n, 0, FileAccess.Read))
+            {
+                return this.Write(m_stream, size, n);
+            }
         }
+
+        protected abstract int Write(Stream stream, int size, int count);
 
         /// <summary>
         /// Seek to the specified offset position. |whence| may be any one of
@@ -22,9 +28,17 @@ namespace CefGlue
         private int seek(cef_write_handler_t* self, long offset, int whence)
         {
             ThrowIfObjectDisposed();
-            // TODO: CefWriteHandler.seek
-            throw new NotImplementedException();
+
+            return this.Seek(offset, (SeekOrigin)whence) ? 0 : 1;
         }
+
+        /// <summary>
+        /// Seek to the specified offset position.
+        /// |whence| may be any one of SEEK_CUR, SEEK_END or SEEK_SET.
+        /// </summary>
+        /// <returns>If successfull - returns true. If fails - returns false.</returns>
+        protected abstract bool Seek(long offset, SeekOrigin whence);
+
 
         /// <summary>
         /// Return the current offset position.
@@ -32,9 +46,15 @@ namespace CefGlue
         private long tell(cef_write_handler_t* self)
         {
             ThrowIfObjectDisposed();
-            // TODO: CefWriteHandler.tell
-            throw new NotImplementedException();
+
+            return this.Tell();
         }
+
+        /// <summary>
+        /// Return the current offset position.
+        /// </summary>
+        protected abstract long Tell();
+
 
         /// <summary>
         /// Flush the stream.
@@ -42,9 +62,15 @@ namespace CefGlue
         private int flush(cef_write_handler_t* self)
         {
             ThrowIfObjectDisposed();
-            // TODO: CefWriteHandler.flush
-            throw new NotImplementedException();
+
+            return this.Flush() ? 0 : 1;
         }
+
+        /// <summary>
+        /// Flush the stream.
+        /// </summary>
+        /// <returns>If successfull - returns true. If fails - returns false.</returns>
+        protected abstract bool Flush();
 
 
     }

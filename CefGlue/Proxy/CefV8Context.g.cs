@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefV8Context From(cef_v8context_t* ptr)
         {
-			return new CefV8Context(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefV8Context(ptr);
+        }
+		
+        internal static CefV8Context FromOrDefault(cef_v8context_t* ptr)
+        {
+            if (ptr != null) return new CefV8Context(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefV8Context proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefV8Context Create(cef_v8context_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefV8Context(ptr, addRefCount);
+            throw new NullReferenceException("CefV8Context");
         }
 
         private cef_v8context_t* ptr;
 
-        private CefV8Context(cef_v8context_t* ptr, bool addRefCount)
+        private CefV8Context(cef_v8context_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefV8Context, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

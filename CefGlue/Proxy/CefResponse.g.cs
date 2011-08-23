@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefResponse From(cef_response_t* ptr)
         {
-			return new CefResponse(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefResponse(ptr);
+        }
+		
+        internal static CefResponse FromOrDefault(cef_response_t* ptr)
+        {
+            if (ptr != null) return new CefResponse(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefResponse proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefResponse Create(cef_response_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefResponse(ptr, addRefCount);
+            throw new NullReferenceException("CefResponse");
         }
 
         private cef_response_t* ptr;
 
-        private CefResponse(cef_response_t* ptr, bool addRefCount)
+        private CefResponse(cef_response_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefResponse, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

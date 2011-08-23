@@ -9,11 +9,11 @@
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     internal unsafe struct time_t
     {
-        private int _seconds;
+        private int seconds;
 
         public DateTime ToDateTime()
         {
-            return new DateTime(1970, 1, 1).AddSeconds(_seconds);
+            return new DateTime(1970, 1, 1).AddSeconds(seconds);
         }
     }
 }

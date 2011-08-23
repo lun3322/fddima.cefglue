@@ -2,70 +2,80 @@ namespace CefGlue
 {
     using System;
     using Core;
+    using System.IO;
 
     unsafe partial class CefStreamWriter
     {
         /// <summary>
         /// Create a new CefStreamWriter object for a file.
         /// </summary>
-        /* FIXME: CefStreamWriter.CreateForFile public */
-        static cef_stream_writer_t* CreateForFile(/*const*/ cef_string_t* fileName)
+        public static CefStreamWriter Create(string fileName)
         {
-            // TODO: CefStreamWriter.CreateForFile
-            throw new NotImplementedException();
+            fixed (char* fileName_str = fileName)
+            {
+                var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
+                return CefStreamWriter.From(
+                    libcef.stream_writer_create_for_file(&n_fileName)
+                    );
+            }
         }
 
         /// <summary>
         /// Create a new CefStreamWriter object for a custom handler.
         /// </summary>
-        /* FIXME: CefStreamWriter.CreateForHandler public */
-        static cef_stream_writer_t* CreateForHandler(cef_write_handler_t* handler)
+        public static CefStreamWriter Create(CefWriteHandler handler)
         {
-            // TODO: CefStreamWriter.CreateForHandler
-            throw new NotImplementedException();
+            return CefStreamWriter.From(
+                libcef.stream_writer_create_for_handler(handler.GetNativePointerAndAddRef())
+                );
         }
 
         /// <summary>
         /// Write raw binary data.
         /// </summary>
-        /* FIXME: CefStreamWriter.Write public */
-        int Write(/*const*/ void* ptr, int size, int n)
+        internal int Write(/*const*/ void* ptr, int size, int count)
         {
-            // TODO: CefStreamWriter.Write
-            throw new NotImplementedException();
+            return this.write(this.ptr, ptr, size, count);
         }
 
         /// <summary>
-        /// Seek to the specified offset position. |whence| may be any one of
-        /// SEEK_CUR, SEEK_END or SEEK_SET.
+        /// Write raw binary data.
         /// </summary>
-        /* FIXME: CefStreamWriter.Seek public */
-        int Seek(long offset, int whence)
+        public int Write(byte[] buffer, int offset, int length)
         {
-            // TODO: CefStreamWriter.Seek
-            throw new NotImplementedException();
+            if (buffer.Length - offset < length) throw new ArgumentOutOfRangeException();
+
+            fixed (byte* ptr = &buffer[offset])
+            {
+                return Write(ptr, 1, length);
+            }
+        }
+
+
+        /// <summary>
+        /// Seek to the specified offset position.
+        /// |whence| may be any one of SEEK_CUR, SEEK_END or SEEK_SET.
+        /// </summary>
+        public bool Seek(long offset, SeekOrigin whence)
+        {
+            return this.seek(this.ptr, offset, (int)whence) == 0;
         }
 
         /// <summary>
         /// Return the current offset position.
         /// </summary>
-        /* FIXME: CefStreamWriter.Tell public */
-        long Tell()
+        public long Tell()
         {
-            // TODO: CefStreamWriter.Tell
-            throw new NotImplementedException();
+            return this.tell(this.ptr);
         }
 
         /// <summary>
         /// Flush the stream.
         /// </summary>
-        /* FIXME: CefStreamWriter.Flush public */
-        int Flush()
+        public bool Flush()
         {
-            // TODO: CefStreamWriter.Flush
-            throw new NotImplementedException();
+            return this.flush(this.ptr) == 0;
         }
-
 
     }
 }

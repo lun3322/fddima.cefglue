@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefWebUrlRequest From(cef_web_urlrequest_t* ptr)
         {
-			return new CefWebUrlRequest(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefWebUrlRequest(ptr);
+        }
+		
+        internal static CefWebUrlRequest FromOrDefault(cef_web_urlrequest_t* ptr)
+        {
+            if (ptr != null) return new CefWebUrlRequest(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefWebUrlRequest proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefWebUrlRequest Create(cef_web_urlrequest_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefWebUrlRequest(ptr, addRefCount);
+            throw new NullReferenceException("CefWebUrlRequest");
         }
 
         private cef_web_urlrequest_t* ptr;
 
-        private CefWebUrlRequest(cef_web_urlrequest_t* ptr, bool addRefCount)
+        private CefWebUrlRequest(cef_web_urlrequest_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefWebUrlRequest, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

@@ -64,6 +64,7 @@
     <Compile Include="base\cef_string_userfree_t.cs" />
     <Compile Include="base\cef_window_handle_t.cs" />
     <Compile Include="base\time_t.cs" />
+    <Compile Include="cefglue_base_t.cs" />
     <Compile Include="cef_base_t.cs" />
     <Compile Include="enum\cef_dom_document_type_t.cs" />
     <Compile Include="enum\cef_dom_event_category_t.cs" />

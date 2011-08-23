@@ -6,57 +6,67 @@ namespace CefGlue
     unsafe partial class CefXmlReader
     {
         /// <summary>
-        /// Create a new CefXmlReader object. The returned object's methods can
-        /// only be called from the thread that created the object.
+        /// Create a new CefXmlReader object.
+        /// The returned object's methods can only be called from the thread that created the object.
         /// </summary>
-        /* FIXME: CefXmlReader.Create public */
-        static cef_xml_reader_t* Create(cef_stream_reader_t* stream, cef_xml_encoding_type_t encodingType, /*const*/ cef_string_t* URI)
+        public static CefXmlReader Create(CefStreamReader stream, CefXmlEncodingType encodingType, string uri)
         {
-            // TODO: CefXmlReader.Create
-            throw new NotImplementedException();
+            fixed (char* uri_str = uri)
+            {
+                var n_uri = new cef_string_t(uri_str, uri != null ? uri.Length : 0);
+
+                return CefXmlReader.From(
+                    libcef.xml_reader_create(
+                        stream.GetNativePointerAndAddRef(),
+                        (cef_xml_encoding_type_t)encodingType,
+                        &n_uri)
+                        );
+            }
         }
 
         /// <summary>
-        /// Moves the cursor to the next node in the document. This method must
-        /// be called at least once to set the current cursor position. Returns
-        /// true if the cursor position was set successfully.
+        /// Create a new CefXmlReader object.
+        /// The returned object's methods can only be called from the thread that created the object.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToNextNode public */
-        int MoveToNextNode()
+        public static CefXmlReader Create(CefStreamReader stream, CefXmlEncodingType encodingType, Uri uri)
         {
-            // TODO: CefXmlReader.MoveToNextNode
-            throw new NotImplementedException();
+            return Create(stream, encodingType, uri.ToString());
         }
 
         /// <summary>
-        /// Close the document. This should be called directly to ensure that
-        /// cleanup occurs on the correct thread.
+        /// Moves the cursor to the next node in the document.
+        /// This method must be called at least once to set the current cursor position.
+        /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.Close public */
-        int Close()
+        public bool MoveToNextNode()
         {
-            // TODO: CefXmlReader.Close
-            throw new NotImplementedException();
+            return this.move_to_next_node(this.ptr) != 0;
+        }
+
+        /// <summary>
+        /// Close the document.
+        /// This should be called directly to ensure that cleanup occurs on the correct thread.
+        /// </summary>
+        public bool Close()
+        {
+            return this.close(this.ptr) != 0;
         }
 
         /// <summary>
         /// Returns true if an error has been reported by the XML parser.
         /// </summary>
-        /* FIXME: CefXmlReader.HasError public */
-        int HasError()
+        public bool HasError()
         {
-            // TODO: CefXmlReader.HasError
-            throw new NotImplementedException();
+            return this.has_error(this.ptr) != 0;
         }
 
         /// <summary>
         /// Returns the error string.
         /// </summary>
-        /* FIXME: CefXmlReader.GetError public */
-        cef_string_userfree_t GetError()
+        public string GetError()
         {
-            // TODO: CefXmlReader.GetError
-            throw new NotImplementedException();
+            var n_result = this.get_error(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
 
@@ -65,201 +75,187 @@ namespace CefGlue
         /// <summary>
         /// Returns the node type.
         /// </summary>
-        /* FIXME: CefXmlReader.GetType public */
-        cef_xml_node_type_t GetType()
+        public CefXmlNodeType Type
         {
-            // TODO: CefXmlReader.GetType
-            throw new NotImplementedException();
+            get
+            {
+                return (CefXmlNodeType)this.get_type(this.ptr);
+            }
         }
 
         /// <summary>
         /// Returns the node depth. Depth starts at 0 for the root node.
         /// </summary>
-        /* FIXME: CefXmlReader.GetDepth public */
-        int GetDepth()
+        public int GetDepth()
         {
-            // TODO: CefXmlReader.GetDepth
-            throw new NotImplementedException();
+            return this.get_depth(this.ptr);
         }
 
         /// <summary>
-        /// Returns the local name. See http://www.w3.org/TR/REC-xml-names/#NT-
-        /// LocalPart for additional details.
+        /// Returns the local name.
+        /// See http://www.w3.org/TR/REC-xml-names/#NT-LocalPart for additional details.
         /// </summary>
-        /* FIXME: CefXmlReader.GetLocalName public */
-        cef_string_userfree_t GetLocalName()
+        public string GetLocalName()
         {
-            // TODO: CefXmlReader.GetLocalName
-            throw new NotImplementedException();
+            var n_result = this.get_local_name(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns the namespace prefix. See http://www.w3.org/TR/REC-xml-names/
-        /// for additional details.
+        /// Returns the namespace prefix.
+        /// See http://www.w3.org/TR/REC-xml-names/ for additional details.
         /// </summary>
-        /* FIXME: CefXmlReader.GetPrefix public */
-        cef_string_userfree_t GetPrefix()
+        public string GetPrefix()
         {
-            // TODO: CefXmlReader.GetPrefix
-            throw new NotImplementedException();
+            var n_result = this.get_prefix(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns the qualified name, equal to (Prefix:)LocalName. See
-        /// http://www.w3.org/TR/REC-xml-names/#ns-qualnames for additional
-        /// details.
+        /// Returns the qualified name, equal to (Prefix:)LocalName.
+        /// See http://www.w3.org/TR/REC-xml-names/#ns-qualnames for additional details.
         /// </summary>
-        /* FIXME: CefXmlReader.GetQualifiedName public */
-        cef_string_userfree_t GetQualifiedName()
+        public string GetQualifiedName()
         {
-            // TODO: CefXmlReader.GetQualifiedName
-            throw new NotImplementedException();
+            var n_result = this.get_qualified_name(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns the URI defining the namespace associated with the node. See
-        /// http://www.w3.org/TR/REC-xml-names/ for additional details.
+        /// Returns the URI defining the namespace associated with the node.
+        /// See http://www.w3.org/TR/REC-xml-names/ for additional details.
         /// </summary>
-        /* FIXME: CefXmlReader.GetNamespaceURI public */
-        cef_string_userfree_t GetNamespaceURI()
+        public string GetNamespaceURI()
         {
-            // TODO: CefXmlReader.GetNamespaceURI
-            throw new NotImplementedException();
+            var n_result = this.get_namespace_uri(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns the base URI of the node. See http://www.w3.org/TR/xmlbase/
-        /// for additional details.
+        /// Returns the base URI of the node.
+        /// See http://www.w3.org/TR/xmlbase/ for additional details.
         /// </summary>
-        /* FIXME: CefXmlReader.GetBaseURI public */
-        cef_string_userfree_t GetBaseURI()
+        public string GetBaseURI()
         {
-            // TODO: CefXmlReader.GetBaseURI
-            throw new NotImplementedException();
+            var n_result = this.get_base_uri(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns the xml:lang scope within which the node resides. See
-        /// http://www.w3.org/TR/REC-xml/#sec-lang-tag for additional details.
+        /// Returns the xml:lang scope within which the node resides.
+        /// See http://www.w3.org/TR/REC-xml/#sec-lang-tag for additional details.
         /// </summary>
-        /* FIXME: CefXmlReader.GetXmlLang public */
-        cef_string_userfree_t GetXmlLang()
+        public string GetXmlLang()
         {
-            // TODO: CefXmlReader.GetXmlLang
-            throw new NotImplementedException();
+            var n_result = this.get_xml_lang(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns true if the node represents an empty element. <a/> is
-        /// considered empty but <a></a> is not.
+        /// Returns true if the node represents an empty element.
+        /// &lt;a/&gt; is considered empty but &lt;a&gt;&lt;/a&gt; is not.
         /// </summary>
-        /* FIXME: CefXmlReader.IsEmptyElement public */
-        int IsEmptyElement()
+        public bool IsEmptyElement()
         {
-            // TODO: CefXmlReader.IsEmptyElement
-            throw new NotImplementedException();
+            return this.is_empty_element(this.ptr) != 0;
         }
 
         /// <summary>
         /// Returns true if the node has a text value.
         /// </summary>
-        /* FIXME: CefXmlReader.HasValue public */
-        int HasValue()
+        public bool HasValue()
         {
-            // TODO: CefXmlReader.HasValue
-            throw new NotImplementedException();
+            return this.has_value(this.ptr) != 0;
         }
 
         /// <summary>
         /// Returns the text value.
         /// </summary>
-        /* FIXME: CefXmlReader.GetValue public */
-        cef_string_userfree_t GetValue()
+        public string GetValue()
         {
-            // TODO: CefXmlReader.GetValue
-            throw new NotImplementedException();
+            var n_result = this.get_value(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns true if the node has attributes.
         /// </summary>
-        /* FIXME: CefXmlReader.HasAttributes public */
-        int HasAttributes()
+        public bool HasAttributes()
         {
-            // TODO: CefXmlReader.HasAttributes
-            throw new NotImplementedException();
+            return this.has_attributes(this.ptr) != 0;
         }
 
         /// <summary>
         /// Returns the number of attributes.
         /// </summary>
-        /* FIXME: CefXmlReader.GetAttributeCount public */
-        int GetAttributeCount()
+        public int GetAttributeCount()
         {
-            // TODO: CefXmlReader.GetAttributeCount
-            throw new NotImplementedException();
+            return this.get_attribute_count(this.ptr);
         }
 
         /// <summary>
         /// Returns the value of the attribute at the specified 0-based index.
         /// </summary>
-        /* FIXME: CefXmlReader.GetAttribute public */
-        cef_string_userfree_t GetAttribute(int index)
+        public string GetAttribute(int index)
         {
-            // TODO: CefXmlReader.GetAttribute
-            throw new NotImplementedException();
+            var n_result = this.get_attribute_byindex(this.ptr, index);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the value of the attribute with the specified qualified name.
         /// </summary>
-        /* FIXME: CefXmlReader.GetAttribute public */
-        cef_string_userfree_t GetAttribute(/*const*/ cef_string_t* qualifiedName)
+        public string GetAttribute(string qualifiedName)
         {
-            // TODO: CefXmlReader.GetAttribute
-            throw new NotImplementedException();
+            fixed (char* qualifiedName_str = qualifiedName)
+            {
+                var n_qualifiedName = new cef_string_t(qualifiedName_str, qualifiedName != null ? qualifiedName.Length : 0);
+
+                var n_result = this.get_attribute_byqname(this.ptr, &n_qualifiedName);
+                return n_result.GetStringAndFree();
+            }
         }
 
         /// <summary>
-        /// Returns the value of the attribute with the specified local name and
-        /// namespace URI.
+        /// Returns the value of the attribute with the specified local name and namespace URI.
         /// </summary>
-        /* FIXME: CefXmlReader.GetAttribute public */
-        cef_string_userfree_t GetAttribute(/*const*/ cef_string_t* localName, /*const*/ cef_string_t* namespaceURI)
+        public string GetAttribute(string localName, string namespaceUri)
         {
-            // TODO: CefXmlReader.GetAttribute
-            throw new NotImplementedException();
+            fixed (char* localName_str = localName)
+            fixed (char* namespaceUri_str = namespaceUri)
+            {
+                var n_localName = new cef_string_t(localName_str, localName != null ? localName.Length : 0);
+                var n_namespaceUri = new cef_string_t(namespaceUri_str, namespaceUri != null ? namespaceUri.Length : 0);
+
+                var n_result = this.get_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri);
+                return n_result.GetStringAndFree();
+            }
         }
 
         /// <summary>
         /// Returns an XML representation of the current node's children.
         /// </summary>
-        /* FIXME: CefXmlReader.GetInnerXml public */
-        cef_string_userfree_t GetInnerXml()
+        public string GetInnerXml()
         {
-            // TODO: CefXmlReader.GetInnerXml
-            throw new NotImplementedException();
+            var n_result = this.get_inner_xml(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns an XML representation of the current node including its
-        /// children.
+        /// Returns an XML representation of the current node including its children.
         /// </summary>
-        /* FIXME: CefXmlReader.GetOuterXml public */
-        cef_string_userfree_t GetOuterXml()
+        public string GetOuterXml()
         {
-            // TODO: CefXmlReader.GetOuterXml
-            throw new NotImplementedException();
+            var n_result = this.get_outer_xml(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the line number for the current node.
         /// </summary>
-        /* FIXME: CefXmlReader.GetLineNumber public */
-        int GetLineNumber()
+        public int GetLineNumber()
         {
-            // TODO: CefXmlReader.GetLineNumber
-            throw new NotImplementedException();
+            return this.get_line_number(this.ptr);
         }
 
 
@@ -273,69 +269,67 @@ namespace CefGlue
         /// Moves the cursor to the attribute at the specified 0-based index.
         /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToAttribute public */
-        int MoveToAttribute(int index)
+        public bool MoveToAttribute(int index)
         {
-            // TODO: CefXmlReader.MoveToAttribute
-            throw new NotImplementedException();
+            return this.move_to_attribute_byindex(this.ptr, index) != 0;
         }
 
         /// <summary>
         /// Moves the cursor to the attribute with the specified qualified name.
         /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToAttribute public */
-        int MoveToAttribute(/*const*/ cef_string_t* qualifiedName)
+        public bool MoveToAttribute(string qualifiedName)
         {
-            // TODO: CefXmlReader.MoveToAttribute
-            throw new NotImplementedException();
+            fixed (char* qualifiedName_str = qualifiedName)
+            {
+                var n_qualifiedName = new cef_string_t(qualifiedName_str, qualifiedName != null ? qualifiedName.Length : 0);
+
+                return this.move_to_attribute_byqname(this.ptr, &n_qualifiedName) != 0;
+            }
         }
 
         /// <summary>
-        /// Moves the cursor to the attribute with the specified local name and
-        /// namespace URI. Returns true if the cursor position was set
-        /// successfully.
+        /// Moves the cursor to the attribute with the specified local name and namespace URI.
+        /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToAttribute public */
-        int MoveToAttribute(/*const*/ cef_string_t* localName, /*const*/ cef_string_t* namespaceURI)
+        public bool MoveToAttribute(string localName, string namespaceUri)
         {
-            // TODO: CefXmlReader.MoveToAttribute
-            throw new NotImplementedException();
+            fixed (char* localName_str = localName)
+            fixed (char* namespaceUri_str = namespaceUri)
+            {
+                var n_localName = new cef_string_t(localName_str, localName != null ? localName.Length : 0);
+                var n_namespaceUri = new cef_string_t(namespaceUri_str, namespaceUri != null ? namespaceUri.Length : 0);
+
+                return this.move_to_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri) != 0;
+            }
         }
 
         /// <summary>
         /// Moves the cursor to the first attribute in the current element.
         /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToFirstAttribute public */
-        int MoveToFirstAttribute()
+        public bool MoveToFirstAttribute()
         {
-            // TODO: CefXmlReader.MoveToFirstAttribute
-            throw new NotImplementedException();
+            return this.move_to_first_attribute(this.ptr) != 0;
         }
 
         /// <summary>
         /// Moves the cursor to the next attribute in the current element.
         /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToNextAttribute public */
-        int MoveToNextAttribute()
+        public bool MoveToNextAttribute()
         {
-            // TODO: CefXmlReader.MoveToNextAttribute
-            throw new NotImplementedException();
+            return this.move_to_next_attribute(this.ptr) != 0;
         }
 
         /// <summary>
-        /// Moves the cursor back to the carrying element. Returns true if the
-        /// cursor position was set successfully.
+        /// Moves the cursor back to the carrying element.
+        /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefXmlReader.MoveToCarryingElement public */
-        int MoveToCarryingElement()
+        public bool MoveToCarryingElement()
         {
-            // TODO: CefXmlReader.MoveToCarryingElement
-            throw new NotImplementedException();
+            return this.move_to_carrying_element(this.ptr) != 0;
         }
-
 
     }
 }

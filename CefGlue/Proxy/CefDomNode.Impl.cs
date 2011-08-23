@@ -8,170 +8,166 @@ namespace CefGlue
         /// <summary>
         /// Returns the type for this node.
         /// </summary>
-        /* FIXME: CefDomNode.GetType public */
-        cef_dom_node_type_t GetType()
+        public CefDomNodeType Type
         {
-            // TODO: CefDomNode.GetType
-            throw new NotImplementedException();
+            get
+            {
+                return (CefDomNodeType)this.get_type(this.ptr);
+            }
         }
 
         /// <summary>
         /// Returns true if this is a text node.
         /// </summary>
-        /* FIXME: CefDomNode.IsText public */
-        int IsText()
+        public bool IsText
         {
-            // TODO: CefDomNode.IsText
-            throw new NotImplementedException();
+            get
+            {
+                return this.is_text(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// Returns true if this is an element node.
         /// </summary>
-        /* FIXME: CefDomNode.IsElement public */
-        int IsElement()
+        public bool IsElement
         {
-            // TODO: CefDomNode.IsElement
-            throw new NotImplementedException();
+            get
+            {
+                return this.is_element(this.ptr) != 0;
+            }
         }
 
         /// <summary>
-        /// Returns true if this object is pointing to the same handle as |that|
-        /// object.
+        /// Returns true if this object is pointing to the same handle as |that| object.
         /// </summary>
-        /* FIXME: CefDomNode.IsSame public */
-        int IsSame(cef_domnode_t* that)
+        public bool IsSame(CefDomNode that)
         {
-            // TODO: CefDomNode.IsSame
-            throw new NotImplementedException();
+            return this.is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
         /// Returns the name of this node.
         /// </summary>
-        /* FIXME: CefDomNode.GetName public */
-        cef_string_userfree_t GetName()
+        public string GetName()
         {
-            // TODO: CefDomNode.GetName
-            throw new NotImplementedException();
+            var n_name = this.get_name(this.ptr);
+            return n_name.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the value of this node.
         /// </summary>
-        /* FIXME: CefDomNode.GetValue public */
-        cef_string_userfree_t GetValue()
+        public string GetValue()
         {
-            // TODO: CefDomNode.GetValue
-            throw new NotImplementedException();
+            var n_value = this.get_value(this.ptr);
+            return n_value.GetStringAndFree();
         }
 
         /// <summary>
-        /// Set the value of this node. Returns true on success.
+        /// Set the value of this node.
+        /// Returns true on success.
         /// </summary>
-        /* FIXME: CefDomNode.SetValue public */
-        int SetValue(/*const*/ cef_string_t* value)
+        public bool SetValue(string value)
         {
-            // TODO: CefDomNode.SetValue
-            throw new NotImplementedException();
+            fixed (char* value_str = value)
+            {
+                var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
+                return this.set_value(this.ptr, &n_value) != 0;
+            }
         }
 
         /// <summary>
         /// Returns the contents of this node as markup.
         /// </summary>
-        /* FIXME: CefDomNode.GetAsMarkup public */
-        cef_string_userfree_t GetAsMarkup()
+        public string GetAsMarkup()
         {
-            // TODO: CefDomNode.GetAsMarkup
-            throw new NotImplementedException();
+            var n_asMarkup = this.get_as_markup(this.ptr);
+            return n_asMarkup.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the document associated with this node.
         /// </summary>
-        /* FIXME: CefDomNode.GetDocument public */
-        cef_domdocument_t* GetDocument()
+        public CefDomDocument GetDocument()
         {
-            // TODO: CefDomNode.GetDocument
-            throw new NotImplementedException();
+            var n_document = this.get_document(this.ptr);
+            return CefDomDocument.From(n_document);
         }
 
         /// <summary>
         /// Returns the parent node.
         /// </summary>
-        /* FIXME: CefDomNode.GetParent public */
-        cef_domnode_t* GetParent()
+        public CefDomNode GetParent()
         {
-            // TODO: CefDomNode.GetParent
-            throw new NotImplementedException();
+            var n_parent = this.get_parent(this.ptr);
+            return CefDomNode.From(n_parent);
         }
 
         /// <summary>
         /// Returns the previous sibling node.
         /// </summary>
-        /* FIXME: CefDomNode.GetPreviousSibling public */
-        cef_domnode_t* GetPreviousSibling()
+        public CefDomNode GetPreviousSibling()
         {
-            // TODO: CefDomNode.GetPreviousSibling
-            throw new NotImplementedException();
+            var n_result = this.get_previous_sibling(this.ptr);
+            return CefDomNode.From(n_result);
         }
 
         /// <summary>
         /// Returns the next sibling node.
         /// </summary>
-        /* FIXME: CefDomNode.GetNextSibling public */
-        cef_domnode_t* GetNextSibling()
+        public CefDomNode GetNextSibling()
         {
-            // TODO: CefDomNode.GetNextSibling
-            throw new NotImplementedException();
+            var n_result = this.get_next_sibling(this.ptr);
+            return CefDomNode.From(n_result);
         }
 
         /// <summary>
         /// Returns true if this node has child nodes.
         /// </summary>
-        /* FIXME: CefDomNode.HasChildren public */
-        int HasChildren()
+        public bool HasChildren
         {
-            // TODO: CefDomNode.HasChildren
-            throw new NotImplementedException();
+            get
+            {
+                return this.has_children(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// Return the first child node.
         /// </summary>
-        /* FIXME: CefDomNode.GetFirstChild public */
-        cef_domnode_t* GetFirstChild()
+        public CefDomNode GetFirstChild()
         {
-            // TODO: CefDomNode.GetFirstChild
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_first_child(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the last child node.
         /// </summary>
-        /* FIXME: CefDomNode.GetLastChild public */
-        cef_domnode_t* GetLastChild()
+        public CefDomNode GetLastChild()
         {
-            // TODO: CefDomNode.GetLastChild
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_last_child(this.ptr)
+                );
         }
 
         /// <summary>
-        /// Add an event listener to this node for the specified event type. If
-        /// |useCapture| is true then this listener will be considered a
-        /// capturing listener. Capturing listeners will recieve all events of
-        /// the specified type before the events are dispatched to any other
-        /// event targets beneath the current node in the tree. Events which are
-        /// bubbling upwards through the tree will not trigger a capturing
-        /// listener. Separate calls to this method can be used to register the
-        /// same listener with and without capture. See WebCore/dom/EventNames.h
-        /// for the list of supported event types.
+        /// Add an event listener to this node for the specified event type.
+        /// If |useCapture| is true then this listener will be considered a capturing listener.
+        /// Capturing listeners will recieve all events of the specified type before the events are dispatched to any other event targets beneath the current node in the tree.
+        /// Events which are bubbling upwards through the tree will not trigger a capturing listener.
+        /// Separate calls to this method can be used to register the same listener with and without capture.
+        /// See WebCore/dom/EventNames.h for the list of supported event types.
         /// </summary>
-        /* FIXME: CefDomNode.AddEventListener public */
-        void AddEventListener(/*const*/ cef_string_t* eventType, cef_domevent_listener_t* listener, int useCapture)
+        public void AddEventListener(string eventType, CefDomEventListener listener, bool useCapture)
         {
-            // TODO: CefDomNode.AddEventListener
-            throw new NotImplementedException();
+            fixed (char* eventType_str = eventType)
+            {
+                var n_eventType = new cef_string_t(eventType_str, eventType != null ? eventType.Length : 0);
+                this.add_event_listener(this.ptr, &n_eventType, listener.GetNativePointerAndAddRef(), useCapture ? 1 : 0);
+            }
         }
 
 
@@ -180,72 +176,99 @@ namespace CefGlue
         /// <summary>
         /// Returns the tag name of this element.
         /// </summary>
-        /* FIXME: CefDomNode.GetElementTagName public */
-        cef_string_userfree_t GetElementTagName()
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public string GetElementTagName()
         {
-            // TODO: CefDomNode.GetElementTagName
-            throw new NotImplementedException();
+            var n_result = this.get_element_tag_name(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns true if this element has attributes.
         /// </summary>
-        /* FIXME: CefDomNode.HasElementAttributes public */
-        int HasElementAttributes()
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public bool HasElementAttributes()
         {
-            // TODO: CefDomNode.HasElementAttributes
-            throw new NotImplementedException();
+            return this.has_element_attributes(this.ptr) != 0;
         }
 
         /// <summary>
         /// Returns true if this element has an attribute named |attrName|.
         /// </summary>
-        /* FIXME: CefDomNode.HasElementAttribute public */
-        int HasElementAttribute(/*const*/ cef_string_t* attrName)
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public bool HasElementAttribute(string attrName)
         {
-            // TODO: CefDomNode.HasElementAttribute
-            throw new NotImplementedException();
+            fixed (char* attrName_str = attrName)
+            {
+                var n_attrName = new cef_string_t(attrName_str, attrName != null ? attrName.Length : 0);
+                return this.has_element_attribute(this.ptr, &n_attrName) != 0;
+            }
         }
 
         /// <summary>
         /// Returns the element attribute named |attrName|.
         /// </summary>
-        /* FIXME: CefDomNode.GetElementAttribute public */
-        cef_string_userfree_t GetElementAttribute(/*const*/ cef_string_t* attrName)
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public string GetElementAttribute(string attrName)
         {
-            // TODO: CefDomNode.GetElementAttribute
-            throw new NotImplementedException();
+            fixed (char* attrName_str = attrName)
+            {
+                var n_attrName = new cef_string_t(attrName_str, attrName != null ? attrName.Length : 0);
+                var n_value = this.get_element_attribute(this.ptr, &n_attrName);
+                return n_value.GetStringAndFree();
+            }
         }
 
         /// <summary>
         /// Returns a map of all element attributes.
         /// </summary>
-        /* FIXME: CefDomNode.GetElementAttributes public */
-        void GetElementAttributes(cef_string_map_t attrMap)
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public CefStringMap GetElementAttributes()
         {
-            // TODO: CefDomNode.GetElementAttributes
-            throw new NotImplementedException();
+            var map = new CefStringMap();
+            this.get_element_attributes(this.ptr, map.GetNativeHandle());
+            return map;
         }
 
         /// <summary>
-        /// Set the value for the element attribute named |attrName|. Returns
-        /// true on success.
+        /// Set the value for the element attribute named |attrName|.
+        /// Returns true on success.
         /// </summary>
-        /* FIXME: CefDomNode.SetElementAttribute public */
-        int SetElementAttribute(/*const*/ cef_string_t* attrName, /*const*/ cef_string_t* value)
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public bool SetElementAttribute(string attrName, string value)
         {
-            // TODO: CefDomNode.SetElementAttribute
-            throw new NotImplementedException();
+            fixed (char* attrName_str = attrName)
+            fixed (char* value_str = value)
+            {
+                var n_attrName = new cef_string_t(attrName_str, attrName != null ? attrName.Length : 0);
+                var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
+
+                return this.set_element_attribute(this.ptr, &n_attrName, &n_value) != 0;
+            }
         }
 
         /// <summary>
         /// Returns the inner text of the element.
         /// </summary>
-        /* FIXME: CefDomNode.GetElementInnerText public */
-        cef_string_userfree_t GetElementInnerText()
+        /// <remarks>
+        /// This method are valid only for element node.
+        /// </remarks>
+        public string GetElementInnerText()
         {
-            // TODO: CefDomNode.GetElementInnerText
-            throw new NotImplementedException();
+            var n_result = this.get_element_inner_text(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
 

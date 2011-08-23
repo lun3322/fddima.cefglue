@@ -115,7 +115,7 @@ namespace CefGlue
             ThrowIfObjectDisposed();
 
             var m_browser = CefBrowser.From(browser);
-            var m_show = show != 0 ? true : false;
+            var m_show = show != 0;
 
             this.OnPopupShow(m_browser, m_show);
         }

@@ -670,4 +670,50 @@
         }
     }
 
+    unsafe partial struct cef_web_urlrequest_client_t
+    {
+        private static int s_size;
+
+        static cef_web_urlrequest_client_t()
+        {
+            s_size = Marshal.SizeOf(typeof(cef_web_urlrequest_client_t));
+        }
+
+        internal static cef_web_urlrequest_client_t* Alloc()
+        {
+            var ptr = (cef_web_urlrequest_client_t*)Marshal.AllocHGlobal(s_size);
+            *ptr = new cef_web_urlrequest_client_t();
+            ptr->@base.size = s_size;
+            return ptr;
+        }
+
+        internal static void Free(cef_web_urlrequest_client_t* ptr)
+        {
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+    }
+
+    unsafe partial struct cefglue_base_t
+    {
+        private static int s_size;
+
+        static cefglue_base_t()
+        {
+            s_size = Marshal.SizeOf(typeof(cefglue_base_t));
+        }
+
+        internal static cefglue_base_t* Alloc()
+        {
+            var ptr = (cefglue_base_t*)Marshal.AllocHGlobal(s_size);
+            *ptr = new cefglue_base_t();
+            ptr->@base.size = s_size;
+            return ptr;
+        }
+
+        internal static void Free(cefglue_base_t* ptr)
+        {
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+    }
+
 }

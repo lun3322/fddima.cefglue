@@ -9,9 +9,11 @@ namespace CefGlue.Diagnostics
 
         ObjectCt,
 
+        //
+        CefBase,
+
         // 
         CefString,
-
 
         // Handlers
         CefClient,

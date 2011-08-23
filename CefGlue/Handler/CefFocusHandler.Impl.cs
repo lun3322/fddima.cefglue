@@ -18,7 +18,7 @@ namespace CefGlue
 
             var m_browser = CefBrowser.From(browser);
 
-            this.OnTakeFocus(m_browser, next != 0 ? true : false);
+            this.OnTakeFocus(m_browser, next != 0);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CefGlue
             ThrowIfObjectDisposed();
 
             var m_browser = CefBrowser.From(browser);
-            var m_isWidget = isWidget != 0 ? true : false;
+            var m_isWidget = isWidget != 0;
 
             var handled = this.OnSetFocus(m_browser, m_isWidget);
 

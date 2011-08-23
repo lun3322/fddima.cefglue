@@ -8,164 +8,163 @@ namespace CefGlue
         /// <summary>
         /// Returns the document type.
         /// </summary>
-        /* FIXME: CefDomDocument.GetType public */
-        cef_dom_document_type_t GetType()
+        public CefDomDocumentType Type
         {
-            // TODO: CefDomDocument.GetType
-            throw new NotImplementedException();
+            get
+            {
+                return (CefDomDocumentType)this.get_type(this.ptr);
+            }
         }
 
         /// <summary>
         /// Returns the root document node.
         /// </summary>
-        /* FIXME: CefDomDocument.GetDocument public */
-        cef_domnode_t* GetDocument()
+        public CefDomNode GetDocument()
         {
-            // TODO: CefDomDocument.GetDocument
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_document(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the BODY node of an HTML document.
         /// </summary>
-        /* FIXME: CefDomDocument.GetBody public */
-        cef_domnode_t* GetBody()
+        public CefDomNode GetBody()
         {
-            // TODO: CefDomDocument.GetBody
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_body(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the HEAD node of an HTML document.
         /// </summary>
-        /* FIXME: CefDomDocument.GetHead public */
-        cef_domnode_t* GetHead()
+        public CefDomNode GetHead()
         {
-            // TODO: CefDomDocument.GetHead
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_head(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the title of an HTML document.
         /// </summary>
-        /* FIXME: CefDomDocument.GetTitle public */
-        cef_string_userfree_t GetTitle()
+        public string GetTitle()
         {
-            // TODO: CefDomDocument.GetTitle
-            throw new NotImplementedException();
+            var n_result = this.get_title(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the document element with the specified ID value.
         /// </summary>
-        /* FIXME: CefDomDocument.GetElementById public */
-        cef_domnode_t* GetElementById(/*const*/ cef_string_t* id)
+        public CefDomNode GetElementById(string id)
         {
-            // TODO: CefDomDocument.GetElementById
-            throw new NotImplementedException();
+            fixed (char* id_str = id)
+            {
+                var n_id = new cef_string_t(id_str, id != null ? id.Length : 0);
+                return CefDomNode.From(
+                    this.get_element_by_id(this.ptr, &n_id)
+                    );
+            }
         }
 
         /// <summary>
         /// Returns the node that currently has keyboard focus.
         /// </summary>
-        /* FIXME: CefDomDocument.GetFocusedNode public */
-        cef_domnode_t* GetFocusedNode()
+        public CefDomNode GetFocusedNode()
         {
-            // TODO: CefDomDocument.GetFocusedNode
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_focused_node(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns true if a portion of the document is selected.
         /// </summary>
-        /* FIXME: CefDomDocument.HasSelection public */
-        int HasSelection()
+        public bool HasSelection
         {
-            // TODO: CefDomDocument.HasSelection
-            throw new NotImplementedException();
+            get
+            {
+                return this.has_selection(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// Returns the selection start node.
         /// </summary>
-        /* FIXME: CefDomDocument.GetSelectionStartNode public */
-        cef_domnode_t* GetSelectionStartNode()
+        public CefDomNode GetSelectionStartNode()
         {
-            // TODO: CefDomDocument.GetSelectionStartNode
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_selection_start_node(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the selection offset within the start node.
         /// </summary>
-        /* FIXME: CefDomDocument.GetSelectionStartOffset public */
-        int GetSelectionStartOffset()
+        public int GetSelectionStartOffset()
         {
-            // TODO: CefDomDocument.GetSelectionStartOffset
-            throw new NotImplementedException();
+            return this.get_selection_start_offset(this.ptr);
         }
 
         /// <summary>
         /// Returns the selection end node.
         /// </summary>
-        /* FIXME: CefDomDocument.GetSelectionEndNode public */
-        cef_domnode_t* GetSelectionEndNode()
+        public CefDomNode GetSelectionEndNode()
         {
-            // TODO: CefDomDocument.GetSelectionEndNode
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_selection_end_node(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the selection offset within the end node.
         /// </summary>
-        /* FIXME: CefDomDocument.GetSelectionEndOffset public */
-        int GetSelectionEndOffset()
+        public int GetSelectionEndOffset()
         {
-            // TODO: CefDomDocument.GetSelectionEndOffset
-            throw new NotImplementedException();
+            return this.get_selection_end_offset(this.ptr);
         }
 
         /// <summary>
         /// Returns the contents of this selection as markup.
         /// </summary>
-        /* FIXME: CefDomDocument.GetSelectionAsMarkup public */
-        cef_string_userfree_t GetSelectionAsMarkup()
+        public string GetSelectionAsMarkup()
         {
-            // TODO: CefDomDocument.GetSelectionAsMarkup
-            throw new NotImplementedException();
+            var n_result = this.get_selection_as_markup(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the contents of this selection as text.
         /// </summary>
-        /* FIXME: CefDomDocument.GetSelectionAsText public */
-        cef_string_userfree_t GetSelectionAsText()
+        public string GetSelectionAsText()
         {
-            // TODO: CefDomDocument.GetSelectionAsText
-            throw new NotImplementedException();
+            var n_result = this.get_selection_as_text(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the base URL for the document.
         /// </summary>
-        /* FIXME: CefDomDocument.GetBaseURL public */
-        cef_string_userfree_t GetBaseURL()
+        public string GetBaseURL()
         {
-            // TODO: CefDomDocument.GetBaseURL
-            throw new NotImplementedException();
+            var n_result = this.get_base_url(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns a complete URL based on the document base URL and the
-        /// specified partial URL.
+        /// Returns a complete URL based on the document base URL and the specified partial URL.
         /// </summary>
-        /* FIXME: CefDomDocument.GetCompleteURL public */
-        cef_string_userfree_t GetCompleteURL(/*const*/ cef_string_t* partialURL)
+        public string GetCompleteURL(string partialUrl)
         {
-            // TODO: CefDomDocument.GetCompleteURL
-            throw new NotImplementedException();
+            fixed (char* partialUrl_str = partialUrl)
+            {
+                var n_partialUrl = new cef_string_t(partialUrl_str, partialUrl != null ? partialUrl.Length : 0);
+                var n_result = this.get_complete_url(this.ptr, &n_partialUrl);
+                return n_result.GetStringAndFree();
+            }
         }
-
 
     }
 }

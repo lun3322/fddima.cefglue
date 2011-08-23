@@ -63,6 +63,8 @@
     <Compile Include="..\CefGlue.Version.cs">
       <Link>Properties\CefGlue.Version.cs</Link>
     </Compile>
+    <Compile Include="Base\CefStringList.cs" />
+    <Compile Include="Base\CefStringMap.cs" />
     <Compile Include="Cef.cs" />
     <Compile Include="Diagnostics\GCFinalizerThreadId.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
@@ -93,6 +95,11 @@
     <Compile Include="Enum\CefWebUrlRequestState.cs" />
     <Compile Include="Enum\CefXmlEncodingType.cs" />
     <Compile Include="Enum\CefXmlNodeType.cs" />
+    <Compile Include="Handler\CefBase.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CefBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="Handler\CefContentFilter.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -180,6 +187,14 @@
     </Compile>
     <Compile Include="Handler\CefV8Handler.Impl.cs">
       <DependentUpon>CefV8Handler.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\CefWebUrlRequestClient.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CefWebUrlRequestClient.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\CefWebUrlRequestClient.Impl.cs">
+      <DependentUpon>CefWebUrlRequestClient.tt</DependentUpon>
     </Compile>
     <Compile Include="Handler\CefWriteHandler.g.cs">
       <AutoGen>True</AutoGen>
@@ -285,14 +300,6 @@
     </Compile>
     <Compile Include="Proxy\CefWebUrlRequest.Impl.cs">
       <DependentUpon>CefWebUrlRequest.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefWebUrlRequestClient.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefWebUrlRequestClient.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefWebUrlRequestClient.Impl.cs">
-      <DependentUpon>CefWebUrlRequestClient.tt</DependentUpon>
     </Compile>
     <Compile Include="Proxy\CefXmlReader.g.cs">
       <AutoGen>True</AutoGen>
@@ -453,6 +460,10 @@
     <None Include="..\CefGlue.snk">
       <Link>Properties\CefGlue.snk</Link>
     </None>
+    <None Include="Handler\CefBase.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CefBase.g.cs</LastGenOutput>
+    </None>
     <None Include="Handler\CefContentFilter.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CefContentFilter.g.cs</LastGenOutput>
@@ -541,6 +552,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CefV8Handler.g.cs</LastGenOutput>
     </None>
+    <None Include="Handler\CefWebUrlRequestClient.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CefWebUrlRequestClient.g.cs</LastGenOutput>
+    </None>
     <None Include="Handler\CefWriteHandler.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CefWriteHandler.g.cs</LastGenOutput>
@@ -605,10 +620,6 @@
     <None Include="Proxy\CefWebUrlRequest.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CefWebUrlRequest.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefWebUrlRequestClient.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefWebUrlRequestClient.g.cs</LastGenOutput>
     </None>
     <None Include="Proxy\CefXmlReader.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

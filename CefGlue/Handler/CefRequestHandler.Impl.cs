@@ -17,7 +17,7 @@ namespace CefGlue
             var m_frame = CefFrame.From(frame);
             var m_request = CefRequest.From(request);
             var m_navType = (CefHandlerNavType)navType;
-            var m_isRedirect = isRedirect != 0 ? true : false;
+            var m_isRedirect = isRedirect != 0;
 
             var handled = this.OnBeforeBrowse(m_browser, m_frame, m_request, m_navType, m_isRedirect);
 
@@ -219,7 +219,7 @@ namespace CefGlue
             ThrowIfObjectDisposed();
 
             var m_browser = CefBrowser.From(browser);
-            var m_isProxy = isProxy != 0 ? true : false;
+            var m_isProxy = isProxy != 0;
             var m_host = cef_string_t.ToString(host);
             var m_realm = cef_string_t.ToString(realm);
             var m_scheme = cef_string_t.ToString(scheme);

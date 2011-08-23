@@ -42,6 +42,10 @@
 
 		new StructDef("cef_read_handler_t",      hasBase:true),
 		new StructDef("cef_write_handler_t",     hasBase:true),
+
+        new StructDef("cef_web_urlrequest_client_t", hasBase:true),
+
+        new StructDef("cefglue_base_t",      hasBase:true),
     };
 
     var structNames = new string[] {

@@ -168,7 +168,7 @@
             cef_string_t.Copy(this.UserAgent, &ptr->user_agent);
             cef_string_t.Copy(this.ProductVersion, &ptr->product_version);
             cef_string_t.Copy(this.Locale, &ptr->locale);
-            ptr->extra_plugin_paths = cef_string_list_t.CreateFrom(this.ExtraPluginPaths);
+            ptr->extra_plugin_paths = cef_string_list_t.Create(this.ExtraPluginPaths);
             cef_string_t.Copy(this.LogFile, &ptr->log_file);
             ptr->log_severity = (cef_log_severity_t)this.LogSeverity;
 

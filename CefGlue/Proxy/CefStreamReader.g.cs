@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefStreamReader From(cef_stream_reader_t* ptr)
         {
-			return new CefStreamReader(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefStreamReader(ptr);
+        }
+		
+        internal static CefStreamReader FromOrDefault(cef_stream_reader_t* ptr)
+        {
+            if (ptr != null) return new CefStreamReader(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefStreamReader proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefStreamReader Create(cef_stream_reader_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefStreamReader(ptr, addRefCount);
+            throw new NullReferenceException("CefStreamReader");
         }
 
         private cef_stream_reader_t* ptr;
 
-        private CefStreamReader(cef_stream_reader_t* ptr, bool addRefCount)
+        private CefStreamReader(cef_stream_reader_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefStreamReader, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

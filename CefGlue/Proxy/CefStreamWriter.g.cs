@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefStreamWriter From(cef_stream_writer_t* ptr)
         {
-			return new CefStreamWriter(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefStreamWriter(ptr);
+        }
+		
+        internal static CefStreamWriter FromOrDefault(cef_stream_writer_t* ptr)
+        {
+            if (ptr != null) return new CefStreamWriter(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefStreamWriter proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefStreamWriter Create(cef_stream_writer_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefStreamWriter(ptr, addRefCount);
+            throw new NullReferenceException("CefStreamWriter");
         }
 
         private cef_stream_writer_t* ptr;
 
-        private CefStreamWriter(cef_stream_writer_t* ptr, bool addRefCount)
+        private CefStreamWriter(cef_stream_writer_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefStreamWriter, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

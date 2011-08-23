@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefZipReader From(cef_zip_reader_t* ptr)
         {
-			return new CefZipReader(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefZipReader(ptr);
+        }
+		
+        internal static CefZipReader FromOrDefault(cef_zip_reader_t* ptr)
+        {
+            if (ptr != null) return new CefZipReader(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefZipReader proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefZipReader Create(cef_zip_reader_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefZipReader(ptr, addRefCount);
+            throw new NullReferenceException("CefZipReader");
         }
 
         private cef_zip_reader_t* ptr;
 
-        private CefZipReader(cef_zip_reader_t* ptr, bool addRefCount)
+        private CefZipReader(cef_zip_reader_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefZipReader, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

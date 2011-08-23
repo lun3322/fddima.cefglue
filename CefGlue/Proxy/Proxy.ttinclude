@@ -75,20 +75,24 @@ namespace CefGlue
         /// </summary>
         internal static <#=def.ClassName#> From(<#=def.StructName#>* ptr)
         {
-			return new <#=def.ClassName#>(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new <#=def.ClassName#>(ptr);
+        }
+		
+        internal static <#=def.ClassName#> FromOrDefault(<#=def.StructName#>* ptr)
+        {
+            if (ptr != null) return new <#=def.ClassName#>(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create <#=def.ClassName#> proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static <#=def.ClassName#> Create(<#=def.StructName#>* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new <#=def.ClassName#>(ptr, addRefCount);
+            throw new NullReferenceException("<#=def.ClassName#>");
         }
 
         private <#=def.StructName#>* ptr;
 
-        private <#=def.ClassName#>(<#=def.StructName#>* ptr, bool addRefCount)
+        private <#=def.ClassName#>(<#=def.StructName#>* ptr)
         {
             this.ptr = ptr;
 
@@ -97,7 +101,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

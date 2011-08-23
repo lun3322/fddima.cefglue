@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefFrame From(cef_frame_t* ptr)
         {
-			return new CefFrame(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefFrame(ptr);
+        }
+		
+        internal static CefFrame FromOrDefault(cef_frame_t* ptr)
+        {
+            if (ptr != null) return new CefFrame(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefFrame proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefFrame Create(cef_frame_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefFrame(ptr, addRefCount);
+            throw new NullReferenceException("CefFrame");
         }
 
         private cef_frame_t* ptr;
 
-        private CefFrame(cef_frame_t* ptr, bool addRefCount)
+        private CefFrame(cef_frame_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefFrame, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

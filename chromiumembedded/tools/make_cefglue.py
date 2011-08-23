@@ -12,6 +12,7 @@ def is_handler_class(cls):
             or name == "cef_client_t"
             or name == "cef_v8accessor_t"
             or name == "cef_task_t"
+            or name == "cef_web_urlrequest_client_t"
             or re.match(".*visitor_t", name) != None
             );
 

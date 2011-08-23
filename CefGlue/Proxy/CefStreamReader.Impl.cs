@@ -1,6 +1,7 @@
 namespace CefGlue
 {
     using System;
+    using System.IO;
     using Core;
 
     unsafe partial class CefStreamReader
@@ -8,73 +9,86 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefStreamReader object from a file.
         /// </summary>
-        /* FIXME: CefStreamReader.CreateForFile public */
-        static cef_stream_reader_t* CreateForFile(/*const*/ cef_string_t* fileName)
+        public static CefStreamReader Create(string fileName)
         {
-            // TODO: CefStreamReader.CreateForFile
-            throw new NotImplementedException();
+            fixed (char* fileName_str = fileName)
+            {
+                var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
+
+                return CefStreamReader.From(
+                    libcef.stream_reader_create_for_file(&n_fileName)
+                    );
+            }
         }
 
         /// <summary>
         /// Create a new CefStreamReader object from data.
         /// </summary>
-        /* FIXME: CefStreamReader.CreateForData public */
-        static cef_stream_reader_t* CreateForData(void* data, int size)
+        /// <remarks>It will copy data.</remarks>
+        [CLSCompliant(false)]
+        public static unsafe CefStreamReader Create(void* data, int size)
         {
-            // TODO: CefStreamReader.CreateForData
-            throw new NotImplementedException();
+            return CefStreamReader.From(
+                libcef.stream_reader_create_for_data(data, size)
+                );
         }
 
         /// <summary>
         /// Create a new CefStreamReader object from a custom handler.
         /// </summary>
-        /* FIXME: CefStreamReader.CreateForHandler public */
-        static cef_stream_reader_t* CreateForHandler(cef_read_handler_t* handler)
+        public static CefStreamReader Create(CefReadHandler handler)
         {
-            // TODO: CefStreamReader.CreateForHandler
-            throw new NotImplementedException();
+            return CefStreamReader.From(
+                libcef.stream_reader_create_for_handler(handler.GetNativePointerAndAddRef())
+                );
         }
 
         /// <summary>
         /// Read raw binary data.
         /// </summary>
-        /* FIXME: CefStreamReader.Read public */
-        int Read(void* ptr, int size, int n)
+        internal int Read(void* ptr, int size, int count)
         {
-            // TODO: CefStreamReader.Read
-            throw new NotImplementedException();
+            return this.read(this.ptr, ptr, size, count);
         }
 
         /// <summary>
-        /// Seek to the specified offset position. |whence| may be any one of
-        /// SEEK_CUR, SEEK_END or SEEK_SET. Returns zero on success and non-zero
-        /// on failure.
+        /// Read raw binary data.
         /// </summary>
-        /* FIXME: CefStreamReader.Seek public */
-        int Seek(long offset, int whence)
+        public int Read(byte[] buffer, int offset, int length)
         {
-            // TODO: CefStreamReader.Seek
-            throw new NotImplementedException();
+            if (buffer.Length - offset < length) throw new ArgumentOutOfRangeException();
+
+            fixed (byte* ptr = &buffer[offset])
+            {
+                return Read(ptr, 1, length);
+            }
+        }
+
+
+        /// <summary>
+        /// Seek to the specified offset position.
+        /// |whence| may be any one of SEEK_CUR, SEEK_END or SEEK_SET.
+        /// Returns zero on success and non-zero on failure.
+        /// </summary>
+        public bool Seek(long offset, SeekOrigin whence)
+        {
+            return this.seek(this.ptr, offset, (int)whence) == 0;
         }
 
         /// <summary>
         /// Return the current offset position.
         /// </summary>
-        /* FIXME: CefStreamReader.Tell public */
-        long Tell()
+        public long Tell()
         {
-            // TODO: CefStreamReader.Tell
-            throw new NotImplementedException();
+            return this.tell(this.ptr);
         }
 
         /// <summary>
         /// Return non-zero if at end of file.
         /// </summary>
-        /* FIXME: CefStreamReader.Eof public */
-        int Eof()
+        public bool Eof()
         {
-            // TODO: CefStreamReader.Eof
-            throw new NotImplementedException();
+            return this.eof(this.ptr) != 0;
         }
 
 

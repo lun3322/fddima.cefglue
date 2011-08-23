@@ -1,6 +1,7 @@
 namespace CefGlue
 {
     using System;
+    using System.IO;
     using Core;
 
     unsafe partial class CefDownloadHandler
@@ -13,9 +14,23 @@ namespace CefGlue
         private int received_data(cef_download_handler_t* self, void* data, int data_size)
         {
             ThrowIfObjectDisposed();
-            // TODO: CefDownloadHandler.received_data
-            throw new NotImplementedException();
+
+            var m_stream = new UnmanagedMemoryStream((byte*)data, data_size, 0, FileAccess.Read);
+
+            var handled = this.ReceivedData(m_stream);
+
+            m_stream.Dispose();
+
+            return handled ? 1 : 0;
         }
+
+        /// <summary>
+        /// A portion of the file contents have been received.
+        /// This method will be called multiple times until the download is complete.
+        /// Return |true| to continue receiving data and |false| to cancel.
+        /// </summary>
+        protected abstract bool ReceivedData(Stream data);
+
 
         /// <summary>
         /// The download is complete.
@@ -23,10 +38,14 @@ namespace CefGlue
         private void complete(cef_download_handler_t* self)
         {
             ThrowIfObjectDisposed();
-            // TODO: CefDownloadHandler.complete
-            throw new NotImplementedException();
+
+            this.Complete();
         }
 
+        /// <summary>
+        /// The download is complete.
+        /// </summary>
+        protected abstract void Complete();
 
     }
 }

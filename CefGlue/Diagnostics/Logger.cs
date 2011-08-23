@@ -11,8 +11,6 @@ namespace CefGlue.Diagnostics
     using System.Threading;
     using System.Globalization;
 
-    // TODO: fixme targets can be disabled
-
     [CLSCompliant(false)]
     public sealed class Logger
     {

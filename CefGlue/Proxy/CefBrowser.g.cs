@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefBrowser From(cef_browser_t* ptr)
         {
-			return new CefBrowser(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefBrowser(ptr);
+        }
+		
+        internal static CefBrowser FromOrDefault(cef_browser_t* ptr)
+        {
+            if (ptr != null) return new CefBrowser(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefBrowser proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefBrowser Create(cef_browser_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefBrowser(ptr, addRefCount);
+            throw new NullReferenceException("CefBrowser");
         }
 
         private cef_browser_t* ptr;
 
-        private CefBrowser(cef_browser_t* ptr, bool addRefCount)
+        private CefBrowser(cef_browser_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefBrowser, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

@@ -8,125 +8,102 @@ namespace CefGlue
         /// <summary>
         /// Execute undo in this frame.
         /// </summary>
-        /* FIXME: CefFrame.Undo public */
-        void Undo()
+        public void Undo()
         {
-            // TODO: CefFrame.Undo
-            throw new NotImplementedException();
+            this.undo(this.ptr);
         }
 
         /// <summary>
         /// Execute redo in this frame.
         /// </summary>
-        /* FIXME: CefFrame.Redo public */
-        void Redo()
+        public void Redo()
         {
-            // TODO: CefFrame.Redo
-            throw new NotImplementedException();
+            this.redo(this.ptr);
         }
 
         /// <summary>
         /// Execute cut in this frame.
         /// </summary>
-        /* FIXME: CefFrame.Cut public */
-        void Cut()
+        public void Cut()
         {
-            // TODO: CefFrame.Cut
-            throw new NotImplementedException();
+            this.cut(this.ptr);
         }
 
         /// <summary>
         /// Execute copy in this frame.
         /// </summary>
-        /* FIXME: CefFrame.Copy public */
-        void Copy()
+        public void Copy()
         {
-            // TODO: CefFrame.Copy
-            throw new NotImplementedException();
+            this.copy(this.ptr);
         }
 
         /// <summary>
         /// Execute paste in this frame.
         /// </summary>
-        /* FIXME: CefFrame.Paste public */
-        void Paste()
+        public void Paste()
         {
-            // TODO: CefFrame.Paste
-            throw new NotImplementedException();
+            this.paste(this.ptr);
         }
 
         /// <summary>
         /// Execute delete in this frame.
         /// </summary>
-        /* FIXME: CefFrame.Delete public */
-        void Delete()
+        public void Delete()
         {
-            // TODO: CefFrame.Delete
-            throw new NotImplementedException();
+            this.del(this.ptr);
         }
 
         /// <summary>
         /// Execute select all in this frame.
         /// </summary>
-        /* FIXME: CefFrame.SelectAll public */
-        void SelectAll()
+        public void SelectAll()
         {
-            // TODO: CefFrame.SelectAll
-            throw new NotImplementedException();
+            this.select_all(this.ptr);
         }
 
         /// <summary>
-        /// Execute printing in the this frame.  The user will be prompted with
-        /// the print dialog appropriate to the operating system.
+        /// Execute printing in the this frame.
+        /// The user will be prompted with the print dialog appropriate to the operating system.
         /// </summary>
-        /* FIXME: CefFrame.Print public */
-        void Print()
+        public void Print()
         {
-            // TODO: CefFrame.Print
-            throw new NotImplementedException();
+            this.print(this.ptr);
         }
 
         /// <summary>
-        /// Save this frame's HTML source to a temporary file and open it in the
-        /// default text viewing application.
+        /// Save this frame's HTML source to a temporary file and open it in the default text viewing application.
         /// </summary>
-        /* FIXME: CefFrame.ViewSource public */
-        void ViewSource()
+        public void ViewSource()
         {
-            // TODO: CefFrame.ViewSource
-            throw new NotImplementedException();
+            this.view_source(this.ptr);
         }
 
         /// <summary>
-        /// Returns this frame's HTML source as a string. This method should only
-        /// be called on the UI thread.
+        /// Returns this frame's HTML source as a string.
+        /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: CefFrame.GetSource public */
-        cef_string_userfree_t GetSource()
+        public string GetSource()
         {
-            // TODO: CefFrame.GetSource
-            throw new NotImplementedException();
+            cef_string_userfree_t n_source = this.get_source(this.ptr);
+            return n_source.GetStringAndFree();
         }
 
         /// <summary>
-        /// Returns this frame's display text as a string. This method should
-        /// only be called on the UI thread.
+        /// Returns this frame's display text as a string.
+        /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: CefFrame.GetText public */
-        cef_string_userfree_t GetText()
+        public string GetText()
         {
-            // TODO: CefFrame.GetText
-            throw new NotImplementedException();
+            cef_string_userfree_t n_text = this.get_text(this.ptr);
+            return n_text.GetStringAndFree();
         }
 
         /// <summary>
         /// Load the request represented by the |request| object.
         /// </summary>
-        /* FIXME: CefFrame.LoadRequest public */
-        void LoadRequest(cef_request_t* request)
+        public void LoadRequest(CefRequest request)
         {
-            // TODO: CefFrame.LoadRequest
-            throw new NotImplementedException();
+            this.load_request(this.ptr, request.GetNativePointerAndAddRef());
         }
 
         /// <summary>
@@ -134,46 +111,57 @@ namespace CefGlue
         /// </summary>
         public void LoadURL(string url)
         {
-            cef_string_t n_url;
-            cef_string_t.Copy(url, &n_url);
-
-            this.load_url(this.ptr, &n_url);
-
-            cef_string_t.Clear(&n_url);
+            fixed (char* str = url)
+            {
+                cef_string_t n_url = new cef_string_t(str, url != null ? url.Length : 0);
+                this.load_url(this.ptr, &n_url);
+            }
         }
 
         /// <summary>
         /// Load the contents of |string| with the optional dummy target |url|.
         /// </summary>
-        /* FIXME: CefFrame.LoadString public */
-        void LoadString(/*const*/ cef_string_t* @string, /*const*/ cef_string_t* url)
+        public void LoadString(string content, string url)
         {
-            // TODO: CefFrame.LoadString
-            throw new NotImplementedException();
+            fixed (char* content_str = content)
+            fixed (char* url_str = url)
+            {
+                var n_content = new cef_string_t(content_str, content != null ? content.Length : 0);
+                var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
+
+                this.load_string(this.ptr, &n_content, &n_url);
+            }
         }
 
         /// <summary>
         /// Load the contents of |stream| with the optional dummy target |url|.
         /// </summary>
-        /* FIXME: CefFrame.LoadStream public */
-        void LoadStream(cef_stream_reader_t* stream, /*const*/ cef_string_t* url)
+        public void LoadStream(CefStreamReader stream, string url)
         {
-            // TODO: CefFrame.LoadStream
-            throw new NotImplementedException();
+            fixed (char* url_str = url)
+            {
+                var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
+
+                this.load_stream(this.ptr, stream.GetNativePointerAndAddRef(), &n_url);
+            }
         }
 
         /// <summary>
-        /// Execute a string of JavaScript code in this frame. The |script_url|
-        /// parameter is the URL where the script in question can be found, if
-        /// any. The renderer may request this URL to show the developer the
-        /// source of the error.  The |start_line| parameter is the base line
-        /// number to use for error reporting.
+        /// Execute a string of JavaScript code in this frame.
+        /// The |script_url| parameter is the URL where the script in question can be found, if any.
+        /// The renderer may request this URL to show the developer the source of the error.
+        /// The |start_line| parameter is the base line number to use for error reporting.
         /// </summary>
-        /* FIXME: CefFrame.ExecuteJavaScript public */
-        void ExecuteJavaScript(/*const*/ cef_string_t* jsCode, /*const*/ cef_string_t* scriptUrl, int startLine)
+        public void ExecuteJavaScript(string jsCode, string scriptUrl, int startLine)
         {
-            // TODO: CefFrame.ExecuteJavaScript
-            throw new NotImplementedException();
+            fixed (char* jsCode_str = jsCode)
+            fixed (char* scriptUrl_str = scriptUrl)
+            {
+                var n_jsCode = new cef_string_t(jsCode_str, jsCode != null ? jsCode.Length : 0);
+                var n_scriptUrl = new cef_string_t(scriptUrl_str, scriptUrl != null ? scriptUrl.Length : 0);
+
+                this.execute_java_script(this.ptr, &n_jsCode, &n_scriptUrl, startLine);
+            }
         }
 
         /// <summary>
@@ -202,44 +190,39 @@ namespace CefGlue
         /// <summary>
         /// Returns this frame's name.
         /// </summary>
-        /* FIXME: CefFrame.GetName public */
-        cef_string_userfree_t GetName()
+        public string GetName()
         {
-            // TODO: CefFrame.GetName
-            throw new NotImplementedException();
+            cef_string_userfree_t n_name = this.get_name(this.ptr);
+            return n_name.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the URL currently loaded in this frame.
         /// This method should only be called on the UI thread.
         /// </summary>
-        /* FIXME: CefFrame.GetURL public */
-        cef_string_userfree_t GetURL()
+        public string GetURL()
         {
-            // TODO: CefFrame.GetURL
-            throw new NotImplementedException();
+            cef_string_userfree_t n_url = this.get_url(this.ptr);
+            return n_url.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the browser that this frame belongs to.
         /// </summary>
-        /* FIXME: CefFrame.GetBrowser public */
-        cef_browser_t* GetBrowser()
+        public CefBrowser GetBrowser()
         {
-            // TODO: CefFrame.GetBrowser
-            throw new NotImplementedException();
+            return CefBrowser.From(
+                this.get_browser(this.ptr)
+                );
         }
 
         /// <summary>
         /// Visit the DOM document.
         /// </summary>
-        /* FIXME: CefFrame.VisitDOM public */
-        void VisitDOM(cef_domvisitor_t* visitor)
+        public void VisitDom(CefDomVisitor visitor)
         {
-            // TODO: CefFrame.VisitDOM
-            throw new NotImplementedException();
+            this.visit_dom(this.ptr, visitor.GetNativePointerAndAddRef());
         }
-
 
     }
 }

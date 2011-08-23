@@ -8,78 +8,74 @@ namespace CefGlue
         /// <summary>
         /// Returns the current (top) context object in the V8 context stack.
         /// </summary>
-        /* FIXME: CefV8Context.GetCurrentContext public */
-        static cef_v8context_t* GetCurrentContext()
+        public static CefV8Context GetCurrentContext()
         {
-            // TODO: CefV8Context.GetCurrentContext
-            throw new NotImplementedException();
+            return CefV8Context.From(
+                libcef.v8context_get_current_context()
+                );
         }
 
         /// <summary>
         /// Returns the entered (bottom) context object in the V8 context stack.
         /// </summary>
-        /* FIXME: CefV8Context.GetEnteredContext public */
-        static cef_v8context_t* GetEnteredContext()
+        public static CefV8Context GetEnteredContext()
         {
-            // TODO: CefV8Context.GetEnteredContext
-            throw new NotImplementedException();
+            return CefV8Context.From(
+                libcef.v8context_get_entered_context()
+                );
         }
 
         /// <summary>
         /// Returns the browser for this context.
         /// </summary>
-        /* FIXME: CefV8Context.GetBrowser public */
-        cef_browser_t* GetBrowser()
+        public CefBrowser GetBrowser()
         {
-            // TODO: CefV8Context.GetBrowser
-            throw new NotImplementedException();
+            return CefBrowser.From(
+                this.get_browser(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the frame for this context.
         /// </summary>
-        /* FIXME: CefV8Context.GetFrame public */
-        cef_frame_t* GetFrame()
+        public CefFrame GetFrame()
         {
-            // TODO: CefV8Context.GetFrame
-            throw new NotImplementedException();
+            return CefFrame.From(
+                this.get_frame(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the global object for this context.
         /// </summary>
-        /* FIXME: CefV8Context.GetGlobal public */
-        cef_v8value_t* GetGlobal()
+        public CefV8Value GetGlobal()
         {
-            // TODO: CefV8Context.GetGlobal
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                this.get_global(this.ptr)
+                );
         }
 
         /// <summary>
-        /// Enter this context. A context must be explicitly entered before
-        /// creating a V8 Object, Array or Function asynchronously. Exit() must
-        /// be called the same number of times as Enter() before releasing this
-        /// context. V8 objects belong to the context in which they are created.
+        /// Enter this context.
+        /// A context must be explicitly entered before creating a V8 Object, Array or Function asynchronously.
+        /// Exit() must be called the same number of times as Enter() before releasing this context.
+        /// V8 objects belong to the context in which they are created.
         /// Returns true if the scope was entered successfully.
         /// </summary>
-        /* FIXME: CefV8Context.Enter public */
-        int Enter()
+        public bool Enter()
         {
-            // TODO: CefV8Context.Enter
-            throw new NotImplementedException();
+            return this.enter(this.ptr) != 0;
         }
 
         /// <summary>
-        /// Exit this context. Call this method only after calling Enter().
+        /// Exit this context.
+        /// Call this method only after calling Enter().
         /// Returns true if the scope was exited successfully.
         /// </summary>
-        /* FIXME: CefV8Context.Exit public */
-        int Exit()
+        public bool Exit()
         {
-            // TODO: CefV8Context.Exit
-            throw new NotImplementedException();
+            return this.exit(this.ptr) != 0;
         }
-
 
     }
 }

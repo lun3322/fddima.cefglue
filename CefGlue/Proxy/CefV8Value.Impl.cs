@@ -8,277 +8,260 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefV8Value object of type undefined.
         /// </summary>
-        /* FIXME: CefV8Value.CreateUndefined public */
-        static cef_v8value_t* CreateUndefined()
+        public static CefV8Value CreateUndefined()
         {
-            // TODO: CefV8Value.CreateUndefined
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                libcef.v8value_create_undefined()
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type null.
         /// </summary>
-        /* FIXME: CefV8Value.CreateNull public */
-        static cef_v8value_t* CreateNull()
+        public static CefV8Value CreateNull()
         {
-            // TODO: CefV8Value.CreateNull
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                libcef.v8value_create_null()
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type bool.
         /// </summary>
-        /* FIXME: CefV8Value.CreateBool public */
-        static cef_v8value_t* CreateBool(int value)
+        public static CefV8Value CreateBool(bool value)
         {
-            // TODO: CefV8Value.CreateBool
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                libcef.v8value_create_bool(value ? 1 : 0)
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type int.
         /// </summary>
-        /* FIXME: CefV8Value.CreateInt public */
-        static cef_v8value_t* CreateInt(int value)
+        public static CefV8Value CreateInt(int value)
         {
-            // TODO: CefV8Value.CreateInt
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                libcef.v8value_create_int(value)
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type double.
         /// </summary>
-        /* FIXME: CefV8Value.CreateDouble public */
-        static cef_v8value_t* CreateDouble(double value)
+        public static CefV8Value CreateDouble(double value)
         {
-            // TODO: CefV8Value.CreateDouble
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                libcef.v8value_create_double(value)
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type Date.
         /// </summary>
-        /* FIXME: CefV8Value.CreateDate public */
-        static cef_v8value_t* CreateDate(/*const*/ cef_time_t* date)
+        public static CefV8Value CreateDate(CefTime date)
         {
             // TODO: CefV8Value.CreateDate
             throw new NotImplementedException();
+            cef_time_t n_date;
+            return CefV8Value.From(
+                libcef.v8value_create_date(&n_date)
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type string.
         /// </summary>
-        /* FIXME: CefV8Value.CreateString public */
-        static cef_v8value_t* CreateString(/*const*/ cef_string_t* value)
+        public static CefV8Value CreateString(string value)
         {
-            // TODO: CefV8Value.CreateString
-            throw new NotImplementedException();
+            fixed (char* value_str = value)
+            {
+                var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
+                return CefV8Value.From(
+                    libcef.v8value_create_string(&n_value)
+                    );
+            }
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type object.
         /// </summary>
-        /* FIXME: CefV8Value.CreateObject public */
-        static cef_v8value_t* CreateObject(cef_base_t* user_data)
+        public static CefV8Value CreateObject(CefBase userData)
         {
             // TODO: CefV8Value.CreateObject
+            // cef_base_t* n_user_data;
+            // libcef.v8value_create_object(n_user_data);
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type object with accessors.
         /// </summary>
-        /* FIXME: CefV8Value.CreateObject public */
-        static cef_v8value_t* CreateObject(cef_base_t* user_data, cef_v8accessor_t* accessor)
+        public static CefV8Value CreateObject(CefBase userData, CefV8Accessor accessor)
         {
             // TODO: CefV8Value.CreateObject
+            // libcef.v8value_create_object_with_accessor(n_userData, accessor.GetNativePointerAndAddRef())
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type array.
         /// </summary>
-        /* FIXME: CefV8Value.CreateArray public */
-        static cef_v8value_t* CreateArray()
+        public static CefV8Value CreateArray()
         {
-            // TODO: CefV8Value.CreateArray
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                libcef.v8value_create_array()
+                );
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type function.
         /// </summary>
-        /* FIXME: CefV8Value.CreateFunction public */
-        static cef_v8value_t* CreateFunction(/*const*/ cef_string_t* name, cef_v8handler_t* handler)
+        public static CefV8Value CreateFunction(string name, CefV8Handler handler)
         {
-            // TODO: CefV8Value.CreateFunction
-            throw new NotImplementedException();
+            fixed (char* name_str = name)
+            {
+                var n_name = new cef_string_t(name_str, name.Length);
+
+                return CefV8Value.From(
+                    libcef.v8value_create_function(&n_name, handler.GetNativePointerAndAddRef())
+                    );
+            }
         }
 
         /// <summary>
         /// True if the value type is undefined.
         /// </summary>
-        /* FIXME: CefV8Value.IsUndefined public */
-        int IsUndefined()
+        public bool IsUndefined()
         {
-            // TODO: CefV8Value.IsUndefined
-            throw new NotImplementedException();
+            return this.is_undefined(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is null.
         /// </summary>
-        /* FIXME: CefV8Value.IsNull public */
-        int IsNull()
+        public bool IsNull()
         {
-            // TODO: CefV8Value.IsNull
-            throw new NotImplementedException();
+            return this.is_null(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is bool.
         /// </summary>
-        /* FIXME: CefV8Value.IsBool public */
-        int IsBool()
+        public bool IsBool()
         {
-            // TODO: CefV8Value.IsBool
-            throw new NotImplementedException();
+            return this.is_bool(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is int.
         /// </summary>
-        /* FIXME: CefV8Value.IsInt public */
-        int IsInt()
+        public bool IsInt()
         {
-            // TODO: CefV8Value.IsInt
-            throw new NotImplementedException();
+            return this.is_int(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is double.
         /// </summary>
-        /* FIXME: CefV8Value.IsDouble public */
-        int IsDouble()
+        public bool IsDouble()
         {
-            // TODO: CefV8Value.IsDouble
-            throw new NotImplementedException();
+            return this.is_double(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is Date.
         /// </summary>
-        /* FIXME: CefV8Value.IsDate public */
-        int IsDate()
+        public bool IsDate()
         {
-            // TODO: CefV8Value.IsDate
-            throw new NotImplementedException();
+            return this.is_date(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is string.
         /// </summary>
-        /* FIXME: CefV8Value.IsString public */
-        int IsString()
+        public bool IsString()
         {
-            // TODO: CefV8Value.IsString
-            throw new NotImplementedException();
+            return this.is_string(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is object.
         /// </summary>
-        /* FIXME: CefV8Value.IsObject public */
-        int IsObject()
+        public bool IsObject()
         {
-            // TODO: CefV8Value.IsObject
-            throw new NotImplementedException();
+            return this.is_object(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is array.
         /// </summary>
-        /* FIXME: CefV8Value.IsArray public */
-        int IsArray()
+        public bool IsArray()
         {
-            // TODO: CefV8Value.IsArray
-            throw new NotImplementedException();
+            return this.is_array(this.ptr) != 0;
         }
 
         /// <summary>
         /// True if the value type is function.
         /// </summary>
-        /* FIXME: CefV8Value.IsFunction public */
-        int IsFunction()
+        public bool IsFunction()
         {
-            // TODO: CefV8Value.IsFunction
-            throw new NotImplementedException();
+            return this.is_function(this.ptr) != 0;
         }
 
         /// <summary>
-        /// Returns true if this object is pointing to the same handle as |that|
-        /// object.
+        /// Returns true if this object is pointing to the same handle as |that| object.
         /// </summary>
-        /* FIXME: CefV8Value.IsSame public */
-        int IsSame(cef_v8value_t* that)
+        public bool IsSame(CefV8Value that)
         {
-            // TODO: CefV8Value.IsSame
-            throw new NotImplementedException();
+            return this.is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
-        /// Return a bool value.  The underlying data will be converted to if
-        /// necessary.
+        /// Return a bool value.
+        /// The underlying data will be converted to if necessary.
         /// </summary>
-        /* FIXME: CefV8Value.GetBoolValue public */
-        int GetBoolValue()
+        public bool GetBoolValue()
         {
-            // TODO: CefV8Value.GetBoolValue
-            throw new NotImplementedException();
+            return this.get_bool_value(this.ptr) != 0;
         }
 
         /// <summary>
-        /// Return an int value.  The underlying data will be converted to if
-        /// necessary.
+        /// Return an int value.
+        /// The underlying data will be converted to if necessary.
         /// </summary>
-        /* FIXME: CefV8Value.GetIntValue public */
-        int GetIntValue()
+        public int GetIntValue()
         {
-            // TODO: CefV8Value.GetIntValue
-            throw new NotImplementedException();
+            return this.get_int_value(this.ptr);
         }
 
         /// <summary>
-        /// Return a double value.  The underlying data will be converted to if
-        /// necessary.
+        /// Return a double value.
+        /// The underlying data will be converted to if necessary.
         /// </summary>
-        /* FIXME: CefV8Value.GetDoubleValue public */
-        double GetDoubleValue()
+        public double GetDoubleValue()
         {
-            // TODO: CefV8Value.GetDoubleValue
-            throw new NotImplementedException();
+            return this.get_double_value(this.ptr);
         }
 
         /// <summary>
-        /// Return a Date value.  The underlying data will be converted to if
-        /// necessary.
+        /// Return a Date value.
+        /// The underlying data will be converted to if necessary.
         /// </summary>
-        /* FIXME: CefV8Value.GetDateValue public */
-        cef_time_t GetDateValue()
+        public CefTime GetDateValue()
         {
             // TODO: CefV8Value.GetDateValue
             throw new NotImplementedException();
+            // return this.get_date_value(this.ptr);
         }
 
         /// <summary>
-        /// Return a string value.  The underlying data will be converted to if
-        /// necessary.
+        /// Return a string value.
+        /// The underlying data will be converted to if necessary.
         /// </summary>
-        /* FIXME: CefV8Value.GetStringValue public */
-        cef_string_userfree_t GetStringValue()
+        public string GetStringValue()
         {
-            // TODO: CefV8Value.GetStringValue
-            throw new NotImplementedException();
+            var n_result = this.get_string_value(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
 
@@ -291,110 +274,118 @@ namespace CefGlue
         /// <summary>
         /// Returns true if the object has a value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.HasValue public */
-        int HasValue(/*const*/ cef_string_t* key)
+        public bool HasValue(string key)
         {
-            // TODO: CefV8Value.HasValue
-            throw new NotImplementedException();
+            fixed (char* key_str = key)
+            {
+                var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return this.has_value_bykey(this.ptr, &n_key) != 0;
+            }
         }
 
         /// <summary>
         /// Returns true if the object has a value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.HasValue public */
-        int HasValue(int index)
+        public bool HasValue(int index)
         {
-            // TODO: CefV8Value.HasValue
-            throw new NotImplementedException();
+            return this.has_value_byindex(this.ptr, index) != 0;
         }
 
         /// <summary>
         /// Delete the value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.DeleteValue public */
-        int DeleteValue(/*const*/ cef_string_t* key)
+        public bool DeleteValue(string key)
         {
-            // TODO: CefV8Value.DeleteValue
-            throw new NotImplementedException();
+            fixed (char* key_str = key)
+            {
+                var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return this.delete_value_bykey(this.ptr, &n_key) != 0;
+            }
         }
 
         /// <summary>
         /// Delete the value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.DeleteValue public */
-        int DeleteValue(int index)
+        public bool DeleteValue(int index)
         {
-            // TODO: CefV8Value.DeleteValue
-            throw new NotImplementedException();
+            return this.delete_value_byindex(this.ptr, index) != 0;
         }
 
         /// <summary>
         /// Returns the value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.GetValue public */
-        cef_v8value_t* GetValue(/*const*/ cef_string_t* key)
+        public CefV8Value GetValue(string key)
         {
-            // TODO: CefV8Value.GetValue
-            throw new NotImplementedException();
+            fixed (char* key_str = key)
+            {
+                var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return CefV8Value.From(
+                    this.get_value_bykey(this.ptr, &n_key)
+                    );
+            }
         }
 
         /// <summary>
         /// Returns the value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.GetValue public */
-        cef_v8value_t* GetValue(int index)
+        public CefV8Value GetValue(int index)
         {
-            // TODO: CefV8Value.GetValue
-            throw new NotImplementedException();
+            return CefV8Value.From(
+                   this.get_value_byindex(this.ptr, index)
+                   );
         }
 
         /// <summary>
         /// Associate a value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.SetValue public */
-        int SetValue(/*const*/ cef_string_t* key, cef_v8value_t* value)
+        public bool SetValue(string key, CefV8Value value)
         {
-            // TODO: CefV8Value.SetValue
-            throw new NotImplementedException();
+            fixed (char* key_str = key)
+            {
+                var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return this.set_value_bykey(this.ptr, &n_key, value.GetNativePointerAndAddRef()) != 0;
+            }
         }
 
         /// <summary>
         /// Associate a value with the specified identifier.
         /// </summary>
-        /* FIXME: CefV8Value.SetValue public */
-        int SetValue(int index, cef_v8value_t* value)
+        public bool SetValue(int index, CefV8Value value)
         {
-            // TODO: CefV8Value.SetValue
-            throw new NotImplementedException();
+            return this.set_value_byindex(this.ptr, index, value.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
-        /// Register an identifier whose access will be forwarded to the
-        /// CefV8Accessor instance passed to CefV8Value::CreateObject().
+        /// Register an identifier whose access will be forwarded to the CefV8Accessor instance passed to CefV8Value::CreateObject().
         /// </summary>
-        /* FIXME: CefV8Value.SetValue public */
-        int SetValue(/*const*/ cef_string_t* key, cef_v8_accesscontrol_t settings, cef_v8_propertyattribute_t attribute)
+        public bool SetValue(string key, CefV8AccessControl settings, CefV8PropertyAttribute attribute)
         {
-            // TODO: CefV8Value.SetValue
-            throw new NotImplementedException();
+            fixed (char* key_str = key)
+            {
+                var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return this.set_value_byaccessor(this.ptr, &n_key, (cef_v8_accesscontrol_t)settings, (cef_v8_propertyattribute_t)attribute) != 0;
+            }
         }
 
         /// <summary>
         /// Read the keys for the object's values into the specified vector.
         /// Integer- based keys will also be returned as strings.
         /// </summary>
-        /* FIXME: CefV8Value.GetKeys public */
-        int GetKeys(cef_string_list_t keys)
+        public bool GetKeys(out CefStringList keys)
         {
-            // TODO: CefV8Value.GetKeys
-            throw new NotImplementedException();
+            keys = new CefStringList();
+            return this.get_keys(this.ptr, keys.GetNativeHandle()) != 0;
         }
 
         /// <summary>
         /// Returns the user data, if any, specified when the object was created.
         /// </summary>
-        /* FIXME: CefV8Value.GetUserData public */
-        cef_base_t* GetUserData()
+        public CefBase GetUserData()
         {
             // TODO: CefV8Value.GetUserData
             throw new NotImplementedException();
@@ -406,11 +397,9 @@ namespace CefGlue
         /// <summary>
         /// Returns the number of elements in the array.
         /// </summary>
-        /* FIXME: CefV8Value.GetArrayLength public */
-        int GetArrayLength()
+        public int GetArrayLength()
         {
-            // TODO: CefV8Value.GetArrayLength
-            throw new NotImplementedException();
+            return this.get_array_length(this.ptr);
         }
 
 
@@ -419,18 +408,16 @@ namespace CefGlue
         /// <summary>
         /// Returns the function name.
         /// </summary>
-        /* FIXME: CefV8Value.GetFunctionName public */
-        cef_string_userfree_t GetFunctionName()
+        public string GetFunctionName()
         {
-            // TODO: CefV8Value.GetFunctionName
-            throw new NotImplementedException();
+            var n_result = this.get_function_name(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the function handler or NULL if not a CEF-created function.
         /// </summary>
-        /* FIXME: CefV8Value.GetFunctionHandler public */
-        cef_v8handler_t* GetFunctionHandler()
+        public CefV8Handler GetFunctionHandler()
         {
             // TODO: CefV8Value.GetFunctionHandler
             throw new NotImplementedException();
@@ -455,7 +442,6 @@ namespace CefGlue
             // TODO: CefV8Value.ExecuteFunctionWithContext
             throw new NotImplementedException();
         }
-
 
     }
 }

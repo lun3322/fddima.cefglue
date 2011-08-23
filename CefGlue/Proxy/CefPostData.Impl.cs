@@ -8,65 +8,56 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefPostData object.
         /// </summary>
-        /* FIXME: CefPostData.CreatePostData public */
-        static cef_post_data_t* CreatePostData()
+        public static CefPostData Create()
         {
-            // TODO: CefPostData.CreatePostData
-            throw new NotImplementedException();
+            return CefPostData.From(
+                libcef.post_data_create()
+                );
         }
 
         /// <summary>
         /// Returns the number of existing post data elements.
         /// </summary>
-        /* FIXME: CefPostData.GetElementCount public */
-        int GetElementCount()
+        public int GetElementCount()
         {
-            // TODO: CefPostData.GetElementCount
-            throw new NotImplementedException();
+            return this.get_element_count(this.ptr);
         }
 
         /// <summary>
         /// Retrieve the post data elements.
         /// </summary>
-        /* FIXME: CefPostData.GetElements public */
-        cef_post_data_element_t* GetElements(int elementIndex)
+        public CefPostDataElement GetElements(int elementIndex)
         {
-            // TODO: CefPostData.GetElements
-            throw new NotImplementedException();
+            return CefPostDataElement.From(
+                this.get_elements(this.ptr, elementIndex)
+                );
         }
 
         /// <summary>
-        /// Remove the specified post data element.  Returns true if the removal
-        /// succeeds.
+        /// Remove the specified post data element.
+        /// Returns true if the removal succeeds.
         /// </summary>
-        /* FIXME: CefPostData.RemoveElement public */
-        int RemoveElement(cef_post_data_element_t* element)
+        public bool RemoveElement(CefPostDataElement element)
         {
-            // TODO: CefPostData.RemoveElement
-            throw new NotImplementedException();
+            return this.remove_element(this.ptr, element.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
-        /// Add the specified post data element.  Returns true if the add
-        /// succeeds.
+        /// Add the specified post data element.
+        /// Returns true if the add succeeds.
         /// </summary>
-        /* FIXME: CefPostData.AddElement public */
-        int AddElement(cef_post_data_element_t* element)
+        public bool AddElement(CefPostDataElement element)
         {
-            // TODO: CefPostData.AddElement
-            throw new NotImplementedException();
+            return this.add_element(this.ptr, element.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
         /// Remove all existing post data elements.
         /// </summary>
-        /* FIXME: CefPostData.RemoveElements public */
-        void RemoveElements()
+        public void RemoveElements()
         {
-            // TODO: CefPostData.RemoveElements
-            throw new NotImplementedException();
+            this.remove_elements(this.ptr);
         }
-
 
     }
 }

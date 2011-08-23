@@ -6,59 +6,56 @@ namespace CefGlue
     unsafe partial class CefZipReader
     {
         /// <summary>
-        /// Create a new CefZipReader object. The returned object's methods can
-        /// only be called from the thread that created the object.
+        /// Create a new CefZipReader object.
+        /// The returned object's methods can only be called from the thread that created the object.
         /// </summary>
-        /* FIXME: CefZipReader.Create public */
-        static cef_zip_reader_t* Create(cef_stream_reader_t* stream)
+        public static CefZipReader Create(CefStreamReader stream)
         {
-            // TODO: CefZipReader.Create
-            throw new NotImplementedException();
+            return CefZipReader.From(
+                libcef.zip_reader_create(stream.GetNativePointerAndAddRef())
+                );
         }
 
         /// <summary>
-        /// Moves the cursor to the first file in the archive. Returns true if
-        /// the cursor position was set successfully.
-        /// </summary>
-        /* FIXME: CefZipReader.MoveToFirstFile public */
-        int MoveToFirstFile()
-        {
-            // TODO: CefZipReader.MoveToFirstFile
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Moves the cursor to the next file in the archive. Returns true if the
-        /// cursor position was set successfully.
-        /// </summary>
-        /* FIXME: CefZipReader.MoveToNextFile public */
-        int MoveToNextFile()
-        {
-            // TODO: CefZipReader.MoveToNextFile
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Moves the cursor to the specified file in the archive. If
-        /// |caseSensitive| is true then the search will be case sensitive.
+        /// Moves the cursor to the first file in the archive.
         /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefZipReader.MoveToFile public */
-        int MoveToFile(/*const*/ cef_string_t* fileName, int caseSensitive)
+        public bool MoveToFirstFile()
         {
-            // TODO: CefZipReader.MoveToFile
-            throw new NotImplementedException();
+            return this.move_to_first_file(this.ptr) != 0;
         }
 
         /// <summary>
-        /// Closes the archive. This should be called directly to ensure that
-        /// cleanup occurs on the correct thread.
+        /// Moves the cursor to the next file in the archive.
+        /// Returns true if the cursor position was set successfully.
         /// </summary>
-        /* FIXME: CefZipReader.Close public */
-        int Close()
+        public bool MoveToNextFile()
         {
-            // TODO: CefZipReader.Close
-            throw new NotImplementedException();
+            return this.move_to_next_file(this.ptr) != 0;
+        }
+
+        /// <summary>
+        /// Moves the cursor to the specified file in the archive.
+        /// If |caseSensitive| is true then the search will be case sensitive.
+        /// Returns true if the cursor position was set successfully.
+        /// </summary>
+        public bool MoveToFile(string fileName, bool caseSensitive)
+        {
+            fixed (char* fileName_str = fileName)
+            {
+                var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
+
+                return this.move_to_file(this.ptr, &n_fileName, caseSensitive ? 1 : 0) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Closes the archive.
+        /// This should be called directly to ensure that cleanup occurs on the correct thread.
+        /// </summary>
+        public bool Close()
+        {
+            return this.close(this.ptr) != 0;
         }
 
 
@@ -67,84 +64,76 @@ namespace CefGlue
         /// <summary>
         /// Returns the name of the file.
         /// </summary>
-        /* FIXME: CefZipReader.GetFileName public */
-        cef_string_userfree_t GetFileName()
+        public string GetFileName()
         {
-            // TODO: CefZipReader.GetFileName
-            throw new NotImplementedException();
+            var n_result = this.get_file_name(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Returns the uncompressed size of the file.
         /// </summary>
-        /* FIXME: CefZipReader.GetFileSize public */
-        long GetFileSize()
+        public long GetFileSize()
         {
-            // TODO: CefZipReader.GetFileSize
-            throw new NotImplementedException();
+            return this.get_file_size(this.ptr);
         }
 
         /// <summary>
         /// Returns the last modified timestamp for the file.
         /// </summary>
-        /* FIXME: CefZipReader.GetFileLastModified public */
-        time_t GetFileLastModified()
+        public DateTime GetFileLastModified()
         {
-            // TODO: CefZipReader.GetFileLastModified
-            throw new NotImplementedException();
+            var n_result = this.get_file_last_modified(this.ptr);
+            return n_result.ToDateTime();
         }
 
         /// <summary>
-        /// Opens the file for reading of uncompressed data. A read password may
-        /// optionally be specified.
+        /// Opens the file for reading of uncompressed data.
+        /// A read password may optionally be specified.
         /// </summary>
-        /* FIXME: CefZipReader.OpenFile public */
-        int OpenFile(/*const*/ cef_string_t* password)
+        public bool OpenFile(string password = null)
         {
-            // TODO: CefZipReader.OpenFile
-            throw new NotImplementedException();
+            fixed (char* password_str = password)
+            {
+                var n_password = new cef_string_t(password_str, password != null ? password.Length : 0);
+
+                return this.open_file(this.ptr, &n_password) != 0;
+            }
         }
 
         /// <summary>
         /// Closes the file.
         /// </summary>
-        /* FIXME: CefZipReader.CloseFile public */
-        int CloseFile()
+        public bool CloseFile()
         {
-            // TODO: CefZipReader.CloseFile
-            throw new NotImplementedException();
+            return this.close_file(this.ptr) != 0;
         }
 
         /// <summary>
-        /// Read uncompressed file contents into the specified buffer. Returns &amp;
-        /// 0 if an error occurred, 0 if at the end of file, or the number of
-        /// bytes read.
+        /// Read uncompressed file contents into the specified buffer.
+        /// Returns &amp; 0 if an error occurred, 0 if at the end of file, or the number of bytes read.
         /// </summary>
-        /* FIXME: CefZipReader.ReadFile public */
-        int ReadFile(void* buffer, int bufferSize)
+        internal unsafe int ReadFile(void* buffer, int bufferSize)
         {
-            // TODO: CefZipReader.ReadFile
-            throw new NotImplementedException();
+            return this.read_file(this.ptr, buffer, bufferSize);
         }
+
+        // TODO: CefZipReader.ReadFile overloads
 
         /// <summary>
         /// Returns the current offset in the uncompressed file contents.
         /// </summary>
-        /* FIXME: CefZipReader.Tell public */
-        long Tell()
+        public long Tell()
         {
-            // TODO: CefZipReader.Tell
-            throw new NotImplementedException();
+            return this.tell(this.ptr);
         }
 
         /// <summary>
         /// Returns true if at end of the file contents.
         /// </summary>
-        /* FIXME: CefZipReader.Eof public */
-        int Eof()
+        public bool Eof()
         {
-            // TODO: CefZipReader.Eof
-            throw new NotImplementedException();
+            return this.eof(this.ptr) != 0;
         }
 
 

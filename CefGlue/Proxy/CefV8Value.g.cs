@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefV8Value From(cef_v8value_t* ptr)
         {
-			return new CefV8Value(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefV8Value(ptr);
+        }
+		
+        internal static CefV8Value FromOrDefault(cef_v8value_t* ptr)
+        {
+            if (ptr != null) return new CefV8Value(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefV8Value proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefV8Value Create(cef_v8value_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefV8Value(ptr, addRefCount);
+            throw new NullReferenceException("CefV8Value");
         }
 
         private cef_v8value_t* ptr;
 
-        private CefV8Value(cef_v8value_t* ptr, bool addRefCount)
+        private CefV8Value(cef_v8value_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefV8Value, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

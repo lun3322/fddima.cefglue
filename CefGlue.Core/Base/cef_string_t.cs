@@ -34,6 +34,16 @@
         [UnmanagedFunctionPointer(libcef.Call)]
         public delegate void dtor_delegate(char* str);
 
+        /// <summary>
+        /// This is useful to pass string without copying.
+        /// </summary>
+        public cef_string_t(char* str, int length)
+        {
+            this.str = str;
+            this.length = length;
+            this.dtor = IntPtr.Zero;
+        }
+
 #if DIAGNOSTICS
         private static readonly bool diagnostics = true;
 

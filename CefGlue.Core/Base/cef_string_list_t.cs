@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -12,28 +10,35 @@
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
     internal unsafe struct cef_string_list_t
     {
-        private IntPtr _handle;
+        public static cef_string_list_t Create()
+        {
+            return libcef.string_list_alloc();
+        }
 
-        public static cef_string_list_t CreateFrom(IEnumerable<string> collection)
+        public static cef_string_list_t Create(IEnumerable<string> collection)
         {
             var list = libcef.string_list_alloc();
-            cef_string_t str = new cef_string_t();
-            foreach (var path in collection)
+            foreach (var value in collection)
             {
-                cef_string_t.Set(path, &str, false);
-                libcef.string_list_append(list, &str);
+                fixed (char* str = value)
+                {
+                    cef_string_t n_value = new cef_string_t(str, value != null ? value.Length : 0);
+                    libcef.string_list_append(list, &n_value);
+                }
             }
             return list;
         }
 
-        public bool IsAllocated { get { return _handle != IntPtr.Zero; } }
+        private IntPtr handle;
+
+        public bool IsAllocated { get { return this.handle != IntPtr.Zero; } }
 
         public void Free()
         {
             if (IsAllocated)
             {
                 libcef.string_list_free(this);
-                _handle = IntPtr.Zero;
+                handle = IntPtr.Zero;
             }
         }
 
@@ -44,12 +49,58 @@
                 return libcef.string_list_size(this);
             }
         }
+
+        public bool Value(int index, out string value)
+        {
+            cef_string_t n_value = new cef_string_t();
+            var result = libcef.string_list_value(this, index, ref n_value) != 0 ? true : false;
+            value = result ? cef_string_t.ToString(&n_value) : null;
+            cef_string_t.Clear(&n_value);
+            return result;
+        }
+
+        public void Append(string value)
+        {
+            fixed (char* str = value)
+            {
+                cef_string_t n_value = new cef_string_t(str, value != null ? value.Length : 0);
+                libcef.string_list_append(this, &n_value);
+            }
+        }
+
+        public void Clear()
+        {
+            libcef.string_list_clear(this);
+        }
+
+        public cef_string_list_t Copy()
+        {
+            return libcef.string_list_copy(this);
+        }
+
+        public List<string> ToList()
+        {
+            var list = new List<string>();
+
+            var count = this.Count;
+            for (var i = 0; i < count; i++)
+            {
+                string value;
+                if (Value(i, out value))
+                {
+                    list.Add(value);
+                }
+                else throw new InvalidOperationException();
+            }
+
+            return list;
+        }
     }
 
     internal static unsafe partial class libcef
     {
         /// <summary>
-        /// Allocate a new string map.
+        /// Allocate a new string list.
         /// </summary>
         /// <returns></returns>
         // CEF_EXPORT cef_string_list_t cef_string_list_alloc();

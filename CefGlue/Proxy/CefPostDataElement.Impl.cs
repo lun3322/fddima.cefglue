@@ -8,85 +8,80 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefPostDataElement object.
         /// </summary>
-        /* FIXME: CefPostDataElement.CreatePostDataElement public */
-        static cef_post_data_element_t* CreatePostDataElement()
+        public static CefPostDataElement Create()
         {
-            // TODO: CefPostDataElement.CreatePostDataElement
-            throw new NotImplementedException();
+            return CefPostDataElement.From(
+                libcef.post_data_element_create()
+                );
         }
 
         /// <summary>
         /// Remove all contents from the post data element.
         /// </summary>
-        /* FIXME: CefPostDataElement.SetToEmpty public */
-        void SetToEmpty()
+        public void SetToEmpty()
         {
-            // TODO: CefPostDataElement.SetToEmpty
-            throw new NotImplementedException();
+            this.set_to_empty(this.ptr);
         }
 
         /// <summary>
         /// The post data element will represent a file.
         /// </summary>
-        /* FIXME: CefPostDataElement.SetToFile public */
-        void SetToFile(/*const*/ cef_string_t* fileName)
+        public void SetToFile(string fileName)
         {
-            // TODO: CefPostDataElement.SetToFile
-            throw new NotImplementedException();
+            fixed (char* fileName_str = fileName)
+            {
+                var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
+                this.set_to_file(this.ptr, &n_fileName);
+            }
         }
 
         /// <summary>
-        /// The post data element will represent bytes.  The bytes passed in will
-        /// be copied.
+        /// The post data element will represent bytes.
+        /// The bytes passed in will be copied.
         /// </summary>
-        /* FIXME: CefPostDataElement.SetToBytes public */
-        void SetToBytes(int size, /*const*/ void* bytes)
+        public void SetToBytes(int size, IntPtr bytes)
         {
-            // TODO: CefPostDataElement.SetToBytes
-            throw new NotImplementedException();
+            this.set_to_bytes(this.ptr, size, (void*)bytes);
+
+            // TODO: make usable method overrides (byte[] bytes, int offset, int length), (byte[] bytes, int length), (byte[] bytes)
         }
 
         /// <summary>
         /// Return the type of this post data element.
         /// </summary>
-        /* FIXME: CefPostDataElement.GetType public */
-        cef_postdataelement_type_t GetType()
+        public CefPostDataElementType Type
         {
-            // TODO: CefPostDataElement.GetType
-            throw new NotImplementedException();
+            get
+            {
+                return (CefPostDataElementType)this.get_type(this.ptr);
+            }
         }
 
         /// <summary>
         /// Return the file name.
         /// </summary>
-        /* FIXME: CefPostDataElement.GetFile public */
-        cef_string_userfree_t GetFile()
+        public string GetFile()
         {
-            // TODO: CefPostDataElement.GetFile
-            throw new NotImplementedException();
+            var n_result = this.get_file(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Return the number of bytes.
         /// </summary>
-        /* FIXME: CefPostDataElement.GetBytesCount public */
-        int GetBytesCount()
+        public int GetBytesCount()
         {
-            // TODO: CefPostDataElement.GetBytesCount
-            throw new NotImplementedException();
+            return this.get_bytes_count(this.ptr);
         }
 
         /// <summary>
-        /// Read up to |size| bytes into |bytes| and return the number of bytes
-        /// actually read.
+        /// Read up to |size| bytes into |bytes| and return the number of bytes actually read.
         /// </summary>
-        /* FIXME: CefPostDataElement.GetBytes public */
-        int GetBytes(int size, void* bytes)
+        public int GetBytes(int size, IntPtr bytes)
         {
-            // TODO: CefPostDataElement.GetBytes
-            throw new NotImplementedException();
+            return this.get_bytes(this.ptr, size, (void*)bytes);
+            // TODO: make usable overrides
         }
-
 
     }
 }

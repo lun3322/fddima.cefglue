@@ -8,93 +8,94 @@ namespace CefGlue
         /// <summary>
         /// Get the response status code.
         /// </summary>
-        /* FIXME: CefResponse.GetStatus public */
-        int GetStatus()
+        public int GetStatus()
         {
-            // TODO: CefResponse.GetStatus
-            throw new NotImplementedException();
+            return this.get_status(this.ptr);
         }
 
         /// <summary>
         /// Set the response status code.
         /// </summary>
-        /* FIXME: CefResponse.SetStatus public */
-        void SetStatus(int status)
+        public void SetStatus(int status)
         {
-            // TODO: CefResponse.SetStatus
-            throw new NotImplementedException();
+            this.set_status(this.ptr, status);
         }
 
         /// <summary>
         /// Get the response status text.
         /// </summary>
-        /* FIXME: CefResponse.GetStatusText public */
-        cef_string_userfree_t GetStatusText()
+        public string GetStatusText()
         {
-            // TODO: CefResponse.GetStatusText
-            throw new NotImplementedException();
+            var n_result = this.get_status_text(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Set the response status text.
         /// </summary>
-        /* FIXME: CefResponse.SetStatusText public */
-        void SetStatusText(/*const*/ cef_string_t* statusText)
+        public void SetStatusText(string statusText)
         {
-            // TODO: CefResponse.SetStatusText
-            throw new NotImplementedException();
+            fixed (char* statusText_str = statusText)
+            {
+                var n_statusText = new cef_string_t(statusText_str, statusText != null ? statusText.Length : 0);
+
+                this.set_status_text(this.ptr, &n_statusText);
+            }
         }
 
         /// <summary>
         /// Get the response mime type.
         /// </summary>
-        /* FIXME: CefResponse.GetMimeType public */
-        cef_string_userfree_t GetMimeType()
+        public string GetMimeType()
         {
-            // TODO: CefResponse.GetMimeType
-            throw new NotImplementedException();
+            var n_result = this.get_mime_type(this.ptr);
+            return n_result.GetStringAndFree();
         }
 
         /// <summary>
         /// Set the response mime type.
         /// </summary>
-        /* FIXME: CefResponse.SetMimeType public */
-        void SetMimeType(/*const*/ cef_string_t* mimeType)
+        public void SetMimeType(string mimeType)
         {
-            // TODO: CefResponse.SetMimeType
-            throw new NotImplementedException();
+            fixed (char* mimeType_str = mimeType)
+            {
+                var n_mimeType = new cef_string_t(mimeType_str, mimeType != null ? mimeType.Length : 0);
+
+                this.set_mime_type(this.ptr, &n_mimeType);
+            }
         }
 
         /// <summary>
         /// Get the value for the specified response header field.
         /// </summary>
-        /* FIXME: CefResponse.GetHeader public */
-        cef_string_userfree_t GetHeader(/*const*/ cef_string_t* name)
+        public string GetHeader(string name)
         {
-            // TODO: CefResponse.GetHeader
-            throw new NotImplementedException();
+            fixed (char* name_str = name)
+            {
+                var n_name = new cef_string_t(name_str, name != null ? name.Length : 0);
+
+                var n_result = this.get_header(this.ptr, &n_name);
+                return n_result.GetStringAndFree();
+            }
         }
 
         /// <summary>
         /// Get all response header fields.
         /// </summary>
-        /* FIXME: CefResponse.GetHeaderMap public */
-        void GetHeaderMap(cef_string_map_t headerMap)
+        public CefStringMap GetHeaderMap()
         {
-            // TODO: CefResponse.GetHeaderMap
-            throw new NotImplementedException();
+            var map = new CefStringMap();
+            this.get_header_map(this.ptr, map.GetNativeHandle());
+            return map;
         }
 
         /// <summary>
         /// Set all response header fields.
         /// </summary>
-        /* FIXME: CefResponse.SetHeaderMap public */
-        void SetHeaderMap(cef_string_map_t headerMap)
+        public void SetHeaderMap(CefStringMap headerMap)
         {
-            // TODO: CefResponse.SetHeaderMap
-            throw new NotImplementedException();
+            this.set_header_map(this.ptr, headerMap.GetNativeHandle());
         }
-
 
     }
 }

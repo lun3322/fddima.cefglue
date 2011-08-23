@@ -6,7 +6,7 @@
     /// <summary>
     /// Key types.
     /// </summary>
-    public enum CefKeytype
+    public enum CefKeyType
     {
         KeyUp = cef_key_type_t.KT_KEYUP,
         KeyDown = cef_key_type_t.KT_KEYDOWN,

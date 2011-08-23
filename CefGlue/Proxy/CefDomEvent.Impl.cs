@@ -8,81 +8,87 @@ namespace CefGlue
         /// <summary>
         /// Returns the event type.
         /// </summary>
-        /* FIXME: CefDomEvent.GetType public */
-        cef_string_userfree_t GetType()
+        public string Type
         {
-            // TODO: CefDomEvent.GetType
-            throw new NotImplementedException();
+            get
+            {
+                var n_type = this.get_type(this.ptr);
+                return n_type.GetStringAndFree();
+            }
         }
 
         /// <summary>
         /// Returns the event category.
         /// </summary>
-        /* FIXME: CefDomEvent.GetCategory public */
-        cef_dom_event_category_t GetCategory()
+        public CefDomEventCategory Category
         {
-            // TODO: CefDomEvent.GetCategory
-            throw new NotImplementedException();
+            get
+            {
+                return (CefDomEventCategory)this.get_category(this.ptr);
+            }
         }
 
         /// <summary>
         /// Returns the event processing phase.
         /// </summary>
-        /* FIXME: CefDomEvent.GetPhase public */
-        cef_dom_event_phase_t GetPhase()
+        public CefDomEventPhase Phase
         {
-            // TODO: CefDomEvent.GetPhase
-            throw new NotImplementedException();
+            get
+            {
+                return (CefDomEventPhase)this.get_phase(this.ptr);
+            }
         }
 
         /// <summary>
         /// Returns true if the event can bubble up the tree.
         /// </summary>
-        /* FIXME: CefDomEvent.CanBubble public */
-        int CanBubble()
+        public bool CanBubble
         {
-            // TODO: CefDomEvent.CanBubble
-            throw new NotImplementedException();
+            get
+            {
+                return this.can_bubble(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// Returns true if the event can be canceled.
         /// </summary>
-        /* FIXME: CefDomEvent.CanCancel public */
-        int CanCancel()
+        public bool CanCancel
         {
-            // TODO: CefDomEvent.CanCancel
-            throw new NotImplementedException();
+            get
+            {
+                return this.can_cancel(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// Returns the document associated with this event.
         /// </summary>
-        /* FIXME: CefDomEvent.GetDocument public */
-        cef_domdocument_t* GetDocument()
+        public CefDomDocument GetDocument()
         {
-            // TODO: CefDomEvent.GetDocument
-            throw new NotImplementedException();
+            return CefDomDocument.From(
+                this.get_document(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the target of the event.
         /// </summary>
-        /* FIXME: CefDomEvent.GetTarget public */
-        cef_domnode_t* GetTarget()
+        public CefDomNode GetTarget()
         {
-            // TODO: CefDomEvent.GetTarget
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_target(this.ptr)
+                );
         }
 
         /// <summary>
         /// Returns the current target of the event.
         /// </summary>
-        /* FIXME: CefDomEvent.GetCurrentTarget public */
-        cef_domnode_t* GetCurrentTarget()
+        public CefDomNode GetCurrentTarget()
         {
-            // TODO: CefDomEvent.GetCurrentTarget
-            throw new NotImplementedException();
+            return CefDomNode.From(
+                this.get_current_target(this.ptr)
+                );
         }
 
 

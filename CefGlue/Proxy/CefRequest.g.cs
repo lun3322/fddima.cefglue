@@ -21,20 +21,24 @@ namespace CefGlue
         /// </summary>
         internal static CefRequest From(cef_request_t* ptr)
         {
-			return new CefRequest(ptr, false);
+            if (ptr == null) ThrowNullNativePointer();
+			return new CefRequest(ptr);
+        }
+		
+        internal static CefRequest FromOrDefault(cef_request_t* ptr)
+        {
+            if (ptr != null) return new CefRequest(ptr);
+            else return null;
         }
 
-        /// <summary>
-        /// Create CefRequest proxy from pointer and optionally increments the reference count for the object.
-        /// </summary>
-        internal static CefRequest Create(cef_request_t* ptr, bool addRefCount)
+        private static void ThrowNullNativePointer()
         {
-            return new CefRequest(ptr, addRefCount);
+            throw new NullReferenceException("CefRequest");
         }
 
         private cef_request_t* ptr;
 
-        private CefRequest(cef_request_t* ptr, bool addRefCount)
+        private CefRequest(cef_request_t* ptr)
         {
             this.ptr = ptr;
 
@@ -43,7 +47,7 @@ namespace CefGlue
             Cef.Logger.Trace(LogTarget.CefRequest, this.ptr, LogOperation.Create);
 #endif
 
-			if (addRefCount) this.AddRef();
+            // if (addRef) this.AddRef();
         }
 
         #region IDisposable

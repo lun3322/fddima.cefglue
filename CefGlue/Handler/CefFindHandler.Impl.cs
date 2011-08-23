@@ -20,7 +20,7 @@ namespace CefGlue
 
             var m_browser = CefBrowser.From(browser);
             var m_selectionRect = CefRect.From(selectionRect);
-            var m_finalUpdate = finalUpdate != 0 ? true : false;
+            var m_finalUpdate = finalUpdate != 0;
 
             this.OnFindResult(m_browser, identifier, count, m_selectionRect, activeMatchOrdinal, m_finalUpdate);
         }
