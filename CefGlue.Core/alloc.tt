@@ -8,6 +8,7 @@
         new StructDef("cef_window_info_t",       hasBase:false, hasSize:false, hasClear:true),
         new StructDef("cef_browser_settings_t",  hasBase:false, hasSize:true,  hasClear:false), // FIXME: hasClear
 		new StructDef("cef_popup_features_t",  	 hasBase:false, hasSize:false, hasClear:false),
+		new StructDef("cef_cookie_t",            hasBase:false, hasSize:false, hasClear:true),
 
         new StructDef("cef_client_t",            hasBase:true),
         new StructDef("cef_life_span_handler_t", hasBase:true),

@@ -52,5 +52,18 @@
         // Query string component (i.e., everything following the '?').
         ///
         public cef_string_t query;
+
+
+        public static void Clear(cef_urlparts_t* self)
+        {
+            cef_string_t.Clear(&self->spec);
+            cef_string_t.Clear(&self->scheme);
+            cef_string_t.Clear(&self->username);
+            cef_string_t.Clear(&self->password);
+            cef_string_t.Clear(&self->host);
+            cef_string_t.Clear(&self->port);
+            cef_string_t.Clear(&self->path);
+            cef_string_t.Clear(&self->query);
+        }
     }
 }

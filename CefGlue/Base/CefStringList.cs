@@ -22,7 +22,7 @@
             this.list = cef_string_list_t.Create(collection);
         }
 
-        private CefStringList(cef_string_list_t list)
+        internal CefStringList(cef_string_list_t list)
         {
             this.list = list;
         }

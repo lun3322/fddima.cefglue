@@ -28,6 +28,10 @@
                 return;
             }
 
+
+            Cef.RegisterCustomScheme("client", false, false, false);
+            Cef.RegisterSchemeHandlerFactory("client", null, new ClientSchemeHandlerFactory());
+
             // This is shows that handler works like zombie - when handler is used by native side only
             // it prevents to be collected by GC.
             CefTask.Post(CefThreadId.UI, () =>

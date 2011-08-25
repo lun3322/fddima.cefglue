@@ -12,7 +12,16 @@ namespace CefGlue
         /// </summary>
         public static void Post(CefThreadId threadId, CefTask task)
         {
-            libcef.post_task((cef_thread_id_t)threadId, task.GetNativePointerAndAddRef());
+            Cef.PostTask(threadId, task);
+        }
+
+        /// <summary>
+        /// Post a task for delayed execution on the specified thread.
+        /// This function may be called on any thread.
+        /// </summary>
+        public static void Post(CefThreadId threadId, CefTask task, long delayMs)
+        {
+            Cef.PostTask(threadId, task, delayMs);
         }
 
         /// <summary>
@@ -21,7 +30,16 @@ namespace CefGlue
         /// </summary>
         public static void Post(CefThreadId threadId, Action action)
         {
-            new CefActionTask(action).Post(threadId);
+            Cef.PostTask(threadId, new CefActionTask(action));
+        }
+
+        /// <summary>
+        /// Post a task for delayed execution on the specified thread.
+        /// This function may be called on any thread.
+        /// </summary>
+        public static void Post(CefThreadId threadId, Action action, long delayMs)
+        {
+            Cef.PostTask(threadId, new CefActionTask(action), delayMs);
         }
 
         /// <summary>
@@ -30,7 +48,16 @@ namespace CefGlue
         /// </summary>
         public void Post(CefThreadId threadId)
         {
-            CefTask.Post(threadId, this);
+            Cef.PostTask(threadId, this);
+        }
+
+        /// <summary>
+        /// Post a task for delayed execution on the specified thread.
+        /// This function may be called on any thread.
+        /// </summary>
+        public void Post(CefThreadId threadId, long delayMs)
+        {
+            Cef.PostTask(threadId, this, delayMs);
         }
 
         /// <summary>

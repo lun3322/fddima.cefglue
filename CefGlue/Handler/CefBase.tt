@@ -5,6 +5,8 @@
     {
         ClassName = "CefBase",
         StructName = "cefglue_base_t",
+		
+		ReversibleNativePointer = true,
     };
 
     WriteHandler(def);

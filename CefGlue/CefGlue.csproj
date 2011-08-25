@@ -453,7 +453,6 @@
     <Compile Include="Struct\CefPrintInfo.cs" />
     <Compile Include="Struct\CefPrintMargins.cs" />
     <Compile Include="Struct\CefPrintOptions.cs" />
-    <Compile Include="Struct\CefTime.cs" />
     <Compile Include="Struct\CefUrlParts.cs" />
   </ItemGroup>
   <ItemGroup>

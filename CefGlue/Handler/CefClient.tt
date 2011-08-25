@@ -6,8 +6,7 @@
         ClassName = "CefClient",
         StructName = "cef_client_t",
 
-		StableNativePointer = true,
-		FromPointer = true,
+		ReversibleNativePointer = true,
 
 		Disposable = true,
     };

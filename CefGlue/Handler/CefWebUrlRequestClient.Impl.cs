@@ -101,7 +101,7 @@ namespace CefGlue
             ThrowIfObjectDisposed();
 
             var m_requester = CefWebUrlRequest.From(requester);
-            using (var m_stream = new UnmanagedMemoryStream((byte*)data, dataLength, 0, FileAccess.Read))
+            using (var m_stream = new UnmanagedMemoryStream((byte*)data, dataLength, dataLength, FileAccess.Read))
             {
                 this.OnData(m_requester, m_stream, dataLength);
             }

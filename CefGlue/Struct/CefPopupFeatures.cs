@@ -8,63 +8,41 @@
 
     public sealed unsafe class CefPopupFeatures : IDisposable
     {
-        internal static CefPopupFeatures From(cef_popup_features_t* pointer)
+        internal static CefPopupFeatures From(cef_popup_features_t* ptr)
         {
-            return new CefPopupFeatures(pointer);
+            return new CefPopupFeatures(ptr);
         }
 
-        private cef_popup_features_t* _ptr;
-        private bool _owner;
+        private cef_popup_features_t* ptr;
 
-        public CefPopupFeatures()
+        private CefPopupFeatures(cef_popup_features_t* ptr)
         {
-            _ptr = cef_popup_features_t.Alloc();
-            _owner = true;
+            this.ptr = ptr;
         }
 
-        private CefPopupFeatures(cef_popup_features_t* pointer)
-        {
-            _ptr = pointer;
-            _owner = false;
-        }
-
-        #region IDisposable
         ~CefPopupFeatures()
         {
-            Dispose(false);
+            this.ptr = null;
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.ptr = null;
             GC.SuppressFinalize(this);
         }
-
-        private void Dispose(bool disposing)
-        {
-            if (_ptr != null)
-            {
-                if (_owner)
-                {
-                    cef_popup_features_t.Free(_ptr);
-                }
-                _ptr = null;
-            }
-        }
-        #endregion
 
         internal cef_popup_features_t* NativePointer
         {
             get
             {
                 CheckNativePointer();
-                return _ptr;
+                return ptr;
             }
         }
 
         private void CheckNativePointer()
         {
-            if (_ptr == null) ThrowObjectDisposedException();
+            if (ptr == null) ThrowObjectDisposedException();
         }
 
         private void ThrowObjectDisposedException()
@@ -72,7 +50,112 @@
             throw new ObjectDisposedException("{0} is disposed.", this.GetType().Name);
         }
 
-        // ....
+        public int? X
+        {
+            get
+            {
+                return this.ptr->xSet ? (int?)this.ptr->x : null;
+            }
+        }
 
+        public int? Y
+        {
+            get
+            {
+                return this.ptr->ySet ? (int?)this.ptr->y : null;
+            }
+        }
+
+        public int? Width
+        {
+            get
+            {
+                return this.ptr->widthSet ? (int?)this.ptr->width : null;
+            }
+        }
+
+        public int? Height
+        {
+            get
+            {
+                return this.ptr->heightSet ? (int?)this.ptr->height : null;
+            }
+        }
+
+        public bool MenuBarVisible
+        {
+            get
+            {
+                return this.ptr->menuBarVisible;
+            }
+        }
+
+        public bool StatusBarVisible
+        {
+            get
+            {
+                return this.ptr->statusBarVisible;
+            }
+        }
+
+        public bool ToolBarVisible
+        {
+            get
+            {
+                return this.ptr->toolBarVisible;
+            }
+        }
+
+        public bool LocationBarVisible
+        {
+            get
+            {
+                return this.ptr->locationBarVisible;
+            }
+        }
+
+        public bool ScrollbarsVisible
+        {
+            get
+            {
+                return this.ptr->scrollbarsVisible;
+            }
+        }
+
+        public bool Resizable
+        {
+            get
+            {
+                return this.ptr->resizable;
+            }
+        }
+
+        public bool Fullscreen
+        {
+            get
+            {
+                return this.ptr->fullscreen;
+            }
+        }
+
+        public bool Dialog
+        {
+            get
+            {
+                return this.ptr->dialog;
+            }
+        }
+
+        public IEnumerable<string> AdditionalFeatures
+        {
+            get
+            {
+                if (this.ptr->additionalFeatures.IsAllocated)
+                {
+                    return new CefStringList(this.ptr->additionalFeatures.Copy()).AsEnumerable();
+                }
+                return null;
+            }
+        }
     }
 }

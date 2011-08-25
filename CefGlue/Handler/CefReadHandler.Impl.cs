@@ -13,7 +13,8 @@ namespace CefGlue
         {
             ThrowIfObjectDisposed();
 
-            using (var m_stream = new UnmanagedMemoryStream((byte*)ptr, size * n, 0, FileAccess.Write))
+            long length = size * n;
+            using (var m_stream = new UnmanagedMemoryStream((byte*)ptr, length, length, FileAccess.Write))
             {
                 return this.Read(m_stream, size, n);
             }

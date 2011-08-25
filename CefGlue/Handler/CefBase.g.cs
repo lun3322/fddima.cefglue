@@ -18,6 +18,23 @@ namespace CefGlue
 
         private static ObjectTable<CefBase> pointers = new ObjectTable<CefBase>();
 
+        /// <summary>
+        /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
+        /// </summary>
+        internal static CefBase From(cefglue_base_t* pointer)
+        {
+#if DIAGNOSTICS
+            Cef.Logger.Trace(LogTarget.CefBase, pointer, "From");
+#endif
+            CefBase value;
+            if (pointers.TryGetValue((IntPtr)pointer, out value))
+            {
+                value.ReleaseRef();
+                return value;
+            }
+            throw new CefGlueException("CefBase not found.");
+        }
+		
 
 
         private int refct;

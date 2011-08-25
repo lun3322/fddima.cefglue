@@ -95,6 +95,29 @@
         }
     }
 
+    unsafe partial struct cef_cookie_t
+    {
+        private static int s_size;
+
+        static cef_cookie_t()
+        {
+            s_size = Marshal.SizeOf(typeof(cef_cookie_t));
+        }
+
+        internal static cef_cookie_t* Alloc()
+        {
+            var ptr = (cef_cookie_t*)Marshal.AllocHGlobal(s_size);
+            *ptr = new cef_cookie_t();
+            return ptr;
+        }
+
+        internal static void Free(cef_cookie_t* ptr)
+        {
+            Clear(ptr);
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+    }
+
     unsafe partial struct cef_client_t
     {
         private static int s_size;

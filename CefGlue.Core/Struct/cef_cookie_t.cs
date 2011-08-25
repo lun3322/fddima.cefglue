@@ -38,14 +38,12 @@
         ///
         // If |secure| is true the cookie will only be sent for HTTPS requests.
         ///
-        //bool secure;
-        public int secure;
+        public bool_t secure;
 
         ///
         // If |httponly| is true the cookie will only be sent for HTTP requests.
         ///
-        //bool httponly;
-        public int httponly;
+        public bool_t httponly;
 
         ///
         // The cookie creation date. This is automatically populated by the system on
@@ -62,8 +60,15 @@
         ///
         // The cookie expiration date is only valid if |has_expires| is true.
         ///
-        //bool has_expires;
-        public int has_expires;
+        public bool_t has_expires;
         public cef_time_t expires;
+
+        public static void Clear(cef_cookie_t* self)
+        {
+            cef_string_t.Clear(&self->name);
+            cef_string_t.Clear(&self->value);
+            cef_string_t.Clear(&self->domain);
+            cef_string_t.Clear(&self->path);
+        }
     }
 }

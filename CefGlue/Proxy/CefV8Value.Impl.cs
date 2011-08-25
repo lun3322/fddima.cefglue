@@ -58,11 +58,9 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefV8Value object of type Date.
         /// </summary>
-        public static CefV8Value CreateDate(CefTime date)
+        public static CefV8Value CreateDate(DateTime value)
         {
-            // TODO: CefV8Value.CreateDate
-            throw new NotImplementedException();
-            cef_time_t n_date;
+            cef_time_t n_date = new cef_time_t(value);
             return CefV8Value.From(
                 libcef.v8value_create_date(&n_date)
                 );
@@ -87,10 +85,9 @@ namespace CefGlue
         /// </summary>
         public static CefV8Value CreateObject(CefBase userData)
         {
-            // TODO: CefV8Value.CreateObject
-            // cef_base_t* n_user_data;
-            // libcef.v8value_create_object(n_user_data);
-            throw new NotImplementedException();
+            return CefV8Value.From(libcef.v8value_create_object(
+                    (cef_base_t*)userData.GetNativePointerAndAddRef()
+                ));
         }
 
         /// <summary>
@@ -98,9 +95,10 @@ namespace CefGlue
         /// </summary>
         public static CefV8Value CreateObject(CefBase userData, CefV8Accessor accessor)
         {
-            // TODO: CefV8Value.CreateObject
-            // libcef.v8value_create_object_with_accessor(n_userData, accessor.GetNativePointerAndAddRef())
-            throw new NotImplementedException();
+            return CefV8Value.From(libcef.v8value_create_object_with_accessor(
+                    (cef_base_t*)userData.GetNativePointerAndAddRef(),
+                    accessor.GetNativePointerAndAddRef()
+                ));
         }
 
         /// <summary>
@@ -247,11 +245,10 @@ namespace CefGlue
         /// Return a Date value.
         /// The underlying data will be converted to if necessary.
         /// </summary>
-        public CefTime GetDateValue()
+        public DateTime GetDateValue()
         {
-            // TODO: CefV8Value.GetDateValue
-            throw new NotImplementedException();
-            // return this.get_date_value(this.ptr);
+            var n_result = this.get_date_value(this.ptr);
+            return n_result.ToDateTime();
         }
 
         /// <summary>
@@ -387,8 +384,9 @@ namespace CefGlue
         /// </summary>
         public CefBase GetUserData()
         {
-            // TODO: CefV8Value.GetUserData
-            throw new NotImplementedException();
+            var n_base = this.get_user_data(this.ptr);
+            if (n_base == null) return null;
+            return CefBase.From((cefglue_base_t*)n_base);
         }
 
 
@@ -419,29 +417,87 @@ namespace CefGlue
         /// </summary>
         public CefV8Handler GetFunctionHandler()
         {
-            // TODO: CefV8Value.GetFunctionHandler
-            throw new NotImplementedException();
+            return CefV8Handler.From(
+                this.get_function_handler(this.ptr)
+            );
         }
 
         /// <summary>
         /// Execute the function using the current V8 context.
         /// </summary>
-        /* FIXME: CefV8Value.ExecuteFunction public */
-        int ExecuteFunction(cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception)
+        public bool ExecuteFunction(CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
         {
-            // TODO: CefV8Value.ExecuteFunction
-            throw new NotImplementedException();
+            var n_arguments = CreateArgumentsArray(arguments);
+            cef_v8value_t* n_retval = null;
+            cef_string_t n_exception;
+            bool result;
+
+            fixed (cef_v8value_t** n_arguments_ptr = &n_arguments[0])
+            {
+                result = this.execute_function(
+                    this.ptr,
+                    obj.GetNativePointerAndAddRef(),
+                    n_arguments != null ? n_arguments.Length : 0,
+                    n_arguments_ptr,
+                    &n_retval,
+                    &n_exception
+                    ) != 0;
+            }
+
+            returnValue = CefV8Value.FromOrDefault(n_retval);
+
+            exception = cef_string_t.ToString(&n_exception);
+            cef_string_t.Clear(&n_exception);
+
+            return result;
         }
 
         /// <summary>
         /// Execute the function using the specified V8 context.
         /// </summary>
-        /* FIXME: CefV8Value.ExecuteFunctionWithContext public */
-        int ExecuteFunctionWithContext(cef_v8context_t* context, cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception)
+        public bool ExecuteFunctionWithContext(CefV8Context context, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
         {
-            // TODO: CefV8Value.ExecuteFunctionWithContext
-            throw new NotImplementedException();
+            var n_arguments = CreateArgumentsArray(arguments);
+            cef_v8value_t* n_retval = null;
+            cef_string_t n_exception;
+            bool result;
+
+            fixed (cef_v8value_t** n_arguments_ptr = &n_arguments[0])
+            {
+                result = this.execute_function_with_context(
+                    this.ptr,
+                    context.GetNativePointerAndAddRef(),
+                    obj.GetNativePointerAndAddRef(),
+                    n_arguments != null ? n_arguments.Length : 0,
+                    n_arguments_ptr,
+                    &n_retval,
+                    &n_exception
+                    ) != 0;
+            }
+
+            returnValue = CefV8Value.FromOrDefault(n_retval);
+
+            exception = cef_string_t.ToString(&n_exception);
+            cef_string_t.Clear(&n_exception);
+
+            return result;
         }
 
+        private static cef_v8value_t*[] CreateArgumentsArray(CefV8Value[] arguments)
+        {
+            if (arguments == null) return null;
+
+            var length = arguments.Length;
+            if (length == 0) return null;
+
+            var result = new cef_v8value_t*[arguments.Length];
+
+            for (var i = 0; i < length; i++)
+            {
+                result[i] = arguments[i].GetNativePointerAndAddRef();
+            }
+
+            return result;
+        }
     }
 }

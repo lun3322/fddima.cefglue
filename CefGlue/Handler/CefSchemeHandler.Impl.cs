@@ -79,7 +79,7 @@ namespace CefGlue
         {
             ThrowIfObjectDisposed();
 
-            using (var m_stream = new UnmanagedMemoryStream((byte*)data_out, bytes_to_read, 0, FileAccess.Write))
+            using (var m_stream = new UnmanagedMemoryStream((byte*)data_out, bytes_to_read, bytes_to_read, FileAccess.Write))
             {
                 int m_bytesRead;
                 var handled = this.ReadResponse(m_stream, bytes_to_read, out m_bytesRead);

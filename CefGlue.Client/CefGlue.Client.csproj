@@ -65,6 +65,8 @@
     <Compile Include="..\CefGlue.Version.cs">
       <Link>Properties\CefGlue.Version.cs</Link>
     </Compile>
+    <Compile Include="ClientSchemeHandler.cs" />
+    <Compile Include="ClientSchemeHandlerFactory.cs" />
     <Compile Include="ConsoleForm.cs">
       <SubType>Form</SubType>
     </Compile>
