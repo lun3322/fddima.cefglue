@@ -6,7 +6,9 @@
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
+#if DIAGNOSTICS
     using Diagnostics;
+#endif
 
     public partial class CefWebBrowser : Control
     {

@@ -2,7 +2,7 @@
 
 CefGlue is a .NET CLR binding for [The Chromium Embedded Framework (CEF)](http://code.google.com/p/chromiumembedded) by Marshall A. Greenblatt.
 
-This project is MIT licensed.
+This project is licensed under New BSD License.
 
 
 ### Version 0.4.1-cef-r275

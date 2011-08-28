@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+#if DIAGNOSTICS
     using Diagnostics;
+#endif
 
     partial class CefWebBrowser
     {

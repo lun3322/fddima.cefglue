@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Windows.Forms;
+#if DIAGNOSTICS
     using Diagnostics;
+#endif
 
     partial class CefWebBrowser
     {

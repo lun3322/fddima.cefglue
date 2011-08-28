@@ -20,6 +20,7 @@ using System.Security;
 
 [assembly: CLSCompliant(true)]
 
+/*
 [assembly: InternalsVisibleTo("CefGlue.PerfTests, PublicKey="
 + "00240000048000009400000006020000002400005253413100040000010001004b8ebecd8d93b3"
 + "d54fc872a9a116714c2809e325c959fd2bb482765acaa9be1c8358a5998b844659e674e51dfbb9"
@@ -27,5 +28,6 @@ using System.Security;
 + "7e3c8d58c3e397c5b6443318d6771d573e66e962b70152c93b65fcfbba8181b3f8d4e22b85786e"
 + "75fa10af"
     )]
+*/
 
 // [assembly: AllowPartiallyTrustedCallers]

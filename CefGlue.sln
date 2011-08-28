@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue", "CefGlue\CefGlue.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Client", "CefGlue.Client\CefGlue.Client.csproj", "{9C2C2C0D-CB79-418E-8CC7-5DEE9B2C12E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Core", "CefGlue.Core\CefGlue.Core.csproj", "{013A3CD6-0BFC-4C81-9282-399681C8BB8E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Windows.Forms", "CefGlue.Windows.Forms\CefGlue.Windows.Forms.csproj", "{432E4102-0457-4123-AD92-301AC6883C1B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402ADDB5-8DF3-4B70-9365-5545B6855C05}"
@@ -25,10 +23,6 @@ Global
 		{9C2C2C0D-CB79-418E-8CC7-5DEE9B2C12E2}.Debug|x86.Build.0 = Debug|x86
 		{9C2C2C0D-CB79-418E-8CC7-5DEE9B2C12E2}.Release|x86.ActiveCfg = Release|x86
 		{9C2C2C0D-CB79-418E-8CC7-5DEE9B2C12E2}.Release|x86.Build.0 = Release|x86
-		{013A3CD6-0BFC-4C81-9282-399681C8BB8E}.Debug|x86.ActiveCfg = Debug|x86
-		{013A3CD6-0BFC-4C81-9282-399681C8BB8E}.Debug|x86.Build.0 = Debug|x86
-		{013A3CD6-0BFC-4C81-9282-399681C8BB8E}.Release|x86.ActiveCfg = Release|x86
-		{013A3CD6-0BFC-4C81-9282-399681C8BB8E}.Release|x86.Build.0 = Release|x86
 		{432E4102-0457-4123-AD92-301AC6883C1B}.Debug|x86.ActiveCfg = Debug|x86
 		{432E4102-0457-4123-AD92-301AC6883C1B}.Debug|x86.Build.0 = Debug|x86
 		{432E4102-0457-4123-AD92-301AC6883C1B}.Release|x86.ActiveCfg = Release|x86

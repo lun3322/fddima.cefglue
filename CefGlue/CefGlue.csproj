@@ -66,6 +66,66 @@
     <Compile Include="Base\CefStringList.cs" />
     <Compile Include="Base\CefStringMap.cs" />
     <Compile Include="Cef.cs" />
+    <Compile Include="Core\alloc.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>alloc.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Base\bool_t.cs" />
+    <Compile Include="Core\Base\cef_cursor_handle_t.cs" />
+    <Compile Include="Core\Base\cef_string_list_t.cs" />
+    <Compile Include="Core\Base\cef_string_map_t.cs" />
+    <Compile Include="Core\Base\cef_string_t.cs" />
+    <Compile Include="Core\Base\cef_string_userfree_t.cs" />
+    <Compile Include="Core\Base\cef_window_handle_t.cs" />
+    <Compile Include="Core\Base\time_t.cs" />
+    <Compile Include="Core\cefglue_base_t.cs" />
+    <Compile Include="Core\cef_base_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_document_type_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_event_category_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_event_phase_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_node_type_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_errorcode_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_keyevent_modifiers_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_keyevent_type_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_menucapabilitybits_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_menuid_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_menutypebits_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_navtype_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_statustype_t.cs" />
+    <Compile Include="Core\Enum\cef_key_type_t.cs" />
+    <Compile Include="Core\Enum\cef_log_severity_t.cs" />
+    <Compile Include="Core\Enum\cef_mouse_button_type_t.cs" />
+    <Compile Include="Core\Enum\cef_page_orientation.cs" />
+    <Compile Include="Core\Enum\cef_paint_element_type_t.cs" />
+    <Compile Include="Core\Enum\cef_paper_type_t.cs" />
+    <Compile Include="Core\Enum\cef_postdataelement_type_t.cs" />
+    <Compile Include="Core\Enum\cef_thread_id_t.cs" />
+    <Compile Include="Core\Enum\cef_v8_accesscontrol_t.cs" />
+    <Compile Include="Core\Enum\cef_v8_propertyattribute_t.cs" />
+    <Compile Include="Core\Enum\cef_weburlrequest_flags_t.cs" />
+    <Compile Include="Core\Enum\cef_weburlrequest_state_t.cs" />
+    <Compile Include="Core\Enum\cef_xml_encoding_type_t.cs" />
+    <Compile Include="Core\Enum\cef_xml_node_type_t.cs" />
+    <Compile Include="Core\libcef.cs" />
+    <Compile Include="Core\Struct\cef_browser_settings_t.cs" />
+    <Compile Include="Core\Struct\cef_cookie_t.cs" />
+    <Compile Include="Core\Struct\cef_handler_menuinfo_t.cs" />
+    <Compile Include="Core\Struct\cef_paper_metrics.cs" />
+    <Compile Include="Core\Struct\cef_popup_features_t.cs" />
+    <Compile Include="Core\Struct\cef_print_info_t.cs" />
+    <Compile Include="Core\Struct\cef_print_margins.cs" />
+    <Compile Include="Core\Struct\cef_print_options_t.cs" />
+    <Compile Include="Core\Struct\cef_rect_t.cs" />
+    <Compile Include="Core\Struct\cef_settings_t.cs" />
+    <Compile Include="Core\Struct\cef_time_t.cs" />
+    <Compile Include="Core\Struct\cef_urlparts_t.cs" />
+    <Compile Include="Core\Struct\cef_window_info_t.cs" />
+    <Compile Include="Core\win\NativeMethods.cs" />
+    <Compile Include="Core\win\RECT.cs" />
+    <Compile Include="Core\win\WindowStyles.cs" />
+    <Compile Include="Core\win\WindowStylesEx.cs" />
+    <Compile Include="Diagnostics\Diagnostics.cs" />
     <Compile Include="Diagnostics\GCFinalizerThreadId.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Diagnostics\LogOperation.cs" />
@@ -459,6 +519,11 @@
     <None Include="..\CefGlue.snk">
       <Link>Properties\CefGlue.snk</Link>
     </None>
+    <None Include="Core\alloc.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>alloc.g.cs</LastGenOutput>
+    </None>
+    <None Include="Core\Core.ttinclude" />
     <None Include="Handler\CefBase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CefBase.g.cs</LastGenOutput>
@@ -636,12 +701,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CefGlue.Core\CefGlue.Core.csproj">
-      <Project>{013A3CD6-0BFC-4C81-9282-399681C8BB8E}</Project>
-      <Name>CefGlue.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

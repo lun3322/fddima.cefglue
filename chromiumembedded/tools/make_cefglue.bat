@@ -7,5 +7,5 @@ if exist "%PythonExePath%" goto run
 set PythonExePath=python.exe
 
 :run
-"%PythonExePath%" translator.py --no-backup --cpp-header ../include/cef.h --cefglue ../../CefGlue.Core/libcef.cs --cefglue-dir ./cefglue
+"%PythonExePath%" translator.py --no-backup --cpp-header ../include/cef.h --cefglue ../../CefGlue/Core/libcef.cs --cefglue-dir ./cefglue
 pause
