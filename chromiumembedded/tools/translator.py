@@ -53,8 +53,6 @@ parser.add_option('-c', '--classes', dest='classes', action='append',
 parser.add_option('-q', '--quiet',
                   action='store_true', dest='quiet', default=False,
                   help='do not output detailed status information')
-parser.add_option('--cefglue', dest='cefglue', metavar='FILE',
-                  help='output CEF C API C# source file')
 parser.add_option('--cefglue-dir', dest='cefgluedir', metavar='FILE',
                   help='output CEF C API C# output dir')
 (options, args) = parser.parse_args()
@@ -83,12 +81,11 @@ if not options.capiheader is None:
     writect += write_capi_header(header, options.capiheader,
                                  not options.nobackup)
 
-if not options.cefglue is None:
+if not options.cefgluedir is None:
     #output the C API C# source
     if not options.quiet:
         sys.stdout.write('Generating CefGlue source...\n')
-    writect += write_cefglue(header, options.cefglue,
-                                 not options.nobackup, options.cefgluedir)
+    writect += write_cefglue(header, options.cefgluedir, not options.nobackup)
 
 # build the list of classes to parse
 allclasses = header.get_class_names()

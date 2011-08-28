@@ -716,24 +716,24 @@
         }
     }
 
-    unsafe partial struct cefglue_base_t
+    unsafe partial struct cefglue_userdata_t
     {
         private static int s_size;
 
-        static cefglue_base_t()
+        static cefglue_userdata_t()
         {
-            s_size = Marshal.SizeOf(typeof(cefglue_base_t));
+            s_size = Marshal.SizeOf(typeof(cefglue_userdata_t));
         }
 
-        internal static cefglue_base_t* Alloc()
+        internal static cefglue_userdata_t* Alloc()
         {
-            var ptr = (cefglue_base_t*)Marshal.AllocHGlobal(s_size);
-            *ptr = new cefglue_base_t();
+            var ptr = (cefglue_userdata_t*)Marshal.AllocHGlobal(s_size);
+            *ptr = new cefglue_userdata_t();
             ptr->@base.size = s_size;
             return ptr;
         }
 
-        internal static void Free(cefglue_base_t* ptr)
+        internal static void Free(cefglue_userdata_t* ptr)
         {
             Marshal.FreeHGlobal((IntPtr)ptr);
         }

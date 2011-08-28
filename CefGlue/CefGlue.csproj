@@ -79,7 +79,7 @@
     <Compile Include="Core\Base\cef_string_userfree_t.cs" />
     <Compile Include="Core\Base\cef_window_handle_t.cs" />
     <Compile Include="Core\Base\time_t.cs" />
-    <Compile Include="Core\cefglue_base_t.cs" />
+    <Compile Include="Core\cefglue_userdata_t.cs" />
     <Compile Include="Core\cef_base_t.cs" />
     <Compile Include="Core\Enum\cef_dom_document_type_t.cs" />
     <Compile Include="Core\Enum\cef_dom_event_category_t.cs" />
@@ -155,227 +155,142 @@
     <Compile Include="Enum\CefWebUrlRequestState.cs" />
     <Compile Include="Enum\CefXmlEncodingType.cs" />
     <Compile Include="Enum\CefXmlNodeType.cs" />
-    <Compile Include="Handler\CefBase.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefBase.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefContentFilter.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefContentFilter.tt</DependentUpon>
+    <Compile Include="Handler\CefClient.Impl.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefContentFilter.Impl.cs">
-      <DependentUpon>CefContentFilter.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefCookieVisitor.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefCookieVisitor.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefCookieVisitor.Impl.cs">
-      <DependentUpon>CefCookieVisitor.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Handler\CefDomEventListener.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefDomEventListener.tt</DependentUpon>
+    <Compile Include="Handler\CefDisplayHandler.Impl.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefDomEventListener.Impl.cs">
-      <DependentUpon>CefDomEventListener.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefDomVisitor.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefDomVisitor.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefDomVisitor.Impl.cs">
-      <DependentUpon>CefDomVisitor.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefDownloadHandler.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefDownloadHandler.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefDownloadHandler.Impl.cs">
-      <DependentUpon>CefDownloadHandler.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Handler\CefReadHandler.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefReadHandler.tt</DependentUpon>
+    <Compile Include="Handler\CefFindHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefFocusHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefJSBindingHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefJSDialogHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefKeyboardHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefLifeSpanHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefLoadHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefMenuHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefPrintHandler.Impl.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefReadHandler.Impl.cs">
-      <DependentUpon>CefReadHandler.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Handler\CefSchemeHandler.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefSchemeHandler.tt</DependentUpon>
+    <Compile Include="Handler\CefRenderHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefRequestHandler.Impl.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefSchemeHandler.Impl.cs">
-      <DependentUpon>CefSchemeHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefSchemeHandlerFactory.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefSchemeHandlerFactory.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefSchemeHandlerFactory.Impl.cs">
-      <DependentUpon>CefSchemeHandlerFactory.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefTask.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefTask.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefTask.Impl.cs">
-      <DependentUpon>CefTask.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefV8Accessor.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefV8Accessor.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefV8Accessor.Impl.cs">
-      <DependentUpon>CefV8Accessor.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefV8Handler.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefV8Handler.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefV8Handler.Impl.cs">
-      <DependentUpon>CefV8Handler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefWebUrlRequestClient.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefWebUrlRequestClient.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefWebUrlRequestClient.Impl.cs">
-      <DependentUpon>CefWebUrlRequestClient.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefWriteHandler.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefWriteHandler.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Handler\CefWriteHandler.Impl.cs">
-      <DependentUpon>CefWriteHandler.tt</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\Handler.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Handler.tt</DependentUpon>
     </Compile>
     <Compile Include="Handler\ObjectTable.cs" />
-    <Compile Include="Proxy\CefDomDocument.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefDomDocument.tt</DependentUpon>
+    <Compile Include="Proxy\CefBrowser.Impl.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefDomDocument.Impl.cs">
-      <DependentUpon>CefDomDocument.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefDomEvent.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefDomEvent.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefDomEvent.Impl.cs">
-      <DependentUpon>CefDomEvent.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefDomNode.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefDomNode.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefDomNode.Impl.cs">
-      <DependentUpon>CefDomNode.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Proxy\CefPostData.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefPostData.tt</DependentUpon>
+    <Compile Include="Proxy\CefFrame.Impl.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefPostData.Impl.cs">
-      <DependentUpon>CefPostData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefPostDataElement.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefPostDataElement.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefPostDataElement.Impl.cs">
-      <DependentUpon>CefPostDataElement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefRequest.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefRequest.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefRequest.Impl.cs">
-      <DependentUpon>CefRequest.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefResponse.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefResponse.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefResponse.Impl.cs">
-      <DependentUpon>CefResponse.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefStreamReader.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefStreamReader.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefStreamReader.Impl.cs">
-      <DependentUpon>CefStreamReader.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefStreamWriter.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefStreamWriter.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefStreamWriter.Impl.cs">
-      <DependentUpon>CefStreamWriter.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefV8Context.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefV8Context.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefV8Context.Impl.cs">
-      <DependentUpon>CefV8Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefV8Value.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefV8Value.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefV8Value.Impl.cs">
-      <DependentUpon>CefV8Value.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefWebUrlRequest.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefWebUrlRequest.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefWebUrlRequest.Impl.cs">
-      <DependentUpon>CefWebUrlRequest.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefXmlReader.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefXmlReader.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefXmlReader.Impl.cs">
-      <DependentUpon>CefXmlReader.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefZipReader.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefZipReader.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Proxy\CefZipReader.Impl.cs">
-      <DependentUpon>CefZipReader.tt</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\Proxy.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Proxy.tt</DependentUpon>
     </Compile>
     <Compile Include="Struct\CefBrowserSettings.cs" />
     <Compile Include="CefGlueException.cs" />
@@ -385,127 +300,7 @@
     <Compile Include="Struct\CefSettings.cs" />
     <Compile Include="Enum\CefHandlerStatusType.cs" />
     <Compile Include="Struct\CefWindowInfo.cs" />
-    <Compile Include="Handler\CefDisplayHandler.Impl.cs">
-      <DependentUpon>CefDisplayHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefFindHandler.Impl.cs">
-      <DependentUpon>CefFindHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefFocusHandler.Impl.cs">
-      <DependentUpon>CefFocusHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefJSBindingHandler.Impl.cs">
-      <DependentUpon>CefJSBindingHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefJSDialogHandler.Impl.cs">
-      <DependentUpon>CefJSDialogHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefKeyboardHandler.Impl.cs">
-      <DependentUpon>CefKeyboardHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefLoadHandler.g.cs">
-      <DependentUpon>CefLoadHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefLoadHandler.Impl.cs">
-      <DependentUpon>CefLoadHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefMenuHandler.Impl.cs">
-      <DependentUpon>CefMenuHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefPrintHandler.Impl.cs">
-      <DependentUpon>CefPrintHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefRenderHandler.Impl.cs">
-      <DependentUpon>CefRenderHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefRequestHandler.g.cs">
-      <DependentUpon>CefRequestHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefLifeSpanHandler.Impl.cs">
-      <DependentUpon>CefLifeSpanHandler.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefDisplayHandler.g.cs">
-      <DependentUpon>CefDisplayHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefFocusHandler.g.cs">
-      <DependentUpon>CefFocusHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefKeyboardHandler.g.cs">
-      <DependentUpon>CefKeyboardHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefMenuHandler.g.cs">
-      <DependentUpon>CefMenuHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefPrintHandler.g.cs">
-      <DependentUpon>CefPrintHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefJSDialogHandler.g.cs">
-      <DependentUpon>CefJSDialogHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefJSBindingHandler.g.cs">
-      <DependentUpon>CefJSBindingHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefFindHandler.g.cs">
-      <DependentUpon>CefFindHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefRenderHandler.g.cs">
-      <DependentUpon>CefRenderHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefRequestHandler.Impl.cs">
-      <DependentUpon>CefRequestHandler.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Proxy\CefBrowser.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefBrowser.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Handler\CefLifeSpanHandler.g.cs">
-      <DependentUpon>CefLifeSpanHandler.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefClient.g.cs">
-      <DependentUpon>CefClient.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Handler\CefClient.Impl.cs">
-      <DependentUpon>CefClient.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefBrowser.Impl.cs">
-      <DependentUpon>CefBrowser.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefFrame.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CefFrame.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Proxy\CefFrame.Impl.cs">
-      <DependentUpon>CefFrame.tt</DependentUpon>
-    </Compile>
     <Compile Include="Struct\CefPopupFeatures.cs" />
     <Compile Include="Struct\CefCookie.cs" />
     <Compile Include="Struct\CefHandlerMenuInfo.cs" />
@@ -524,180 +319,19 @@
       <LastGenOutput>alloc.g.cs</LastGenOutput>
     </None>
     <None Include="Core\Core.ttinclude" />
-    <None Include="Handler\CefBase.tt">
+    <None Include="Handler\Handler.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefBase.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefContentFilter.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefContentFilter.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefCookieVisitor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefCookieVisitor.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefDomEventListener.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDomEventListener.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefDomVisitor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDomVisitor.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefDownloadHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDownloadHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefLoadHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefLoadHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefReadHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefReadHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefRequestHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefRequestHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefDisplayHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDisplayHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefFocusHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefFocusHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefKeyboardHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefKeyboardHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefMenuHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefMenuHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefPrintHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefPrintHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefJSDialogHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefJSDialogHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefJSBindingHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefJSBindingHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefFindHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefFindHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefRenderHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefRenderHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefSchemeHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefSchemeHandler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefSchemeHandlerFactory.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefSchemeHandlerFactory.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefTask.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefTask.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefV8Accessor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefV8Accessor.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefV8Handler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefV8Handler.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefWebUrlRequestClient.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefWebUrlRequestClient.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefWriteHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefWriteHandler.g.cs</LastGenOutput>
+      <LastGenOutput>Handler.g.cs</LastGenOutput>
     </None>
     <None Include="Handler\Handler.ttinclude" />
-    <None Include="Proxy\CefBrowser.tt">
+    <None Include="Proxy\Proxy.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefBrowser.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefDomDocument.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDomDocument.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefDomEvent.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDomEvent.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefDomNode.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefDomNode.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefFrame.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefFrame.g.cs</LastGenOutput>
-    </None>
-    <None Include="Handler\CefClient.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefClient.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefPostData.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefPostData.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefPostDataElement.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefPostDataElement.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefRequest.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefRequest.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefResponse.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefResponse.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefStreamReader.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefStreamReader.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefStreamWriter.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefStreamWriter.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefV8Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefV8Context.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefV8Value.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefV8Value.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefWebUrlRequest.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefWebUrlRequest.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefXmlReader.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefXmlReader.g.cs</LastGenOutput>
-    </None>
-    <None Include="Proxy\CefZipReader.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefZipReader.g.cs</LastGenOutput>
+      <LastGenOutput>Proxy.g.cs</LastGenOutput>
     </None>
     <None Include="Proxy\Proxy.ttinclude" />
-    <None Include="Handler\CefLifeSpanHandler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CefLifeSpanHandler.g.cs</LastGenOutput>
-    </None>
+    <None Include="Templates\CefGlue.ttinclude" />
+    <None Include="Templates\HandlerSchema.ttinclude" />
+    <None Include="Templates\ProxySchema.ttinclude" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

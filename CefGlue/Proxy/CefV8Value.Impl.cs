@@ -83,20 +83,36 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefV8Value object of type object.
         /// </summary>
-        public static CefV8Value CreateObject(CefBase userData)
+        public static CefV8Value CreateObject()
+        {
+            return CreateObject((CefUserData)null);
+        }
+
+        /// <summary>
+        /// Create a new CefV8Value object of type object.
+        /// </summary>
+        public static CefV8Value CreateObject(CefUserData userData)
         {
             return CefV8Value.From(libcef.v8value_create_object(
-                    (cef_base_t*)userData.GetNativePointerAndAddRef()
+                (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null)
                 ));
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type object with accessors.
         /// </summary>
-        public static CefV8Value CreateObject(CefBase userData, CefV8Accessor accessor)
+        public static CefV8Value CreateObject(CefV8Accessor accessor)
+        {
+            return CreateObject(null, accessor);
+        }
+
+        /// <summary>
+        /// Create a new CefV8Value object of type object with accessors.
+        /// </summary>
+        public static CefV8Value CreateObject(CefUserData userData, CefV8Accessor accessor)
         {
             return CefV8Value.From(libcef.v8value_create_object_with_accessor(
-                    (cef_base_t*)userData.GetNativePointerAndAddRef(),
+                    (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null),
                     accessor.GetNativePointerAndAddRef()
                 ));
         }
@@ -118,7 +134,7 @@ namespace CefGlue
         {
             fixed (char* name_str = name)
             {
-                var n_name = new cef_string_t(name_str, name.Length);
+                var n_name = new cef_string_t(name_str, name != null ? name.Length : 0);
 
                 return CefV8Value.From(
                     libcef.v8value_create_function(&n_name, handler.GetNativePointerAndAddRef())
@@ -382,11 +398,11 @@ namespace CefGlue
         /// <summary>
         /// Returns the user data, if any, specified when the object was created.
         /// </summary>
-        public CefBase GetUserData()
+        public CefUserData GetUserData()
         {
             var n_base = this.get_user_data(this.ptr);
             if (n_base == null) return null;
-            return CefBase.From((cefglue_base_t*)n_base);
+            return CefUserData.FromOrDefault((cefglue_userdata_t*)n_base);
         }
 
 

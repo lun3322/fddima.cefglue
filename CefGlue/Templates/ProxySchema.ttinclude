@@ -1,0 +1,376 @@
+<#
+//
+// DO NOT MODIFY! THIS IS AUTO-GENERATED FILE!
+//
+
+this.ProxySchema = CreateProxySchema();
+
+#><#+
+
+private Dictionary<string, ProxyDef> ProxySchema { get; set; }
+
+Dictionary<string, ProxyDef> CreateProxySchema()
+{
+    var schema = new Dictionary<string, ProxyDef>();
+    ProxyDef def;
+
+    // CefBrowser
+    def = new ProxyDef()
+    {
+        ClassName = "CefBrowser",
+        StructName = "cef_browser_t",
+    };
+    def.AddMethod("parent_window_will_close");
+    def.AddMethod("close_browser");
+    def.AddMethod("can_go_back");
+    def.AddMethod("go_back");
+    def.AddMethod("can_go_forward");
+    def.AddMethod("go_forward");
+    def.AddMethod("reload");
+    def.AddMethod("reload_ignore_cache");
+    def.AddMethod("stop_load");
+    def.AddMethod("set_focus");
+    def.AddMethod("get_window_handle");
+    def.AddMethod("get_opener_window_handle");
+    def.AddMethod("is_popup");
+    def.AddMethod("get_client");
+    def.AddMethod("get_main_frame");
+    def.AddMethod("get_focused_frame");
+    def.AddMethod("get_frame");
+    def.AddMethod("get_frame_names");
+    def.AddMethod("find");
+    def.AddMethod("stop_finding");
+    def.AddMethod("get_zoom_level");
+    def.AddMethod("set_zoom_level");
+    def.AddMethod("show_dev_tools");
+    def.AddMethod("close_dev_tools");
+    def.AddMethod("is_window_rendering_disabled");
+    def.AddMethod("get_size");
+    def.AddMethod("set_size");
+    def.AddMethod("is_popup_visible");
+    def.AddMethod("hide_popup");
+    def.AddMethod("invalidate");
+    def.AddMethod("get_image");
+    def.AddMethod("send_key_event");
+    def.AddMethod("send_mouse_click_event");
+    def.AddMethod("send_mouse_move_event");
+    def.AddMethod("send_mouse_wheel_event");
+    def.AddMethod("send_focus_event");
+    def.AddMethod("send_capture_lost_event");
+    schema.Add(def.ClassName, def);
+
+    // CefFrame
+    def = new ProxyDef()
+    {
+        ClassName = "CefFrame",
+        StructName = "cef_frame_t",
+    };
+    def.AddMethod("undo");
+    def.AddMethod("redo");
+    def.AddMethod("cut");
+    def.AddMethod("copy");
+    def.AddMethod("paste");
+    def.AddMethod("del");
+    def.AddMethod("select_all");
+    def.AddMethod("print");
+    def.AddMethod("view_source");
+    def.AddMethod("get_source");
+    def.AddMethod("get_text");
+    def.AddMethod("load_request");
+    def.AddMethod("load_url");
+    def.AddMethod("load_string");
+    def.AddMethod("load_stream");
+    def.AddMethod("execute_java_script");
+    def.AddMethod("is_main");
+    def.AddMethod("is_focused");
+    def.AddMethod("get_name");
+    def.AddMethod("get_url");
+    def.AddMethod("get_browser");
+    def.AddMethod("visit_dom");
+    schema.Add(def.ClassName, def);
+
+    // CefRequest
+    def = new ProxyDef()
+    {
+        ClassName = "CefRequest",
+        StructName = "cef_request_t",
+    };
+    def.AddMethod("get_url");
+    def.AddMethod("set_url");
+    def.AddMethod("get_method");
+    def.AddMethod("set_method");
+    def.AddMethod("get_post_data");
+    def.AddMethod("set_post_data");
+    def.AddMethod("get_header_map");
+    def.AddMethod("set_header_map");
+    def.AddMethod("set");
+    def.AddMethod("get_flags");
+    def.AddMethod("set_flags");
+    def.AddMethod("get_first_party_for_cookies");
+    def.AddMethod("set_first_party_for_cookies");
+    schema.Add(def.ClassName, def);
+
+    // CefPostData
+    def = new ProxyDef()
+    {
+        ClassName = "CefPostData",
+        StructName = "cef_post_data_t",
+    };
+    def.AddMethod("get_element_count");
+    def.AddMethod("get_elements");
+    def.AddMethod("remove_element");
+    def.AddMethod("add_element");
+    def.AddMethod("remove_elements");
+    schema.Add(def.ClassName, def);
+
+    // CefPostDataElement
+    def = new ProxyDef()
+    {
+        ClassName = "CefPostDataElement",
+        StructName = "cef_post_data_element_t",
+    };
+    def.AddMethod("set_to_empty");
+    def.AddMethod("set_to_file");
+    def.AddMethod("set_to_bytes");
+    def.AddMethod("get_type");
+    def.AddMethod("get_file");
+    def.AddMethod("get_bytes_count");
+    def.AddMethod("get_bytes");
+    schema.Add(def.ClassName, def);
+
+    // CefResponse
+    def = new ProxyDef()
+    {
+        ClassName = "CefResponse",
+        StructName = "cef_response_t",
+    };
+    def.AddMethod("get_status");
+    def.AddMethod("set_status");
+    def.AddMethod("get_status_text");
+    def.AddMethod("set_status_text");
+    def.AddMethod("get_mime_type");
+    def.AddMethod("set_mime_type");
+    def.AddMethod("get_header");
+    def.AddMethod("get_header_map");
+    def.AddMethod("set_header_map");
+    schema.Add(def.ClassName, def);
+
+    // CefStreamReader
+    def = new ProxyDef()
+    {
+        ClassName = "CefStreamReader",
+        StructName = "cef_stream_reader_t",
+    };
+    def.AddMethod("read");
+    def.AddMethod("seek");
+    def.AddMethod("tell");
+    def.AddMethod("eof");
+    schema.Add(def.ClassName, def);
+
+    // CefStreamWriter
+    def = new ProxyDef()
+    {
+        ClassName = "CefStreamWriter",
+        StructName = "cef_stream_writer_t",
+    };
+    def.AddMethod("write");
+    def.AddMethod("seek");
+    def.AddMethod("tell");
+    def.AddMethod("flush");
+    schema.Add(def.ClassName, def);
+
+    // CefV8Context
+    def = new ProxyDef()
+    {
+        ClassName = "CefV8Context",
+        StructName = "cef_v8context_t",
+    };
+    def.AddMethod("get_browser");
+    def.AddMethod("get_frame");
+    def.AddMethod("get_global");
+    def.AddMethod("enter");
+    def.AddMethod("exit");
+    schema.Add(def.ClassName, def);
+
+    // CefV8Value
+    def = new ProxyDef()
+    {
+        ClassName = "CefV8Value",
+        StructName = "cef_v8value_t",
+    };
+    def.AddMethod("is_undefined");
+    def.AddMethod("is_null");
+    def.AddMethod("is_bool");
+    def.AddMethod("is_int");
+    def.AddMethod("is_double");
+    def.AddMethod("is_date");
+    def.AddMethod("is_string");
+    def.AddMethod("is_object");
+    def.AddMethod("is_array");
+    def.AddMethod("is_function");
+    def.AddMethod("is_same");
+    def.AddMethod("get_bool_value");
+    def.AddMethod("get_int_value");
+    def.AddMethod("get_double_value");
+    def.AddMethod("get_date_value");
+    def.AddMethod("get_string_value");
+    def.AddMethod("has_value_bykey");
+    def.AddMethod("has_value_byindex");
+    def.AddMethod("delete_value_bykey");
+    def.AddMethod("delete_value_byindex");
+    def.AddMethod("get_value_bykey");
+    def.AddMethod("get_value_byindex");
+    def.AddMethod("set_value_bykey");
+    def.AddMethod("set_value_byindex");
+    def.AddMethod("set_value_byaccessor");
+    def.AddMethod("get_keys");
+    def.AddMethod("get_user_data");
+    def.AddMethod("get_array_length");
+    def.AddMethod("get_function_name");
+    def.AddMethod("get_function_handler");
+    def.AddMethod("execute_function");
+    def.AddMethod("execute_function_with_context");
+    schema.Add(def.ClassName, def);
+
+    // CefWebUrlRequest
+    def = new ProxyDef()
+    {
+        ClassName = "CefWebUrlRequest",
+        StructName = "cef_web_urlrequest_t",
+    };
+    def.AddMethod("cancel");
+    def.AddMethod("get_state");
+    schema.Add(def.ClassName, def);
+
+    // CefXmlReader
+    def = new ProxyDef()
+    {
+        ClassName = "CefXmlReader",
+        StructName = "cef_xml_reader_t",
+    };
+    def.AddMethod("move_to_next_node");
+    def.AddMethod("close");
+    def.AddMethod("has_error");
+    def.AddMethod("get_error");
+    def.AddMethod("get_type");
+    def.AddMethod("get_depth");
+    def.AddMethod("get_local_name");
+    def.AddMethod("get_prefix");
+    def.AddMethod("get_qualified_name");
+    def.AddMethod("get_namespace_uri");
+    def.AddMethod("get_base_uri");
+    def.AddMethod("get_xml_lang");
+    def.AddMethod("is_empty_element");
+    def.AddMethod("has_value");
+    def.AddMethod("get_value");
+    def.AddMethod("has_attributes");
+    def.AddMethod("get_attribute_count");
+    def.AddMethod("get_attribute_byindex");
+    def.AddMethod("get_attribute_byqname");
+    def.AddMethod("get_attribute_bylname");
+    def.AddMethod("get_inner_xml");
+    def.AddMethod("get_outer_xml");
+    def.AddMethod("get_line_number");
+    def.AddMethod("move_to_attribute_byindex");
+    def.AddMethod("move_to_attribute_byqname");
+    def.AddMethod("move_to_attribute_bylname");
+    def.AddMethod("move_to_first_attribute");
+    def.AddMethod("move_to_next_attribute");
+    def.AddMethod("move_to_carrying_element");
+    schema.Add(def.ClassName, def);
+
+    // CefZipReader
+    def = new ProxyDef()
+    {
+        ClassName = "CefZipReader",
+        StructName = "cef_zip_reader_t",
+    };
+    def.AddMethod("move_to_first_file");
+    def.AddMethod("move_to_next_file");
+    def.AddMethod("move_to_file");
+    def.AddMethod("close");
+    def.AddMethod("get_file_name");
+    def.AddMethod("get_file_size");
+    def.AddMethod("get_file_last_modified");
+    def.AddMethod("open_file");
+    def.AddMethod("close_file");
+    def.AddMethod("read_file");
+    def.AddMethod("tell");
+    def.AddMethod("eof");
+    schema.Add(def.ClassName, def);
+
+    // CefDomDocument
+    def = new ProxyDef()
+    {
+        ClassName = "CefDomDocument",
+        StructName = "cef_domdocument_t",
+    };
+    def.AddMethod("get_type");
+    def.AddMethod("get_document");
+    def.AddMethod("get_body");
+    def.AddMethod("get_head");
+    def.AddMethod("get_title");
+    def.AddMethod("get_element_by_id");
+    def.AddMethod("get_focused_node");
+    def.AddMethod("has_selection");
+    def.AddMethod("get_selection_start_node");
+    def.AddMethod("get_selection_start_offset");
+    def.AddMethod("get_selection_end_node");
+    def.AddMethod("get_selection_end_offset");
+    def.AddMethod("get_selection_as_markup");
+    def.AddMethod("get_selection_as_text");
+    def.AddMethod("get_base_url");
+    def.AddMethod("get_complete_url");
+    schema.Add(def.ClassName, def);
+
+    // CefDomNode
+    def = new ProxyDef()
+    {
+        ClassName = "CefDomNode",
+        StructName = "cef_domnode_t",
+    };
+    def.AddMethod("get_type");
+    def.AddMethod("is_text");
+    def.AddMethod("is_element");
+    def.AddMethod("is_same");
+    def.AddMethod("get_name");
+    def.AddMethod("get_value");
+    def.AddMethod("set_value");
+    def.AddMethod("get_as_markup");
+    def.AddMethod("get_document");
+    def.AddMethod("get_parent");
+    def.AddMethod("get_previous_sibling");
+    def.AddMethod("get_next_sibling");
+    def.AddMethod("has_children");
+    def.AddMethod("get_first_child");
+    def.AddMethod("get_last_child");
+    def.AddMethod("add_event_listener");
+    def.AddMethod("get_element_tag_name");
+    def.AddMethod("has_element_attributes");
+    def.AddMethod("has_element_attribute");
+    def.AddMethod("get_element_attribute");
+    def.AddMethod("get_element_attributes");
+    def.AddMethod("set_element_attribute");
+    def.AddMethod("get_element_inner_text");
+    schema.Add(def.ClassName, def);
+
+    // CefDomEvent
+    def = new ProxyDef()
+    {
+        ClassName = "CefDomEvent",
+        StructName = "cef_domevent_t",
+    };
+    def.AddMethod("get_type");
+    def.AddMethod("get_category");
+    def.AddMethod("get_phase");
+    def.AddMethod("can_bubble");
+    def.AddMethod("can_cancel");
+    def.AddMethod("get_document");
+    def.AddMethod("get_target");
+    def.AddMethod("get_current_target");
+    schema.Add(def.ClassName, def);
+
+    return schema;
+}
+
+#>

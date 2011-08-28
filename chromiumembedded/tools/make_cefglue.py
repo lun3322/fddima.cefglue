@@ -16,32 +16,55 @@ def is_handler_class(cls):
             or re.match(".*visitor_t", name) != None
             );
 
-def make_cefglue_handler(cls, cefgluedir):
-    dir = cefgluedir + "/Handler";
+def make_cefglue_handlerschema(classes, cefgluedir):
+    dir = cefgluedir + '/Templates';
+    filename = 'HandlerSchema.ttinclude';
 
-    filename = cls.get_cefglue_name() + ".tt";
-    result = """<#@ template language="C#" hostspecific="false" debug="false" #>
-<#@ output extension=".g.cs" #>
-<#@ include file="Handler.ttinclude" #><#
-    var def = new HandlerDef()
+    result = """<#
+//
+// DO NOT MODIFY! THIS IS AUTO-GENERATED FILE!
+//
+
+this.HandlerSchema = CreateHandlerSchema();
+
+#><#+
+
+private Dictionary<string, HandlerDef> HandlerSchema { get; set; }
+
+Dictionary<string, HandlerDef> CreateHandlerSchema()
+{
+    var schema = new Dictionary<string, HandlerDef>();
+    HandlerDef def;
+""";
+
+    for cls in classes:
+        if not is_handler_class(cls):
+            continue
+        make_cefglue_handlerimpl(cls, cefgluedir);
+        result += """
+    // """ + cls.get_cefglue_name() + """
+    def = new HandlerDef()
     {
         ClassName = """ + '"' + cls.get_cefglue_name() + '"' + """,
         StructName = """ + '"' + cls.get_capi_name() + '"' + """,
     };
 """;
-
-    funcs = cls.get_virtual_funcs();
-    for func in funcs:
-        result += """\n    def.AddProperty(""" + '"' + func.get_capi_name() + '"' + """);""";
+        funcs = cls.get_virtual_funcs();
+        for func in funcs:
+            result += """    def.AddCallback(""" + '"' + func.get_capi_name() + '"' + """);\n""";
+        result += """    schema.Add(def.ClassName, def);\n""";
 
     result += """
+    return schema;
+}
 
-    WriteHandler(def);
 #>""";
 
     write_cefglue_file(dir, filename, result);
+    return
 
-
+def make_cefglue_handlerimpl(cls, cefgluedir):
+    dir = cefgluedir + '/obj/HandlerImpl/';
     filename = cls.get_cefglue_name() + ".Impl.cs";
     result = """namespace CefGlue
 {
@@ -87,35 +110,58 @@ def make_cefglue_handler(cls, cefgluedir):
 """;
 
     write_cefglue_file(dir, filename, result);
-
     return
 
-def make_cefglue_proxy(cls, cefgluedir):
-    dir = cefgluedir + "/Proxy";
+def make_cefglue_proxyschema(classes, cefgluedir):
+    dir = cefgluedir + '/Templates';
+    filename = 'ProxySchema.ttinclude';
 
-    filename = cls.get_cefglue_name() + ".tt";
-    result = """<#@ template language="C#" hostspecific="false" debug="false" #>
-<#@ output extension=".g.cs" #>
-<#@ include file="Proxy.ttinclude" #><#
-    var def = new ProxyDef()
+
+    result = """<#
+//
+// DO NOT MODIFY! THIS IS AUTO-GENERATED FILE!
+//
+
+this.ProxySchema = CreateProxySchema();
+
+#><#+
+
+private Dictionary<string, ProxyDef> ProxySchema { get; set; }
+
+Dictionary<string, ProxyDef> CreateProxySchema()
+{
+    var schema = new Dictionary<string, ProxyDef>();
+    ProxyDef def;
+""";
+
+    for cls in classes:
+        if is_handler_class(cls):
+            continue
+        make_cefglue_proxyimpl(cls, cefgluedir);
+        result += """
+    // """ + cls.get_cefglue_name() + """
+    def = new ProxyDef()
     {
         ClassName = """ + '"' + cls.get_cefglue_name() + '"' + """,
         StructName = """ + '"' + cls.get_capi_name() + '"' + """,
     };
 """;
-
-    funcs = cls.get_virtual_funcs();
-    for func in funcs:
-        result += """\n    def.AddMethod(""" + '"' + func.get_capi_name() + '"' + """);""";
+        funcs = cls.get_virtual_funcs();
+        for func in funcs:
+            result += """    def.AddMethod(""" + '"' + func.get_capi_name() + '"' + """);\n""";
+        result += """    schema.Add(def.ClassName, def);\n""";
 
     result += """
+    return schema;
+}
 
-    WriteProxy(def);
 #>""";
+
     write_cefglue_file(dir, filename, result);
+    return
 
-
-
+def make_cefglue_proxyimpl(cls, cefgluedir):
+    dir = cefgluedir + '/obj/ProxyImpl/';
     filename = cls.get_cefglue_name() + ".Impl.cs";
     result = """namespace CefGlue
 {
@@ -318,16 +364,19 @@ namespace CefGlue.Core
 
 """
 
-    for cls in classes:
-        if is_handler_class(cls):
-            make_cefglue_handler(cls, cefgluedir)
-        else:
-            make_cefglue_proxy(cls, cefgluedir)
-    
+    make_cefglue_handlerschema(classes, cefgluedir)
+    make_cefglue_proxyschema(classes, cefgluedir)
+
     return result
 
 
-def write_cefglue(header, file, backup, cefgluedir):
+def write_cefglue(header, cefgluedir, backup):
+    filedir = cefgluedir + '/Core'
+    file = filedir + '/libcef.cs'
+
+    if not os.path.isdir(filedir):
+        os.makedirs(filedir);
+
     if file_exists(file):
         oldcontents = read_file(file)
     else:
