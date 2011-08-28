@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
+    using System.ComponentModel;
 #if DIAGNOSTICS
     using Diagnostics;
 #endif
@@ -19,6 +20,8 @@
 
         public string StartUrl { get; set; }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Title
         {
             get
@@ -41,6 +44,8 @@
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CanGoBack
         {
             get
@@ -58,6 +63,8 @@
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CanGoForward
         {
             get
@@ -75,6 +82,8 @@
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Address
         {
             get
@@ -97,6 +106,8 @@
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public double ZoomLevel
         {
             get

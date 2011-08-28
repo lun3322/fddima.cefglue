@@ -26,6 +26,7 @@
         public MainForm()
         {
             InitializeComponent();
+            // this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             this.caption = this.Text;
 

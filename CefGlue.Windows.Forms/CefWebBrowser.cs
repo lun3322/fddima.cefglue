@@ -2,14 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
+    using System.Drawing;
     using System.Linq;
     using System.Text;
     using System.Windows.Forms;
-#if DIAGNOSTICS
-    using Diagnostics;
-#endif
 
+    [ToolboxBitmap(typeof(CefWebBrowser))]
     public partial class CefWebBrowser : Control
     {
         private CefBrowserSettings settings;
@@ -61,7 +61,7 @@
 
             this.SetStyle(
                 ControlStyles.UserPaint
-                | ControlStyles.AllPaintingInWmPaint, 
+                | ControlStyles.AllPaintingInWmPaint,
                 true);
         }
 
@@ -73,9 +73,6 @@
 
             // FIXME: browser here
             if (this.browser != null) { this.browser.Dispose(); this.browser = null; }
-#if DIAGNOSTICS
-            ObjectCt.WriteDump();
-#endif
             this.client = null;
             // if (this.client != null) { this.client.Dispose(); this.client = null; }
         }
@@ -85,14 +82,27 @@
         {
             base.OnHandleCreated(e);
 
-            var windowInfo = new CefWindowInfo();
-            windowInfo.SetAsChild(this.Handle, 0, 0, this.Width, this.Height);
+            if (this.DesignMode)
+            {
+                this.Paint += new PaintEventHandler(DesignModePaint);
+            }
+            else
+            {
+                var windowInfo = new CefWindowInfo();
+                windowInfo.SetAsChild(this.Handle, 0, 0, this.Width, this.Height);
 
-            this.client = CreateClient();
+                this.client = CreateClient();
 
-            CefBrowser.Create(windowInfo, client, this.StartUrl, this.settings);
+                CefBrowser.Create(windowInfo, client, this.StartUrl, this.settings);
 
-            windowInfo.Dispose();
+                windowInfo.Dispose();
+            }
+        }
+
+        private void DesignModePaint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawRectangle(SystemPens.ControlDark, 0, 0, this.Width - 1, this.Height - 1);
+            e.Dispose();
         }
 
         protected override void OnSizeChanged(EventArgs e)
