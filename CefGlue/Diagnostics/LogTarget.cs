@@ -10,7 +10,7 @@ namespace CefGlue.Diagnostics
         ObjectCt,
 
         //
-        CefBase,
+        CefUserData,
 
         // 
         CefString,
