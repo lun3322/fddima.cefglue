@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Forms;
+    using System.Threading;
+    using System.IO;
 
     static class Program
     {
@@ -15,8 +17,8 @@
         {
             var settings = new CefSettings();
             settings.MultiThreadedMessageLoop = true;
-            settings.CachePath = "cache";
-            settings.LogFile = "CEF.log";
+            settings.CachePath = Path.GetDirectoryName(Application.ExecutablePath) + "/cache/";
+            settings.LogFile = Path.GetDirectoryName(Application.ExecutablePath) + "/CEF.log";
             settings.LogSeverity = CefLogSeverity.Verbose;
             try
             {
@@ -28,6 +30,76 @@
                 return;
             }
 
+
+            Cef.RegisterExtension("clientExtension",
+            @"
+var cefglue = cefglue || {};
+if (!cefglue.client) {
+    cefglue.client = {
+        dump: function() {
+            native function Dump();
+            return Dump.apply(this, arguments);
+        },
+        returnVoid: function() {
+            native function ReturnVoid();
+            ReturnVoid();
+        },
+        returnVoidAndDisposeThis: function() {
+            native function ReturnVoidAndDisposeThis();
+            ReturnVoidAndDisposeThis();
+        },
+        returnUndefined: function() {
+            native function ReturnUndefined();
+            return ReturnUndefined();
+        },
+        returnNull: function() {
+            native function ReturnNull();
+            return ReturnNull();
+        },
+        returnBool: function() {
+            native function ReturnBool();
+            return ReturnBool();
+        },
+        returnInt: function() {
+            native function ReturnInt();
+            return ReturnInt();
+        },
+        returnDouble: function() {
+            native function ReturnDouble();
+            return ReturnDouble();
+        },
+        returnDate: function() {
+            native function ReturnDate();
+            return ReturnDate();
+        },
+        returnString: function() {
+            native function ReturnString();
+            return ReturnString();
+        },
+        returnArray: function() {
+            native function ReturnArray();
+            return ReturnArray();
+        },
+        returnObject: function() {
+            native function ReturnObject();
+            return ReturnObject();
+        },
+        subtractIntImplicit: function(a, b) {
+            native function SubtractIntImplicit();
+            return SubtractIntImplicit(a, b);
+        },
+        subtractIntExplicit: function(a, b) {
+            native function SubtractIntExplicit();
+            return SubtractIntExplicit(a, b);
+        },
+
+        get privateWorkingSet() {
+            native function get_PrivateWorkingSet();
+            return get_PrivateWorkingSet();
+        }
+    };
+};
+", new ClientV8Handler());
 
             Cef.RegisterCustomScheme("client", false, false, false);
             Cef.RegisterSchemeHandlerFactory("client", null, new ClientSchemeHandlerFactory());

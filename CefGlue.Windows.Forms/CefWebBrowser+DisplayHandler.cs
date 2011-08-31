@@ -23,6 +23,8 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnNavStateChange: CanGoBack=[{0}] CanGoForward=[{1}]", canGoBack, canGoForward);
 #endif
+                if (this.control.IsDisposed) return;
+
                 this.control.CanGoBack = canGoBack;
                 this.control.CanGoForward = canGoForward;
             }
@@ -32,6 +34,8 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnAddressChange: URL=[{0}]", url);
 #endif
+                if (this.control.IsDisposed) return;
+
                 if (!browser.IsPopup)
                 {
                     this.control.Address = url;
@@ -43,6 +47,8 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnTitleChange: Title=[{0}]", title);
 #endif
+                if (this.control.IsDisposed) return;
+
                 if (!browser.IsPopup)
                 {
                     this.control.Title = title;
@@ -58,6 +64,8 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnTooltip: Text=[{0}]", text);
 #endif
+                if (this.control.IsDisposed) return false;
+
                 return false;
             }
 
@@ -66,6 +74,8 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnStatusMessage: Type=[{0}] Value=[{1}]", type, value);
 #endif
+                if (this.control.IsDisposed) return;
+
                 if (value.Length == 0)
                 {
                     this.statusMessages.Remove(type);
@@ -83,6 +93,8 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnConsoleMessage: Message=[{0}] Source=[{1}] Line=[{2}]", message, source, line);
 #endif
+                if (this.control.IsDisposed) return false;
+
                 this.control.OnConsoleMessage(new ConsoleMessageEventArgs(message, source, line));
                 return true;
             }

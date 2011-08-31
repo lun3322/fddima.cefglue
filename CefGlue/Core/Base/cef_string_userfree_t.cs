@@ -18,19 +18,38 @@
 
         public void Free()
         {
-            cef_string_userfree_free(this);
+            if (str != null)
+            {
+                cef_string_userfree_free(this);
+                str = null;
+            }
         }
 
         public string GetString()
         {
-            return cef_string_t.ToString(str);
+            if (str != null)
+            {
+                return cef_string_t.ToString(str);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public string GetStringAndFree()
         {
-            var result = cef_string_t.ToString(str);
-            cef_string_userfree_free(this);
-            return result;
+            if (str != null)
+            {
+                var result = cef_string_t.ToString(str);
+                cef_string_userfree_free(this);
+                str = null;
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         #region LibCef UserFreeString NativeMethods

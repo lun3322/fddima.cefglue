@@ -154,6 +154,8 @@ class ProxyDef
         _methods = new List<ProxyMethodDef>();
     }
 
+	public int Index { get; private set; }
+	
     public string ClassName { get; set; }
 
     public string StructName { get; set; }
@@ -173,6 +175,13 @@ class ProxyDef
         method.Parent = this;
         _methods.Add(method);
     }
+	
+	public void ApplyMethodIndexes()
+    {
+		for (var i = 0; i < _methods.Count; i++) {
+			_methods[i].Index = i + 3; // indexes 0,1,2 reserved to add_ref, release and get_refct
+		}
+	}
 }
 
 class ProxyMethodDef
@@ -181,6 +190,8 @@ class ProxyMethodDef
     {
     }
 
+	public int Index { get; internal set; }
+	
     public ProxyDef Parent { get; set; }
     public string StructName { get; set; }
 

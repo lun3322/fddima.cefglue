@@ -72,6 +72,14 @@
                     this.control.browserWindowHandle = browser.WindowHandle;
 
                     this.control.SetStyle(ControlStyles.Opaque, true);
+
+                    // FIXME: this is invalid - can't be accessed from another thread
+                    /*
+                    if (this.control.Focused)
+                    {
+                        this.control.browser.SetFocus(true);
+                    }
+                    */
                 }
             }
 

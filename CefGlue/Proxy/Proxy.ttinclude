@@ -25,6 +25,7 @@ namespace CefGlue
 
 void GenerateProxyClass(ProxyDef def)
 {
+	def.ApplyMethodIndexes();
 #>
 
     public sealed unsafe partial class <#=def.ClassName#> : IDisposable
@@ -93,29 +94,9 @@ void GenerateProxyClass(ProxyDef def)
         }
         #endregion
 
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-                return (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(this.ptr->@base.add_ref, typeof(cef_base_t.add_ref_delegate));
-            }
-        }
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-                return (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(this.ptr->@base.release, typeof(cef_base_t.release_delegate));
-            }
-        }
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-                return (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(this.ptr->@base.get_refct, typeof(cef_base_t.get_refct_delegate));
-            }
-        }
+<#+ GenerateMethodAccessor("add_ref", "cef_base_t.add_ref_delegate", "this.ptr->@base.add_ref", 0); #>
+<#+ GenerateMethodAccessor("release", "cef_base_t.release_delegate", "this.ptr->@base.release", 1); #>
+<#+ GenerateMethodAccessor("get_refct", "cef_base_t.get_refct_delegate", "this.ptr->@base.get_refct", 2); #>
 
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
@@ -161,17 +142,54 @@ void GenerateProxyClass(ProxyDef def)
             return this.ptr;
         }
 
-<#+ foreach (var method in def.GetMethods()) { #>
-        private <#=method.NativeDelegateType#> <#=method.StructName#>
-        {
-            get
-            {
-                return (<#=method.NativeDelegateType#>)Marshal.GetDelegateForFunctionPointer(this.ptr-><#=method.StructName#>, typeof(<#=method.NativeDelegateType#>));
-            }
-        }
-
-<#+ } #>
+<#+ foreach (var method in def.GetMethods())
+    {
+        GenerateMethodAccessor(method);
+    }
+#>
     }
 <#+
 }
+
+void GenerateMethodAccessor(ProxyMethodDef method)
+{
+	GenerateMethodAccessor(method.StructName, method.NativeDelegateType, "this.ptr->" + method.StructName, method.Index);
+}
+
+void GenerateMethodAccessor(string structName, string nativeDelegateType, string pointerExpr, int index)
+{
+	// This is assumes, that underlying type have one implementation, i.e. method pointers in fact is non virtual and do not changed from object to object.
+
+	var bsPtr0 = "sp" + Convert.ToString(index, 16);
+	var bsDelegate0 = "sd" + Convert.ToString(index, 16);
+#>
+
+        private static IntPtr <#=bsPtr0#>;
+		private static <#=nativeDelegateType#> <#=bsDelegate0#>;
+
+        private <#=nativeDelegateType#> <#=structName#>
+        {
+            get
+            {
+				var mptr = <#=pointerExpr#>;
+				if (mptr == <#=bsPtr0#>)
+				{
+					return <#=bsDelegate0#>;
+				}
+				else
+				{
+					var mdelegate = (<#=nativeDelegateType#>)Marshal.GetDelegateForFunctionPointer(mptr, typeof(<#=nativeDelegateType#>));
+					if (<#=bsPtr0#> == IntPtr.Zero)
+					{
+						<#=bsDelegate0#> = mdelegate;
+						<#=bsPtr0#> = mptr;
+					}
+					return mdelegate;
+				}
+            }
+        }
+		
+<#+
+}
+
 #>

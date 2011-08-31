@@ -118,13 +118,23 @@
             }
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            if (this.browser != null)
+            {
+                // FIXME: this is to avoid dead lock with Invoke from CEF UI thread, may be we must execute this call on CEF UI thread async
+                CefTask.Post(CefThreadId.UI, () => this.browser.SetFocus(true));
+            }
+
+            base.OnGotFocus(e);
+        }
+
         private CefClient CreateClient()
         {
             var client = new Client(this);
             return client;
         }
 
-        // TODO: SetFocus
 
 
     }

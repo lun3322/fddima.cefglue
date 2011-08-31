@@ -86,6 +86,7 @@
             {
                 if (this.InvokeRequired)
                 {
+                    // FIXME: can't execute this when control disposed
                     this.Invoke(new Action<StatusMessageEventArgs>(this.OnStatusMessage), e);
                     return;
                 }

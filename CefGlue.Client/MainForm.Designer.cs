@@ -33,18 +33,29 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bookmarksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bookmarksCefGlueHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bookmarksCefHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bookmarksGoogleSearchMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.browserMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miCloseBrowser = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.browserShowDevToolsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.browserCloseDevToolsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bookmarksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bookmarksCefGlueHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bookmarksCefHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bookmarksGoogleSearchMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.consoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.browserZoomInMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.browserZoomOutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.browserResetZoomMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.consoleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleShowOrHideMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleClearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testsCustomSchemeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.javaScriptExtensionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testsJseDumpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testsJsePerformanceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.goBackButton = new System.Windows.Forms.ToolStripButton();
@@ -56,10 +67,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.browserZoomInMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.browserZoomOutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.browserResetZoomMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -71,7 +78,9 @@
             this.fileMenuItem,
             this.bookmarksMenuItem,
             this.browserMenuItem,
-            this.consoleToolStripMenuItem});
+            this.consoleMenuItem,
+            this.testsMenuItem,
+            this.helpMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(1008, 24);
@@ -92,6 +101,40 @@
             this.fileExitMenuItem.Size = new System.Drawing.Size(92, 22);
             this.fileExitMenuItem.Text = "E&xit";
             this.fileExitMenuItem.Click += new System.EventHandler(this.fileExitMenuItem_Click);
+            // 
+            // bookmarksMenuItem
+            // 
+            this.bookmarksMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bookmarksCefGlueHomeMenuItem,
+            this.bookmarksCefHomeMenuItem,
+            this.bookmarksGoogleSearchMenuItem});
+            this.bookmarksMenuItem.Name = "bookmarksMenuItem";
+            this.bookmarksMenuItem.Size = new System.Drawing.Size(78, 20);
+            this.bookmarksMenuItem.Text = "&Bookmarks";
+            // 
+            // bookmarksCefGlueHomeMenuItem
+            // 
+            this.bookmarksCefGlueHomeMenuItem.Name = "bookmarksCefGlueHomeMenuItem";
+            this.bookmarksCefGlueHomeMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.bookmarksCefGlueHomeMenuItem.Tag = "https://bitbucket.org/fddima/cefglue";
+            this.bookmarksCefGlueHomeMenuItem.Text = "&CefGlue Project";
+            this.bookmarksCefGlueHomeMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // bookmarksCefHomeMenuItem
+            // 
+            this.bookmarksCefHomeMenuItem.Name = "bookmarksCefHomeMenuItem";
+            this.bookmarksCefHomeMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.bookmarksCefHomeMenuItem.Tag = "http://code.google.com/p/chromiumembedded";
+            this.bookmarksCefHomeMenuItem.Text = "Chromium Embedded Framework";
+            this.bookmarksCefHomeMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // bookmarksGoogleSearchMenuItem
+            // 
+            this.bookmarksGoogleSearchMenuItem.Name = "bookmarksGoogleSearchMenuItem";
+            this.bookmarksGoogleSearchMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.bookmarksGoogleSearchMenuItem.Tag = "http://www.google.com";
+            this.bookmarksGoogleSearchMenuItem.Text = "Google &Search";
+            this.bookmarksGoogleSearchMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
             // 
             // browserMenuItem
             // 
@@ -134,45 +177,40 @@
             this.browserCloseDevToolsMenuItem.Text = "Close Developer Tools";
             this.browserCloseDevToolsMenuItem.Click += new System.EventHandler(this.browserCloseDevToolsMenuItem_Click);
             // 
-            // bookmarksMenuItem
+            // toolStripSeparator2
             // 
-            this.bookmarksMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bookmarksCefGlueHomeMenuItem,
-            this.bookmarksCefHomeMenuItem,
-            this.bookmarksGoogleSearchMenuItem});
-            this.bookmarksMenuItem.Name = "bookmarksMenuItem";
-            this.bookmarksMenuItem.Size = new System.Drawing.Size(78, 20);
-            this.bookmarksMenuItem.Text = "&Bookmarks";
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(188, 6);
             // 
-            // bookmarksCefGlueHomeMenuItem
+            // browserZoomInMenuItem
             // 
-            this.bookmarksCefGlueHomeMenuItem.Name = "bookmarksCefGlueHomeMenuItem";
-            this.bookmarksCefGlueHomeMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.bookmarksCefGlueHomeMenuItem.Text = "&CefGlue Project";
-            this.bookmarksCefGlueHomeMenuItem.Click += new System.EventHandler(this.bookmarksCefGlueHomeMenuItem_Click);
+            this.browserZoomInMenuItem.Name = "browserZoomInMenuItem";
+            this.browserZoomInMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserZoomInMenuItem.Text = "Zoom In";
+            this.browserZoomInMenuItem.Click += new System.EventHandler(this.browserZoomInMenuItem_Click);
             // 
-            // bookmarksCefHomeMenuItem
+            // browserZoomOutMenuItem
             // 
-            this.bookmarksCefHomeMenuItem.Name = "bookmarksCefHomeMenuItem";
-            this.bookmarksCefHomeMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.bookmarksCefHomeMenuItem.Text = "Chromium Embedded Framework";
-            this.bookmarksCefHomeMenuItem.Click += new System.EventHandler(this.bookmarksCefHomeMenuItem_Click);
+            this.browserZoomOutMenuItem.Name = "browserZoomOutMenuItem";
+            this.browserZoomOutMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserZoomOutMenuItem.Text = "Zoom Out";
+            this.browserZoomOutMenuItem.Click += new System.EventHandler(this.browserZoomOutMenuItem_Click);
             // 
-            // bookmarksGoogleSearchMenuItem
+            // browserResetZoomMenuItem
             // 
-            this.bookmarksGoogleSearchMenuItem.Name = "bookmarksGoogleSearchMenuItem";
-            this.bookmarksGoogleSearchMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.bookmarksGoogleSearchMenuItem.Text = "Google &Search";
-            this.bookmarksGoogleSearchMenuItem.Click += new System.EventHandler(this.bookmarksGoogleSearchMenuItem_Click);
+            this.browserResetZoomMenuItem.Name = "browserResetZoomMenuItem";
+            this.browserResetZoomMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserResetZoomMenuItem.Text = "Reset Zoom";
+            this.browserResetZoomMenuItem.Click += new System.EventHandler(this.browserResetZoomMenuItem_Click);
             // 
-            // consoleToolStripMenuItem
+            // consoleMenuItem
             // 
-            this.consoleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.consoleMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.consoleShowOrHideMenuItem,
             this.consoleClearMenuItem});
-            this.consoleToolStripMenuItem.Name = "consoleToolStripMenuItem";
-            this.consoleToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.consoleToolStripMenuItem.Text = "&Console";
+            this.consoleMenuItem.Name = "consoleMenuItem";
+            this.consoleMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.consoleMenuItem.Text = "&Console";
             // 
             // consoleShowOrHideMenuItem
             // 
@@ -187,6 +225,62 @@
             this.consoleClearMenuItem.Size = new System.Drawing.Size(103, 22);
             this.consoleClearMenuItem.Text = "&Clear";
             this.consoleClearMenuItem.Click += new System.EventHandler(this.consoleClearMenuItem_Click);
+            // 
+            // testsMenuItem
+            // 
+            this.testsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testsCustomSchemeMenuItem,
+            this.javaScriptExtensionToolStripMenuItem});
+            this.testsMenuItem.Name = "testsMenuItem";
+            this.testsMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.testsMenuItem.Text = "&Tests";
+            // 
+            // testsCustomSchemeMenuItem
+            // 
+            this.testsCustomSchemeMenuItem.Name = "testsCustomSchemeMenuItem";
+            this.testsCustomSchemeMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.testsCustomSchemeMenuItem.Tag = "client://tests/CustomScheme.html";
+            this.testsCustomSchemeMenuItem.Text = "Custom &Scheme";
+            this.testsCustomSchemeMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // javaScriptExtensionToolStripMenuItem
+            // 
+            this.javaScriptExtensionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testsJseDumpMenuItem,
+            this.testsJsePerformanceMenuItem});
+            this.javaScriptExtensionToolStripMenuItem.Name = "javaScriptExtensionToolStripMenuItem";
+            this.javaScriptExtensionToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.javaScriptExtensionToolStripMenuItem.Text = "&JavaScript Extension";
+            // 
+            // testsJseDumpMenuItem
+            // 
+            this.testsJseDumpMenuItem.Name = "testsJseDumpMenuItem";
+            this.testsJseDumpMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.testsJseDumpMenuItem.Tag = "client://tests/jse/Dump.html";
+            this.testsJseDumpMenuItem.Text = "&Dump";
+            this.testsJseDumpMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // testsJsePerformanceMenuItem
+            // 
+            this.testsJsePerformanceMenuItem.Name = "testsJsePerformanceMenuItem";
+            this.testsJsePerformanceMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.testsJsePerformanceMenuItem.Tag = "client://tests/jse/Performance.html";
+            this.testsJsePerformanceMenuItem.Text = "&Performance";
+            this.testsJsePerformanceMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // helpMenuItem
+            // 
+            this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpAboutMenuItem});
+            this.helpMenuItem.Name = "helpMenuItem";
+            this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpMenuItem.Text = "&Help";
+            // 
+            // helpAboutMenuItem
+            // 
+            this.helpAboutMenuItem.Name = "helpAboutMenuItem";
+            this.helpAboutMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.helpAboutMenuItem.Text = "&About...";
             // 
             // imageList
             // 
@@ -295,32 +389,6 @@
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.statusLabel.Visible = false;
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(188, 6);
-            // 
-            // browserZoomInMenuItem
-            // 
-            this.browserZoomInMenuItem.Name = "browserZoomInMenuItem";
-            this.browserZoomInMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.browserZoomInMenuItem.Text = "Zoom In";
-            this.browserZoomInMenuItem.Click += new System.EventHandler(this.browserZoomInMenuItem_Click);
-            // 
-            // browserZoomOutMenuItem
-            // 
-            this.browserZoomOutMenuItem.Name = "browserZoomOutMenuItem";
-            this.browserZoomOutMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.browserZoomOutMenuItem.Text = "Zoom Out";
-            this.browserZoomOutMenuItem.Click += new System.EventHandler(this.browserZoomOutMenuItem_Click);
-            // 
-            // browserResetZoomMenuItem
-            // 
-            this.browserResetZoomMenuItem.Name = "browserResetZoomMenuItem";
-            this.browserResetZoomMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.browserResetZoomMenuItem.Text = "Reset Zoom";
-            this.browserResetZoomMenuItem.Click += new System.EventHandler(this.browserResetZoomMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,13 +436,20 @@
         private System.Windows.Forms.ToolStripMenuItem bookmarksGoogleSearchMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.ToolStripMenuItem bookmarksCefHomeMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem consoleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem consoleMenuItem;
         private System.Windows.Forms.ToolStripMenuItem consoleShowOrHideMenuItem;
         private System.Windows.Forms.ToolStripMenuItem consoleClearMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem browserZoomInMenuItem;
         private System.Windows.Forms.ToolStripMenuItem browserZoomOutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem browserResetZoomMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testsCustomSchemeMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpAboutMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem javaScriptExtensionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testsJseDumpMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testsJsePerformanceMenuItem;
     }
 }
 

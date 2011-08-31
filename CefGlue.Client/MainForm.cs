@@ -17,9 +17,6 @@
         private string caption;
         private CefWebBrowser browser;
 
-        private const string homeUrl = "https://bitbucket.org/fddima/cefglue";
-        private const string chromiumEmbeddedUrl = "http://code.google.com/p/chromiumembedded";
-
         private ConsoleForm consoleForm;
         private BindingList<ConsoleMessageEventArgs> consoleMessages = new BindingList<ConsoleMessageEventArgs>();
 
@@ -50,8 +47,12 @@
             // settings.DefaultEncoding = "Windows-1251";
             // settings.EncodingDetectorEnabled = false;
             // settings.DeveloperToolsDisabled = true;
+            // settings.CaretBrowsingEnabled = true;
 
-            var browser = new CefWebBrowser(settings, homeUrl);
+            //var startUrl = this.bookmarksCefGlueHomeMenuItem.Tag as string;
+            var startUrl = this.testsJsePerformanceMenuItem.Tag as string;
+
+            var browser = new CefWebBrowser(settings, startUrl);
             browser.Parent = this;
             browser.Dock = DockStyle.Fill;
             browser.BringToFront();
@@ -66,6 +67,22 @@
             browser.ConsoleMessage += new EventHandler<ConsoleMessageEventArgs>(browser_ConsoleMessage);
 
             return browser;
+        }
+
+        protected override void  OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            browser.Focus();
+        }
+
+        private void navigateByTagMenuItemClick(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripItem;
+            if (item != null && this.goButton.Enabled)
+            {
+                this.addressTextBox.Text = item.Tag as string ?? "";
+                this.goButton.PerformClick();
+            }
         }
 
         void browser_CanGoBackChanged(object sender, EventArgs e)
@@ -159,24 +176,6 @@
             this.browser.CloseDevTools();
         }
 
-        private void bookmarksCefGlueHomeMenuItem_Click(object sender, EventArgs e)
-        {
-            this.addressTextBox.Text = homeUrl;
-            this.goButton.PerformClick();
-        }
-
-        private void bookmarksCefHomeMenuItem_Click(object sender, EventArgs e)
-        {
-            this.addressTextBox.Text = chromiumEmbeddedUrl;
-            this.goButton.PerformClick();
-        }
-
-        private void bookmarksGoogleSearchMenuItem_Click(object sender, EventArgs e)
-        {
-            this.addressTextBox.Text = "http://google.com";
-            this.goButton.PerformClick();
-        }
-
         private void goBackButton_Click(object sender, EventArgs e)
         {
             this.browser.GoBack();
@@ -241,5 +240,6 @@
         {
             this.browser.ZoomLevel = 0;
         }
+
     }
 }

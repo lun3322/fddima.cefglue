@@ -145,81 +145,111 @@ namespace CefGlue
         /// <summary>
         /// True if the value type is undefined.
         /// </summary>
-        public bool IsUndefined()
+        public bool IsUndefined
         {
-            return this.is_undefined(this.ptr) != 0;
+            get
+            {
+                return this.is_undefined(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is null.
         /// </summary>
-        public bool IsNull()
+        public bool IsNull
         {
-            return this.is_null(this.ptr) != 0;
+            get
+            {
+                return this.is_null(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is bool.
         /// </summary>
-        public bool IsBool()
+        public bool IsBool
         {
-            return this.is_bool(this.ptr) != 0;
+            get
+            {
+                return this.is_bool(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is int.
         /// </summary>
-        public bool IsInt()
+        public bool IsInt
         {
-            return this.is_int(this.ptr) != 0;
+            get
+            {
+                return this.is_int(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is double.
         /// </summary>
-        public bool IsDouble()
+        public bool IsDouble
         {
-            return this.is_double(this.ptr) != 0;
+            get
+            {
+                return this.is_double(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is Date.
         /// </summary>
-        public bool IsDate()
+        public bool IsDate
         {
-            return this.is_date(this.ptr) != 0;
+            get
+            {
+                return this.is_date(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is string.
         /// </summary>
-        public bool IsString()
+        public bool IsString
         {
-            return this.is_string(this.ptr) != 0;
+            get
+            {
+                return this.is_string(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is object.
         /// </summary>
-        public bool IsObject()
+        public bool IsObject
         {
-            return this.is_object(this.ptr) != 0;
+            get
+            {
+                return this.is_object(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is array.
         /// </summary>
-        public bool IsArray()
+        public bool IsArray
         {
-            return this.is_array(this.ptr) != 0;
+            get
+            {
+                return this.is_array(this.ptr) != 0;
+            }
         }
 
         /// <summary>
         /// True if the value type is function.
         /// </summary>
-        public bool IsFunction()
+        public bool IsFunction
         {
-            return this.is_function(this.ptr) != 0;
+            get
+            {
+                return this.is_function(this.ptr) != 0;
+            }
         }
 
         /// <summary>
@@ -389,10 +419,24 @@ namespace CefGlue
         /// Read the keys for the object's values into the specified vector.
         /// Integer- based keys will also be returned as strings.
         /// </summary>
-        public bool GetKeys(out CefStringList keys)
+        public bool TryGetKeys(out CefStringList keys)
         {
             keys = new CefStringList();
             return this.get_keys(this.ptr, keys.GetNativeHandle()) != 0;
+        }
+
+        /// <summary>
+        /// Read the keys for the object's values into the specified vector.
+        /// Integer- based keys will also be returned as strings.
+        /// </summary>
+        public CefStringList GetKeys()
+        {
+            CefStringList keys;
+            if (TryGetKeys(out keys))
+            {
+                return keys;
+            }
+            else throw new CefGlueException("CefV8Value.GetKeys failed.");
         }
 
         /// <summary>
@@ -433,7 +477,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Handler GetFunctionHandler()
         {
-            return CefV8Handler.From(
+            return CefV8Handler.FromOrDefault(
                 this.get_function_handler(this.ptr)
             );
         }

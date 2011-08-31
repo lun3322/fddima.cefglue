@@ -72,6 +72,7 @@
     </Compile>
     <Compile Include="ClientSchemeHandler.cs" />
     <Compile Include="ClientSchemeHandlerFactory.cs" />
+    <Compile Include="ClientV8Handler.cs" />
     <Compile Include="ConsoleForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +146,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\go_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\jse\Dump.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\CustomScheme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\jse\Performance.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\DefaultProject.targets" />
