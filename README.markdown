@@ -5,6 +5,16 @@ CefGlue is a .NET CLR binding for [The Chromium Embedded Framework (CEF)](http:/
 This project is licensed under New BSD License.
 
 
+### Documentation
+
+Latest [on-line documentation](http://cefglue.dmitriid.com/doc/) available.
+
+
+### Support
+
+CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
+
+
 ### Version 0.4.2-cef-r275
 
 Download [CefGlue-0.4.2-cef-r275.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.2-cef-r275.zip), [cef_binary_r275_VS2008.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r275_VS2008.zip)
@@ -26,9 +36,4 @@ Download [CefGlue-0.4.1-cef-r275.zip](https://bitbucket.org/fddima/cefglue/downl
 - Implemented full set of CEF API.
 - Provide simple windows forms browser control.
 - Simple sample application.
-
-
-### Support
-
-CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
 
