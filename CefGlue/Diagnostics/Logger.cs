@@ -14,6 +14,7 @@ namespace CefGlue.Diagnostics
     [CLSCompliant(false)]
     public sealed class Logger
     {
+        private bool disabled;
         private StreamWriter writer;
         private bool autoFlush;
         private LogSeverity severity;
@@ -60,9 +61,22 @@ namespace CefGlue.Diagnostics
 
         public void Open()
         {
-            if (writer == null)
+            if (this.disabled) return;
+
+            if (this.writer == null)
             {
-                writer = File.AppendText("CefGlue.log");
+                try
+                {
+                    this.writer = File.AppendText("CefGlue.log");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    this.disabled = true;
+                }
+                catch (IOException)
+                {
+                    this.disabled = true;
+                }
             }
         }
 
@@ -620,6 +634,7 @@ namespace CefGlue.Diagnostics
             }
 
             if (this.writer == null) Open();
+            if (this.disabled) return;
 
             this.writer.Write(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
             this.writer.Write('|');
