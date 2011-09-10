@@ -17,6 +17,20 @@
     {
         private cef_string_t* str;
 
+        public int Length
+        {
+            get { return str->length; }
+        }
+
+        internal char GetFirstCharOrDefault()
+        {
+            if (str->length > 0)
+            {
+                return *(str->str);
+            }
+            return '\x0';
+        }
+
         public void Free()
         {
             if (str != null)
