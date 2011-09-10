@@ -5,6 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
 #if DIAGNOSTICS
     using Diagnostics;
@@ -84,16 +85,27 @@
 
         public IEnumerable<string> GetFrameNames()
         {
-            // TODO: FIX THIS CODE
-            IEnumerable<string> frameNames = null;
-            CefTask.Post(CefThreadId.UI, () =>
+            // TODO: check CefWebBrowser.GetFrameNames implementation
+            if (Cef.CurrentlyOn(CefThreadId.UI))
             {
-                var frames = this.browser.GetFrameNames();
-                var val = frames.GetValue(0);
-                frameNames = frames.AsEnumerable();
-            });
-            while (frameNames == null) Application.DoEvents();
-            return frameNames;
+                return this.browser.GetFrameNames().AsEnumerable();
+            }
+            else
+            {
+                IEnumerable<string> frameNames = null;
+                ManualResetEvent mrevent = new ManualResetEvent(false);
+                CefTask.Post(CefThreadId.UI, () =>
+                {
+                    frameNames = this.browser.GetFrameNames().AsEnumerable();
+                    mrevent.Set();
+                });
+                while (!mrevent.WaitOne(50)) // TODO: do it only if we are on WinForms UI thread
+                {
+                    Application.DoEvents();
+                }
+                mrevent.Dispose();
+                return frameNames;
+            }
         }
 
         // frame-related
