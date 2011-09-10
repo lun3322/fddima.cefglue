@@ -16,7 +16,7 @@ namespace CefGlue
     using Core;
     using Diagnostics;
 <#+ foreach (var handler in this.ProxySchema.Values) {
-		GenerateProxyClass(handler);
+        GenerateProxyClass(handler);
     } #>
 }
 
@@ -25,13 +25,13 @@ namespace CefGlue
 
 void GenerateProxyClass(ProxyDef def)
 {
-	def.ApplyMethodIndexes();
+    def.ApplyMethodIndexes();
 #>
 
     public sealed unsafe partial class <#=def.ClassName#> : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -39,25 +39,21 @@ void GenerateProxyClass(ProxyDef def)
         /// </summary>
         internal static <#=def.ClassName#> From(<#=def.StructName#>* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new <#=def.ClassName#>(ptr);
+            return new <#=def.ClassName#>(ptr);
         }
-		
+
         internal static <#=def.ClassName#> FromOrDefault(<#=def.StructName#>* ptr)
         {
             if (ptr == null) return null;
-            else return new <#=def.ClassName#>(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("<#=def.ClassName#>");
+            return new <#=def.ClassName#>(ptr);
         }
 
         private <#=def.StructName#>* ptr;
 
         private <#=def.ClassName#>(<#=def.StructName#>* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -94,9 +90,14 @@ void GenerateProxyClass(ProxyDef def)
         }
         #endregion
 
-<#+ GenerateMethodAccessor("add_ref", "cef_base_t.add_ref_delegate", "this.ptr->@base.add_ref", 0); #>
-<#+ GenerateMethodAccessor("release", "cef_base_t.release_delegate", "this.ptr->@base.release", 1); #>
-<#+ GenerateMethodAccessor("get_refct", "cef_base_t.get_refct_delegate", "this.ptr->@base.get_refct", 2); #>
+<#+
+    if (def.GenerateMethodAccessors)
+    {
+        GenerateMethodAccessor("add_ref", "cef_base_t.add_ref_delegate", "this.ptr->@base.add_ref", 0);
+        GenerateMethodAccessor("release", "cef_base_t.release_delegate", "this.ptr->@base.release", 1);
+        GenerateMethodAccessor("get_refct", "cef_base_t.get_refct_delegate", "this.ptr->@base.get_refct", 2);
+    }
+#>
 
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
@@ -106,7 +107,8 @@ void GenerateProxyClass(ProxyDef def)
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return <#=def.StructName#>.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -117,7 +119,8 @@ void GenerateProxyClass(ProxyDef def)
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return <#=def.StructName#>.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -125,7 +128,11 @@ void GenerateProxyClass(ProxyDef def)
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return <#=def.StructName#>.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal <#=def.StructName#>* NativePointer
@@ -142,9 +149,13 @@ void GenerateProxyClass(ProxyDef def)
             return this.ptr;
         }
 
-<#+ foreach (var method in def.GetMethods())
+<#+ 
+    if (def.GenerateMethodAccessors)
     {
-        GenerateMethodAccessor(method);
+        foreach (var method in def.GetMethods())
+        {
+            GenerateMethodAccessor(method);
+        }
     }
 #>
     }
@@ -153,42 +164,42 @@ void GenerateProxyClass(ProxyDef def)
 
 void GenerateMethodAccessor(ProxyMethodDef method)
 {
-	GenerateMethodAccessor(method.StructName, method.NativeDelegateType, "this.ptr->" + method.StructName, method.Index);
+    GenerateMethodAccessor(method.StructName, method.NativeDelegateType, "this.ptr->" + method.StructName, method.Index);
 }
 
 void GenerateMethodAccessor(string structName, string nativeDelegateType, string pointerExpr, int index)
 {
-	// This is assumes, that underlying type have one implementation, i.e. method pointers in fact is non virtual and do not changed from object to object.
+    // This is assumes, that underlying type have one implementation, i.e. method pointers in fact is non virtual and do not changed from object to object.
 
-	var bsPtr0 = "sp" + Convert.ToString(index, 16);
-	var bsDelegate0 = "sd" + Convert.ToString(index, 16);
+    var bsPtr0 = "sp" + Convert.ToString(index, 16);
+    var bsDelegate0 = "sd" + Convert.ToString(index, 16);
 #>
 
         private static IntPtr <#=bsPtr0#>;
-		private static <#=nativeDelegateType#> <#=bsDelegate0#>;
+        private static <#=nativeDelegateType#> <#=bsDelegate0#>;
 
         private <#=nativeDelegateType#> <#=structName#>
         {
             get
             {
-				var mptr = <#=pointerExpr#>;
-				if (mptr == <#=bsPtr0#>)
-				{
-					return <#=bsDelegate0#>;
-				}
-				else
-				{
-					var mdelegate = (<#=nativeDelegateType#>)Marshal.GetDelegateForFunctionPointer(mptr, typeof(<#=nativeDelegateType#>));
-					if (<#=bsPtr0#> == IntPtr.Zero)
-					{
-						<#=bsDelegate0#> = mdelegate;
-						<#=bsPtr0#> = mptr;
-					}
-					return mdelegate;
-				}
+                var mptr = <#=pointerExpr#>;
+                if (mptr == <#=bsPtr0#>)
+                {
+                    return <#=bsDelegate0#>;
+                }
+                else
+                {
+                    var mdelegate = (<#=nativeDelegateType#>)Marshal.GetDelegateForFunctionPointer(mptr, typeof(<#=nativeDelegateType#>));
+                    if (<#=bsPtr0#> == IntPtr.Zero)
+                    {
+                        <#=bsDelegate0#> = mdelegate;
+                        <#=bsPtr0#> = mptr;
+                    }
+                    return mdelegate;
+                }
             }
         }
-		
+
 <#+
 }
 

@@ -10,7 +10,7 @@
 
     /// <summary>
     /// Initialization settings.
-    /// Specify <code>null</code> or <code>0</code> to get the recommended default values.
+    /// Specify <c>null</c> or <c>0</c> to get the recommended default values.
     /// </summary>
     public sealed class CefSettings
     {

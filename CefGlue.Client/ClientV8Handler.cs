@@ -129,6 +129,32 @@
 
         private void WriteV8Value(CefV8Value value, StringBuilder result, int indent = 0)
         {
+            /*
+            var isUndefined = value.IsUndefined;
+            var isNull = value.IsNull;
+            var isBool = value.IsBool;
+            var isInt = value.IsInt;
+            var isDouble = value.IsDouble;
+            var isDate = value.IsDate;
+            var isString = value.IsString;
+            var isArray = value.IsArray;
+            var isObject = value.IsObject;
+            var isFunction = value.IsFunction;
+
+            result.Append("[");
+            if (isUndefined) result.Append("undefined ");
+            if (isNull) result.Append("null ");
+            if (isBool) result.Append("bool ");
+            if (isInt) result.Append("int ");
+            if (isDouble) result.Append("double ");
+            if (isDate) result.Append("date ");
+            if (isString) result.Append("string ");
+            if (isArray) result.Append("array ");
+            if (isObject) result.Append("object ");
+            if (isFunction) result.Append("function");
+            result.Append("]");
+            */
+
             if (value.IsUndefined)
             {
                 result.Append("(undefined)");
@@ -211,7 +237,7 @@
                 }
                 result.Append('}');
             }
-            else result.Append("(unknown)");
+            //else result.Append("(unknown)");
         }
     }
 }

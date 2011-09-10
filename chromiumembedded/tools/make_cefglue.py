@@ -215,8 +215,12 @@ def make_cefglue_proxyimpl(cls, cefgluedir):
     return
 
 def make_cefglue_structlayout():
-	result = '[StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]'
-	return result
+    result = '[StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]'
+    return result
+
+def make_cefglue_struct_suppressmessage():
+    result = '[SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]';
+    return result
 
 def make_cefglue_unmanaged_function_pointer():
 	result = '[UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]'
@@ -262,9 +266,17 @@ def make_cefglue_global_funcs(funcs, defined_names, translate_map, indent):
             first = False
     return result
 
-def make_cefglue_member_funcs(funcs, defined_names, translate_map, indent):
+def make_cefglue_member_funcs(funcs, defined_names, translate_map, make_method_invoke, indent):
     result = ''
+
+    # cef_base_t functions
+    if make_method_invoke:
+        result += make_cefglue_method_invoke(0, 'add_ref',   'int', 'cef_base_t* self', 'self', 'cef_base_t.add_ref_delegate',   '((cef_base_t*)self)->add_ref',   indent);
+        result += make_cefglue_method_invoke(1, 'release',   'int', 'cef_base_t* self', 'self', 'cef_base_t.release_delegate',   '((cef_base_t*)self)->release',   indent);
+        result += make_cefglue_method_invoke(2, 'get_refct', 'int', 'cef_base_t* self', 'self', 'cef_base_t.get_refct_delegate', '((cef_base_t*)self)->get_refct', indent);
+
     first = True
+    method_index = 3;
     for func in funcs:
         comment = func.get_comment()
 
@@ -277,16 +289,81 @@ def make_cefglue_member_funcs(funcs, defined_names, translate_map, indent):
         parts = func.get_cefglue_parts()
         result += indent + 'public IntPtr ' + parts['name'] + ';\n'
 
+        method_delegate_type = parts['name'] + '_delegate';
+
         result += indent + make_cefglue_unmanaged_function_pointer() + '\n'
-        result += indent + 'public delegate ' + parts['retval'] + ' ' + parts['name'] + '_delegate' + \
+        result += indent + 'public delegate ' + parts['retval'] + ' ' + method_delegate_type + \
                   '(' + string.join(parts['args'], ', ') + ');\n'
+
+        if make_method_invoke:
+            method_name       = parts['name'];                                 # method name
+            method_ret_type   = parts['retval'];                               # return type
+            method_args_decl  = string.join(parts['args'], ', ');              # arguments
+            ptr_expr = 'self->' + method_name;
+
+            method_args_ref_list = [];
+            for arg in parts['args']:
+                argparts = arg.split(' ');
+                argparts.reverse();
+                method_args_ref_list.append( argparts[0] );
+
+            method_args_ref   = string.join( method_args_ref_list, ', ');  # arguments
+
+            result += make_cefglue_method_invoke(method_index, method_name, method_ret_type, method_args_decl, method_args_ref, method_delegate_type, ptr_expr, indent);
+
 
         #result += wrap_code(indent+parts['retval']+' (CEF_CALLBACK *'+
         #                    parts['name']+')('+
         #                    string.join(parts['args'], ', ')+');')
+        
+        method_index = method_index + 1;
 
         if first:
             first = False
+
+    return result
+
+def make_cefglue_method_invoke(method_index, method_name, method_ret_type, method_args_decl, method_args_ref, method_delegate_type, ptr_expr, indent):
+    method_slot = format(method_index, "X");
+    bs_ptr_0 = 's_bp' + method_slot;
+    bs_delegate_0 = 's_bd' + method_slot;
+
+    result = '';
+    result += '\n';
+
+    result += indent + 'private static IntPtr ' + bs_ptr_0 + ';\n';
+    result += indent + 'private static ' + method_delegate_type + ' ' + bs_delegate_0 + ';\n'
+
+    result += '\n';
+    result += indent + '// method slot: ' + method_slot + '\n';
+    result += indent + 'public static ' + method_ret_type + ' invoke_' + method_name + '(' + method_args_decl + ')\n';
+    result += indent + '{\n';
+    result += indent + '    ' + method_delegate_type + ' mdelegate;\n';
+    result += '\n';
+    result += indent + '    var mptr = ' + ptr_expr + ';\n';
+    result += indent + '    if (mptr == ' + bs_ptr_0 + ')\n';
+    result += indent + '    {\n';
+    result += indent + '        mdelegate = ' + bs_delegate_0 + ';\n';
+    result += indent + '    }\n';
+    result += indent + '    else\n';
+    result += indent + '    {\n';
+    result += indent + '        mdelegate = (' + method_delegate_type + ')Marshal.GetDelegateForFunctionPointer(mptr, typeof(' + method_delegate_type + '));\n';
+    result += indent + '        if (' + bs_ptr_0 + ' == IntPtr.Zero)\n'
+    result += indent + '        {\n'
+    result += indent + '            ' + bs_delegate_0 + ' = mdelegate;\n'
+    result += indent + '            ' + bs_ptr_0 + ' = mptr;\n'
+    result += indent + '        }\n'
+    result += indent + '    }\n'
+    result += '\n';
+
+    result += indent + '    ';
+    if method_ret_type != 'void':
+        result += 'return ';
+        
+    result += 'mdelegate(' + method_args_ref + ');\n';
+
+    result += indent + '}\n';
+    result += '\n';
     return result
 
 def make_cefglue(header, cefgluedir):
@@ -305,6 +382,7 @@ namespace CefGlue.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Security;
@@ -339,11 +417,13 @@ namespace CefGlue.Core
         classname = cls.get_capi_name()
         result += '\n' + format_comment_cefglue(cls.get_comment(), '    ', translate_map);
         result += '    ' + make_cefglue_structlayout() + '\n'
+        result += '    ' + make_cefglue_struct_suppressmessage() + '\n'
         result += '    ' + make_struct_decl() + ' ' + classname + \
                   '\n    {\n        /// <summary>\n        /// Base structure.\n        /// </summary>\n        public cef_base_t @base;\n'
         funcs = cls.get_virtual_funcs()
-        result += make_cefglue_member_funcs(funcs, defined_names,
-                                         translate_map, '        ')
+        result += make_cefglue_member_funcs(funcs, defined_names, translate_map,
+                                         not is_handler_class(cls), # make method invoke only to proxies
+                                         '        ')
         result += '\n    };\n\n'
         
         defined_names.append(cls.get_capi_name())

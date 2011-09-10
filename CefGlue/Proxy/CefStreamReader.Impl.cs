@@ -48,7 +48,7 @@ namespace CefGlue
         /// </summary>
         internal int Read(void* ptr, int size, int count)
         {
-            return this.read(this.ptr, ptr, size, count);
+            return cef_stream_reader_t.invoke_read(this.ptr, ptr, size, count);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace CefGlue
         /// </summary>
         public bool Seek(long offset, SeekOrigin whence)
         {
-            return this.seek(this.ptr, offset, (int)whence) == 0;
+            return cef_stream_reader_t.invoke_seek(this.ptr, offset, (int)whence) == 0;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace CefGlue
         /// </summary>
         public long Tell()
         {
-            return this.tell(this.ptr);
+            return cef_stream_reader_t.invoke_tell(this.ptr);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace CefGlue
         /// </summary>
         public bool Eof()
         {
-            return this.eof(this.ptr) != 0;
+            return cef_stream_reader_t.invoke_eof(this.ptr) != 0;
         }
 
 

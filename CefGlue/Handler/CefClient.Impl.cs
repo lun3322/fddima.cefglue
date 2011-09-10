@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Core;
-    using CefGlue.Diagnostics;
+    using Diagnostics;
 
     // TODO: all handlers require optimization like this:
     // now we implement all client properties, it means that native side will always do native callback to query attached handlers

@@ -71,6 +71,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ConsoleMessageEventArgs.cs" />
+    <Compile Include="CefWebBrowser+JSBindingHandler.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StatusMessageEventArgs.cs" />
     <Compile Include="CefWebBrowser.cs">
       <SubType>Component</SubType>

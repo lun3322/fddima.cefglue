@@ -6,6 +6,8 @@
     using System.Windows.Forms;
     using System.Threading;
     using System.IO;
+    using System.Text;
+    using CefGlue.ScriptableObject;
 
     static class Program
     {
@@ -30,12 +32,11 @@
                 return;
             }
 
-
             Cef.RegisterExtension("clientExtension",
             @"
-var cefglue = cefglue || {};
-if (!cefglue.client) {
-    cefglue.client = {
+var cefGlue = cefGlue || {};
+if (!cefGlue.client) {
+    cefGlue.client = {
         dump: function() {
             native function Dump();
             return Dump.apply(this, arguments);
@@ -101,7 +102,23 @@ if (!cefglue.client) {
 };
 ", new ClientV8Handler());
 
-            Cef.RegisterCustomScheme("client", false, false, false);
+            Cef.RegisterScriptableObject(
+                "cefGlue.tests.scriptableObject.v8Extension",
+                new TestScriptableObject(),
+                ScriptableObjectOptions.Extension
+                );
+
+            // TODO: must be cefglue.scriptableObject.tests.jsBinding
+            Cef.RegisterScriptableObject(
+                "testScriptableObject",
+                new TestScriptableObject()
+                );
+
+            var testObject1 = new CefGlue.Client.Examples.ScriptableObject.TestObject1();
+            Cef.RegisterScriptableObject(testObject1, ScriptableObjectOptions.Extension);
+            Cef.RegisterScriptableObject("myTestObject1", testObject1, ScriptableObjectOptions.Extension);
+
+            Cef.RegisterCustomScheme("client", true, true, false);
             Cef.RegisterSchemeHandlerFactory("client", null, new ClientSchemeHandlerFactory());
 
             // This is shows that handler works like zombie - when handler is used by native side only

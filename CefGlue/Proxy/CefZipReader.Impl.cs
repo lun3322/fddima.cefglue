@@ -22,7 +22,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToFirstFile()
         {
-            return this.move_to_first_file(this.ptr) != 0;
+            return cef_zip_reader_t.invoke_move_to_first_file(this.ptr) != 0;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToNextFile()
         {
-            return this.move_to_next_file(this.ptr) != 0;
+            return cef_zip_reader_t.invoke_move_to_next_file(this.ptr) != 0;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace CefGlue
             {
                 var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
 
-                return this.move_to_file(this.ptr, &n_fileName, caseSensitive ? 1 : 0) != 0;
+                return cef_zip_reader_t.invoke_move_to_file(this.ptr, &n_fileName, caseSensitive ? 1 : 0) != 0;
             }
         }
 
@@ -55,7 +55,7 @@ namespace CefGlue
         /// </summary>
         public bool Close()
         {
-            return this.close(this.ptr) != 0;
+            return cef_zip_reader_t.invoke_close(this.ptr) != 0;
         }
 
 
@@ -66,7 +66,7 @@ namespace CefGlue
         /// </summary>
         public string GetFileName()
         {
-            var n_result = this.get_file_name(this.ptr);
+            var n_result = cef_zip_reader_t.invoke_get_file_name(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -75,7 +75,7 @@ namespace CefGlue
         /// </summary>
         public long GetFileSize()
         {
-            return this.get_file_size(this.ptr);
+            return cef_zip_reader_t.invoke_get_file_size(this.ptr);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace CefGlue
         /// </summary>
         public DateTime GetFileLastModified()
         {
-            var n_result = this.get_file_last_modified(this.ptr);
+            var n_result = cef_zip_reader_t.invoke_get_file_last_modified(this.ptr);
             return n_result.ToDateTime();
         }
 
@@ -97,7 +97,7 @@ namespace CefGlue
             {
                 var n_password = new cef_string_t(password_str, password != null ? password.Length : 0);
 
-                return this.open_file(this.ptr, &n_password) != 0;
+                return cef_zip_reader_t.invoke_open_file(this.ptr, &n_password) != 0;
             }
         }
 
@@ -106,7 +106,7 @@ namespace CefGlue
         /// </summary>
         public bool CloseFile()
         {
-            return this.close_file(this.ptr) != 0;
+            return cef_zip_reader_t.invoke_close_file(this.ptr) != 0;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace CefGlue
         /// </summary>
         internal unsafe int ReadFile(void* buffer, int bufferSize)
         {
-            return this.read_file(this.ptr, buffer, bufferSize);
+            return cef_zip_reader_t.invoke_read_file(this.ptr, buffer, bufferSize);
         }
 
         // TODO: CefZipReader.ReadFile overloads
@@ -125,7 +125,7 @@ namespace CefGlue
         /// </summary>
         public long Tell()
         {
-            return this.tell(this.ptr);
+            return cef_zip_reader_t.invoke_tell(this.ptr);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace CefGlue
         /// </summary>
         public bool Eof()
         {
-            return this.eof(this.ptr) != 0;
+            return cef_zip_reader_t.invoke_eof(this.ptr) != 0;
         }
 
 

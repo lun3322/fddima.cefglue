@@ -5,6 +5,7 @@ namespace CefGlue.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Security;
@@ -326,6 +327,7 @@ namespace CefGlue.Core
     /// structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_task_t
     {
         /// <summary>
@@ -349,6 +351,7 @@ namespace CefGlue.Core
     /// structure will always be called on the IO thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_cookie_visitor_t
     {
         /// <summary>
@@ -376,12 +379,94 @@ namespace CefGlue.Core
     /// comments.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_browser_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Call this function before destroying a contained browser window. This
@@ -392,12 +477,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void parent_window_will_close_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp3;
+        private static parent_window_will_close_delegate s_bd3;
+
+        // method slot: 3
+        public static void invoke_parent_window_will_close(cef_browser_t* self)
+        {
+            parent_window_will_close_delegate mdelegate;
+
+            var mptr = self->parent_window_will_close;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (parent_window_will_close_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(parent_window_will_close_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Closes this browser window.
         /// </summary>
         public IntPtr close_browser;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void close_browser_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp4;
+        private static close_browser_delegate s_bd4;
+
+        // method slot: 4
+        public static void invoke_close_browser(cef_browser_t* self)
+        {
+            close_browser_delegate mdelegate;
+
+            var mptr = self->close_browser;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (close_browser_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(close_browser_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns true (1) if the browser can navigate backwards.
@@ -406,12 +545,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int can_go_back_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp5;
+        private static can_go_back_delegate s_bd5;
+
+        // method slot: 5
+        public static int invoke_can_go_back(cef_browser_t* self)
+        {
+            can_go_back_delegate mdelegate;
+
+            var mptr = self->can_go_back;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (can_go_back_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(can_go_back_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Navigate backwards.
         /// </summary>
         public IntPtr go_back;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void go_back_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp6;
+        private static go_back_delegate s_bd6;
+
+        // method slot: 6
+        public static void invoke_go_back(cef_browser_t* self)
+        {
+            go_back_delegate mdelegate;
+
+            var mptr = self->go_back;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (go_back_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(go_back_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns true (1) if the browser can navigate forwards.
@@ -420,12 +613,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int can_go_forward_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp7;
+        private static can_go_forward_delegate s_bd7;
+
+        // method slot: 7
+        public static int invoke_can_go_forward(cef_browser_t* self)
+        {
+            can_go_forward_delegate mdelegate;
+
+            var mptr = self->can_go_forward;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (can_go_forward_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(can_go_forward_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Navigate forwards.
         /// </summary>
         public IntPtr go_forward;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void go_forward_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp8;
+        private static go_forward_delegate s_bd8;
+
+        // method slot: 8
+        public static void invoke_go_forward(cef_browser_t* self)
+        {
+            go_forward_delegate mdelegate;
+
+            var mptr = self->go_forward;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (go_forward_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(go_forward_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Reload the current page.
@@ -434,6 +681,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void reload_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp9;
+        private static reload_delegate s_bd9;
+
+        // method slot: 9
+        public static void invoke_reload(cef_browser_t* self)
+        {
+            reload_delegate mdelegate;
+
+            var mptr = self->reload;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (reload_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(reload_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Reload the current page ignoring any cached data.
         /// </summary>
@@ -441,12 +715,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void reload_ignore_cache_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bpA;
+        private static reload_ignore_cache_delegate s_bdA;
+
+        // method slot: A
+        public static void invoke_reload_ignore_cache(cef_browser_t* self)
+        {
+            reload_ignore_cache_delegate mdelegate;
+
+            var mptr = self->reload_ignore_cache;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (reload_ignore_cache_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(reload_ignore_cache_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Stop loading the page.
         /// </summary>
         public IntPtr stop_load;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void stop_load_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bpB;
+        private static stop_load_delegate s_bdB;
+
+        // method slot: B
+        public static void invoke_stop_load(cef_browser_t* self)
+        {
+            stop_load_delegate mdelegate;
+
+            var mptr = self->stop_load;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (stop_load_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(stop_load_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Set focus for the browser window. If |enable| is true (1) focus will
@@ -456,12 +784,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_focus_delegate(cef_browser_t* self, int enable);
 
+        private static IntPtr s_bpC;
+        private static set_focus_delegate s_bdC;
+
+        // method slot: C
+        public static void invoke_set_focus(cef_browser_t* self, int enable)
+        {
+            set_focus_delegate mdelegate;
+
+            var mptr = self->set_focus;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (set_focus_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_focus_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            mdelegate(self, enable);
+        }
+
+
         /// <summary>
         /// Retrieve the window handle for this browser.
         /// </summary>
         public IntPtr get_window_handle;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_window_handle_t get_window_handle_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bpD;
+        private static get_window_handle_delegate s_bdD;
+
+        // method slot: D
+        public static cef_window_handle_t invoke_get_window_handle(cef_browser_t* self)
+        {
+            get_window_handle_delegate mdelegate;
+
+            var mptr = self->get_window_handle;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (get_window_handle_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_window_handle_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Retrieve the window handle of the browser that opened this browser.
@@ -472,12 +854,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_window_handle_t get_opener_window_handle_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bpE;
+        private static get_opener_window_handle_delegate s_bdE;
+
+        // method slot: E
+        public static cef_window_handle_t invoke_get_opener_window_handle(cef_browser_t* self)
+        {
+            get_opener_window_handle_delegate mdelegate;
+
+            var mptr = self->get_opener_window_handle;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (get_opener_window_handle_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_opener_window_handle_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if the window is a popup window.
         /// </summary>
         public IntPtr is_popup;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_popup_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bpF;
+        private static is_popup_delegate s_bdF;
+
+        // method slot: F
+        public static int invoke_is_popup(cef_browser_t* self)
+        {
+            is_popup_delegate mdelegate;
+
+            var mptr = self->is_popup;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (is_popup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_popup_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the client for this browser.
@@ -486,12 +922,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_client_t* get_client_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp10;
+        private static get_client_delegate s_bd10;
+
+        // method slot: 10
+        public static cef_client_t* invoke_get_client(cef_browser_t* self)
+        {
+            get_client_delegate mdelegate;
+
+            var mptr = self->get_client;
+            if (mptr == s_bp10)
+            {
+                mdelegate = s_bd10;
+            }
+            else
+            {
+                mdelegate = (get_client_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_client_delegate));
+                if (s_bp10 == IntPtr.Zero)
+                {
+                    s_bd10 = mdelegate;
+                    s_bp10 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the main (top-level) frame for the browser window.
         /// </summary>
         public IntPtr get_main_frame;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_frame_t* get_main_frame_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp11;
+        private static get_main_frame_delegate s_bd11;
+
+        // method slot: 11
+        public static cef_frame_t* invoke_get_main_frame(cef_browser_t* self)
+        {
+            get_main_frame_delegate mdelegate;
+
+            var mptr = self->get_main_frame;
+            if (mptr == s_bp11)
+            {
+                mdelegate = s_bd11;
+            }
+            else
+            {
+                mdelegate = (get_main_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_main_frame_delegate));
+                if (s_bp11 == IntPtr.Zero)
+                {
+                    s_bd11 = mdelegate;
+                    s_bp11 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the focused frame for the browser window. This function
@@ -501,6 +991,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_frame_t* get_focused_frame_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp12;
+        private static get_focused_frame_delegate s_bd12;
+
+        // method slot: 12
+        public static cef_frame_t* invoke_get_focused_frame(cef_browser_t* self)
+        {
+            get_focused_frame_delegate mdelegate;
+
+            var mptr = self->get_focused_frame;
+            if (mptr == s_bp12)
+            {
+                mdelegate = s_bd12;
+            }
+            else
+            {
+                mdelegate = (get_focused_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_focused_frame_delegate));
+                if (s_bp12 == IntPtr.Zero)
+                {
+                    s_bd12 = mdelegate;
+                    s_bp12 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the frame with the specified name, or NULL if not found. This
         /// function should only be called on the UI thread.
@@ -509,6 +1026,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_frame_t* get_frame_delegate(cef_browser_t* self, /*const*/ cef_string_t* name);
 
+        private static IntPtr s_bp13;
+        private static get_frame_delegate s_bd13;
+
+        // method slot: 13
+        public static cef_frame_t* invoke_get_frame(cef_browser_t* self, /*const*/ cef_string_t* name)
+        {
+            get_frame_delegate mdelegate;
+
+            var mptr = self->get_frame;
+            if (mptr == s_bp13)
+            {
+                mdelegate = s_bd13;
+            }
+            else
+            {
+                mdelegate = (get_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_frame_delegate));
+                if (s_bp13 == IntPtr.Zero)
+                {
+                    s_bd13 = mdelegate;
+                    s_bp13 = mptr;
+                }
+            }
+
+            return mdelegate(self, name);
+        }
+
+
         /// <summary>
         /// Returns the names of all existing frames. This function should only
         /// be called on the UI thread.
@@ -516,6 +1060,33 @@ namespace CefGlue.Core
         public IntPtr get_frame_names;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void get_frame_names_delegate(cef_browser_t* self, cef_string_list_t names);
+
+        private static IntPtr s_bp14;
+        private static get_frame_names_delegate s_bd14;
+
+        // method slot: 14
+        public static void invoke_get_frame_names(cef_browser_t* self, cef_string_list_t names)
+        {
+            get_frame_names_delegate mdelegate;
+
+            var mptr = self->get_frame_names;
+            if (mptr == s_bp14)
+            {
+                mdelegate = s_bd14;
+            }
+            else
+            {
+                mdelegate = (get_frame_names_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_frame_names_delegate));
+                if (s_bp14 == IntPtr.Zero)
+                {
+                    s_bd14 = mdelegate;
+                    s_bp14 = mptr;
+                }
+            }
+
+            mdelegate(self, names);
+        }
+
 
         /// <summary>
         /// Search for |searchText|. |identifier| can be used to have multiple
@@ -528,12 +1099,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void find_delegate(cef_browser_t* self, int identifier, /*const*/ cef_string_t* searchText, int forward, int matchCase, int findNext);
 
+        private static IntPtr s_bp15;
+        private static find_delegate s_bd15;
+
+        // method slot: 15
+        public static void invoke_find(cef_browser_t* self, int identifier, /*const*/ cef_string_t* searchText, int forward, int matchCase, int findNext)
+        {
+            find_delegate mdelegate;
+
+            var mptr = self->find;
+            if (mptr == s_bp15)
+            {
+                mdelegate = s_bd15;
+            }
+            else
+            {
+                mdelegate = (find_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(find_delegate));
+                if (s_bp15 == IntPtr.Zero)
+                {
+                    s_bd15 = mdelegate;
+                    s_bp15 = mptr;
+                }
+            }
+
+            mdelegate(self, identifier, searchText, forward, matchCase, findNext);
+        }
+
+
         /// <summary>
         /// Cancel all searches that are currently going on.
         /// </summary>
         public IntPtr stop_finding;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void stop_finding_delegate(cef_browser_t* self, int clearSelection);
+
+        private static IntPtr s_bp16;
+        private static stop_finding_delegate s_bd16;
+
+        // method slot: 16
+        public static void invoke_stop_finding(cef_browser_t* self, int clearSelection)
+        {
+            stop_finding_delegate mdelegate;
+
+            var mptr = self->stop_finding;
+            if (mptr == s_bp16)
+            {
+                mdelegate = s_bd16;
+            }
+            else
+            {
+                mdelegate = (stop_finding_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(stop_finding_delegate));
+                if (s_bp16 == IntPtr.Zero)
+                {
+                    s_bd16 = mdelegate;
+                    s_bp16 = mptr;
+                }
+            }
+
+            mdelegate(self, clearSelection);
+        }
+
 
         /// <summary>
         /// Get the zoom level.
@@ -542,6 +1167,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate double get_zoom_level_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp17;
+        private static get_zoom_level_delegate s_bd17;
+
+        // method slot: 17
+        public static double invoke_get_zoom_level(cef_browser_t* self)
+        {
+            get_zoom_level_delegate mdelegate;
+
+            var mptr = self->get_zoom_level;
+            if (mptr == s_bp17)
+            {
+                mdelegate = s_bd17;
+            }
+            else
+            {
+                mdelegate = (get_zoom_level_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_zoom_level_delegate));
+                if (s_bp17 == IntPtr.Zero)
+                {
+                    s_bd17 = mdelegate;
+                    s_bp17 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Change the zoom level to the specified value.
         /// </summary>
@@ -549,12 +1201,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_zoom_level_delegate(cef_browser_t* self, double zoomLevel);
 
+        private static IntPtr s_bp18;
+        private static set_zoom_level_delegate s_bd18;
+
+        // method slot: 18
+        public static void invoke_set_zoom_level(cef_browser_t* self, double zoomLevel)
+        {
+            set_zoom_level_delegate mdelegate;
+
+            var mptr = self->set_zoom_level;
+            if (mptr == s_bp18)
+            {
+                mdelegate = s_bd18;
+            }
+            else
+            {
+                mdelegate = (set_zoom_level_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_zoom_level_delegate));
+                if (s_bp18 == IntPtr.Zero)
+                {
+                    s_bd18 = mdelegate;
+                    s_bp18 = mptr;
+                }
+            }
+
+            mdelegate(self, zoomLevel);
+        }
+
+
         /// <summary>
         /// Open developer tools in its own window.
         /// </summary>
         public IntPtr show_dev_tools;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void show_dev_tools_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp19;
+        private static show_dev_tools_delegate s_bd19;
+
+        // method slot: 19
+        public static void invoke_show_dev_tools(cef_browser_t* self)
+        {
+            show_dev_tools_delegate mdelegate;
+
+            var mptr = self->show_dev_tools;
+            if (mptr == s_bp19)
+            {
+                mdelegate = s_bd19;
+            }
+            else
+            {
+                mdelegate = (show_dev_tools_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(show_dev_tools_delegate));
+                if (s_bp19 == IntPtr.Zero)
+                {
+                    s_bd19 = mdelegate;
+                    s_bp19 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Explicitly close the developer tools window if one exists for this
@@ -564,12 +1270,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void close_dev_tools_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp1A;
+        private static close_dev_tools_delegate s_bd1A;
+
+        // method slot: 1A
+        public static void invoke_close_dev_tools(cef_browser_t* self)
+        {
+            close_dev_tools_delegate mdelegate;
+
+            var mptr = self->close_dev_tools;
+            if (mptr == s_bp1A)
+            {
+                mdelegate = s_bd1A;
+            }
+            else
+            {
+                mdelegate = (close_dev_tools_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(close_dev_tools_delegate));
+                if (s_bp1A == IntPtr.Zero)
+                {
+                    s_bd1A = mdelegate;
+                    s_bp1A = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if window rendering is disabled.
         /// </summary>
         public IntPtr is_window_rendering_disabled;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_window_rendering_disabled_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp1B;
+        private static is_window_rendering_disabled_delegate s_bd1B;
+
+        // method slot: 1B
+        public static int invoke_is_window_rendering_disabled(cef_browser_t* self)
+        {
+            is_window_rendering_disabled_delegate mdelegate;
+
+            var mptr = self->is_window_rendering_disabled;
+            if (mptr == s_bp1B)
+            {
+                mdelegate = s_bd1B;
+            }
+            else
+            {
+                mdelegate = (is_window_rendering_disabled_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_window_rendering_disabled_delegate));
+                if (s_bp1B == IntPtr.Zero)
+                {
+                    s_bd1B = mdelegate;
+                    s_bp1B = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Get the size of the specified element. This function should only be
@@ -579,6 +1339,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_size_delegate(cef_browser_t* self, cef_paint_element_type_t type, int* width, int* height);
 
+        private static IntPtr s_bp1C;
+        private static get_size_delegate s_bd1C;
+
+        // method slot: 1C
+        public static int invoke_get_size(cef_browser_t* self, cef_paint_element_type_t type, int* width, int* height)
+        {
+            get_size_delegate mdelegate;
+
+            var mptr = self->get_size;
+            if (mptr == s_bp1C)
+            {
+                mdelegate = s_bd1C;
+            }
+            else
+            {
+                mdelegate = (get_size_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_size_delegate));
+                if (s_bp1C == IntPtr.Zero)
+                {
+                    s_bd1C = mdelegate;
+                    s_bp1C = mptr;
+                }
+            }
+
+            return mdelegate(self, type, width, height);
+        }
+
+
         /// <summary>
         /// Set the size of the specified element. This function is only used
         /// when window rendering is disabled.
@@ -586,6 +1373,33 @@ namespace CefGlue.Core
         public IntPtr set_size;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_size_delegate(cef_browser_t* self, cef_paint_element_type_t type, int width, int height);
+
+        private static IntPtr s_bp1D;
+        private static set_size_delegate s_bd1D;
+
+        // method slot: 1D
+        public static void invoke_set_size(cef_browser_t* self, cef_paint_element_type_t type, int width, int height)
+        {
+            set_size_delegate mdelegate;
+
+            var mptr = self->set_size;
+            if (mptr == s_bp1D)
+            {
+                mdelegate = s_bd1D;
+            }
+            else
+            {
+                mdelegate = (set_size_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_size_delegate));
+                if (s_bp1D == IntPtr.Zero)
+                {
+                    s_bd1D = mdelegate;
+                    s_bp1D = mptr;
+                }
+            }
+
+            mdelegate(self, type, width, height);
+        }
+
 
         /// <summary>
         /// Returns true (1) if a popup is currently visible. This function
@@ -595,12 +1409,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_popup_visible_delegate(cef_browser_t* self);
 
+        private static IntPtr s_bp1E;
+        private static is_popup_visible_delegate s_bd1E;
+
+        // method slot: 1E
+        public static int invoke_is_popup_visible(cef_browser_t* self)
+        {
+            is_popup_visible_delegate mdelegate;
+
+            var mptr = self->is_popup_visible;
+            if (mptr == s_bp1E)
+            {
+                mdelegate = s_bd1E;
+            }
+            else
+            {
+                mdelegate = (is_popup_visible_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_popup_visible_delegate));
+                if (s_bp1E == IntPtr.Zero)
+                {
+                    s_bd1E = mdelegate;
+                    s_bp1E = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Hide the currently visible popup, if any.
         /// </summary>
         public IntPtr hide_popup;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void hide_popup_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp1F;
+        private static hide_popup_delegate s_bd1F;
+
+        // method slot: 1F
+        public static void invoke_hide_popup(cef_browser_t* self)
+        {
+            hide_popup_delegate mdelegate;
+
+            var mptr = self->hide_popup;
+            if (mptr == s_bp1F)
+            {
+                mdelegate = s_bd1F;
+            }
+            else
+            {
+                mdelegate = (hide_popup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(hide_popup_delegate));
+                if (s_bp1F == IntPtr.Zero)
+                {
+                    s_bd1F = mdelegate;
+                    s_bp1F = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Invalidate the |dirtyRect| region of the view. This function is only
@@ -610,6 +1478,33 @@ namespace CefGlue.Core
         public IntPtr invalidate;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void invalidate_delegate(cef_browser_t* self, /*const*/ cef_rect_t* dirtyRect);
+
+        private static IntPtr s_bp20;
+        private static invalidate_delegate s_bd20;
+
+        // method slot: 20
+        public static void invoke_invalidate(cef_browser_t* self, /*const*/ cef_rect_t* dirtyRect)
+        {
+            invalidate_delegate mdelegate;
+
+            var mptr = self->invalidate;
+            if (mptr == s_bp20)
+            {
+                mdelegate = s_bd20;
+            }
+            else
+            {
+                mdelegate = (invalidate_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(invalidate_delegate));
+                if (s_bp20 == IntPtr.Zero)
+                {
+                    s_bd20 = mdelegate;
+                    s_bp20 = mptr;
+                }
+            }
+
+            mdelegate(self, dirtyRect);
+        }
+
 
         /// <summary>
         /// Get the raw image data contained in the specified element without
@@ -623,12 +1518,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_image_delegate(cef_browser_t* self, cef_paint_element_type_t type, int width, int height, void* buffer);
 
+        private static IntPtr s_bp21;
+        private static get_image_delegate s_bd21;
+
+        // method slot: 21
+        public static int invoke_get_image(cef_browser_t* self, cef_paint_element_type_t type, int width, int height, void* buffer)
+        {
+            get_image_delegate mdelegate;
+
+            var mptr = self->get_image;
+            if (mptr == s_bp21)
+            {
+                mdelegate = s_bd21;
+            }
+            else
+            {
+                mdelegate = (get_image_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_image_delegate));
+                if (s_bp21 == IntPtr.Zero)
+                {
+                    s_bd21 = mdelegate;
+                    s_bp21 = mptr;
+                }
+            }
+
+            return mdelegate(self, type, width, height, buffer);
+        }
+
+
         /// <summary>
         /// Send a key event to the browser.
         /// </summary>
         public IntPtr send_key_event;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void send_key_event_delegate(cef_browser_t* self, cef_key_type_t type, int key, int modifiers, int sysChar, int imeChar);
+
+        private static IntPtr s_bp22;
+        private static send_key_event_delegate s_bd22;
+
+        // method slot: 22
+        public static void invoke_send_key_event(cef_browser_t* self, cef_key_type_t type, int key, int modifiers, int sysChar, int imeChar)
+        {
+            send_key_event_delegate mdelegate;
+
+            var mptr = self->send_key_event;
+            if (mptr == s_bp22)
+            {
+                mdelegate = s_bd22;
+            }
+            else
+            {
+                mdelegate = (send_key_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(send_key_event_delegate));
+                if (s_bp22 == IntPtr.Zero)
+                {
+                    s_bd22 = mdelegate;
+                    s_bp22 = mptr;
+                }
+            }
+
+            mdelegate(self, type, key, modifiers, sysChar, imeChar);
+        }
+
 
         /// <summary>
         /// Send a mouse click event to the browser. The |x| and |y| coordinates
@@ -638,6 +1587,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void send_mouse_click_event_delegate(cef_browser_t* self, int x, int y, cef_mouse_button_type_t type, int mouseUp, int clickCount);
 
+        private static IntPtr s_bp23;
+        private static send_mouse_click_event_delegate s_bd23;
+
+        // method slot: 23
+        public static void invoke_send_mouse_click_event(cef_browser_t* self, int x, int y, cef_mouse_button_type_t type, int mouseUp, int clickCount)
+        {
+            send_mouse_click_event_delegate mdelegate;
+
+            var mptr = self->send_mouse_click_event;
+            if (mptr == s_bp23)
+            {
+                mdelegate = s_bd23;
+            }
+            else
+            {
+                mdelegate = (send_mouse_click_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(send_mouse_click_event_delegate));
+                if (s_bp23 == IntPtr.Zero)
+                {
+                    s_bd23 = mdelegate;
+                    s_bp23 = mptr;
+                }
+            }
+
+            mdelegate(self, x, y, type, mouseUp, clickCount);
+        }
+
+
         /// <summary>
         /// Send a mouse move event to the browser. The |x| and |y| coordinates
         /// are relative to the upper-left corner of the view.
@@ -645,6 +1621,33 @@ namespace CefGlue.Core
         public IntPtr send_mouse_move_event;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void send_mouse_move_event_delegate(cef_browser_t* self, int x, int y, int mouseLeave);
+
+        private static IntPtr s_bp24;
+        private static send_mouse_move_event_delegate s_bd24;
+
+        // method slot: 24
+        public static void invoke_send_mouse_move_event(cef_browser_t* self, int x, int y, int mouseLeave)
+        {
+            send_mouse_move_event_delegate mdelegate;
+
+            var mptr = self->send_mouse_move_event;
+            if (mptr == s_bp24)
+            {
+                mdelegate = s_bd24;
+            }
+            else
+            {
+                mdelegate = (send_mouse_move_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(send_mouse_move_event_delegate));
+                if (s_bp24 == IntPtr.Zero)
+                {
+                    s_bd24 = mdelegate;
+                    s_bp24 = mptr;
+                }
+            }
+
+            mdelegate(self, x, y, mouseLeave);
+        }
+
 
         /// <summary>
         /// Send a mouse wheel event to the browser. The |x| and |y| coordinates
@@ -654,6 +1657,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void send_mouse_wheel_event_delegate(cef_browser_t* self, int x, int y, int delta);
 
+        private static IntPtr s_bp25;
+        private static send_mouse_wheel_event_delegate s_bd25;
+
+        // method slot: 25
+        public static void invoke_send_mouse_wheel_event(cef_browser_t* self, int x, int y, int delta)
+        {
+            send_mouse_wheel_event_delegate mdelegate;
+
+            var mptr = self->send_mouse_wheel_event;
+            if (mptr == s_bp25)
+            {
+                mdelegate = s_bd25;
+            }
+            else
+            {
+                mdelegate = (send_mouse_wheel_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(send_mouse_wheel_event_delegate));
+                if (s_bp25 == IntPtr.Zero)
+                {
+                    s_bd25 = mdelegate;
+                    s_bp25 = mptr;
+                }
+            }
+
+            mdelegate(self, x, y, delta);
+        }
+
+
         /// <summary>
         /// Send a focus event to the browser.
         /// </summary>
@@ -661,12 +1691,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void send_focus_event_delegate(cef_browser_t* self, int setFocus);
 
+        private static IntPtr s_bp26;
+        private static send_focus_event_delegate s_bd26;
+
+        // method slot: 26
+        public static void invoke_send_focus_event(cef_browser_t* self, int setFocus)
+        {
+            send_focus_event_delegate mdelegate;
+
+            var mptr = self->send_focus_event;
+            if (mptr == s_bp26)
+            {
+                mdelegate = s_bd26;
+            }
+            else
+            {
+                mdelegate = (send_focus_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(send_focus_event_delegate));
+                if (s_bp26 == IntPtr.Zero)
+                {
+                    s_bd26 = mdelegate;
+                    s_bp26 = mptr;
+                }
+            }
+
+            mdelegate(self, setFocus);
+        }
+
+
         /// <summary>
         /// Send a capture lost event to the browser.
         /// </summary>
         public IntPtr send_capture_lost_event;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void send_capture_lost_event_delegate(cef_browser_t* self);
+
+        private static IntPtr s_bp27;
+        private static send_capture_lost_event_delegate s_bd27;
+
+        // method slot: 27
+        public static void invoke_send_capture_lost_event(cef_browser_t* self)
+        {
+            send_capture_lost_event_delegate mdelegate;
+
+            var mptr = self->send_capture_lost_event;
+            if (mptr == s_bp27)
+            {
+                mdelegate = s_bd27;
+            }
+            else
+            {
+                mdelegate = (send_capture_lost_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(send_capture_lost_event_delegate));
+                if (s_bp27 == IntPtr.Zero)
+                {
+                    s_bd27 = mdelegate;
+                    s_bp27 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
     };
 
@@ -697,12 +1781,94 @@ namespace CefGlue.Core
     /// in the comments.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_frame_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Execute undo in this frame.
@@ -711,12 +1877,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void undo_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bp3;
+        private static undo_delegate s_bd3;
+
+        // method slot: 3
+        public static void invoke_undo(cef_frame_t* self)
+        {
+            undo_delegate mdelegate;
+
+            var mptr = self->undo;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (undo_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(undo_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Execute redo in this frame.
         /// </summary>
         public IntPtr redo;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void redo_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bp4;
+        private static redo_delegate s_bd4;
+
+        // method slot: 4
+        public static void invoke_redo(cef_frame_t* self)
+        {
+            redo_delegate mdelegate;
+
+            var mptr = self->redo;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (redo_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(redo_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Execute cut in this frame.
@@ -725,12 +1945,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void cut_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bp5;
+        private static cut_delegate s_bd5;
+
+        // method slot: 5
+        public static void invoke_cut(cef_frame_t* self)
+        {
+            cut_delegate mdelegate;
+
+            var mptr = self->cut;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (cut_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cut_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Execute copy in this frame.
         /// </summary>
         public IntPtr copy;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void copy_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bp6;
+        private static copy_delegate s_bd6;
+
+        // method slot: 6
+        public static void invoke_copy(cef_frame_t* self)
+        {
+            copy_delegate mdelegate;
+
+            var mptr = self->copy;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (copy_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(copy_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Execute paste in this frame.
@@ -739,6 +2013,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void paste_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bp7;
+        private static paste_delegate s_bd7;
+
+        // method slot: 7
+        public static void invoke_paste(cef_frame_t* self)
+        {
+            paste_delegate mdelegate;
+
+            var mptr = self->paste;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (paste_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(paste_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Execute delete in this frame.
         /// </summary>
@@ -746,12 +2047,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void del_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bp8;
+        private static del_delegate s_bd8;
+
+        // method slot: 8
+        public static void invoke_del(cef_frame_t* self)
+        {
+            del_delegate mdelegate;
+
+            var mptr = self->del;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (del_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(del_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Execute select all in this frame.
         /// </summary>
         public IntPtr select_all;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void select_all_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bp9;
+        private static select_all_delegate s_bd9;
+
+        // method slot: 9
+        public static void invoke_select_all(cef_frame_t* self)
+        {
+            select_all_delegate mdelegate;
+
+            var mptr = self->select_all;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (select_all_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(select_all_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Execute printing in the this frame.  The user will be prompted with
@@ -761,6 +2116,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void print_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bpA;
+        private static print_delegate s_bdA;
+
+        // method slot: A
+        public static void invoke_print(cef_frame_t* self)
+        {
+            print_delegate mdelegate;
+
+            var mptr = self->print;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (print_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(print_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Save this frame's HTML source to a temporary file and open it in the
         /// default text viewing application.
@@ -768,6 +2150,33 @@ namespace CefGlue.Core
         public IntPtr view_source;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void view_source_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bpB;
+        private static view_source_delegate s_bdB;
+
+        // method slot: B
+        public static void invoke_view_source(cef_frame_t* self)
+        {
+            view_source_delegate mdelegate;
+
+            var mptr = self->view_source;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (view_source_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(view_source_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns this frame's HTML source as a string. This function should
@@ -780,6 +2189,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_source_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bpC;
+        private static get_source_delegate s_bdC;
+
+        // method slot: C
+        public static cef_string_userfree_t invoke_get_source(cef_frame_t* self)
+        {
+            get_source_delegate mdelegate;
+
+            var mptr = self->get_source;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (get_source_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_source_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns this frame's display text as a string. This function should
         /// only be called on the UI thread.
@@ -791,12 +2227,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_text_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bpD;
+        private static get_text_delegate s_bdD;
+
+        // method slot: D
+        public static cef_string_userfree_t invoke_get_text(cef_frame_t* self)
+        {
+            get_text_delegate mdelegate;
+
+            var mptr = self->get_text;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (get_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_text_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Load the request represented by the |request| object.
         /// </summary>
         public IntPtr load_request;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void load_request_delegate(cef_frame_t* self, cef_request_t* request);
+
+        private static IntPtr s_bpE;
+        private static load_request_delegate s_bdE;
+
+        // method slot: E
+        public static void invoke_load_request(cef_frame_t* self, cef_request_t* request)
+        {
+            load_request_delegate mdelegate;
+
+            var mptr = self->load_request;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (load_request_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(load_request_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            mdelegate(self, request);
+        }
+
 
         /// <summary>
         /// Load the specified |url|.
@@ -805,6 +2295,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void load_url_delegate(cef_frame_t* self, /*const*/ cef_string_t* url);
 
+        private static IntPtr s_bpF;
+        private static load_url_delegate s_bdF;
+
+        // method slot: F
+        public static void invoke_load_url(cef_frame_t* self, /*const*/ cef_string_t* url)
+        {
+            load_url_delegate mdelegate;
+
+            var mptr = self->load_url;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (load_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(load_url_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            mdelegate(self, url);
+        }
+
+
         /// <summary>
         /// Load the contents of |string| with the optional dummy target |url|.
         /// </summary>
@@ -812,12 +2329,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void load_string_delegate(cef_frame_t* self, /*const*/ cef_string_t* @string, /*const*/ cef_string_t* url);
 
+        private static IntPtr s_bp10;
+        private static load_string_delegate s_bd10;
+
+        // method slot: 10
+        public static void invoke_load_string(cef_frame_t* self, /*const*/ cef_string_t* @string, /*const*/ cef_string_t* url)
+        {
+            load_string_delegate mdelegate;
+
+            var mptr = self->load_string;
+            if (mptr == s_bp10)
+            {
+                mdelegate = s_bd10;
+            }
+            else
+            {
+                mdelegate = (load_string_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(load_string_delegate));
+                if (s_bp10 == IntPtr.Zero)
+                {
+                    s_bd10 = mdelegate;
+                    s_bp10 = mptr;
+                }
+            }
+
+            mdelegate(self, @string, url);
+        }
+
+
         /// <summary>
         /// Load the contents of |stream| with the optional dummy target |url|.
         /// </summary>
         public IntPtr load_stream;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void load_stream_delegate(cef_frame_t* self, cef_stream_reader_t* stream, /*const*/ cef_string_t* url);
+
+        private static IntPtr s_bp11;
+        private static load_stream_delegate s_bd11;
+
+        // method slot: 11
+        public static void invoke_load_stream(cef_frame_t* self, cef_stream_reader_t* stream, /*const*/ cef_string_t* url)
+        {
+            load_stream_delegate mdelegate;
+
+            var mptr = self->load_stream;
+            if (mptr == s_bp11)
+            {
+                mdelegate = s_bd11;
+            }
+            else
+            {
+                mdelegate = (load_stream_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(load_stream_delegate));
+                if (s_bp11 == IntPtr.Zero)
+                {
+                    s_bd11 = mdelegate;
+                    s_bp11 = mptr;
+                }
+            }
+
+            mdelegate(self, stream, url);
+        }
+
 
         /// <summary>
         /// Execute a string of JavaScript code in this frame. The |script_url|
@@ -830,12 +2401,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void execute_java_script_delegate(cef_frame_t* self, /*const*/ cef_string_t* jsCode, /*const*/ cef_string_t* scriptUrl, int startLine);
 
+        private static IntPtr s_bp12;
+        private static execute_java_script_delegate s_bd12;
+
+        // method slot: 12
+        public static void invoke_execute_java_script(cef_frame_t* self, /*const*/ cef_string_t* jsCode, /*const*/ cef_string_t* scriptUrl, int startLine)
+        {
+            execute_java_script_delegate mdelegate;
+
+            var mptr = self->execute_java_script;
+            if (mptr == s_bp12)
+            {
+                mdelegate = s_bd12;
+            }
+            else
+            {
+                mdelegate = (execute_java_script_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(execute_java_script_delegate));
+                if (s_bp12 == IntPtr.Zero)
+                {
+                    s_bd12 = mdelegate;
+                    s_bp12 = mptr;
+                }
+            }
+
+            mdelegate(self, jsCode, scriptUrl, startLine);
+        }
+
+
         /// <summary>
         /// Returns true (1) if this is the main frame.
         /// </summary>
         public IntPtr is_main;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_main_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bp13;
+        private static is_main_delegate s_bd13;
+
+        // method slot: 13
+        public static int invoke_is_main(cef_frame_t* self)
+        {
+            is_main_delegate mdelegate;
+
+            var mptr = self->is_main;
+            if (mptr == s_bp13)
+            {
+                mdelegate = s_bd13;
+            }
+            else
+            {
+                mdelegate = (is_main_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_main_delegate));
+                if (s_bp13 == IntPtr.Zero)
+                {
+                    s_bd13 = mdelegate;
+                    s_bp13 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns true (1) if this is the focused frame. This function should
@@ -844,6 +2469,33 @@ namespace CefGlue.Core
         public IntPtr is_focused;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_focused_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bp14;
+        private static is_focused_delegate s_bd14;
+
+        // method slot: 14
+        public static int invoke_is_focused(cef_frame_t* self)
+        {
+            is_focused_delegate mdelegate;
+
+            var mptr = self->is_focused;
+            if (mptr == s_bp14)
+            {
+                mdelegate = s_bd14;
+            }
+            else
+            {
+                mdelegate = (is_focused_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_focused_delegate));
+                if (s_bp14 == IntPtr.Zero)
+                {
+                    s_bd14 = mdelegate;
+                    s_bp14 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns this frame's name.
@@ -854,6 +2506,33 @@ namespace CefGlue.Core
         public IntPtr get_name;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_name_delegate(cef_frame_t* self);
+
+        private static IntPtr s_bp15;
+        private static get_name_delegate s_bd15;
+
+        // method slot: 15
+        public static cef_string_userfree_t invoke_get_name(cef_frame_t* self)
+        {
+            get_name_delegate mdelegate;
+
+            var mptr = self->get_name;
+            if (mptr == s_bp15)
+            {
+                mdelegate = s_bd15;
+            }
+            else
+            {
+                mdelegate = (get_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_name_delegate));
+                if (s_bp15 == IntPtr.Zero)
+                {
+                    s_bd15 = mdelegate;
+                    s_bp15 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the URL currently loaded in this frame. This function should
@@ -866,6 +2545,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_url_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bp16;
+        private static get_url_delegate s_bd16;
+
+        // method slot: 16
+        public static cef_string_userfree_t invoke_get_url(cef_frame_t* self)
+        {
+            get_url_delegate mdelegate;
+
+            var mptr = self->get_url;
+            if (mptr == s_bp16)
+            {
+                mdelegate = s_bd16;
+            }
+            else
+            {
+                mdelegate = (get_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_url_delegate));
+                if (s_bp16 == IntPtr.Zero)
+                {
+                    s_bd16 = mdelegate;
+                    s_bp16 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the browser that this frame belongs to.
         /// </summary>
@@ -873,12 +2579,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_browser_t* get_browser_delegate(cef_frame_t* self);
 
+        private static IntPtr s_bp17;
+        private static get_browser_delegate s_bd17;
+
+        // method slot: 17
+        public static cef_browser_t* invoke_get_browser(cef_frame_t* self)
+        {
+            get_browser_delegate mdelegate;
+
+            var mptr = self->get_browser;
+            if (mptr == s_bp17)
+            {
+                mdelegate = s_bd17;
+            }
+            else
+            {
+                mdelegate = (get_browser_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_browser_delegate));
+                if (s_bp17 == IntPtr.Zero)
+                {
+                    s_bd17 = mdelegate;
+                    s_bp17 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Visit the DOM document.
         /// </summary>
         public IntPtr visit_dom;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void visit_dom_delegate(cef_frame_t* self, cef_domvisitor_t* visitor);
+
+        private static IntPtr s_bp18;
+        private static visit_dom_delegate s_bd18;
+
+        // method slot: 18
+        public static void invoke_visit_dom(cef_frame_t* self, cef_domvisitor_t* visitor)
+        {
+            visit_dom_delegate mdelegate;
+
+            var mptr = self->visit_dom;
+            if (mptr == s_bp18)
+            {
+                mdelegate = s_bd18;
+            }
+            else
+            {
+                mdelegate = (visit_dom_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(visit_dom_delegate));
+                if (s_bp18 == IntPtr.Zero)
+                {
+                    s_bd18 = mdelegate;
+                    s_bp18 = mptr;
+                }
+            }
+
+            mdelegate(self, visitor);
+        }
+
 
     };
 
@@ -888,6 +2648,7 @@ namespace CefGlue.Core
     /// The functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_life_span_handler_t
     {
         /// <summary>
@@ -955,6 +2716,7 @@ namespace CefGlue.Core
     /// The functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_load_handler_t
     {
         /// <summary>
@@ -1006,6 +2768,7 @@ namespace CefGlue.Core
     /// The functions of this structure will be called on the thread indicated.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_request_handler_t
     {
         /// <summary>
@@ -1095,6 +2858,7 @@ namespace CefGlue.Core
     /// state. The functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_display_handler_t
     {
         /// <summary>
@@ -1159,6 +2923,7 @@ namespace CefGlue.Core
     /// of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_focus_handler_t
     {
         /// <summary>
@@ -1195,6 +2960,7 @@ namespace CefGlue.Core
     /// functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_keyboard_handler_t
     {
         /// <summary>
@@ -1224,6 +2990,7 @@ namespace CefGlue.Core
     /// menus. The functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_menu_handler_t
     {
         /// <summary>
@@ -1265,6 +3032,7 @@ namespace CefGlue.Core
     /// functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_print_handler_t
     {
         /// <summary>
@@ -1309,6 +3077,7 @@ namespace CefGlue.Core
     /// functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_find_handler_t
     {
         /// <summary>
@@ -1337,6 +3106,7 @@ namespace CefGlue.Core
     /// The functions of this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_jsdialog_handler_t
     {
         /// <summary>
@@ -1382,6 +3152,7 @@ namespace CefGlue.Core
     /// this structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_jsbinding_handler_t
     {
         /// <summary>
@@ -1405,6 +3176,7 @@ namespace CefGlue.Core
     /// thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_render_handler_t
     {
         /// <summary>
@@ -1480,6 +3252,7 @@ namespace CefGlue.Core
     /// Implement this structure to provide handler implementations.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_client_t
     {
         /// <summary>
@@ -1579,12 +3352,94 @@ namespace CefGlue.Core
     /// structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_request_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Get the fully qualified URL.
@@ -1596,12 +3451,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_url_delegate(cef_request_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_url_delegate s_bd3;
+
+        // method slot: 3
+        public static cef_string_userfree_t invoke_get_url(cef_request_t* self)
+        {
+            get_url_delegate mdelegate;
+
+            var mptr = self->get_url;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_url_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the fully qualified URL.
         /// </summary>
         public IntPtr set_url;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_url_delegate(cef_request_t* self, /*const*/ cef_string_t* url);
+
+        private static IntPtr s_bp4;
+        private static set_url_delegate s_bd4;
+
+        // method slot: 4
+        public static void invoke_set_url(cef_request_t* self, /*const*/ cef_string_t* url)
+        {
+            set_url_delegate mdelegate;
+
+            var mptr = self->set_url;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (set_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_url_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            mdelegate(self, url);
+        }
+
 
         /// <summary>
         /// Get the request function type. The value will default to POST if post
@@ -1614,12 +3523,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_method_delegate(cef_request_t* self);
 
+        private static IntPtr s_bp5;
+        private static get_method_delegate s_bd5;
+
+        // method slot: 5
+        public static cef_string_userfree_t invoke_get_method(cef_request_t* self)
+        {
+            get_method_delegate mdelegate;
+
+            var mptr = self->get_method;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (get_method_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_method_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the request function type.
         /// </summary>
         public IntPtr set_method;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_method_delegate(cef_request_t* self, /*const*/ cef_string_t* method);
+
+        private static IntPtr s_bp6;
+        private static set_method_delegate s_bd6;
+
+        // method slot: 6
+        public static void invoke_set_method(cef_request_t* self, /*const*/ cef_string_t* method)
+        {
+            set_method_delegate mdelegate;
+
+            var mptr = self->set_method;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (set_method_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_method_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            mdelegate(self, method);
+        }
+
 
         /// <summary>
         /// Get the post data.
@@ -1628,12 +3591,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_post_data_t* get_post_data_delegate(cef_request_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_post_data_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_post_data_t* invoke_get_post_data(cef_request_t* self)
+        {
+            get_post_data_delegate mdelegate;
+
+            var mptr = self->get_post_data;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_post_data_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_post_data_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the post data.
         /// </summary>
         public IntPtr set_post_data;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_post_data_delegate(cef_request_t* self, cef_post_data_t* postData);
+
+        private static IntPtr s_bp8;
+        private static set_post_data_delegate s_bd8;
+
+        // method slot: 8
+        public static void invoke_set_post_data(cef_request_t* self, cef_post_data_t* postData)
+        {
+            set_post_data_delegate mdelegate;
+
+            var mptr = self->set_post_data;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (set_post_data_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_post_data_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            mdelegate(self, postData);
+        }
+
 
         /// <summary>
         /// Get the header values.
@@ -1642,12 +3659,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void get_header_map_delegate(cef_request_t* self, cef_string_map_t headerMap);
 
+        private static IntPtr s_bp9;
+        private static get_header_map_delegate s_bd9;
+
+        // method slot: 9
+        public static void invoke_get_header_map(cef_request_t* self, cef_string_map_t headerMap)
+        {
+            get_header_map_delegate mdelegate;
+
+            var mptr = self->get_header_map;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_header_map_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            mdelegate(self, headerMap);
+        }
+
+
         /// <summary>
         /// Set the header values.
         /// </summary>
         public IntPtr set_header_map;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_header_map_delegate(cef_request_t* self, cef_string_map_t headerMap);
+
+        private static IntPtr s_bpA;
+        private static set_header_map_delegate s_bdA;
+
+        // method slot: A
+        public static void invoke_set_header_map(cef_request_t* self, cef_string_map_t headerMap)
+        {
+            set_header_map_delegate mdelegate;
+
+            var mptr = self->set_header_map;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (set_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_header_map_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            mdelegate(self, headerMap);
+        }
+
 
         /// <summary>
         /// Set all values at one time.
@@ -1656,6 +3727,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_delegate(cef_request_t* self, /*const*/ cef_string_t* url, /*const*/ cef_string_t* method, cef_post_data_t* postData, cef_string_map_t headerMap);
 
+        private static IntPtr s_bpB;
+        private static set_delegate s_bdB;
+
+        // method slot: B
+        public static void invoke_set(cef_request_t* self, /*const*/ cef_string_t* url, /*const*/ cef_string_t* method, cef_post_data_t* postData, cef_string_map_t headerMap)
+        {
+            set_delegate mdelegate;
+
+            var mptr = self->set;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (set_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            mdelegate(self, url, method, postData, headerMap);
+        }
+
+
         /// <summary>
         /// Get the flags used in combination with cef_web_urlrequest_t.
         /// </summary>
@@ -1663,12 +3761,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_weburlrequest_flags_t get_flags_delegate(cef_request_t* self);
 
+        private static IntPtr s_bpC;
+        private static get_flags_delegate s_bdC;
+
+        // method slot: C
+        public static cef_weburlrequest_flags_t invoke_get_flags(cef_request_t* self)
+        {
+            get_flags_delegate mdelegate;
+
+            var mptr = self->get_flags;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (get_flags_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_flags_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the flags used in combination with cef_web_urlrequest_t.
         /// </summary>
         public IntPtr set_flags;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_flags_delegate(cef_request_t* self, cef_weburlrequest_flags_t flags);
+
+        private static IntPtr s_bpD;
+        private static set_flags_delegate s_bdD;
+
+        // method slot: D
+        public static void invoke_set_flags(cef_request_t* self, cef_weburlrequest_flags_t flags)
+        {
+            set_flags_delegate mdelegate;
+
+            var mptr = self->set_flags;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (set_flags_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_flags_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            mdelegate(self, flags);
+        }
+
 
         /// <summary>
         /// Set the URL to the first party for cookies used in combination with
@@ -1681,6 +3833,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_first_party_for_cookies_delegate(cef_request_t* self);
 
+        private static IntPtr s_bpE;
+        private static get_first_party_for_cookies_delegate s_bdE;
+
+        // method slot: E
+        public static cef_string_userfree_t invoke_get_first_party_for_cookies(cef_request_t* self)
+        {
+            get_first_party_for_cookies_delegate mdelegate;
+
+            var mptr = self->get_first_party_for_cookies;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (get_first_party_for_cookies_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_first_party_for_cookies_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Get the URL to the first party for cookies used in combination with
         /// cef_web_urlrequest_t.
@@ -1688,6 +3867,33 @@ namespace CefGlue.Core
         public IntPtr set_first_party_for_cookies;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_first_party_for_cookies_delegate(cef_request_t* self, /*const*/ cef_string_t* url);
+
+        private static IntPtr s_bpF;
+        private static set_first_party_for_cookies_delegate s_bdF;
+
+        // method slot: F
+        public static void invoke_set_first_party_for_cookies(cef_request_t* self, /*const*/ cef_string_t* url)
+        {
+            set_first_party_for_cookies_delegate mdelegate;
+
+            var mptr = self->set_first_party_for_cookies;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (set_first_party_for_cookies_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_first_party_for_cookies_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            mdelegate(self, url);
+        }
+
 
     };
 
@@ -1707,12 +3913,94 @@ namespace CefGlue.Core
     /// this structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_post_data_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the number of existing post data elements.
@@ -1721,12 +4009,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_element_count_delegate(cef_post_data_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_element_count_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_get_element_count(cef_post_data_t* self)
+        {
+            get_element_count_delegate mdelegate;
+
+            var mptr = self->get_element_count;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_element_count_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_element_count_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Retrieve the post data elements.
         /// </summary>
         public IntPtr get_elements;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_post_data_element_t* get_elements_delegate(cef_post_data_t* self, int elementIndex);
+
+        private static IntPtr s_bp4;
+        private static get_elements_delegate s_bd4;
+
+        // method slot: 4
+        public static cef_post_data_element_t* invoke_get_elements(cef_post_data_t* self, int elementIndex)
+        {
+            get_elements_delegate mdelegate;
+
+            var mptr = self->get_elements;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (get_elements_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_elements_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self, elementIndex);
+        }
+
 
         /// <summary>
         /// Remove the specified post data element.  Returns true (1) if the
@@ -1736,6 +4078,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int remove_element_delegate(cef_post_data_t* self, cef_post_data_element_t* element);
 
+        private static IntPtr s_bp5;
+        private static remove_element_delegate s_bd5;
+
+        // method slot: 5
+        public static int invoke_remove_element(cef_post_data_t* self, cef_post_data_element_t* element)
+        {
+            remove_element_delegate mdelegate;
+
+            var mptr = self->remove_element;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (remove_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(remove_element_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self, element);
+        }
+
+
         /// <summary>
         /// Add the specified post data element.  Returns true (1) if the add
         /// succeeds.
@@ -1744,12 +4113,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int add_element_delegate(cef_post_data_t* self, cef_post_data_element_t* element);
 
+        private static IntPtr s_bp6;
+        private static add_element_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_add_element(cef_post_data_t* self, cef_post_data_element_t* element)
+        {
+            add_element_delegate mdelegate;
+
+            var mptr = self->add_element;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (add_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(add_element_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self, element);
+        }
+
+
         /// <summary>
         /// Remove all existing post data elements.
         /// </summary>
         public IntPtr remove_elements;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void remove_elements_delegate(cef_post_data_t* self);
+
+        private static IntPtr s_bp7;
+        private static remove_elements_delegate s_bd7;
+
+        // method slot: 7
+        public static void invoke_remove_elements(cef_post_data_t* self)
+        {
+            remove_elements_delegate mdelegate;
+
+            var mptr = self->remove_elements;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (remove_elements_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(remove_elements_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
 
     };
 
@@ -1769,12 +4192,94 @@ namespace CefGlue.Core
     /// The functions of this structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_post_data_element_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Remove all contents from the post data element.
@@ -1783,12 +4288,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_to_empty_delegate(cef_post_data_element_t* self);
 
+        private static IntPtr s_bp3;
+        private static set_to_empty_delegate s_bd3;
+
+        // method slot: 3
+        public static void invoke_set_to_empty(cef_post_data_element_t* self)
+        {
+            set_to_empty_delegate mdelegate;
+
+            var mptr = self->set_to_empty;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (set_to_empty_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_to_empty_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// The post data element will represent a file.
         /// </summary>
         public IntPtr set_to_file;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_to_file_delegate(cef_post_data_element_t* self, /*const*/ cef_string_t* fileName);
+
+        private static IntPtr s_bp4;
+        private static set_to_file_delegate s_bd4;
+
+        // method slot: 4
+        public static void invoke_set_to_file(cef_post_data_element_t* self, /*const*/ cef_string_t* fileName)
+        {
+            set_to_file_delegate mdelegate;
+
+            var mptr = self->set_to_file;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (set_to_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_to_file_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            mdelegate(self, fileName);
+        }
+
 
         /// <summary>
         /// The post data element will represent bytes.  The bytes passed in will
@@ -1798,12 +4357,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_to_bytes_delegate(cef_post_data_element_t* self, int size, /*const*/ void* bytes);
 
+        private static IntPtr s_bp5;
+        private static set_to_bytes_delegate s_bd5;
+
+        // method slot: 5
+        public static void invoke_set_to_bytes(cef_post_data_element_t* self, int size, /*const*/ void* bytes)
+        {
+            set_to_bytes_delegate mdelegate;
+
+            var mptr = self->set_to_bytes;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (set_to_bytes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_to_bytes_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            mdelegate(self, size, bytes);
+        }
+
+
         /// <summary>
         /// Return the type of this post data element.
         /// </summary>
         public IntPtr get_type;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_postdataelement_type_t get_type_delegate(cef_post_data_element_t* self);
+
+        private static IntPtr s_bp6;
+        private static get_type_delegate s_bd6;
+
+        // method slot: 6
+        public static cef_postdataelement_type_t invoke_get_type(cef_post_data_element_t* self)
+        {
+            get_type_delegate mdelegate;
+
+            var mptr = self->get_type;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_type_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Return the file name.
@@ -1815,12 +4428,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_file_delegate(cef_post_data_element_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_file_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_string_userfree_t invoke_get_file(cef_post_data_element_t* self)
+        {
+            get_file_delegate mdelegate;
+
+            var mptr = self->get_file;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_file_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Return the number of bytes.
         /// </summary>
         public IntPtr get_bytes_count;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_bytes_count_delegate(cef_post_data_element_t* self);
+
+        private static IntPtr s_bp8;
+        private static get_bytes_count_delegate s_bd8;
+
+        // method slot: 8
+        public static int invoke_get_bytes_count(cef_post_data_element_t* self)
+        {
+            get_bytes_count_delegate mdelegate;
+
+            var mptr = self->get_bytes_count;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (get_bytes_count_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_bytes_count_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Read up to |size| bytes into |bytes| and return the number of bytes
@@ -1829,6 +4496,33 @@ namespace CefGlue.Core
         public IntPtr get_bytes;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_bytes_delegate(cef_post_data_element_t* self, int size, void* bytes);
+
+        private static IntPtr s_bp9;
+        private static get_bytes_delegate s_bd9;
+
+        // method slot: 9
+        public static int invoke_get_bytes(cef_post_data_element_t* self, int size, void* bytes)
+        {
+            get_bytes_delegate mdelegate;
+
+            var mptr = self->get_bytes;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_bytes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_bytes_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self, size, bytes);
+        }
+
 
     };
 
@@ -1848,12 +4542,94 @@ namespace CefGlue.Core
     /// structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_response_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Get the response status code.
@@ -1862,12 +4638,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_status_delegate(cef_response_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_status_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_get_status(cef_response_t* self)
+        {
+            get_status_delegate mdelegate;
+
+            var mptr = self->get_status;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_status_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_status_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the response status code.
         /// </summary>
         public IntPtr set_status;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_status_delegate(cef_response_t* self, int status);
+
+        private static IntPtr s_bp4;
+        private static set_status_delegate s_bd4;
+
+        // method slot: 4
+        public static void invoke_set_status(cef_response_t* self, int status)
+        {
+            set_status_delegate mdelegate;
+
+            var mptr = self->set_status;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (set_status_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_status_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            mdelegate(self, status);
+        }
+
 
         /// <summary>
         /// Get the response status text.
@@ -1879,12 +4709,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_status_text_delegate(cef_response_t* self);
 
+        private static IntPtr s_bp5;
+        private static get_status_text_delegate s_bd5;
+
+        // method slot: 5
+        public static cef_string_userfree_t invoke_get_status_text(cef_response_t* self)
+        {
+            get_status_text_delegate mdelegate;
+
+            var mptr = self->get_status_text;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (get_status_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_status_text_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the response status text.
         /// </summary>
         public IntPtr set_status_text;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_status_text_delegate(cef_response_t* self, /*const*/ cef_string_t* statusText);
+
+        private static IntPtr s_bp6;
+        private static set_status_text_delegate s_bd6;
+
+        // method slot: 6
+        public static void invoke_set_status_text(cef_response_t* self, /*const*/ cef_string_t* statusText)
+        {
+            set_status_text_delegate mdelegate;
+
+            var mptr = self->set_status_text;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (set_status_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_status_text_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            mdelegate(self, statusText);
+        }
+
 
         /// <summary>
         /// Get the response mime type.
@@ -1896,12 +4780,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_mime_type_delegate(cef_response_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_mime_type_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_string_userfree_t invoke_get_mime_type(cef_response_t* self)
+        {
+            get_mime_type_delegate mdelegate;
+
+            var mptr = self->get_mime_type;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_mime_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_mime_type_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the response mime type.
         /// </summary>
         public IntPtr set_mime_type;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_mime_type_delegate(cef_response_t* self, /*const*/ cef_string_t* mimeType);
+
+        private static IntPtr s_bp8;
+        private static set_mime_type_delegate s_bd8;
+
+        // method slot: 8
+        public static void invoke_set_mime_type(cef_response_t* self, /*const*/ cef_string_t* mimeType)
+        {
+            set_mime_type_delegate mdelegate;
+
+            var mptr = self->set_mime_type;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (set_mime_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_mime_type_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            mdelegate(self, mimeType);
+        }
+
 
         /// <summary>
         /// Get the value for the specified response header field.
@@ -1913,6 +4851,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_header_delegate(cef_response_t* self, /*const*/ cef_string_t* name);
 
+        private static IntPtr s_bp9;
+        private static get_header_delegate s_bd9;
+
+        // method slot: 9
+        public static cef_string_userfree_t invoke_get_header(cef_response_t* self, /*const*/ cef_string_t* name)
+        {
+            get_header_delegate mdelegate;
+
+            var mptr = self->get_header;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_header_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_header_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self, name);
+        }
+
+
         /// <summary>
         /// Get all response header fields.
         /// </summary>
@@ -1920,12 +4885,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void get_header_map_delegate(cef_response_t* self, cef_string_map_t headerMap);
 
+        private static IntPtr s_bpA;
+        private static get_header_map_delegate s_bdA;
+
+        // method slot: A
+        public static void invoke_get_header_map(cef_response_t* self, cef_string_map_t headerMap)
+        {
+            get_header_map_delegate mdelegate;
+
+            var mptr = self->get_header_map;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (get_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_header_map_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            mdelegate(self, headerMap);
+        }
+
+
         /// <summary>
         /// Set all response header fields.
         /// </summary>
         public IntPtr set_header_map;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void set_header_map_delegate(cef_response_t* self, cef_string_map_t headerMap);
+
+        private static IntPtr s_bpB;
+        private static set_header_map_delegate s_bdB;
+
+        // method slot: B
+        public static void invoke_set_header_map(cef_response_t* self, cef_string_map_t headerMap)
+        {
+            set_header_map_delegate mdelegate;
+
+            var mptr = self->set_header_map;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (set_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_header_map_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            mdelegate(self, headerMap);
+        }
+
 
     };
 
@@ -1935,6 +4954,7 @@ namespace CefGlue.Core
     /// functions of this structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_read_handler_t
     {
         /// <summary>
@@ -1979,6 +4999,7 @@ namespace CefGlue.Core
     /// structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_stream_reader_t
     {
         /// <summary>
@@ -1986,12 +5007,120 @@ namespace CefGlue.Core
         /// </summary>
         public cef_base_t @base;
 
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Read raw binary data.
         /// </summary>
         public IntPtr read;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int read_delegate(cef_stream_reader_t* self, void* ptr, int size, int n);
+
+        private static IntPtr s_bp3;
+        private static read_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_read(cef_stream_reader_t* self, void* ptr, int size, int n)
+        {
+            read_delegate mdelegate;
+
+            var mptr = self->read;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (read_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(read_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self, ptr, size, n);
+        }
+
 
         /// <summary>
         /// Seek to the specified offset position. |whence| may be any one of
@@ -2002,6 +5131,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int seek_delegate(cef_stream_reader_t* self, long offset, int whence);
 
+        private static IntPtr s_bp4;
+        private static seek_delegate s_bd4;
+
+        // method slot: 4
+        public static int invoke_seek(cef_stream_reader_t* self, long offset, int whence)
+        {
+            seek_delegate mdelegate;
+
+            var mptr = self->seek;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (seek_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(seek_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self, offset, whence);
+        }
+
+
         /// <summary>
         /// Return the current offset position.
         /// </summary>
@@ -2009,12 +5165,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate long tell_delegate(cef_stream_reader_t* self);
 
+        private static IntPtr s_bp5;
+        private static tell_delegate s_bd5;
+
+        // method slot: 5
+        public static long invoke_tell(cef_stream_reader_t* self)
+        {
+            tell_delegate mdelegate;
+
+            var mptr = self->tell;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (tell_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(tell_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Return non-zero if at end of file.
         /// </summary>
         public IntPtr eof;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int eof_delegate(cef_stream_reader_t* self);
+
+        private static IntPtr s_bp6;
+        private static eof_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_eof(cef_stream_reader_t* self)
+        {
+            eof_delegate mdelegate;
+
+            var mptr = self->eof;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (eof_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(eof_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -2046,6 +5256,7 @@ namespace CefGlue.Core
     /// functions of this structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_write_handler_t
     {
         /// <summary>
@@ -2090,6 +5301,7 @@ namespace CefGlue.Core
     /// may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_stream_writer_t
     {
         /// <summary>
@@ -2097,12 +5309,120 @@ namespace CefGlue.Core
         /// </summary>
         public cef_base_t @base;
 
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Write raw binary data.
         /// </summary>
         public IntPtr write;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int write_delegate(cef_stream_writer_t* self, /*const*/ void* ptr, int size, int n);
+
+        private static IntPtr s_bp3;
+        private static write_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_write(cef_stream_writer_t* self, /*const*/ void* ptr, int size, int n)
+        {
+            write_delegate mdelegate;
+
+            var mptr = self->write;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (write_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(write_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self, ptr, size, n);
+        }
+
 
         /// <summary>
         /// Seek to the specified offset position. |whence| may be any one of
@@ -2112,6 +5432,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int seek_delegate(cef_stream_writer_t* self, long offset, int whence);
 
+        private static IntPtr s_bp4;
+        private static seek_delegate s_bd4;
+
+        // method slot: 4
+        public static int invoke_seek(cef_stream_writer_t* self, long offset, int whence)
+        {
+            seek_delegate mdelegate;
+
+            var mptr = self->seek;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (seek_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(seek_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self, offset, whence);
+        }
+
+
         /// <summary>
         /// Return the current offset position.
         /// </summary>
@@ -2119,12 +5466,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate long tell_delegate(cef_stream_writer_t* self);
 
+        private static IntPtr s_bp5;
+        private static tell_delegate s_bd5;
+
+        // method slot: 5
+        public static long invoke_tell(cef_stream_writer_t* self)
+        {
+            tell_delegate mdelegate;
+
+            var mptr = self->tell;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (tell_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(tell_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Flush the stream.
         /// </summary>
         public IntPtr flush;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int flush_delegate(cef_stream_writer_t* self);
+
+        private static IntPtr s_bp6;
+        private static flush_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_flush(cef_stream_writer_t* self)
+        {
+            flush_delegate mdelegate;
+
+            var mptr = self->flush;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (flush_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(flush_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -2149,12 +5550,94 @@ namespace CefGlue.Core
     /// Structure that encapsulates a V8 context handle.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_v8context_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the browser for this context.
@@ -2163,6 +5646,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_browser_t* get_browser_delegate(cef_v8context_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_browser_delegate s_bd3;
+
+        // method slot: 3
+        public static cef_browser_t* invoke_get_browser(cef_v8context_t* self)
+        {
+            get_browser_delegate mdelegate;
+
+            var mptr = self->get_browser;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_browser_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_browser_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the frame for this context.
         /// </summary>
@@ -2170,12 +5680,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_frame_t* get_frame_delegate(cef_v8context_t* self);
 
+        private static IntPtr s_bp4;
+        private static get_frame_delegate s_bd4;
+
+        // method slot: 4
+        public static cef_frame_t* invoke_get_frame(cef_v8context_t* self)
+        {
+            get_frame_delegate mdelegate;
+
+            var mptr = self->get_frame;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (get_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_frame_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the global object for this context.
         /// </summary>
         public IntPtr get_global;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_v8value_t* get_global_delegate(cef_v8context_t* self);
+
+        private static IntPtr s_bp5;
+        private static get_global_delegate s_bd5;
+
+        // method slot: 5
+        public static cef_v8value_t* invoke_get_global(cef_v8context_t* self)
+        {
+            get_global_delegate mdelegate;
+
+            var mptr = self->get_global;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (get_global_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_global_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Enter this context. A context must be explicitly entered before
@@ -2188,6 +5752,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int enter_delegate(cef_v8context_t* self);
 
+        private static IntPtr s_bp6;
+        private static enter_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_enter(cef_v8context_t* self)
+        {
+            enter_delegate mdelegate;
+
+            var mptr = self->enter;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (enter_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(enter_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Exit this context. Call this function only after calling enter().
         /// Returns true (1) if the scope was exited successfully.
@@ -2195,6 +5786,33 @@ namespace CefGlue.Core
         public IntPtr exit;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int exit_delegate(cef_v8context_t* self);
+
+        private static IntPtr s_bp7;
+        private static exit_delegate s_bd7;
+
+        // method slot: 7
+        public static int invoke_exit(cef_v8context_t* self)
+        {
+            exit_delegate mdelegate;
+
+            var mptr = self->exit;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (exit_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(exit_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -2220,6 +5838,7 @@ namespace CefGlue.Core
     /// functions of this structure will always be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_v8handler_t
     {
         /// <summary>
@@ -2248,6 +5867,7 @@ namespace CefGlue.Core
     /// be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_v8accessor_t
     {
         /// <summary>
@@ -2283,12 +5903,94 @@ namespace CefGlue.Core
     /// only be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_v8value_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// True if the value type is undefined.
@@ -2297,12 +5999,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_undefined_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bp3;
+        private static is_undefined_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_is_undefined(cef_v8value_t* self)
+        {
+            is_undefined_delegate mdelegate;
+
+            var mptr = self->is_undefined;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (is_undefined_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_undefined_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// True if the value type is null.
         /// </summary>
         public IntPtr is_null;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_null_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp4;
+        private static is_null_delegate s_bd4;
+
+        // method slot: 4
+        public static int invoke_is_null(cef_v8value_t* self)
+        {
+            is_null_delegate mdelegate;
+
+            var mptr = self->is_null;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (is_null_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_null_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// True if the value type is bool.
@@ -2311,12 +6067,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_bool_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bp5;
+        private static is_bool_delegate s_bd5;
+
+        // method slot: 5
+        public static int invoke_is_bool(cef_v8value_t* self)
+        {
+            is_bool_delegate mdelegate;
+
+            var mptr = self->is_bool;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (is_bool_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_bool_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// True if the value type is int.
         /// </summary>
         public IntPtr is_int;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_int_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp6;
+        private static is_int_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_is_int(cef_v8value_t* self)
+        {
+            is_int_delegate mdelegate;
+
+            var mptr = self->is_int;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (is_int_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_int_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// True if the value type is double.
@@ -2325,12 +6135,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_double_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bp7;
+        private static is_double_delegate s_bd7;
+
+        // method slot: 7
+        public static int invoke_is_double(cef_v8value_t* self)
+        {
+            is_double_delegate mdelegate;
+
+            var mptr = self->is_double;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (is_double_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_double_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// True if the value type is Date.
         /// </summary>
         public IntPtr is_date;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_date_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp8;
+        private static is_date_delegate s_bd8;
+
+        // method slot: 8
+        public static int invoke_is_date(cef_v8value_t* self)
+        {
+            is_date_delegate mdelegate;
+
+            var mptr = self->is_date;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (is_date_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_date_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// True if the value type is string.
@@ -2339,12 +6203,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_string_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bp9;
+        private static is_string_delegate s_bd9;
+
+        // method slot: 9
+        public static int invoke_is_string(cef_v8value_t* self)
+        {
+            is_string_delegate mdelegate;
+
+            var mptr = self->is_string;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (is_string_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_string_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// True if the value type is object.
         /// </summary>
         public IntPtr is_object;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_object_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bpA;
+        private static is_object_delegate s_bdA;
+
+        // method slot: A
+        public static int invoke_is_object(cef_v8value_t* self)
+        {
+            is_object_delegate mdelegate;
+
+            var mptr = self->is_object;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (is_object_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_object_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// True if the value type is array.
@@ -2353,12 +6271,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_array_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bpB;
+        private static is_array_delegate s_bdB;
+
+        // method slot: B
+        public static int invoke_is_array(cef_v8value_t* self)
+        {
+            is_array_delegate mdelegate;
+
+            var mptr = self->is_array;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (is_array_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_array_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// True if the value type is function.
         /// </summary>
         public IntPtr is_function;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_function_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bpC;
+        private static is_function_delegate s_bdC;
+
+        // method slot: C
+        public static int invoke_is_function(cef_v8value_t* self)
+        {
+            is_function_delegate mdelegate;
+
+            var mptr = self->is_function;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (is_function_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_function_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns true (1) if this object is pointing to the same handle as
@@ -2368,6 +6340,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_same_delegate(cef_v8value_t* self, cef_v8value_t* that);
 
+        private static IntPtr s_bpD;
+        private static is_same_delegate s_bdD;
+
+        // method slot: D
+        public static int invoke_is_same(cef_v8value_t* self, cef_v8value_t* that)
+        {
+            is_same_delegate mdelegate;
+
+            var mptr = self->is_same;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (is_same_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_same_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self, that);
+        }
+
+
         /// <summary>
         /// Return a bool value.  The underlying data will be converted to if
         /// necessary.
@@ -2375,6 +6374,33 @@ namespace CefGlue.Core
         public IntPtr get_bool_value;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_bool_value_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bpE;
+        private static get_bool_value_delegate s_bdE;
+
+        // method slot: E
+        public static int invoke_get_bool_value(cef_v8value_t* self)
+        {
+            get_bool_value_delegate mdelegate;
+
+            var mptr = self->get_bool_value;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (get_bool_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_bool_value_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Return an int value.  The underlying data will be converted to if
@@ -2384,6 +6410,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_int_value_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bpF;
+        private static get_int_value_delegate s_bdF;
+
+        // method slot: F
+        public static int invoke_get_int_value(cef_v8value_t* self)
+        {
+            get_int_value_delegate mdelegate;
+
+            var mptr = self->get_int_value;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (get_int_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_int_value_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Return a double value.  The underlying data will be converted to if
         /// necessary.
@@ -2392,6 +6445,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate double get_double_value_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bp10;
+        private static get_double_value_delegate s_bd10;
+
+        // method slot: 10
+        public static double invoke_get_double_value(cef_v8value_t* self)
+        {
+            get_double_value_delegate mdelegate;
+
+            var mptr = self->get_double_value;
+            if (mptr == s_bp10)
+            {
+                mdelegate = s_bd10;
+            }
+            else
+            {
+                mdelegate = (get_double_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_double_value_delegate));
+                if (s_bp10 == IntPtr.Zero)
+                {
+                    s_bd10 = mdelegate;
+                    s_bp10 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Return a Date value.  The underlying data will be converted to if
         /// necessary.
@@ -2399,6 +6479,33 @@ namespace CefGlue.Core
         public IntPtr get_date_value;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_time_t get_date_value_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp11;
+        private static get_date_value_delegate s_bd11;
+
+        // method slot: 11
+        public static cef_time_t invoke_get_date_value(cef_v8value_t* self)
+        {
+            get_date_value_delegate mdelegate;
+
+            var mptr = self->get_date_value;
+            if (mptr == s_bp11)
+            {
+                mdelegate = s_bd11;
+            }
+            else
+            {
+                mdelegate = (get_date_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_date_value_delegate));
+                if (s_bp11 == IntPtr.Zero)
+                {
+                    s_bd11 = mdelegate;
+                    s_bp11 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Return a string value.  The underlying data will be converted to if
@@ -2410,6 +6517,33 @@ namespace CefGlue.Core
         public IntPtr get_string_value;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_string_value_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp12;
+        private static get_string_value_delegate s_bd12;
+
+        // method slot: 12
+        public static cef_string_userfree_t invoke_get_string_value(cef_v8value_t* self)
+        {
+            get_string_value_delegate mdelegate;
+
+            var mptr = self->get_string_value;
+            if (mptr == s_bp12)
+            {
+                mdelegate = s_bd12;
+            }
+            else
+            {
+                mdelegate = (get_string_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_string_value_delegate));
+                if (s_bp12 == IntPtr.Zero)
+                {
+                    s_bd12 = mdelegate;
+                    s_bp12 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
 
         /// OBJECT METHODS - These functions are only available on objects.
@@ -2426,6 +6560,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_value_bykey_delegate(cef_v8value_t* self, /*const*/ cef_string_t* key);
 
+        private static IntPtr s_bp13;
+        private static has_value_bykey_delegate s_bd13;
+
+        // method slot: 13
+        public static int invoke_has_value_bykey(cef_v8value_t* self, /*const*/ cef_string_t* key)
+        {
+            has_value_bykey_delegate mdelegate;
+
+            var mptr = self->has_value_bykey;
+            if (mptr == s_bp13)
+            {
+                mdelegate = s_bd13;
+            }
+            else
+            {
+                mdelegate = (has_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_value_bykey_delegate));
+                if (s_bp13 == IntPtr.Zero)
+                {
+                    s_bd13 = mdelegate;
+                    s_bp13 = mptr;
+                }
+            }
+
+            return mdelegate(self, key);
+        }
+
+
         /// <summary>
         /// Returns true (1) if the object has a value with the specified
         /// identifier.
@@ -2434,12 +6595,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_value_byindex_delegate(cef_v8value_t* self, int index);
 
+        private static IntPtr s_bp14;
+        private static has_value_byindex_delegate s_bd14;
+
+        // method slot: 14
+        public static int invoke_has_value_byindex(cef_v8value_t* self, int index)
+        {
+            has_value_byindex_delegate mdelegate;
+
+            var mptr = self->has_value_byindex;
+            if (mptr == s_bp14)
+            {
+                mdelegate = s_bd14;
+            }
+            else
+            {
+                mdelegate = (has_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_value_byindex_delegate));
+                if (s_bp14 == IntPtr.Zero)
+                {
+                    s_bd14 = mdelegate;
+                    s_bp14 = mptr;
+                }
+            }
+
+            return mdelegate(self, index);
+        }
+
+
         /// <summary>
         /// Delete the value with the specified identifier.
         /// </summary>
         public IntPtr delete_value_bykey;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int delete_value_bykey_delegate(cef_v8value_t* self, /*const*/ cef_string_t* key);
+
+        private static IntPtr s_bp15;
+        private static delete_value_bykey_delegate s_bd15;
+
+        // method slot: 15
+        public static int invoke_delete_value_bykey(cef_v8value_t* self, /*const*/ cef_string_t* key)
+        {
+            delete_value_bykey_delegate mdelegate;
+
+            var mptr = self->delete_value_bykey;
+            if (mptr == s_bp15)
+            {
+                mdelegate = s_bd15;
+            }
+            else
+            {
+                mdelegate = (delete_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(delete_value_bykey_delegate));
+                if (s_bp15 == IntPtr.Zero)
+                {
+                    s_bd15 = mdelegate;
+                    s_bp15 = mptr;
+                }
+            }
+
+            return mdelegate(self, key);
+        }
+
 
         /// <summary>
         /// Delete the value with the specified identifier.
@@ -2448,12 +6663,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int delete_value_byindex_delegate(cef_v8value_t* self, int index);
 
+        private static IntPtr s_bp16;
+        private static delete_value_byindex_delegate s_bd16;
+
+        // method slot: 16
+        public static int invoke_delete_value_byindex(cef_v8value_t* self, int index)
+        {
+            delete_value_byindex_delegate mdelegate;
+
+            var mptr = self->delete_value_byindex;
+            if (mptr == s_bp16)
+            {
+                mdelegate = s_bd16;
+            }
+            else
+            {
+                mdelegate = (delete_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(delete_value_byindex_delegate));
+                if (s_bp16 == IntPtr.Zero)
+                {
+                    s_bd16 = mdelegate;
+                    s_bp16 = mptr;
+                }
+            }
+
+            return mdelegate(self, index);
+        }
+
+
         /// <summary>
         /// Returns the value with the specified identifier.
         /// </summary>
         public IntPtr get_value_bykey;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_v8value_t* get_value_bykey_delegate(cef_v8value_t* self, /*const*/ cef_string_t* key);
+
+        private static IntPtr s_bp17;
+        private static get_value_bykey_delegate s_bd17;
+
+        // method slot: 17
+        public static cef_v8value_t* invoke_get_value_bykey(cef_v8value_t* self, /*const*/ cef_string_t* key)
+        {
+            get_value_bykey_delegate mdelegate;
+
+            var mptr = self->get_value_bykey;
+            if (mptr == s_bp17)
+            {
+                mdelegate = s_bd17;
+            }
+            else
+            {
+                mdelegate = (get_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_value_bykey_delegate));
+                if (s_bp17 == IntPtr.Zero)
+                {
+                    s_bd17 = mdelegate;
+                    s_bp17 = mptr;
+                }
+            }
+
+            return mdelegate(self, key);
+        }
+
 
         /// <summary>
         /// Returns the value with the specified identifier.
@@ -2462,6 +6731,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_v8value_t* get_value_byindex_delegate(cef_v8value_t* self, int index);
 
+        private static IntPtr s_bp18;
+        private static get_value_byindex_delegate s_bd18;
+
+        // method slot: 18
+        public static cef_v8value_t* invoke_get_value_byindex(cef_v8value_t* self, int index)
+        {
+            get_value_byindex_delegate mdelegate;
+
+            var mptr = self->get_value_byindex;
+            if (mptr == s_bp18)
+            {
+                mdelegate = s_bd18;
+            }
+            else
+            {
+                mdelegate = (get_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_value_byindex_delegate));
+                if (s_bp18 == IntPtr.Zero)
+                {
+                    s_bd18 = mdelegate;
+                    s_bp18 = mptr;
+                }
+            }
+
+            return mdelegate(self, index);
+        }
+
+
         /// <summary>
         /// Associate a value with the specified identifier.
         /// </summary>
@@ -2469,12 +6765,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int set_value_bykey_delegate(cef_v8value_t* self, /*const*/ cef_string_t* key, cef_v8value_t* value);
 
+        private static IntPtr s_bp19;
+        private static set_value_bykey_delegate s_bd19;
+
+        // method slot: 19
+        public static int invoke_set_value_bykey(cef_v8value_t* self, /*const*/ cef_string_t* key, cef_v8value_t* value)
+        {
+            set_value_bykey_delegate mdelegate;
+
+            var mptr = self->set_value_bykey;
+            if (mptr == s_bp19)
+            {
+                mdelegate = s_bd19;
+            }
+            else
+            {
+                mdelegate = (set_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_value_bykey_delegate));
+                if (s_bp19 == IntPtr.Zero)
+                {
+                    s_bd19 = mdelegate;
+                    s_bp19 = mptr;
+                }
+            }
+
+            return mdelegate(self, key, value);
+        }
+
+
         /// <summary>
         /// Associate a value with the specified identifier.
         /// </summary>
         public IntPtr set_value_byindex;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int set_value_byindex_delegate(cef_v8value_t* self, int index, cef_v8value_t* value);
+
+        private static IntPtr s_bp1A;
+        private static set_value_byindex_delegate s_bd1A;
+
+        // method slot: 1A
+        public static int invoke_set_value_byindex(cef_v8value_t* self, int index, cef_v8value_t* value)
+        {
+            set_value_byindex_delegate mdelegate;
+
+            var mptr = self->set_value_byindex;
+            if (mptr == s_bp1A)
+            {
+                mdelegate = s_bd1A;
+            }
+            else
+            {
+                mdelegate = (set_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_value_byindex_delegate));
+                if (s_bp1A == IntPtr.Zero)
+                {
+                    s_bd1A = mdelegate;
+                    s_bp1A = mptr;
+                }
+            }
+
+            return mdelegate(self, index, value);
+        }
+
 
         /// <summary>
         /// Register an identifier whose access will be forwarded to the
@@ -2485,6 +6835,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int set_value_byaccessor_delegate(cef_v8value_t* self, /*const*/ cef_string_t* key, cef_v8_accesscontrol_t settings, cef_v8_propertyattribute_t attribute);
 
+        private static IntPtr s_bp1B;
+        private static set_value_byaccessor_delegate s_bd1B;
+
+        // method slot: 1B
+        public static int invoke_set_value_byaccessor(cef_v8value_t* self, /*const*/ cef_string_t* key, cef_v8_accesscontrol_t settings, cef_v8_propertyattribute_t attribute)
+        {
+            set_value_byaccessor_delegate mdelegate;
+
+            var mptr = self->set_value_byaccessor;
+            if (mptr == s_bp1B)
+            {
+                mdelegate = s_bd1B;
+            }
+            else
+            {
+                mdelegate = (set_value_byaccessor_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_value_byaccessor_delegate));
+                if (s_bp1B == IntPtr.Zero)
+                {
+                    s_bd1B = mdelegate;
+                    s_bp1B = mptr;
+                }
+            }
+
+            return mdelegate(self, key, settings, attribute);
+        }
+
+
         /// <summary>
         /// Read the keys for the object's values into the specified vector.
         /// Integer- based keys will also be returned as strings.
@@ -2493,12 +6870,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_keys_delegate(cef_v8value_t* self, cef_string_list_t keys);
 
+        private static IntPtr s_bp1C;
+        private static get_keys_delegate s_bd1C;
+
+        // method slot: 1C
+        public static int invoke_get_keys(cef_v8value_t* self, cef_string_list_t keys)
+        {
+            get_keys_delegate mdelegate;
+
+            var mptr = self->get_keys;
+            if (mptr == s_bp1C)
+            {
+                mdelegate = s_bd1C;
+            }
+            else
+            {
+                mdelegate = (get_keys_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_keys_delegate));
+                if (s_bp1C == IntPtr.Zero)
+                {
+                    s_bd1C = mdelegate;
+                    s_bp1C = mptr;
+                }
+            }
+
+            return mdelegate(self, keys);
+        }
+
+
         /// <summary>
         /// Returns the user data, if any, specified when the object was created.
         /// </summary>
         public IntPtr get_user_data;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_base_t* get_user_data_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp1D;
+        private static get_user_data_delegate s_bd1D;
+
+        // method slot: 1D
+        public static cef_base_t* invoke_get_user_data(cef_v8value_t* self)
+        {
+            get_user_data_delegate mdelegate;
+
+            var mptr = self->get_user_data;
+            if (mptr == s_bp1D)
+            {
+                mdelegate = s_bd1D;
+            }
+            else
+            {
+                mdelegate = (get_user_data_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_user_data_delegate));
+                if (s_bp1D == IntPtr.Zero)
+                {
+                    s_bd1D = mdelegate;
+                    s_bp1D = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
 
         /// ARRAY METHODS - These functions are only available on arrays.
@@ -2509,6 +6940,33 @@ namespace CefGlue.Core
         public IntPtr get_array_length;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_array_length_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp1E;
+        private static get_array_length_delegate s_bd1E;
+
+        // method slot: 1E
+        public static int invoke_get_array_length(cef_v8value_t* self)
+        {
+            get_array_length_delegate mdelegate;
+
+            var mptr = self->get_array_length;
+            if (mptr == s_bp1E)
+            {
+                mdelegate = s_bd1E;
+            }
+            else
+            {
+                mdelegate = (get_array_length_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_array_length_delegate));
+                if (s_bp1E == IntPtr.Zero)
+                {
+                    s_bd1E = mdelegate;
+                    s_bp1E = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
 
         /// FUNCTION METHODS - These functions are only available on functions.
@@ -2523,12 +6981,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_function_name_delegate(cef_v8value_t* self);
 
+        private static IntPtr s_bp1F;
+        private static get_function_name_delegate s_bd1F;
+
+        // method slot: 1F
+        public static cef_string_userfree_t invoke_get_function_name(cef_v8value_t* self)
+        {
+            get_function_name_delegate mdelegate;
+
+            var mptr = self->get_function_name;
+            if (mptr == s_bp1F)
+            {
+                mdelegate = s_bd1F;
+            }
+            else
+            {
+                mdelegate = (get_function_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_function_name_delegate));
+                if (s_bp1F == IntPtr.Zero)
+                {
+                    s_bd1F = mdelegate;
+                    s_bp1F = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the function handler or NULL if not a CEF-created function.
         /// </summary>
         public IntPtr get_function_handler;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_v8handler_t* get_function_handler_delegate(cef_v8value_t* self);
+
+        private static IntPtr s_bp20;
+        private static get_function_handler_delegate s_bd20;
+
+        // method slot: 20
+        public static cef_v8handler_t* invoke_get_function_handler(cef_v8value_t* self)
+        {
+            get_function_handler_delegate mdelegate;
+
+            var mptr = self->get_function_handler;
+            if (mptr == s_bp20)
+            {
+                mdelegate = s_bd20;
+            }
+            else
+            {
+                mdelegate = (get_function_handler_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_function_handler_delegate));
+                if (s_bp20 == IntPtr.Zero)
+                {
+                    s_bd20 = mdelegate;
+                    s_bp20 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Execute the function using the current V8 context.
@@ -2537,12 +7049,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int execute_function_delegate(cef_v8value_t* self, cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception);
 
+        private static IntPtr s_bp21;
+        private static execute_function_delegate s_bd21;
+
+        // method slot: 21
+        public static int invoke_execute_function(cef_v8value_t* self, cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception)
+        {
+            execute_function_delegate mdelegate;
+
+            var mptr = self->execute_function;
+            if (mptr == s_bp21)
+            {
+                mdelegate = s_bd21;
+            }
+            else
+            {
+                mdelegate = (execute_function_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(execute_function_delegate));
+                if (s_bp21 == IntPtr.Zero)
+                {
+                    s_bd21 = mdelegate;
+                    s_bp21 = mptr;
+                }
+            }
+
+            return mdelegate(self, @object, argumentCount, arguments, retval, exception);
+        }
+
+
         /// <summary>
         /// Execute the function using the specified V8 context.
         /// </summary>
         public IntPtr execute_function_with_context;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int execute_function_with_context_delegate(cef_v8value_t* self, cef_v8context_t* context, cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception);
+
+        private static IntPtr s_bp22;
+        private static execute_function_with_context_delegate s_bd22;
+
+        // method slot: 22
+        public static int invoke_execute_function_with_context(cef_v8value_t* self, cef_v8context_t* context, cef_v8value_t* @object, int argumentCount, cef_v8value_t* /*const*/ * arguments, cef_v8value_t** retval, cef_string_t* exception)
+        {
+            execute_function_with_context_delegate mdelegate;
+
+            var mptr = self->execute_function_with_context;
+            if (mptr == s_bp22)
+            {
+                mdelegate = s_bd22;
+            }
+            else
+            {
+                mdelegate = (execute_function_with_context_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(execute_function_with_context_delegate));
+                if (s_bp22 == IntPtr.Zero)
+                {
+                    s_bd22 = mdelegate;
+                    s_bp22 = mptr;
+                }
+            }
+
+            return mdelegate(self, context, @object, argumentCount, arguments, retval, exception);
+        }
+
 
     };
 
@@ -2622,6 +7188,7 @@ namespace CefGlue.Core
     /// this structure will always be called on the IO thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_scheme_handler_factory_t
     {
         /// <summary>
@@ -2644,6 +7211,7 @@ namespace CefGlue.Core
     /// functions of this structure will always be called on the IO thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_scheme_handler_t
     {
         /// <summary>
@@ -2695,6 +7263,7 @@ namespace CefGlue.Core
     /// will always be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_download_handler_t
     {
         /// <summary>
@@ -2727,12 +7296,94 @@ namespace CefGlue.Core
     /// executed. The functions of this structure may be called on any thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_web_urlrequest_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Cancels the request.
@@ -2741,12 +7392,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void cancel_delegate(cef_web_urlrequest_t* self);
 
+        private static IntPtr s_bp3;
+        private static cancel_delegate s_bd3;
+
+        // method slot: 3
+        public static void invoke_cancel(cef_web_urlrequest_t* self)
+        {
+            cancel_delegate mdelegate;
+
+            var mptr = self->cancel;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (cancel_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cancel_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the current ready state of the request.
         /// </summary>
         public IntPtr get_state;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_weburlrequest_state_t get_state_delegate(cef_web_urlrequest_t* self);
+
+        private static IntPtr s_bp4;
+        private static get_state_delegate s_bd4;
+
+        // method slot: 4
+        public static cef_weburlrequest_state_t invoke_get_state(cef_web_urlrequest_t* self)
+        {
+            get_state_delegate mdelegate;
+
+            var mptr = self->get_state;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (get_state_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_state_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -2766,6 +7471,7 @@ namespace CefGlue.Core
     /// The functions of this structure will always be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_web_urlrequest_client_t
     {
         /// <summary>
@@ -2827,12 +7533,94 @@ namespace CefGlue.Core
     /// that creates the object.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_xml_reader_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Moves the cursor to the next node in the document. This function must
@@ -2843,6 +7631,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_next_node_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp3;
+        private static move_to_next_node_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_move_to_next_node(cef_xml_reader_t* self)
+        {
+            move_to_next_node_delegate mdelegate;
+
+            var mptr = self->move_to_next_node;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (move_to_next_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_next_node_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Close the document. This should be called directly to ensure that
         /// cleanup occurs on the correct thread.
@@ -2851,12 +7666,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int close_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp4;
+        private static close_delegate s_bd4;
+
+        // method slot: 4
+        public static int invoke_close(cef_xml_reader_t* self)
+        {
+            close_delegate mdelegate;
+
+            var mptr = self->close;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (close_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(close_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if an error has been reported by the XML parser.
         /// </summary>
         public IntPtr has_error;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_error_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp5;
+        private static has_error_delegate s_bd5;
+
+        // method slot: 5
+        public static int invoke_has_error(cef_xml_reader_t* self)
+        {
+            has_error_delegate mdelegate;
+
+            var mptr = self->has_error;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (has_error_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_error_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the error string.
@@ -2867,6 +7736,33 @@ namespace CefGlue.Core
         public IntPtr get_error;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_error_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp6;
+        private static get_error_delegate s_bd6;
+
+        // method slot: 6
+        public static cef_string_userfree_t invoke_get_error(cef_xml_reader_t* self)
+        {
+            get_error_delegate mdelegate;
+
+            var mptr = self->get_error;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (get_error_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_error_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
 
         /// The below functions retrieve data for the node at the current cursor
@@ -2879,12 +7775,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_xml_node_type_t get_type_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_type_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_xml_node_type_t invoke_get_type(cef_xml_reader_t* self)
+        {
+            get_type_delegate mdelegate;
+
+            var mptr = self->get_type;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_type_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the node depth. Depth starts at 0 for the root node.
         /// </summary>
         public IntPtr get_depth;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_depth_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp8;
+        private static get_depth_delegate s_bd8;
+
+        // method slot: 8
+        public static int invoke_get_depth(cef_xml_reader_t* self)
+        {
+            get_depth_delegate mdelegate;
+
+            var mptr = self->get_depth;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (get_depth_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_depth_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the local name. See http://www.w3.org/TR/REC-xml-names/#NT-
@@ -2897,6 +7847,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_local_name_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp9;
+        private static get_local_name_delegate s_bd9;
+
+        // method slot: 9
+        public static cef_string_userfree_t invoke_get_local_name(cef_xml_reader_t* self)
+        {
+            get_local_name_delegate mdelegate;
+
+            var mptr = self->get_local_name;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_local_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_local_name_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the namespace prefix. See http://www.w3.org/TR/REC-xml-names/
         /// for additional details.
@@ -2907,6 +7884,33 @@ namespace CefGlue.Core
         public IntPtr get_prefix;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_prefix_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bpA;
+        private static get_prefix_delegate s_bdA;
+
+        // method slot: A
+        public static cef_string_userfree_t invoke_get_prefix(cef_xml_reader_t* self)
+        {
+            get_prefix_delegate mdelegate;
+
+            var mptr = self->get_prefix;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (get_prefix_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_prefix_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the qualified name, equal to (Prefix:)LocalName. See
@@ -2920,6 +7924,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_qualified_name_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bpB;
+        private static get_qualified_name_delegate s_bdB;
+
+        // method slot: B
+        public static cef_string_userfree_t invoke_get_qualified_name(cef_xml_reader_t* self)
+        {
+            get_qualified_name_delegate mdelegate;
+
+            var mptr = self->get_qualified_name;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (get_qualified_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_qualified_name_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the URI defining the namespace associated with the node. See
         /// http://www.w3.org/TR/REC-xml-names/ for additional details.
@@ -2930,6 +7961,33 @@ namespace CefGlue.Core
         public IntPtr get_namespace_uri;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_namespace_uri_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bpC;
+        private static get_namespace_uri_delegate s_bdC;
+
+        // method slot: C
+        public static cef_string_userfree_t invoke_get_namespace_uri(cef_xml_reader_t* self)
+        {
+            get_namespace_uri_delegate mdelegate;
+
+            var mptr = self->get_namespace_uri;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (get_namespace_uri_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_namespace_uri_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the base URI of the node. See http://www.w3.org/TR/xmlbase/
@@ -2942,6 +8000,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_base_uri_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bpD;
+        private static get_base_uri_delegate s_bdD;
+
+        // method slot: D
+        public static cef_string_userfree_t invoke_get_base_uri(cef_xml_reader_t* self)
+        {
+            get_base_uri_delegate mdelegate;
+
+            var mptr = self->get_base_uri;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (get_base_uri_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_base_uri_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the xml:lang scope within which the node resides. See
         /// http://www.w3.org/TR/REC-xml/#sec-lang-tag for additional details.
@@ -2953,6 +8038,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_xml_lang_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bpE;
+        private static get_xml_lang_delegate s_bdE;
+
+        // method slot: E
+        public static cef_string_userfree_t invoke_get_xml_lang(cef_xml_reader_t* self)
+        {
+            get_xml_lang_delegate mdelegate;
+
+            var mptr = self->get_xml_lang;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (get_xml_lang_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_xml_lang_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if the node represents an NULL element. &lt;a/&gt; is
         /// considered NULL but &lt;a&gt;&lt;/a&gt; is not.
@@ -2961,12 +8073,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_empty_element_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bpF;
+        private static is_empty_element_delegate s_bdF;
+
+        // method slot: F
+        public static int invoke_is_empty_element(cef_xml_reader_t* self)
+        {
+            is_empty_element_delegate mdelegate;
+
+            var mptr = self->is_empty_element;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (is_empty_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_empty_element_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if the node has a text value.
         /// </summary>
         public IntPtr has_value;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_value_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp10;
+        private static has_value_delegate s_bd10;
+
+        // method slot: 10
+        public static int invoke_has_value(cef_xml_reader_t* self)
+        {
+            has_value_delegate mdelegate;
+
+            var mptr = self->has_value;
+            if (mptr == s_bp10)
+            {
+                mdelegate = s_bd10;
+            }
+            else
+            {
+                mdelegate = (has_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_value_delegate));
+                if (s_bp10 == IntPtr.Zero)
+                {
+                    s_bd10 = mdelegate;
+                    s_bp10 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the text value.
@@ -2978,6 +8144,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_value_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp11;
+        private static get_value_delegate s_bd11;
+
+        // method slot: 11
+        public static cef_string_userfree_t invoke_get_value(cef_xml_reader_t* self)
+        {
+            get_value_delegate mdelegate;
+
+            var mptr = self->get_value;
+            if (mptr == s_bp11)
+            {
+                mdelegate = s_bd11;
+            }
+            else
+            {
+                mdelegate = (get_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_value_delegate));
+                if (s_bp11 == IntPtr.Zero)
+                {
+                    s_bd11 = mdelegate;
+                    s_bp11 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if the node has attributes.
         /// </summary>
@@ -2985,12 +8178,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_attributes_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp12;
+        private static has_attributes_delegate s_bd12;
+
+        // method slot: 12
+        public static int invoke_has_attributes(cef_xml_reader_t* self)
+        {
+            has_attributes_delegate mdelegate;
+
+            var mptr = self->has_attributes;
+            if (mptr == s_bp12)
+            {
+                mdelegate = s_bd12;
+            }
+            else
+            {
+                mdelegate = (has_attributes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_attributes_delegate));
+                if (s_bp12 == IntPtr.Zero)
+                {
+                    s_bd12 = mdelegate;
+                    s_bp12 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the number of attributes.
         /// </summary>
         public IntPtr get_attribute_count;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_attribute_count_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp13;
+        private static get_attribute_count_delegate s_bd13;
+
+        // method slot: 13
+        public static int invoke_get_attribute_count(cef_xml_reader_t* self)
+        {
+            get_attribute_count_delegate mdelegate;
+
+            var mptr = self->get_attribute_count;
+            if (mptr == s_bp13)
+            {
+                mdelegate = s_bd13;
+            }
+            else
+            {
+                mdelegate = (get_attribute_count_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_attribute_count_delegate));
+                if (s_bp13 == IntPtr.Zero)
+                {
+                    s_bd13 = mdelegate;
+                    s_bp13 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the value of the attribute at the specified 0-based index.
@@ -3002,6 +8249,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_attribute_byindex_delegate(cef_xml_reader_t* self, int index);
 
+        private static IntPtr s_bp14;
+        private static get_attribute_byindex_delegate s_bd14;
+
+        // method slot: 14
+        public static cef_string_userfree_t invoke_get_attribute_byindex(cef_xml_reader_t* self, int index)
+        {
+            get_attribute_byindex_delegate mdelegate;
+
+            var mptr = self->get_attribute_byindex;
+            if (mptr == s_bp14)
+            {
+                mdelegate = s_bd14;
+            }
+            else
+            {
+                mdelegate = (get_attribute_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_attribute_byindex_delegate));
+                if (s_bp14 == IntPtr.Zero)
+                {
+                    s_bd14 = mdelegate;
+                    s_bp14 = mptr;
+                }
+            }
+
+            return mdelegate(self, index);
+        }
+
+
         /// <summary>
         /// Returns the value of the attribute with the specified qualified name.
         /// </summary>
@@ -3011,6 +8285,33 @@ namespace CefGlue.Core
         public IntPtr get_attribute_byqname;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_attribute_byqname_delegate(cef_xml_reader_t* self, /*const*/ cef_string_t* qualifiedName);
+
+        private static IntPtr s_bp15;
+        private static get_attribute_byqname_delegate s_bd15;
+
+        // method slot: 15
+        public static cef_string_userfree_t invoke_get_attribute_byqname(cef_xml_reader_t* self, /*const*/ cef_string_t* qualifiedName)
+        {
+            get_attribute_byqname_delegate mdelegate;
+
+            var mptr = self->get_attribute_byqname;
+            if (mptr == s_bp15)
+            {
+                mdelegate = s_bd15;
+            }
+            else
+            {
+                mdelegate = (get_attribute_byqname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_attribute_byqname_delegate));
+                if (s_bp15 == IntPtr.Zero)
+                {
+                    s_bd15 = mdelegate;
+                    s_bp15 = mptr;
+                }
+            }
+
+            return mdelegate(self, qualifiedName);
+        }
+
 
         /// <summary>
         /// Returns the value of the attribute with the specified local name and
@@ -3023,6 +8324,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_attribute_bylname_delegate(cef_xml_reader_t* self, /*const*/ cef_string_t* localName, /*const*/ cef_string_t* namespaceURI);
 
+        private static IntPtr s_bp16;
+        private static get_attribute_bylname_delegate s_bd16;
+
+        // method slot: 16
+        public static cef_string_userfree_t invoke_get_attribute_bylname(cef_xml_reader_t* self, /*const*/ cef_string_t* localName, /*const*/ cef_string_t* namespaceURI)
+        {
+            get_attribute_bylname_delegate mdelegate;
+
+            var mptr = self->get_attribute_bylname;
+            if (mptr == s_bp16)
+            {
+                mdelegate = s_bd16;
+            }
+            else
+            {
+                mdelegate = (get_attribute_bylname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_attribute_bylname_delegate));
+                if (s_bp16 == IntPtr.Zero)
+                {
+                    s_bd16 = mdelegate;
+                    s_bp16 = mptr;
+                }
+            }
+
+            return mdelegate(self, localName, namespaceURI);
+        }
+
+
         /// <summary>
         /// Returns an XML representation of the current node's children.
         /// </summary>
@@ -3032,6 +8360,33 @@ namespace CefGlue.Core
         public IntPtr get_inner_xml;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_inner_xml_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp17;
+        private static get_inner_xml_delegate s_bd17;
+
+        // method slot: 17
+        public static cef_string_userfree_t invoke_get_inner_xml(cef_xml_reader_t* self)
+        {
+            get_inner_xml_delegate mdelegate;
+
+            var mptr = self->get_inner_xml;
+            if (mptr == s_bp17)
+            {
+                mdelegate = s_bd17;
+            }
+            else
+            {
+                mdelegate = (get_inner_xml_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_inner_xml_delegate));
+                if (s_bp17 == IntPtr.Zero)
+                {
+                    s_bd17 = mdelegate;
+                    s_bp17 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns an XML representation of the current node including its
@@ -3044,12 +8399,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_outer_xml_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp18;
+        private static get_outer_xml_delegate s_bd18;
+
+        // method slot: 18
+        public static cef_string_userfree_t invoke_get_outer_xml(cef_xml_reader_t* self)
+        {
+            get_outer_xml_delegate mdelegate;
+
+            var mptr = self->get_outer_xml;
+            if (mptr == s_bp18)
+            {
+                mdelegate = s_bd18;
+            }
+            else
+            {
+                mdelegate = (get_outer_xml_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_outer_xml_delegate));
+                if (s_bp18 == IntPtr.Zero)
+                {
+                    s_bd18 = mdelegate;
+                    s_bp18 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the line number for the current node.
         /// </summary>
         public IntPtr get_line_number;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_line_number_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp19;
+        private static get_line_number_delegate s_bd19;
+
+        // method slot: 19
+        public static int invoke_get_line_number(cef_xml_reader_t* self)
+        {
+            get_line_number_delegate mdelegate;
+
+            var mptr = self->get_line_number;
+            if (mptr == s_bp19)
+            {
+                mdelegate = s_bd19;
+            }
+            else
+            {
+                mdelegate = (get_line_number_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_line_number_delegate));
+                if (s_bp19 == IntPtr.Zero)
+                {
+                    s_bd19 = mdelegate;
+                    s_bp19 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
 
         /// Attribute nodes are not traversed by default. The below functions can
@@ -3066,6 +8475,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_attribute_byindex_delegate(cef_xml_reader_t* self, int index);
 
+        private static IntPtr s_bp1A;
+        private static move_to_attribute_byindex_delegate s_bd1A;
+
+        // method slot: 1A
+        public static int invoke_move_to_attribute_byindex(cef_xml_reader_t* self, int index)
+        {
+            move_to_attribute_byindex_delegate mdelegate;
+
+            var mptr = self->move_to_attribute_byindex;
+            if (mptr == s_bp1A)
+            {
+                mdelegate = s_bd1A;
+            }
+            else
+            {
+                mdelegate = (move_to_attribute_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_attribute_byindex_delegate));
+                if (s_bp1A == IntPtr.Zero)
+                {
+                    s_bd1A = mdelegate;
+                    s_bp1A = mptr;
+                }
+            }
+
+            return mdelegate(self, index);
+        }
+
+
         /// <summary>
         /// Moves the cursor to the attribute with the specified qualified name.
         /// Returns true (1) if the cursor position was set successfully.
@@ -3073,6 +8509,33 @@ namespace CefGlue.Core
         public IntPtr move_to_attribute_byqname;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_attribute_byqname_delegate(cef_xml_reader_t* self, /*const*/ cef_string_t* qualifiedName);
+
+        private static IntPtr s_bp1B;
+        private static move_to_attribute_byqname_delegate s_bd1B;
+
+        // method slot: 1B
+        public static int invoke_move_to_attribute_byqname(cef_xml_reader_t* self, /*const*/ cef_string_t* qualifiedName)
+        {
+            move_to_attribute_byqname_delegate mdelegate;
+
+            var mptr = self->move_to_attribute_byqname;
+            if (mptr == s_bp1B)
+            {
+                mdelegate = s_bd1B;
+            }
+            else
+            {
+                mdelegate = (move_to_attribute_byqname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_attribute_byqname_delegate));
+                if (s_bp1B == IntPtr.Zero)
+                {
+                    s_bd1B = mdelegate;
+                    s_bp1B = mptr;
+                }
+            }
+
+            return mdelegate(self, qualifiedName);
+        }
+
 
         /// <summary>
         /// Moves the cursor to the attribute with the specified local name and
@@ -3083,6 +8546,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_attribute_bylname_delegate(cef_xml_reader_t* self, /*const*/ cef_string_t* localName, /*const*/ cef_string_t* namespaceURI);
 
+        private static IntPtr s_bp1C;
+        private static move_to_attribute_bylname_delegate s_bd1C;
+
+        // method slot: 1C
+        public static int invoke_move_to_attribute_bylname(cef_xml_reader_t* self, /*const*/ cef_string_t* localName, /*const*/ cef_string_t* namespaceURI)
+        {
+            move_to_attribute_bylname_delegate mdelegate;
+
+            var mptr = self->move_to_attribute_bylname;
+            if (mptr == s_bp1C)
+            {
+                mdelegate = s_bd1C;
+            }
+            else
+            {
+                mdelegate = (move_to_attribute_bylname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_attribute_bylname_delegate));
+                if (s_bp1C == IntPtr.Zero)
+                {
+                    s_bd1C = mdelegate;
+                    s_bp1C = mptr;
+                }
+            }
+
+            return mdelegate(self, localName, namespaceURI);
+        }
+
+
         /// <summary>
         /// Moves the cursor to the first attribute in the current element.
         /// Returns true (1) if the cursor position was set successfully.
@@ -3090,6 +8580,33 @@ namespace CefGlue.Core
         public IntPtr move_to_first_attribute;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_first_attribute_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp1D;
+        private static move_to_first_attribute_delegate s_bd1D;
+
+        // method slot: 1D
+        public static int invoke_move_to_first_attribute(cef_xml_reader_t* self)
+        {
+            move_to_first_attribute_delegate mdelegate;
+
+            var mptr = self->move_to_first_attribute;
+            if (mptr == s_bp1D)
+            {
+                mdelegate = s_bd1D;
+            }
+            else
+            {
+                mdelegate = (move_to_first_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_first_attribute_delegate));
+                if (s_bp1D == IntPtr.Zero)
+                {
+                    s_bd1D = mdelegate;
+                    s_bp1D = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Moves the cursor to the next attribute in the current element.
@@ -3099,6 +8616,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_next_attribute_delegate(cef_xml_reader_t* self);
 
+        private static IntPtr s_bp1E;
+        private static move_to_next_attribute_delegate s_bd1E;
+
+        // method slot: 1E
+        public static int invoke_move_to_next_attribute(cef_xml_reader_t* self)
+        {
+            move_to_next_attribute_delegate mdelegate;
+
+            var mptr = self->move_to_next_attribute;
+            if (mptr == s_bp1E)
+            {
+                mdelegate = s_bd1E;
+            }
+            else
+            {
+                mdelegate = (move_to_next_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_next_attribute_delegate));
+                if (s_bp1E == IntPtr.Zero)
+                {
+                    s_bd1E = mdelegate;
+                    s_bp1E = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Moves the cursor back to the carrying element. Returns true (1) if
         /// the cursor position was set successfully.
@@ -3106,6 +8650,33 @@ namespace CefGlue.Core
         public IntPtr move_to_carrying_element;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_carrying_element_delegate(cef_xml_reader_t* self);
+
+        private static IntPtr s_bp1F;
+        private static move_to_carrying_element_delegate s_bd1F;
+
+        // method slot: 1F
+        public static int invoke_move_to_carrying_element(cef_xml_reader_t* self)
+        {
+            move_to_carrying_element_delegate mdelegate;
+
+            var mptr = self->move_to_carrying_element;
+            if (mptr == s_bp1F)
+            {
+                mdelegate = s_bd1F;
+            }
+            else
+            {
+                mdelegate = (move_to_carrying_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_carrying_element_delegate));
+                if (s_bp1F == IntPtr.Zero)
+                {
+                    s_bd1F = mdelegate;
+                    s_bp1F = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -3127,12 +8698,94 @@ namespace CefGlue.Core
     /// that creates the object.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_zip_reader_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Moves the cursor to the first file in the archive. Returns true (1)
@@ -3142,6 +8795,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_first_file_delegate(cef_zip_reader_t* self);
 
+        private static IntPtr s_bp3;
+        private static move_to_first_file_delegate s_bd3;
+
+        // method slot: 3
+        public static int invoke_move_to_first_file(cef_zip_reader_t* self)
+        {
+            move_to_first_file_delegate mdelegate;
+
+            var mptr = self->move_to_first_file;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (move_to_first_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_first_file_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Moves the cursor to the next file in the archive. Returns true (1) if
         /// the cursor position was set successfully.
@@ -3149,6 +8829,33 @@ namespace CefGlue.Core
         public IntPtr move_to_next_file;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_next_file_delegate(cef_zip_reader_t* self);
+
+        private static IntPtr s_bp4;
+        private static move_to_next_file_delegate s_bd4;
+
+        // method slot: 4
+        public static int invoke_move_to_next_file(cef_zip_reader_t* self)
+        {
+            move_to_next_file_delegate mdelegate;
+
+            var mptr = self->move_to_next_file;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (move_to_next_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_next_file_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Moves the cursor to the specified file in the archive. If
@@ -3159,6 +8866,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int move_to_file_delegate(cef_zip_reader_t* self, /*const*/ cef_string_t* fileName, int caseSensitive);
 
+        private static IntPtr s_bp5;
+        private static move_to_file_delegate s_bd5;
+
+        // method slot: 5
+        public static int invoke_move_to_file(cef_zip_reader_t* self, /*const*/ cef_string_t* fileName, int caseSensitive)
+        {
+            move_to_file_delegate mdelegate;
+
+            var mptr = self->move_to_file;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (move_to_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(move_to_file_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self, fileName, caseSensitive);
+        }
+
+
         /// <summary>
         /// Closes the archive. This should be called directly to ensure that
         /// cleanup occurs on the correct thread.
@@ -3166,6 +8900,33 @@ namespace CefGlue.Core
         public IntPtr close;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int close_delegate(cef_zip_reader_t* self);
+
+        private static IntPtr s_bp6;
+        private static close_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_close(cef_zip_reader_t* self)
+        {
+            close_delegate mdelegate;
+
+            var mptr = self->close;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (close_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(close_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
 
         /// The below functions act on the file at the current cursor position.
@@ -3180,6 +8941,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_file_name_delegate(cef_zip_reader_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_file_name_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_string_userfree_t invoke_get_file_name(cef_zip_reader_t* self)
+        {
+            get_file_name_delegate mdelegate;
+
+            var mptr = self->get_file_name;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_file_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_file_name_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the uncompressed size of the file.
         /// </summary>
@@ -3187,12 +8975,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate long get_file_size_delegate(cef_zip_reader_t* self);
 
+        private static IntPtr s_bp8;
+        private static get_file_size_delegate s_bd8;
+
+        // method slot: 8
+        public static long invoke_get_file_size(cef_zip_reader_t* self)
+        {
+            get_file_size_delegate mdelegate;
+
+            var mptr = self->get_file_size;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (get_file_size_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_file_size_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the last modified timestamp for the file.
         /// </summary>
         public IntPtr get_file_last_modified;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate time_t get_file_last_modified_delegate(cef_zip_reader_t* self);
+
+        private static IntPtr s_bp9;
+        private static get_file_last_modified_delegate s_bd9;
+
+        // method slot: 9
+        public static time_t invoke_get_file_last_modified(cef_zip_reader_t* self)
+        {
+            get_file_last_modified_delegate mdelegate;
+
+            var mptr = self->get_file_last_modified;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_file_last_modified_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_file_last_modified_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Opens the file for reading of uncompressed data. A read password may
@@ -3202,12 +9044,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int open_file_delegate(cef_zip_reader_t* self, /*const*/ cef_string_t* password);
 
+        private static IntPtr s_bpA;
+        private static open_file_delegate s_bdA;
+
+        // method slot: A
+        public static int invoke_open_file(cef_zip_reader_t* self, /*const*/ cef_string_t* password)
+        {
+            open_file_delegate mdelegate;
+
+            var mptr = self->open_file;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (open_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(open_file_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            return mdelegate(self, password);
+        }
+
+
         /// <summary>
         /// Closes the file.
         /// </summary>
         public IntPtr close_file;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int close_file_delegate(cef_zip_reader_t* self);
+
+        private static IntPtr s_bpB;
+        private static close_file_delegate s_bdB;
+
+        // method slot: B
+        public static int invoke_close_file(cef_zip_reader_t* self)
+        {
+            close_file_delegate mdelegate;
+
+            var mptr = self->close_file;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (close_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(close_file_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Read uncompressed file contents into the specified buffer. Returns &lt;
@@ -3218,6 +9114,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int read_file_delegate(cef_zip_reader_t* self, void* buffer, int bufferSize);
 
+        private static IntPtr s_bpC;
+        private static read_file_delegate s_bdC;
+
+        // method slot: C
+        public static int invoke_read_file(cef_zip_reader_t* self, void* buffer, int bufferSize)
+        {
+            read_file_delegate mdelegate;
+
+            var mptr = self->read_file;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (read_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(read_file_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self, buffer, bufferSize);
+        }
+
+
         /// <summary>
         /// Returns the current offset in the uncompressed file contents.
         /// </summary>
@@ -3225,12 +9148,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate long tell_delegate(cef_zip_reader_t* self);
 
+        private static IntPtr s_bpD;
+        private static tell_delegate s_bdD;
+
+        // method slot: D
+        public static long invoke_tell(cef_zip_reader_t* self)
+        {
+            tell_delegate mdelegate;
+
+            var mptr = self->tell;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (tell_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(tell_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if at end of the file contents.
         /// </summary>
         public IntPtr eof;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int eof_delegate(cef_zip_reader_t* self);
+
+        private static IntPtr s_bpE;
+        private static eof_delegate s_bdE;
+
+        // method slot: E
+        public static int invoke_eof(cef_zip_reader_t* self)
+        {
+            eof_delegate mdelegate;
+
+            var mptr = self->eof;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (eof_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(eof_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -3251,6 +9228,7 @@ namespace CefGlue.Core
     /// structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_domvisitor_t
     {
         /// <summary>
@@ -3277,12 +9255,94 @@ namespace CefGlue.Core
     /// structure should only be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_domdocument_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the document type.
@@ -3291,12 +9351,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_dom_document_type_t get_type_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_type_delegate s_bd3;
+
+        // method slot: 3
+        public static cef_dom_document_type_t invoke_get_type(cef_domdocument_t* self)
+        {
+            get_type_delegate mdelegate;
+
+            var mptr = self->get_type;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_type_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the root document node.
         /// </summary>
         public IntPtr get_document;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_document_delegate(cef_domdocument_t* self);
+
+        private static IntPtr s_bp4;
+        private static get_document_delegate s_bd4;
+
+        // method slot: 4
+        public static cef_domnode_t* invoke_get_document(cef_domdocument_t* self)
+        {
+            get_document_delegate mdelegate;
+
+            var mptr = self->get_document;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (get_document_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_document_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the BODY node of an HTML document.
@@ -3305,12 +9419,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_body_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bp5;
+        private static get_body_delegate s_bd5;
+
+        // method slot: 5
+        public static cef_domnode_t* invoke_get_body(cef_domdocument_t* self)
+        {
+            get_body_delegate mdelegate;
+
+            var mptr = self->get_body;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (get_body_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_body_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the HEAD node of an HTML document.
         /// </summary>
         public IntPtr get_head;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_head_delegate(cef_domdocument_t* self);
+
+        private static IntPtr s_bp6;
+        private static get_head_delegate s_bd6;
+
+        // method slot: 6
+        public static cef_domnode_t* invoke_get_head(cef_domdocument_t* self)
+        {
+            get_head_delegate mdelegate;
+
+            var mptr = self->get_head;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (get_head_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_head_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the title of an HTML document.
@@ -3322,12 +9490,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_title_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_title_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_string_userfree_t invoke_get_title(cef_domdocument_t* self)
+        {
+            get_title_delegate mdelegate;
+
+            var mptr = self->get_title;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_title_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_title_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the document element with the specified ID value.
         /// </summary>
         public IntPtr get_element_by_id;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_element_by_id_delegate(cef_domdocument_t* self, /*const*/ cef_string_t* id);
+
+        private static IntPtr s_bp8;
+        private static get_element_by_id_delegate s_bd8;
+
+        // method slot: 8
+        public static cef_domnode_t* invoke_get_element_by_id(cef_domdocument_t* self, /*const*/ cef_string_t* id)
+        {
+            get_element_by_id_delegate mdelegate;
+
+            var mptr = self->get_element_by_id;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (get_element_by_id_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_element_by_id_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self, id);
+        }
+
 
         /// <summary>
         /// Returns the node that currently has keyboard focus.
@@ -3336,12 +9558,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_focused_node_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bp9;
+        private static get_focused_node_delegate s_bd9;
+
+        // method slot: 9
+        public static cef_domnode_t* invoke_get_focused_node(cef_domdocument_t* self)
+        {
+            get_focused_node_delegate mdelegate;
+
+            var mptr = self->get_focused_node;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_focused_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_focused_node_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if a portion of the document is selected.
         /// </summary>
         public IntPtr has_selection;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_selection_delegate(cef_domdocument_t* self);
+
+        private static IntPtr s_bpA;
+        private static has_selection_delegate s_bdA;
+
+        // method slot: A
+        public static int invoke_has_selection(cef_domdocument_t* self)
+        {
+            has_selection_delegate mdelegate;
+
+            var mptr = self->has_selection;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (has_selection_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_selection_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the selection start node.
@@ -3350,12 +9626,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_selection_start_node_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bpB;
+        private static get_selection_start_node_delegate s_bdB;
+
+        // method slot: B
+        public static cef_domnode_t* invoke_get_selection_start_node(cef_domdocument_t* self)
+        {
+            get_selection_start_node_delegate mdelegate;
+
+            var mptr = self->get_selection_start_node;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (get_selection_start_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_selection_start_node_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the selection offset within the start node.
         /// </summary>
         public IntPtr get_selection_start_offset;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_selection_start_offset_delegate(cef_domdocument_t* self);
+
+        private static IntPtr s_bpC;
+        private static get_selection_start_offset_delegate s_bdC;
+
+        // method slot: C
+        public static int invoke_get_selection_start_offset(cef_domdocument_t* self)
+        {
+            get_selection_start_offset_delegate mdelegate;
+
+            var mptr = self->get_selection_start_offset;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (get_selection_start_offset_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_selection_start_offset_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the selection end node.
@@ -3364,12 +9694,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_selection_end_node_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bpD;
+        private static get_selection_end_node_delegate s_bdD;
+
+        // method slot: D
+        public static cef_domnode_t* invoke_get_selection_end_node(cef_domdocument_t* self)
+        {
+            get_selection_end_node_delegate mdelegate;
+
+            var mptr = self->get_selection_end_node;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (get_selection_end_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_selection_end_node_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the selection offset within the end node.
         /// </summary>
         public IntPtr get_selection_end_offset;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_selection_end_offset_delegate(cef_domdocument_t* self);
+
+        private static IntPtr s_bpE;
+        private static get_selection_end_offset_delegate s_bdE;
+
+        // method slot: E
+        public static int invoke_get_selection_end_offset(cef_domdocument_t* self)
+        {
+            get_selection_end_offset_delegate mdelegate;
+
+            var mptr = self->get_selection_end_offset;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (get_selection_end_offset_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_selection_end_offset_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the contents of this selection as markup.
@@ -3381,6 +9765,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_selection_as_markup_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bpF;
+        private static get_selection_as_markup_delegate s_bdF;
+
+        // method slot: F
+        public static cef_string_userfree_t invoke_get_selection_as_markup(cef_domdocument_t* self)
+        {
+            get_selection_as_markup_delegate mdelegate;
+
+            var mptr = self->get_selection_as_markup;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (get_selection_as_markup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_selection_as_markup_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the contents of this selection as text.
         /// </summary>
@@ -3391,6 +9802,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_selection_as_text_delegate(cef_domdocument_t* self);
 
+        private static IntPtr s_bp10;
+        private static get_selection_as_text_delegate s_bd10;
+
+        // method slot: 10
+        public static cef_string_userfree_t invoke_get_selection_as_text(cef_domdocument_t* self)
+        {
+            get_selection_as_text_delegate mdelegate;
+
+            var mptr = self->get_selection_as_text;
+            if (mptr == s_bp10)
+            {
+                mdelegate = s_bd10;
+            }
+            else
+            {
+                mdelegate = (get_selection_as_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_selection_as_text_delegate));
+                if (s_bp10 == IntPtr.Zero)
+                {
+                    s_bd10 = mdelegate;
+                    s_bp10 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the base URL for the document.
         /// </summary>
@@ -3400,6 +9838,33 @@ namespace CefGlue.Core
         public IntPtr get_base_url;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_base_url_delegate(cef_domdocument_t* self);
+
+        private static IntPtr s_bp11;
+        private static get_base_url_delegate s_bd11;
+
+        // method slot: 11
+        public static cef_string_userfree_t invoke_get_base_url(cef_domdocument_t* self)
+        {
+            get_base_url_delegate mdelegate;
+
+            var mptr = self->get_base_url;
+            if (mptr == s_bp11)
+            {
+                mdelegate = s_bd11;
+            }
+            else
+            {
+                mdelegate = (get_base_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_base_url_delegate));
+                if (s_bp11 == IntPtr.Zero)
+                {
+                    s_bd11 = mdelegate;
+                    s_bp11 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns a complete URL based on the document base URL and the
@@ -3412,6 +9877,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_complete_url_delegate(cef_domdocument_t* self, /*const*/ cef_string_t* partialURL);
 
+        private static IntPtr s_bp12;
+        private static get_complete_url_delegate s_bd12;
+
+        // method slot: 12
+        public static cef_string_userfree_t invoke_get_complete_url(cef_domdocument_t* self, /*const*/ cef_string_t* partialURL)
+        {
+            get_complete_url_delegate mdelegate;
+
+            var mptr = self->get_complete_url;
+            if (mptr == s_bp12)
+            {
+                mdelegate = s_bd12;
+            }
+            else
+            {
+                mdelegate = (get_complete_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_complete_url_delegate));
+                if (s_bp12 == IntPtr.Zero)
+                {
+                    s_bd12 = mdelegate;
+                    s_bp12 = mptr;
+                }
+            }
+
+            return mdelegate(self, partialURL);
+        }
+
+
     };
 
 
@@ -3420,12 +9912,94 @@ namespace CefGlue.Core
     /// should only be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_domnode_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the type for this node.
@@ -3434,12 +10008,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_dom_node_type_t get_type_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_type_delegate s_bd3;
+
+        // method slot: 3
+        public static cef_dom_node_type_t invoke_get_type(cef_domnode_t* self)
+        {
+            get_type_delegate mdelegate;
+
+            var mptr = self->get_type;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_type_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if this is a text node.
         /// </summary>
         public IntPtr is_text;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_text_delegate(cef_domnode_t* self);
+
+        private static IntPtr s_bp4;
+        private static is_text_delegate s_bd4;
+
+        // method slot: 4
+        public static int invoke_is_text(cef_domnode_t* self)
+        {
+            is_text_delegate mdelegate;
+
+            var mptr = self->is_text;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (is_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_text_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns true (1) if this is an element node.
@@ -3448,6 +10076,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_element_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp5;
+        private static is_element_delegate s_bd5;
+
+        // method slot: 5
+        public static int invoke_is_element(cef_domnode_t* self)
+        {
+            is_element_delegate mdelegate;
+
+            var mptr = self->is_element;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (is_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_element_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if this object is pointing to the same handle as
         /// |that| object.
@@ -3455,6 +10110,33 @@ namespace CefGlue.Core
         public IntPtr is_same;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int is_same_delegate(cef_domnode_t* self, cef_domnode_t* that);
+
+        private static IntPtr s_bp6;
+        private static is_same_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_is_same(cef_domnode_t* self, cef_domnode_t* that)
+        {
+            is_same_delegate mdelegate;
+
+            var mptr = self->is_same;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (is_same_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(is_same_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self, that);
+        }
+
 
         /// <summary>
         /// Returns the name of this node.
@@ -3466,6 +10148,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_name_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp7;
+        private static get_name_delegate s_bd7;
+
+        // method slot: 7
+        public static cef_string_userfree_t invoke_get_name(cef_domnode_t* self)
+        {
+            get_name_delegate mdelegate;
+
+            var mptr = self->get_name;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (get_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_name_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the value of this node.
         /// </summary>
@@ -3476,12 +10185,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_value_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp8;
+        private static get_value_delegate s_bd8;
+
+        // method slot: 8
+        public static cef_string_userfree_t invoke_get_value(cef_domnode_t* self)
+        {
+            get_value_delegate mdelegate;
+
+            var mptr = self->get_value;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (get_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_value_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Set the value of this node. Returns true (1) on success.
         /// </summary>
         public IntPtr set_value;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int set_value_delegate(cef_domnode_t* self, /*const*/ cef_string_t* value);
+
+        private static IntPtr s_bp9;
+        private static set_value_delegate s_bd9;
+
+        // method slot: 9
+        public static int invoke_set_value(cef_domnode_t* self, /*const*/ cef_string_t* value)
+        {
+            set_value_delegate mdelegate;
+
+            var mptr = self->set_value;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (set_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_value_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self, value);
+        }
+
 
         /// <summary>
         /// Returns the contents of this node as markup.
@@ -3493,12 +10256,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_as_markup_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bpA;
+        private static get_as_markup_delegate s_bdA;
+
+        // method slot: A
+        public static cef_string_userfree_t invoke_get_as_markup(cef_domnode_t* self)
+        {
+            get_as_markup_delegate mdelegate;
+
+            var mptr = self->get_as_markup;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (get_as_markup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_as_markup_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the document associated with this node.
         /// </summary>
         public IntPtr get_document;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domdocument_t* get_document_delegate(cef_domnode_t* self);
+
+        private static IntPtr s_bpB;
+        private static get_document_delegate s_bdB;
+
+        // method slot: B
+        public static cef_domdocument_t* invoke_get_document(cef_domnode_t* self)
+        {
+            get_document_delegate mdelegate;
+
+            var mptr = self->get_document;
+            if (mptr == s_bpB)
+            {
+                mdelegate = s_bdB;
+            }
+            else
+            {
+                mdelegate = (get_document_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_document_delegate));
+                if (s_bpB == IntPtr.Zero)
+                {
+                    s_bdB = mdelegate;
+                    s_bpB = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the parent node.
@@ -3507,12 +10324,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_parent_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bpC;
+        private static get_parent_delegate s_bdC;
+
+        // method slot: C
+        public static cef_domnode_t* invoke_get_parent(cef_domnode_t* self)
+        {
+            get_parent_delegate mdelegate;
+
+            var mptr = self->get_parent;
+            if (mptr == s_bpC)
+            {
+                mdelegate = s_bdC;
+            }
+            else
+            {
+                mdelegate = (get_parent_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_parent_delegate));
+                if (s_bpC == IntPtr.Zero)
+                {
+                    s_bdC = mdelegate;
+                    s_bpC = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the previous sibling node.
         /// </summary>
         public IntPtr get_previous_sibling;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_previous_sibling_delegate(cef_domnode_t* self);
+
+        private static IntPtr s_bpD;
+        private static get_previous_sibling_delegate s_bdD;
+
+        // method slot: D
+        public static cef_domnode_t* invoke_get_previous_sibling(cef_domnode_t* self)
+        {
+            get_previous_sibling_delegate mdelegate;
+
+            var mptr = self->get_previous_sibling;
+            if (mptr == s_bpD)
+            {
+                mdelegate = s_bdD;
+            }
+            else
+            {
+                mdelegate = (get_previous_sibling_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_previous_sibling_delegate));
+                if (s_bpD == IntPtr.Zero)
+                {
+                    s_bdD = mdelegate;
+                    s_bpD = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the next sibling node.
@@ -3521,12 +10392,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_next_sibling_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bpE;
+        private static get_next_sibling_delegate s_bdE;
+
+        // method slot: E
+        public static cef_domnode_t* invoke_get_next_sibling(cef_domnode_t* self)
+        {
+            get_next_sibling_delegate mdelegate;
+
+            var mptr = self->get_next_sibling;
+            if (mptr == s_bpE)
+            {
+                mdelegate = s_bdE;
+            }
+            else
+            {
+                mdelegate = (get_next_sibling_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_next_sibling_delegate));
+                if (s_bpE == IntPtr.Zero)
+                {
+                    s_bdE = mdelegate;
+                    s_bpE = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if this node has child nodes.
         /// </summary>
         public IntPtr has_children;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_children_delegate(cef_domnode_t* self);
+
+        private static IntPtr s_bpF;
+        private static has_children_delegate s_bdF;
+
+        // method slot: F
+        public static int invoke_has_children(cef_domnode_t* self)
+        {
+            has_children_delegate mdelegate;
+
+            var mptr = self->has_children;
+            if (mptr == s_bpF)
+            {
+                mdelegate = s_bdF;
+            }
+            else
+            {
+                mdelegate = (has_children_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_children_delegate));
+                if (s_bpF == IntPtr.Zero)
+                {
+                    s_bdF = mdelegate;
+                    s_bpF = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Return the first child node.
@@ -3535,12 +10460,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_first_child_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp10;
+        private static get_first_child_delegate s_bd10;
+
+        // method slot: 10
+        public static cef_domnode_t* invoke_get_first_child(cef_domnode_t* self)
+        {
+            get_first_child_delegate mdelegate;
+
+            var mptr = self->get_first_child;
+            if (mptr == s_bp10)
+            {
+                mdelegate = s_bd10;
+            }
+            else
+            {
+                mdelegate = (get_first_child_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_first_child_delegate));
+                if (s_bp10 == IntPtr.Zero)
+                {
+                    s_bd10 = mdelegate;
+                    s_bp10 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the last child node.
         /// </summary>
         public IntPtr get_last_child;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_last_child_delegate(cef_domnode_t* self);
+
+        private static IntPtr s_bp11;
+        private static get_last_child_delegate s_bd11;
+
+        // method slot: 11
+        public static cef_domnode_t* invoke_get_last_child(cef_domnode_t* self)
+        {
+            get_last_child_delegate mdelegate;
+
+            var mptr = self->get_last_child;
+            if (mptr == s_bp11)
+            {
+                mdelegate = s_bd11;
+            }
+            else
+            {
+                mdelegate = (get_last_child_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_last_child_delegate));
+                if (s_bp11 == IntPtr.Zero)
+                {
+                    s_bd11 = mdelegate;
+                    s_bp11 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Add an event listener to this node for the specified event type. If
@@ -3557,6 +10536,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void add_event_listener_delegate(cef_domnode_t* self, /*const*/ cef_string_t* eventType, cef_domevent_listener_t* listener, int useCapture);
 
+        private static IntPtr s_bp12;
+        private static add_event_listener_delegate s_bd12;
+
+        // method slot: 12
+        public static void invoke_add_event_listener(cef_domnode_t* self, /*const*/ cef_string_t* eventType, cef_domevent_listener_t* listener, int useCapture)
+        {
+            add_event_listener_delegate mdelegate;
+
+            var mptr = self->add_event_listener;
+            if (mptr == s_bp12)
+            {
+                mdelegate = s_bd12;
+            }
+            else
+            {
+                mdelegate = (add_event_listener_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(add_event_listener_delegate));
+                if (s_bp12 == IntPtr.Zero)
+                {
+                    s_bd12 = mdelegate;
+                    s_bp12 = mptr;
+                }
+            }
+
+            mdelegate(self, eventType, listener, useCapture);
+        }
+
+
 
         /// The following functions are valid only for element nodes.
 
@@ -3570,6 +10576,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_element_tag_name_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp13;
+        private static get_element_tag_name_delegate s_bd13;
+
+        // method slot: 13
+        public static cef_string_userfree_t invoke_get_element_tag_name(cef_domnode_t* self)
+        {
+            get_element_tag_name_delegate mdelegate;
+
+            var mptr = self->get_element_tag_name;
+            if (mptr == s_bp13)
+            {
+                mdelegate = s_bd13;
+            }
+            else
+            {
+                mdelegate = (get_element_tag_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_element_tag_name_delegate));
+                if (s_bp13 == IntPtr.Zero)
+                {
+                    s_bd13 = mdelegate;
+                    s_bp13 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if this element has attributes.
         /// </summary>
@@ -3577,12 +10610,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_element_attributes_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp14;
+        private static has_element_attributes_delegate s_bd14;
+
+        // method slot: 14
+        public static int invoke_has_element_attributes(cef_domnode_t* self)
+        {
+            has_element_attributes_delegate mdelegate;
+
+            var mptr = self->has_element_attributes;
+            if (mptr == s_bp14)
+            {
+                mdelegate = s_bd14;
+            }
+            else
+            {
+                mdelegate = (has_element_attributes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_element_attributes_delegate));
+                if (s_bp14 == IntPtr.Zero)
+                {
+                    s_bd14 = mdelegate;
+                    s_bp14 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if this element has an attribute named |attrName|.
         /// </summary>
         public IntPtr has_element_attribute;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int has_element_attribute_delegate(cef_domnode_t* self, /*const*/ cef_string_t* attrName);
+
+        private static IntPtr s_bp15;
+        private static has_element_attribute_delegate s_bd15;
+
+        // method slot: 15
+        public static int invoke_has_element_attribute(cef_domnode_t* self, /*const*/ cef_string_t* attrName)
+        {
+            has_element_attribute_delegate mdelegate;
+
+            var mptr = self->has_element_attribute;
+            if (mptr == s_bp15)
+            {
+                mdelegate = s_bd15;
+            }
+            else
+            {
+                mdelegate = (has_element_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(has_element_attribute_delegate));
+                if (s_bp15 == IntPtr.Zero)
+                {
+                    s_bd15 = mdelegate;
+                    s_bp15 = mptr;
+                }
+            }
+
+            return mdelegate(self, attrName);
+        }
+
 
         /// <summary>
         /// Returns the element attribute named |attrName|.
@@ -3594,12 +10681,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_element_attribute_delegate(cef_domnode_t* self, /*const*/ cef_string_t* attrName);
 
+        private static IntPtr s_bp16;
+        private static get_element_attribute_delegate s_bd16;
+
+        // method slot: 16
+        public static cef_string_userfree_t invoke_get_element_attribute(cef_domnode_t* self, /*const*/ cef_string_t* attrName)
+        {
+            get_element_attribute_delegate mdelegate;
+
+            var mptr = self->get_element_attribute;
+            if (mptr == s_bp16)
+            {
+                mdelegate = s_bd16;
+            }
+            else
+            {
+                mdelegate = (get_element_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_element_attribute_delegate));
+                if (s_bp16 == IntPtr.Zero)
+                {
+                    s_bd16 = mdelegate;
+                    s_bp16 = mptr;
+                }
+            }
+
+            return mdelegate(self, attrName);
+        }
+
+
         /// <summary>
         /// Returns a map of all element attributes.
         /// </summary>
         public IntPtr get_element_attributes;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate void get_element_attributes_delegate(cef_domnode_t* self, cef_string_map_t attrMap);
+
+        private static IntPtr s_bp17;
+        private static get_element_attributes_delegate s_bd17;
+
+        // method slot: 17
+        public static void invoke_get_element_attributes(cef_domnode_t* self, cef_string_map_t attrMap)
+        {
+            get_element_attributes_delegate mdelegate;
+
+            var mptr = self->get_element_attributes;
+            if (mptr == s_bp17)
+            {
+                mdelegate = s_bd17;
+            }
+            else
+            {
+                mdelegate = (get_element_attributes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_element_attributes_delegate));
+                if (s_bp17 == IntPtr.Zero)
+                {
+                    s_bd17 = mdelegate;
+                    s_bp17 = mptr;
+                }
+            }
+
+            mdelegate(self, attrMap);
+        }
+
 
         /// <summary>
         /// Set the value for the element attribute named |attrName|. Returns
@@ -3608,6 +10749,33 @@ namespace CefGlue.Core
         public IntPtr set_element_attribute;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int set_element_attribute_delegate(cef_domnode_t* self, /*const*/ cef_string_t* attrName, /*const*/ cef_string_t* value);
+
+        private static IntPtr s_bp18;
+        private static set_element_attribute_delegate s_bd18;
+
+        // method slot: 18
+        public static int invoke_set_element_attribute(cef_domnode_t* self, /*const*/ cef_string_t* attrName, /*const*/ cef_string_t* value)
+        {
+            set_element_attribute_delegate mdelegate;
+
+            var mptr = self->set_element_attribute;
+            if (mptr == s_bp18)
+            {
+                mdelegate = s_bd18;
+            }
+            else
+            {
+                mdelegate = (set_element_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(set_element_attribute_delegate));
+                if (s_bp18 == IntPtr.Zero)
+                {
+                    s_bd18 = mdelegate;
+                    s_bp18 = mptr;
+                }
+            }
+
+            return mdelegate(self, attrName, value);
+        }
+
 
         /// <summary>
         /// Returns the inner text of the element.
@@ -3619,6 +10787,33 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_element_inner_text_delegate(cef_domnode_t* self);
 
+        private static IntPtr s_bp19;
+        private static get_element_inner_text_delegate s_bd19;
+
+        // method slot: 19
+        public static cef_string_userfree_t invoke_get_element_inner_text(cef_domnode_t* self)
+        {
+            get_element_inner_text_delegate mdelegate;
+
+            var mptr = self->get_element_inner_text;
+            if (mptr == s_bp19)
+            {
+                mdelegate = s_bd19;
+            }
+            else
+            {
+                mdelegate = (get_element_inner_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_element_inner_text_delegate));
+                if (s_bp19 == IntPtr.Zero)
+                {
+                    s_bd19 = mdelegate;
+                    s_bp19 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
     };
 
 
@@ -3627,12 +10822,94 @@ namespace CefGlue.Core
     /// should only be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_domevent_t
     {
         /// <summary>
         /// Base structure.
         /// </summary>
         public cef_base_t @base;
+
+        private static IntPtr s_bp0;
+        private static cef_base_t.add_ref_delegate s_bd0;
+
+        // method slot: 0
+        public static int invoke_add_ref(cef_base_t* self)
+        {
+            cef_base_t.add_ref_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->add_ref;
+            if (mptr == s_bp0)
+            {
+                mdelegate = s_bd0;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
+                if (s_bp0 == IntPtr.Zero)
+                {
+                    s_bd0 = mdelegate;
+                    s_bp0 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp1;
+        private static cef_base_t.release_delegate s_bd1;
+
+        // method slot: 1
+        public static int invoke_release(cef_base_t* self)
+        {
+            cef_base_t.release_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->release;
+            if (mptr == s_bp1)
+            {
+                mdelegate = s_bd1;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
+                if (s_bp1 == IntPtr.Zero)
+                {
+                    s_bd1 = mdelegate;
+                    s_bp1 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
+        private static IntPtr s_bp2;
+        private static cef_base_t.get_refct_delegate s_bd2;
+
+        // method slot: 2
+        public static int invoke_get_refct(cef_base_t* self)
+        {
+            cef_base_t.get_refct_delegate mdelegate;
+
+            var mptr = ((cef_base_t*)self)->get_refct;
+            if (mptr == s_bp2)
+            {
+                mdelegate = s_bd2;
+            }
+            else
+            {
+                mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
+                if (s_bp2 == IntPtr.Zero)
+                {
+                    s_bd2 = mdelegate;
+                    s_bp2 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the event type.
@@ -3644,12 +10921,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_string_userfree_t get_type_delegate(cef_domevent_t* self);
 
+        private static IntPtr s_bp3;
+        private static get_type_delegate s_bd3;
+
+        // method slot: 3
+        public static cef_string_userfree_t invoke_get_type(cef_domevent_t* self)
+        {
+            get_type_delegate mdelegate;
+
+            var mptr = self->get_type;
+            if (mptr == s_bp3)
+            {
+                mdelegate = s_bd3;
+            }
+            else
+            {
+                mdelegate = (get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_type_delegate));
+                if (s_bp3 == IntPtr.Zero)
+                {
+                    s_bd3 = mdelegate;
+                    s_bp3 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the event category.
         /// </summary>
         public IntPtr get_category;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_dom_event_category_t get_category_delegate(cef_domevent_t* self);
+
+        private static IntPtr s_bp4;
+        private static get_category_delegate s_bd4;
+
+        // method slot: 4
+        public static cef_dom_event_category_t invoke_get_category(cef_domevent_t* self)
+        {
+            get_category_delegate mdelegate;
+
+            var mptr = self->get_category;
+            if (mptr == s_bp4)
+            {
+                mdelegate = s_bd4;
+            }
+            else
+            {
+                mdelegate = (get_category_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_category_delegate));
+                if (s_bp4 == IntPtr.Zero)
+                {
+                    s_bd4 = mdelegate;
+                    s_bp4 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the event processing phase.
@@ -3658,12 +10989,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_dom_event_phase_t get_phase_delegate(cef_domevent_t* self);
 
+        private static IntPtr s_bp5;
+        private static get_phase_delegate s_bd5;
+
+        // method slot: 5
+        public static cef_dom_event_phase_t invoke_get_phase(cef_domevent_t* self)
+        {
+            get_phase_delegate mdelegate;
+
+            var mptr = self->get_phase;
+            if (mptr == s_bp5)
+            {
+                mdelegate = s_bd5;
+            }
+            else
+            {
+                mdelegate = (get_phase_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_phase_delegate));
+                if (s_bp5 == IntPtr.Zero)
+                {
+                    s_bd5 = mdelegate;
+                    s_bp5 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns true (1) if the event can bubble up the tree.
         /// </summary>
         public IntPtr can_bubble;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int can_bubble_delegate(cef_domevent_t* self);
+
+        private static IntPtr s_bp6;
+        private static can_bubble_delegate s_bd6;
+
+        // method slot: 6
+        public static int invoke_can_bubble(cef_domevent_t* self)
+        {
+            can_bubble_delegate mdelegate;
+
+            var mptr = self->can_bubble;
+            if (mptr == s_bp6)
+            {
+                mdelegate = s_bd6;
+            }
+            else
+            {
+                mdelegate = (can_bubble_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(can_bubble_delegate));
+                if (s_bp6 == IntPtr.Zero)
+                {
+                    s_bd6 = mdelegate;
+                    s_bp6 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns true (1) if the event can be canceled.
@@ -3672,12 +11057,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int can_cancel_delegate(cef_domevent_t* self);
 
+        private static IntPtr s_bp7;
+        private static can_cancel_delegate s_bd7;
+
+        // method slot: 7
+        public static int invoke_can_cancel(cef_domevent_t* self)
+        {
+            can_cancel_delegate mdelegate;
+
+            var mptr = self->can_cancel;
+            if (mptr == s_bp7)
+            {
+                mdelegate = s_bd7;
+            }
+            else
+            {
+                mdelegate = (can_cancel_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(can_cancel_delegate));
+                if (s_bp7 == IntPtr.Zero)
+                {
+                    s_bd7 = mdelegate;
+                    s_bp7 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the document associated with this event.
         /// </summary>
         public IntPtr get_document;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domdocument_t* get_document_delegate(cef_domevent_t* self);
+
+        private static IntPtr s_bp8;
+        private static get_document_delegate s_bd8;
+
+        // method slot: 8
+        public static cef_domdocument_t* invoke_get_document(cef_domevent_t* self)
+        {
+            get_document_delegate mdelegate;
+
+            var mptr = self->get_document;
+            if (mptr == s_bp8)
+            {
+                mdelegate = s_bd8;
+            }
+            else
+            {
+                mdelegate = (get_document_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_document_delegate));
+                if (s_bp8 == IntPtr.Zero)
+                {
+                    s_bd8 = mdelegate;
+                    s_bp8 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
         /// <summary>
         /// Returns the target of the event.
@@ -3686,12 +11125,66 @@ namespace CefGlue.Core
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_target_delegate(cef_domevent_t* self);
 
+        private static IntPtr s_bp9;
+        private static get_target_delegate s_bd9;
+
+        // method slot: 9
+        public static cef_domnode_t* invoke_get_target(cef_domevent_t* self)
+        {
+            get_target_delegate mdelegate;
+
+            var mptr = self->get_target;
+            if (mptr == s_bp9)
+            {
+                mdelegate = s_bd9;
+            }
+            else
+            {
+                mdelegate = (get_target_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_target_delegate));
+                if (s_bp9 == IntPtr.Zero)
+                {
+                    s_bd9 = mdelegate;
+                    s_bp9 = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
+
         /// <summary>
         /// Returns the current target of the event.
         /// </summary>
         public IntPtr get_current_target;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate cef_domnode_t* get_current_target_delegate(cef_domevent_t* self);
+
+        private static IntPtr s_bpA;
+        private static get_current_target_delegate s_bdA;
+
+        // method slot: A
+        public static cef_domnode_t* invoke_get_current_target(cef_domevent_t* self)
+        {
+            get_current_target_delegate mdelegate;
+
+            var mptr = self->get_current_target;
+            if (mptr == s_bpA)
+            {
+                mdelegate = s_bdA;
+            }
+            else
+            {
+                mdelegate = (get_current_target_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(get_current_target_delegate));
+                if (s_bpA == IntPtr.Zero)
+                {
+                    s_bdA = mdelegate;
+                    s_bpA = mptr;
+                }
+            }
+
+            return mdelegate(self);
+        }
+
 
     };
 
@@ -3701,6 +11194,7 @@ namespace CefGlue.Core
     /// structure will be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_domevent_listener_t
     {
         /// <summary>
@@ -3727,6 +11221,7 @@ namespace CefGlue.Core
     /// this structure will always be called on the UI thread.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
     internal unsafe partial struct cef_content_filter_t
     {
         /// <summary>

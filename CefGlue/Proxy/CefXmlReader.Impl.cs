@@ -40,7 +40,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToNextNode()
         {
-            return this.move_to_next_node(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_move_to_next_node(this.ptr) != 0;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace CefGlue
         /// </summary>
         public bool Close()
         {
-            return this.close(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_close(this.ptr) != 0;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace CefGlue
         /// </summary>
         public bool HasError()
         {
-            return this.has_error(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_has_error(this.ptr) != 0;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace CefGlue
         /// </summary>
         public string GetError()
         {
-            var n_result = this.get_error(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_error(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -79,7 +79,7 @@ namespace CefGlue
         {
             get
             {
-                return (CefXmlNodeType)this.get_type(this.ptr);
+                return (CefXmlNodeType)cef_xml_reader_t.invoke_get_type(this.ptr);
             }
         }
 
@@ -88,7 +88,7 @@ namespace CefGlue
         /// </summary>
         public int GetDepth()
         {
-            return this.get_depth(this.ptr);
+            return cef_xml_reader_t.invoke_get_depth(this.ptr);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace CefGlue
         /// </summary>
         public string GetLocalName()
         {
-            var n_result = this.get_local_name(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_local_name(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -107,7 +107,7 @@ namespace CefGlue
         /// </summary>
         public string GetPrefix()
         {
-            var n_result = this.get_prefix(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_prefix(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -117,7 +117,7 @@ namespace CefGlue
         /// </summary>
         public string GetQualifiedName()
         {
-            var n_result = this.get_qualified_name(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_qualified_name(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -127,7 +127,7 @@ namespace CefGlue
         /// </summary>
         public string GetNamespaceURI()
         {
-            var n_result = this.get_namespace_uri(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_namespace_uri(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -137,7 +137,7 @@ namespace CefGlue
         /// </summary>
         public string GetBaseURI()
         {
-            var n_result = this.get_base_uri(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_base_uri(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -147,7 +147,7 @@ namespace CefGlue
         /// </summary>
         public string GetXmlLang()
         {
-            var n_result = this.get_xml_lang(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_xml_lang(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -157,7 +157,7 @@ namespace CefGlue
         /// </summary>
         public bool IsEmptyElement()
         {
-            return this.is_empty_element(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_is_empty_element(this.ptr) != 0;
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace CefGlue
         /// </summary>
         public bool HasValue()
         {
-            return this.has_value(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_has_value(this.ptr) != 0;
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace CefGlue
         /// </summary>
         public string GetValue()
         {
-            var n_result = this.get_value(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_value(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -182,7 +182,7 @@ namespace CefGlue
         /// </summary>
         public bool HasAttributes()
         {
-            return this.has_attributes(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_has_attributes(this.ptr) != 0;
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace CefGlue
         /// </summary>
         public int GetAttributeCount()
         {
-            return this.get_attribute_count(this.ptr);
+            return cef_xml_reader_t.invoke_get_attribute_count(this.ptr);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace CefGlue
         /// </summary>
         public string GetAttribute(int index)
         {
-            var n_result = this.get_attribute_byindex(this.ptr, index);
+            var n_result = cef_xml_reader_t.invoke_get_attribute_byindex(this.ptr, index);
             return n_result.GetStringAndFree();
         }
 
@@ -211,7 +211,7 @@ namespace CefGlue
             {
                 var n_qualifiedName = new cef_string_t(qualifiedName_str, qualifiedName != null ? qualifiedName.Length : 0);
 
-                var n_result = this.get_attribute_byqname(this.ptr, &n_qualifiedName);
+                var n_result = cef_xml_reader_t.invoke_get_attribute_byqname(this.ptr, &n_qualifiedName);
                 return n_result.GetStringAndFree();
             }
         }
@@ -227,7 +227,7 @@ namespace CefGlue
                 var n_localName = new cef_string_t(localName_str, localName != null ? localName.Length : 0);
                 var n_namespaceUri = new cef_string_t(namespaceUri_str, namespaceUri != null ? namespaceUri.Length : 0);
 
-                var n_result = this.get_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri);
+                var n_result = cef_xml_reader_t.invoke_get_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri);
                 return n_result.GetStringAndFree();
             }
         }
@@ -237,7 +237,7 @@ namespace CefGlue
         /// </summary>
         public string GetInnerXml()
         {
-            var n_result = this.get_inner_xml(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_inner_xml(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -246,7 +246,7 @@ namespace CefGlue
         /// </summary>
         public string GetOuterXml()
         {
-            var n_result = this.get_outer_xml(this.ptr);
+            var n_result = cef_xml_reader_t.invoke_get_outer_xml(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -255,7 +255,7 @@ namespace CefGlue
         /// </summary>
         public int GetLineNumber()
         {
-            return this.get_line_number(this.ptr);
+            return cef_xml_reader_t.invoke_get_line_number(this.ptr);
         }
 
 
@@ -271,7 +271,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToAttribute(int index)
         {
-            return this.move_to_attribute_byindex(this.ptr, index) != 0;
+            return cef_xml_reader_t.invoke_move_to_attribute_byindex(this.ptr, index) != 0;
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace CefGlue
             {
                 var n_qualifiedName = new cef_string_t(qualifiedName_str, qualifiedName != null ? qualifiedName.Length : 0);
 
-                return this.move_to_attribute_byqname(this.ptr, &n_qualifiedName) != 0;
+                return cef_xml_reader_t.invoke_move_to_attribute_byqname(this.ptr, &n_qualifiedName) != 0;
             }
         }
 
@@ -300,7 +300,7 @@ namespace CefGlue
                 var n_localName = new cef_string_t(localName_str, localName != null ? localName.Length : 0);
                 var n_namespaceUri = new cef_string_t(namespaceUri_str, namespaceUri != null ? namespaceUri.Length : 0);
 
-                return this.move_to_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri) != 0;
+                return cef_xml_reader_t.invoke_move_to_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri) != 0;
             }
         }
 
@@ -310,7 +310,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToFirstAttribute()
         {
-            return this.move_to_first_attribute(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_move_to_first_attribute(this.ptr) != 0;
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToNextAttribute()
         {
-            return this.move_to_next_attribute(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_move_to_next_attribute(this.ptr) != 0;
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace CefGlue
         /// </summary>
         public bool MoveToCarryingElement()
         {
-            return this.move_to_carrying_element(this.ptr) != 0;
+            return cef_xml_reader_t.invoke_move_to_carrying_element(this.ptr) != 0;
         }
 
     }

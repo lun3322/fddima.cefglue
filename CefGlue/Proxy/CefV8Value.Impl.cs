@@ -149,7 +149,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_undefined(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_undefined(this.ptr) != 0;
             }
         }
 
@@ -160,7 +160,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_null(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_null(this.ptr) != 0;
             }
         }
 
@@ -171,7 +171,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_bool(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_bool(this.ptr) != 0;
             }
         }
 
@@ -182,7 +182,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_int(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_int(this.ptr) != 0;
             }
         }
 
@@ -193,7 +193,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_double(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_double(this.ptr) != 0;
             }
         }
 
@@ -204,7 +204,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_date(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_date(this.ptr) != 0;
             }
         }
 
@@ -215,7 +215,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_string(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_string(this.ptr) != 0;
             }
         }
 
@@ -226,7 +226,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_object(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_object(this.ptr) != 0;
             }
         }
 
@@ -237,7 +237,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_array(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_array(this.ptr) != 0;
             }
         }
 
@@ -248,7 +248,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_function(this.ptr) != 0;
+                return cef_v8value_t.invoke_is_function(this.ptr) != 0;
             }
         }
 
@@ -257,7 +257,7 @@ namespace CefGlue
         /// </summary>
         public bool IsSame(CefV8Value that)
         {
-            return this.is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
+            return cef_v8value_t.invoke_is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace CefGlue
         /// </summary>
         public bool GetBoolValue()
         {
-            return this.get_bool_value(this.ptr) != 0;
+            return cef_v8value_t.invoke_get_bool_value(this.ptr) != 0;
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace CefGlue
         /// </summary>
         public int GetIntValue()
         {
-            return this.get_int_value(this.ptr);
+            return cef_v8value_t.invoke_get_int_value(this.ptr);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace CefGlue
         /// </summary>
         public double GetDoubleValue()
         {
-            return this.get_double_value(this.ptr);
+            return cef_v8value_t.invoke_get_double_value(this.ptr);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace CefGlue
         /// </summary>
         public DateTime GetDateValue()
         {
-            var n_result = this.get_date_value(this.ptr);
+            var n_result = cef_v8value_t.invoke_get_date_value(this.ptr);
             return n_result.ToDateTime();
         }
 
@@ -303,7 +303,7 @@ namespace CefGlue
         /// </summary>
         public string GetStringValue()
         {
-            var n_result = this.get_string_value(this.ptr);
+            var n_result = cef_v8value_t.invoke_get_string_value(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -323,7 +323,7 @@ namespace CefGlue
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return this.has_value_bykey(this.ptr, &n_key) != 0;
+                return cef_v8value_t.invoke_has_value_bykey(this.ptr, &n_key) != 0;
             }
         }
 
@@ -332,7 +332,7 @@ namespace CefGlue
         /// </summary>
         public bool HasValue(int index)
         {
-            return this.has_value_byindex(this.ptr, index) != 0;
+            return cef_v8value_t.invoke_has_value_byindex(this.ptr, index) != 0;
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace CefGlue
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return this.delete_value_bykey(this.ptr, &n_key) != 0;
+                return cef_v8value_t.invoke_delete_value_bykey(this.ptr, &n_key) != 0;
             }
         }
 
@@ -353,7 +353,7 @@ namespace CefGlue
         /// </summary>
         public bool DeleteValue(int index)
         {
-            return this.delete_value_byindex(this.ptr, index) != 0;
+            return cef_v8value_t.invoke_delete_value_byindex(this.ptr, index) != 0;
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace CefGlue
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
                 return CefV8Value.From(
-                    this.get_value_bykey(this.ptr, &n_key)
+                    cef_v8value_t.invoke_get_value_bykey(this.ptr, &n_key)
                     );
             }
         }
@@ -377,7 +377,7 @@ namespace CefGlue
         public CefV8Value GetValue(int index)
         {
             return CefV8Value.From(
-                   this.get_value_byindex(this.ptr, index)
+                   cef_v8value_t.invoke_get_value_byindex(this.ptr, index)
                    );
         }
 
@@ -390,7 +390,7 @@ namespace CefGlue
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return this.set_value_bykey(this.ptr, &n_key, value.GetNativePointerAndAddRef()) != 0;
+                return cef_v8value_t.invoke_set_value_bykey(this.ptr, &n_key, value.GetNativePointerAndAddRef()) != 0;
             }
         }
 
@@ -399,7 +399,7 @@ namespace CefGlue
         /// </summary>
         public bool SetValue(int index, CefV8Value value)
         {
-            return this.set_value_byindex(this.ptr, index, value.GetNativePointerAndAddRef()) != 0;
+            return cef_v8value_t.invoke_set_value_byindex(this.ptr, index, value.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace CefGlue
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return this.set_value_byaccessor(this.ptr, &n_key, (cef_v8_accesscontrol_t)settings, (cef_v8_propertyattribute_t)attribute) != 0;
+                return cef_v8value_t.invoke_set_value_byaccessor(this.ptr, &n_key, (cef_v8_accesscontrol_t)settings, (cef_v8_propertyattribute_t)attribute) != 0;
             }
         }
 
@@ -422,7 +422,7 @@ namespace CefGlue
         public bool TryGetKeys(out CefStringList keys)
         {
             keys = new CefStringList();
-            return this.get_keys(this.ptr, keys.GetNativeHandle()) != 0;
+            return cef_v8value_t.invoke_get_keys(this.ptr, keys.GetNativeHandle()) != 0;
         }
 
         /// <summary>
@@ -436,7 +436,7 @@ namespace CefGlue
             {
                 return keys;
             }
-            else throw new CefGlueException("CefV8Value.GetKeys failed.");
+            else throw new CefException("CefV8Value.GetKeys failed.");
         }
 
         /// <summary>
@@ -444,7 +444,7 @@ namespace CefGlue
         /// </summary>
         public CefUserData GetUserData()
         {
-            var n_base = this.get_user_data(this.ptr);
+            var n_base = cef_v8value_t.invoke_get_user_data(this.ptr);
             if (n_base == null) return null;
             return CefUserData.FromOrDefault((cefglue_userdata_t*)n_base);
         }
@@ -457,7 +457,7 @@ namespace CefGlue
         /// </summary>
         public int GetArrayLength()
         {
-            return this.get_array_length(this.ptr);
+            return cef_v8value_t.invoke_get_array_length(this.ptr);
         }
 
 
@@ -468,7 +468,7 @@ namespace CefGlue
         /// </summary>
         public string GetFunctionName()
         {
-            var n_result = this.get_function_name(this.ptr);
+            var n_result = cef_v8value_t.invoke_get_function_name(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -478,7 +478,7 @@ namespace CefGlue
         public CefV8Handler GetFunctionHandler()
         {
             return CefV8Handler.FromOrDefault(
-                this.get_function_handler(this.ptr)
+                cef_v8value_t.invoke_get_function_handler(this.ptr)
             );
         }
 
@@ -494,7 +494,7 @@ namespace CefGlue
 
             fixed (cef_v8value_t** n_arguments_ptr = &n_arguments[0])
             {
-                result = this.execute_function(
+                result = cef_v8value_t.invoke_execute_function(
                     this.ptr,
                     obj.GetNativePointerAndAddRef(),
                     n_arguments != null ? n_arguments.Length : 0,
@@ -524,7 +524,7 @@ namespace CefGlue
 
             fixed (cef_v8value_t** n_arguments_ptr = &n_arguments[0])
             {
-                result = this.execute_function_with_context(
+                result = cef_v8value_t.invoke_execute_function_with_context(
                     this.ptr,
                     context.GetNativePointerAndAddRef(),
                     obj.GetNativePointerAndAddRef(),

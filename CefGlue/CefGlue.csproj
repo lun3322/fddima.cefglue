@@ -66,6 +66,7 @@
     <Compile Include="Base\CefStringList.cs" />
     <Compile Include="Base\CefStringMap.cs" />
     <Compile Include="Cef.cs" />
+    <Compile Include="Cef.ScriptableObject.cs" />
     <Compile Include="Core\alloc.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -121,6 +122,22 @@
     <Compile Include="Core\Struct\cef_time_t.cs" />
     <Compile Include="Core\Struct\cef_urlparts_t.cs" />
     <Compile Include="Core\Struct\cef_window_info_t.cs" />
+    <Compile Include="ScriptableObject\Attributes\NamingConvention.cs" />
+    <Compile Include="ScriptableObject\Attributes\ScriptableObjectAttribute.cs" />
+    <Compile Include="ScriptableObject\Attributes\ScriptableAttribute.cs" />
+    <Compile Include="ScriptableObject\InvokeMethodBuilder.cs" />
+    <Compile Include="ScriptableObject\InvokeMethodHelper.cs" />
+    <Compile Include="ScriptableObject\NameHelper.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectDef.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectOptions.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectV8Accessor.cs" />
+    <Compile Include="ScriptableObject\ExceptionBuilder.cs" />
+    <Compile Include="Common\CefConvert.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectException.cs" />
+    <Compile Include="ScriptableObject\MethodDefAttributes.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectV8Handler.cs" />
+    <Compile Include="ScriptableObject\PropertyDef.cs" />
+    <Compile Include="ScriptableObject\DispatchTable.cs" />
     <Compile Include="Core\win\NativeMethods.cs" />
     <Compile Include="Core\win\RECT.cs" />
     <Compile Include="Core\win\WindowStyles.cs" />
@@ -238,7 +255,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Handler.tt</DependentUpon>
     </Compile>
-    <Compile Include="Handler\ObjectTable.cs" />
+    <Compile Include="Core\ObjectTable.cs" />
     <Compile Include="Proxy\CefBrowser.Impl.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -292,8 +309,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Proxy.tt</DependentUpon>
     </Compile>
+    <Compile Include="ScriptableObject\MethodDef.cs" />
+    <Compile Include="ScriptableObject\ReflectionExtensions.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectBinder.cs" />
     <Compile Include="Struct\CefBrowserSettings.cs" />
-    <Compile Include="CefGlueException.cs" />
+    <Compile Include="CefException.cs" />
     <Compile Include="Enum\CefHandlerErrorCode.cs" />
     <Compile Include="Enum\CefLogSeverity.cs" />
     <Compile Include="Struct\CefRect.cs" />
@@ -318,7 +338,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>alloc.g.cs</LastGenOutput>
     </None>
-    <None Include="Core\Core.ttinclude" />
     <None Include="Handler\Handler.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Handler.g.cs</LastGenOutput>

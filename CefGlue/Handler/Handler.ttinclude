@@ -16,7 +16,7 @@ namespace CefGlue
     using Core;
     using Diagnostics;
 <#+ foreach (var handler in this.HandlerSchema.Values) {
-		GenerateHandlerClass(handler);
+        GenerateHandlerClass(handler);
     } #>
 }
 
@@ -39,38 +39,28 @@ void GenerateHandlerClass(HandlerDef def)
         /// <summary>
         /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
         /// </summary>
-        internal static <#=def.ClassName#> From(<#=def.StructName#>* pointer)
+        internal static <#=def.ClassName#> From(<#=def.StructName#>* ptr)
         {
 #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, pointer, "From");
+            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, ptr, "From");
 #endif
-            if (pointer == null) ThrowNullNativePointer();
+            if (ptr == null) throw new ArgumentNullException("ptr");
             <#=def.ClassName#> value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("<#=def.ClassName#> not found.");
+            value.ReleaseRef();
             return value;
         }
-		
-		internal static <#=def.ClassName#> FromOrDefault(<#=def.StructName#>* pointer)
-		{
-#if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, pointer, "FromOrDefault");
-#endif
-            if (pointer == null) return null;
-            <#=def.ClassName#> value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
-            return value;
-		}
-		
-		private static void ThrowObjectNotFound()
-		{
-		    throw new CefGlueException("<#=def.ClassName#> not found.");
-		}
-		
-        private static void ThrowNullNativePointer()
+
+        internal static <#=def.ClassName#> FromOrDefault(<#=def.StructName#>* ptr)
         {
-            throw new NullReferenceException("<#=def.ClassName#>");
+#if DIAGNOSTICS
+            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, ptr, "FromOrDefault");
+#endif
+            if (ptr == null) return null;
+            <#=def.ClassName#> value;
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("<#=def.ClassName#> not found.");
+            value.ReleaseRef();
+            return value;
         }
 <#+ } #>
 
@@ -86,12 +76,12 @@ void GenerateHandlerClass(HandlerDef def)
         private <#=cb.DelegateName#> <#=cb.DelegateFieldName#>;
 <#+ } #>
 
-        public <#=def.ClassName#>()
+        protected <#=def.ClassName#>()
         {
             this.refct = 0;
             this.ptr = <#=def.StructName#>.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -119,55 +109,63 @@ void GenerateHandlerClass(HandlerDef def)
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, "~<#=def.ClassName#>");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 <#+ if (def.Disposable) { #>
         public void Dispose()
         {
-		    if (this.RefCount == 0)
-			{
-			    Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-			else
-			{
+            if (this.RefCount == 0)
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            else
+            {
                 this.disposed = true;
             }
         }
 <#+ } #>
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				<#=def.StructName#>.Free(this.ptr);
+                <#=def.StructName#>.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-<#+	foreach(var cb in def.GetCallbacks()) { #>
-<#+		if (cb.DisposeField) { #>
+            {
+<#+ foreach(var cb in def.GetCallbacks()) { #>
+<#+     if (cb.DisposeField) { #>
                 if (<#=cb.FieldName#> != null) { <#=cb.FieldName#> = null; }
-<#+		} #>
-<#+	} #>
-			}
+<#+     } #>
+<#+ } #>
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -175,17 +173,17 @@ void GenerateHandlerClass(HandlerDef def)
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -193,10 +191,10 @@ void GenerateHandlerClass(HandlerDef def)
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -247,11 +245,11 @@ void GenerateHandlerClass(HandlerDef def)
             throw new ObjectDisposedException("<#=def.ClassName#>");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 <#+
 }

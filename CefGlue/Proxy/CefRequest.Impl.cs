@@ -20,7 +20,7 @@ namespace CefGlue
         /// </summary>
         public string GetURL()
         {
-            var n_result = this.get_url(this.ptr);
+            var n_result = cef_request_t.invoke_get_url(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -32,7 +32,7 @@ namespace CefGlue
             fixed (char* url_str = url)
             {
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
-                this.set_url(this.ptr, &n_url);
+                cef_request_t.invoke_set_url(this.ptr, &n_url);
             }
         }
 
@@ -42,7 +42,7 @@ namespace CefGlue
         /// </summary>
         public string GetMethod()
         {
-            var n_result = this.get_method(this.ptr);
+            var n_result = cef_request_t.invoke_get_method(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -54,7 +54,7 @@ namespace CefGlue
             fixed (char* method_str = method)
             {
                 var n_method = new cef_string_t(method_str, method != null ? method.Length : 0);
-                this.set_method(this.ptr, &n_method);
+                cef_request_t.invoke_set_method(this.ptr, &n_method);
             }
         }
 
@@ -64,7 +64,7 @@ namespace CefGlue
         public CefPostData GetPostData()
         {
             return CefPostData.From(
-                this.get_post_data(this.ptr)
+                cef_request_t.invoke_get_post_data(this.ptr)
                 );
         }
 
@@ -73,7 +73,7 @@ namespace CefGlue
         /// </summary>
         public void SetPostData(CefPostData postData)
         {
-            this.set_post_data(this.ptr, postData.GetNativePointerAndAddRef());
+            cef_request_t.invoke_set_post_data(this.ptr, postData.GetNativePointerAndAddRef());
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace CefGlue
         public CefStringMap GetHeaderMap()
         {
             var map = new CefStringMap();
-            this.get_header_map(this.ptr, map.GetNativeHandle());
+            cef_request_t.invoke_get_header_map(this.ptr, map.GetNativeHandle());
             return map;
         }
 
@@ -91,7 +91,7 @@ namespace CefGlue
         /// </summary>
         public void SetHeaderMap(CefStringMap headerMap)
         {
-            this.set_header_map(this.ptr, headerMap.GetNativeHandle());
+            cef_request_t.invoke_set_header_map(this.ptr, headerMap.GetNativeHandle());
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace CefGlue
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
                 var n_method = new cef_string_t(method_str, method != null ? method.Length : 0);
 
-                this.set(this.ptr, &n_url, &n_method, postData.GetNativePointerAndAddRef(), headerMap.GetNativeHandle());
+                cef_request_t.invoke_set(this.ptr, &n_url, &n_method, postData.GetNativePointerAndAddRef(), headerMap.GetNativeHandle());
             }
         }
 
@@ -114,7 +114,7 @@ namespace CefGlue
         /// </summary>
         public CefWebUrlRequestFlags GetFlags()
         {
-            return (CefWebUrlRequestFlags)this.get_flags(this.ptr);
+            return (CefWebUrlRequestFlags)cef_request_t.invoke_get_flags(this.ptr);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace CefGlue
         /// </summary>
         public void SetFlags(CefWebUrlRequestFlags flags)
         {
-            this.set_flags(this.ptr, (cef_weburlrequest_flags_t)flags);
+            cef_request_t.invoke_set_flags(this.ptr, (cef_weburlrequest_flags_t)flags);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace CefGlue
         /// </summary>
         public string GetFirstPartyForCookies()
         {
-            var n_result = this.get_first_party_for_cookies(this.ptr);
+            var n_result = cef_request_t.invoke_get_first_party_for_cookies(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -143,7 +143,7 @@ namespace CefGlue
             {
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
 
-                this.set_first_party_for_cookies(this.ptr, &n_url);
+                cef_request_t.invoke_set_first_party_for_cookies(this.ptr, &n_url);
             }
         }
 

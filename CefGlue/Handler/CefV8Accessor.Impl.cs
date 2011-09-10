@@ -11,7 +11,7 @@ namespace CefGlue
         /// structure. |retval| is the value to return for this property. Return
         /// true if handled.
         /// </summary>
-        private int get(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval)
+        internal virtual int get(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval)
         {
             ThrowIfObjectDisposed();
 
@@ -39,7 +39,11 @@ namespace CefGlue
         /// |retval| is the value to return for this property.
         /// Return true if handled.
         /// </summary>
-        protected abstract bool Get(string name, CefV8Value obj, out CefV8Value returnValue);
+        protected virtual bool Get(string name, CefV8Value obj, out CefV8Value returnValue)
+        {
+            returnValue = null;
+            return false;
+        }
 
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace CefGlue
         /// property. |object| is the This() object from V8's AccessorInfo
         /// structure. Return true if handled.
         /// </summary>
-        private int set(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value)
+        internal virtual int set(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value)
         {
             ThrowIfObjectDisposed();
 
@@ -68,7 +72,10 @@ namespace CefGlue
         /// |object| is the This() object from V8's AccessorInfo structure.
         /// Return true if handled.
         /// </summary>
-        protected abstract bool Set(string name, CefV8Value obj, CefV8Value value);
+        protected virtual bool Set(string name, CefV8Value obj, CefV8Value value)
+        {
+            return false;
+        }
 
 
     }

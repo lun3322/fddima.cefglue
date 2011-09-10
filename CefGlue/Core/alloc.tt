@@ -1,14 +1,14 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ output extension=".g.cs" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ include file="Core.ttinclude" #>
+<#@ include file="..\Templates\CefGlue.ttinclude" #>
 <#
     var structDefs = new StructDef[] {
         new StructDef("cef_settings_t",          hasBase:false, hasSize:true,  hasClear:true),
         new StructDef("cef_window_info_t",       hasBase:false, hasSize:false, hasClear:true),
         new StructDef("cef_browser_settings_t",  hasBase:false, hasSize:true,  hasClear:false), // FIXME: hasClear
-		new StructDef("cef_popup_features_t",  	 hasBase:false, hasSize:false, hasClear:false),
-		new StructDef("cef_cookie_t",            hasBase:false, hasSize:false, hasClear:true),
+        new StructDef("cef_popup_features_t",    hasBase:false, hasSize:false, hasClear:false),
+        new StructDef("cef_cookie_t",            hasBase:false, hasSize:false, hasClear:true),
 
         new StructDef("cef_client_t",            hasBase:true),
         new StructDef("cef_life_span_handler_t", hasBase:true),
@@ -23,26 +23,26 @@
         new StructDef("cef_jsdialog_handler_t",  hasBase:true),
         new StructDef("cef_jsbinding_handler_t", hasBase:true),
         new StructDef("cef_render_handler_t",    hasBase:true),
-			
-		new StructDef("cef_download_handler_t",  hasBase:true),
-		new StructDef("cef_scheme_handler_t",    hasBase:true),
-			
-		new StructDef("cef_content_filter_t",    hasBase:true),
-			
-		new StructDef("cef_scheme_handler_factory_t", hasBase:true),
-			
-		new StructDef("cef_task_t",              hasBase:true),
 
-		new StructDef("cef_cookie_visitor_t",    hasBase:true),
-			
-		new StructDef("cef_v8handler_t",         hasBase:true),
-		new StructDef("cef_v8accessor_t",        hasBase:true),
-			
-		new StructDef("cef_domvisitor_t",        hasBase:true),
-		new StructDef("cef_domevent_listener_t", hasBase:true),
+        new StructDef("cef_download_handler_t",  hasBase:true),
+        new StructDef("cef_scheme_handler_t",    hasBase:true),
 
-		new StructDef("cef_read_handler_t",      hasBase:true),
-		new StructDef("cef_write_handler_t",     hasBase:true),
+        new StructDef("cef_content_filter_t",    hasBase:true),
+
+        new StructDef("cef_scheme_handler_factory_t", hasBase:true),
+
+        new StructDef("cef_task_t",              hasBase:true),
+
+        new StructDef("cef_cookie_visitor_t",    hasBase:true),
+
+        new StructDef("cef_v8handler_t",         hasBase:true),
+        new StructDef("cef_v8accessor_t",        hasBase:true),
+
+        new StructDef("cef_domvisitor_t",        hasBase:true),
+        new StructDef("cef_domevent_listener_t", hasBase:true),
+
+        new StructDef("cef_read_handler_t",      hasBase:true),
+        new StructDef("cef_write_handler_t",     hasBase:true),
 
         new StructDef("cef_web_urlrequest_client_t", hasBase:true),
 

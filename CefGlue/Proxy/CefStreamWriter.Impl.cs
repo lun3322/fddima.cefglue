@@ -35,7 +35,7 @@ namespace CefGlue
         /// </summary>
         internal int Write(/*const*/ void* ptr, int size, int count)
         {
-            return this.write(this.ptr, ptr, size, count);
+            return cef_stream_writer_t.invoke_write(this.ptr, ptr, size, count);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace CefGlue
         /// </summary>
         public bool Seek(long offset, SeekOrigin whence)
         {
-            return this.seek(this.ptr, offset, (int)whence) == 0;
+            return cef_stream_writer_t.invoke_seek(this.ptr, offset, (int)whence) == 0;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace CefGlue
         /// </summary>
         public long Tell()
         {
-            return this.tell(this.ptr);
+            return cef_stream_writer_t.invoke_tell(this.ptr);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace CefGlue
         /// </summary>
         public bool Flush()
         {
-            return this.flush(this.ptr) == 0;
+            return cef_stream_writer_t.invoke_flush(this.ptr) == 0;
         }
 
     }

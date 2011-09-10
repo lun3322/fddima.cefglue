@@ -31,7 +31,7 @@ namespace CefGlue
         public CefBrowser GetBrowser()
         {
             return CefBrowser.From(
-                this.get_browser(this.ptr)
+                cef_v8context_t.invoke_get_browser(this.ptr)
                 );
         }
 
@@ -41,7 +41,7 @@ namespace CefGlue
         public CefFrame GetFrame()
         {
             return CefFrame.From(
-                this.get_frame(this.ptr)
+                cef_v8context_t.invoke_get_frame(this.ptr)
                 );
         }
 
@@ -51,7 +51,7 @@ namespace CefGlue
         public CefV8Value GetGlobal()
         {
             return CefV8Value.From(
-                this.get_global(this.ptr)
+                cef_v8context_t.invoke_get_global(this.ptr)
                 );
         }
 
@@ -64,7 +64,7 @@ namespace CefGlue
         /// </summary>
         public bool Enter()
         {
-            return this.enter(this.ptr) != 0;
+            return cef_v8context_t.invoke_enter(this.ptr) != 0;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace CefGlue
         /// </summary>
         public bool Exit()
         {
-            return this.exit(this.ptr) != 0;
+            return cef_v8context_t.invoke_exit(this.ptr) != 0;
         }
 
     }

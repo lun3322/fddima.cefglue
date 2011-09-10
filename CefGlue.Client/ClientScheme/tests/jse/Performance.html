@@ -134,7 +134,7 @@
             execTestFunc(test);
             if (!test.error) {
                 test.warmedUp = true;
-                test.beginMemory = cefglue.client.privateWorkingSet;
+                test.beginMemory = cefGlue.client.privateWorkingSet;
                 return nextStep();
             } else {
                 return nextTest();
@@ -143,7 +143,7 @@
 
         if (test.probe >= test.totalProbes) {
             test.avg = test.total / test.totalProbes;
-            test.endMemory = cefglue.client.privateWorkingSet;
+            test.endMemory = cefGlue.client.privateWorkingSet;
             return nextTest();
         }
 
@@ -298,7 +298,7 @@
         name: "warmup",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnVoid();
+                cefGlue.client.returnVoid();
             }
         }
     });
@@ -307,7 +307,7 @@
         name: "ReturnVoid",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnVoid();
+                cefGlue.client.returnVoid();
             }
         },
         description: "No arguments and no explicit return value."
@@ -317,7 +317,7 @@
         name: "ReturnVoidAndDisposeThis",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnVoidAndDisposeThis();
+                cefGlue.client.returnVoidAndDisposeThis();
             }
         },
         description: "No arguments and no explicit return value, but handler disposes this value."
@@ -327,7 +327,7 @@
         name: "ReturnUndefined",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnUndefined();
+                cefGlue.client.returnUndefined();
             }
         },
         description: "No arguments and return value is undefined."
@@ -337,7 +337,7 @@
         name: "ReturnNull",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnNull();
+                cefGlue.client.returnNull();
             }
         },
         description: "No arguments and return value is null."
@@ -347,7 +347,7 @@
         name: "ReturnBool",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnBool();
+                cefGlue.client.returnBool();
             }
         },
         description: "No arguments and return value is bool."
@@ -357,7 +357,7 @@
         name: "ReturnInt",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnInt();
+                cefGlue.client.returnInt();
             }
         },
         description: "No arguments and return value is int."
@@ -367,7 +367,7 @@
         name: "ReturnDouble",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnDouble();
+                cefGlue.client.returnDouble();
             }
         },
         description: "No arguments and return value is double."
@@ -377,7 +377,7 @@
         name: "ReturnDate",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnDate();
+                cefGlue.client.returnDate();
             }
         },
         description: "No arguments and return value is date."
@@ -387,7 +387,7 @@
         name: "ReturnString",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnString();
+                cefGlue.client.returnString();
             }
         },
         description: "No arguments and return value is string."
@@ -397,7 +397,7 @@
         name: "ReturnArray",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnArray();
+                cefGlue.client.returnArray();
             }
         },
         description: "No arguments and return value is array."
@@ -407,7 +407,7 @@
         name: "ReturnObject",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.returnObject();
+                cefGlue.client.returnObject();
             }
         },
         description: "No arguments and return value is object."
@@ -417,7 +417,7 @@
         name: "SubtractIntImplicit",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.subtractIntImplicit(i + 7, i);
+                cefGlue.client.subtractIntImplicit(i + 7, i);
             }
         },
         description: "Subtract two int arguments and return result."
@@ -427,7 +427,7 @@
         name: "SubtractIntExplicit",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.subtractIntExplicit(i + 7, i);
+                cefGlue.client.subtractIntExplicit(i + 7, i);
             }
         },
         description: "Perform argument type check, then subtract two int arguments and return result."
@@ -437,7 +437,7 @@
         name: "Dump",
         func: function (count) {
             for (var i = 0; i < count; i++) {
-                cefglue.client.dump(undefined, null, false, 0, 1.5, new Date(), "Hello, World!", { a: 1, b: { c: 2, d: 3 }, e: 3 }, [1, 2, [3, 4, 5]], function () { });
+                cefGlue.client.dump(undefined, null, false, 0, 1.5, new Date(), "Hello, World!", { a: 1, b: { c: 2, d: 3 }, e: 3 }, [1, 2, [3, 4, 5]], function () { });
             }
         },
         description: "Performance of complex function.",

@@ -7,7 +7,41 @@
 #region Helper Methods
 public static string Capitalize(string str)
 {
-	return char.ToUpperInvariant(str[0]) + str.Substring(1);
+    return char.ToUpperInvariant(str[0]) + str.Substring(1);
+}
+#endregion
+
+#region Struct Schema
+class StructDef
+{
+    public StructDef()
+    {
+        Name = null;
+        HasBase = true;
+        HasSize = true;
+        HasClear = false;
+    }
+    
+    public StructDef(string name)
+    {
+        Name = name;
+        HasBase = true;
+        HasSize = true;
+        HasClear = false;
+    }
+
+    public StructDef(string name, bool hasBase = true, bool hasSize = true, bool hasClear = false)
+    {
+        Name = name;
+        HasBase = hasBase;
+        HasSize = hasSize || hasBase;
+        HasClear = hasClear;
+    }
+
+    public string Name { get; private set; }
+    public bool HasBase { get; private set; }
+    public bool HasSize { get; private set; }
+    public bool HasClear { get; private set; }
 }
 #endregion
 
@@ -22,13 +56,13 @@ class HandlerDef
     {
         this.callbacks = new List<HandlerCallbackDef>();
 
-		this.Disposable = false;
+        this.Disposable = false;
     }
-	
-	public string GetBackStoreName(string name)
-	{
-		return "bs_" + name;
-	}
+
+    public string GetBackStoreName(string name)
+    {
+        return "bs_" + name;
+    }
 
     public string ClassName
     {
@@ -56,72 +90,72 @@ class HandlerDef
         set { this.structName = value; }
     }
 
-	public bool ReversibleNativePointer
-	{
-		get; set;
-	}
+    public bool ReversibleNativePointer
+    {
+        get; set;
+    }
 
-	/// <summary>
-	/// If true - then object implement's IDisposable interface.
-	/// If false - object doesn't implement IDisposable interface.
-	/// In both cases class provide protected virtual Dispose(bool disposing) method.
-	/// </summary>
-	public bool Disposable { get; set; }
+    /// <summary>
+    /// If true - then object implement's IDisposable interface.
+    /// If false - object doesn't implement IDisposable interface.
+    /// In both cases class provide protected virtual Dispose(bool disposing) method.
+    /// </summary>
+    public bool Disposable { get; set; }
 
     public IEnumerable<HandlerCallbackDef> GetCallbacks() { return this.callbacks.AsEnumerable(); }
 
-	public void AddCallback(string structName, object obj = null)
-	{
-		var def = new HandlerCallbackDef {
-    	    StructName = structName
-		};
-		
-		if (obj != null) {
-			throw new NotImplementedException();
-		}
-		
-		AddCallback(def);
-	}
-	
+    public void AddCallback(string structName, object obj = null)
+    {
+        var def = new HandlerCallbackDef {
+            StructName = structName
+        };
+
+        if (obj != null) {
+            throw new NotImplementedException();
+        }
+
+        AddCallback(def);
+    }
+
     public void AddCallback(HandlerCallbackDef cb)
     {
-		cb.Parent = this;
+        cb.Parent = this;
         this.callbacks.Add(cb);
     }
 }
 
 class HandlerCallbackDef
 {
-	private string name;
-	
+    private string name;
+
     public HandlerCallbackDef()
-    {		
+    {
     }
 
-	public HandlerDef Parent { get; set; }
-	
+    public HandlerDef Parent { get; set; }
+
     public string ParentStructName { get { return this.Parent.StructName; } }
 
     public string Name
-	{
-		get
-		{
-			if (string.IsNullOrWhiteSpace(this.name))
-			{
-				this.name = string.Join("", this.StructName.Split('_').Select(_ => Capitalize(_)));
-			}
-			return this.name;
-		}
-		set
-		{
-			this.name = value;
-		}
-	}
-	
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(this.name))
+            {
+                this.name = string.Join("", this.StructName.Split('_').Select(_ => Capitalize(_)));
+            }
+            return this.name;
+        }
+        set
+        {
+            this.name = value;
+        }
+    }
+
     public string Summary { get; set; }
     public string StructName { get; set; }
 
-    public virtual string Type { get { return Name + "Handler"; } }	
+    public virtual string Type { get { return Name + "Handler"; } }
 
     public string FieldName
     {
@@ -133,14 +167,14 @@ class HandlerCallbackDef
         }
     }
 
-	public virtual bool DisposeField { get { return false; } }
-	public virtual bool ClientCallback { get { return false; } }
+    public virtual bool DisposeField { get { return false; } }
+    public virtual bool ClientCallback { get { return false; } }
 
     public virtual string DelegateName { get { return ParentStructName + "." + StructName + "_delegate"; } }
     public virtual string DelegateFieldName { get { return Parent.GetBackStoreName(StructName); } }
 
     public virtual string NativeCallbackName { get { return StructName; } }
-	public virtual string NativeType { get { throw new NotSupportedException(); } }
+    public virtual string NativeType { get { throw new NotSupportedException(); } }
 }
 #endregion
 
@@ -152,10 +186,11 @@ class ProxyDef
     public ProxyDef()
     {
         _methods = new List<ProxyMethodDef>();
+        GenerateMethodAccessors = false;
     }
 
-	public int Index { get; private set; }
-	
+    public int Index { get; private set; }
+
     public string ClassName { get; set; }
 
     public string StructName { get; set; }
@@ -175,13 +210,15 @@ class ProxyDef
         method.Parent = this;
         _methods.Add(method);
     }
-	
-	public void ApplyMethodIndexes()
+
+    public void ApplyMethodIndexes()
     {
-		for (var i = 0; i < _methods.Count; i++) {
-			_methods[i].Index = i + 3; // indexes 0,1,2 reserved to add_ref, release and get_refct
-		}
-	}
+        for (var i = 0; i < _methods.Count; i++) {
+            _methods[i].Index = i + 3; // indexes 0,1,2 reserved to add_ref, release and get_refct
+        }
+    }
+
+    public bool GenerateMethodAccessors { get; set; }
 }
 
 class ProxyMethodDef
@@ -190,8 +227,8 @@ class ProxyMethodDef
     {
     }
 
-	public int Index { get; internal set; }
-	
+    public int Index { get; internal set; }
+
     public ProxyDef Parent { get; set; }
     public string StructName { get; set; }
 

@@ -25,12 +25,19 @@
             InitializeComponent();
             // this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
+            CreateMenu();
+
             this.caption = this.Text;
 
             this.consoleForm = new ConsoleForm();
             consoleForm.BindData(consoleMessages);
 
             this.browser = CreateBrowserControl();
+        }
+
+        private void CreateMenu()
+        {
+            // TODO: Dynamically create menu here!
         }
 
         private CefWebBrowser CreateBrowserControl()
@@ -49,8 +56,10 @@
             // settings.DeveloperToolsDisabled = true;
             // settings.CaretBrowsingEnabled = true;
 
-            //var startUrl = this.bookmarksCefGlueHomeMenuItem.Tag as string;
-            var startUrl = this.testsJsePerformanceMenuItem.Tag as string;
+            var startUrl = this.bookmarksCefGlueHomeMenuItem.Tag as string;
+            //var startUrl = this.testsJsePerformanceMenuItem.Tag as string;
+            //var startUrl = this.performanceToolStripMenuItem.Tag as string;
+            //var startUrl = this.runTestsToolStripMenuItem.Tag as string;
 
             var browser = new CefWebBrowser(settings, startUrl);
             browser.Parent = this;
@@ -239,6 +248,12 @@
         private void browserResetZoomMenuItem_Click(object sender, EventArgs e)
         {
             this.browser.ZoomLevel = 0;
+        }
+
+        private void browserGetFrameNamesMenuItem_Click(object sender, EventArgs e)
+        {
+            var names = this.browser.GetFrameNames();
+            MessageBox.Show(string.Join(", ", names));
         }
 
     }

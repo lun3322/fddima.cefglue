@@ -3,8 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Text;
 
     /// <summary>
     /// CEF string type.
@@ -21,17 +22,17 @@
     {
         /// <summary></summary>
         /// <remarks>char16_t* str;</remarks>
-        private char* str;
+        internal char* str;
 
         /// <summary></summary>
         /// <remarks>size_t length;</remarks>
-        private int length;
+        internal int length;
 
         /// <summary></summary>
         /// <remarks>void (*dtor)(char16_t* str);</remarks>
-        private IntPtr dtor;
+        internal IntPtr dtor;
 
-        [UnmanagedFunctionPointer(libcef.Call)]
+        [UnmanagedFunctionPointer(libcef.Call), SuppressUnmanagedCodeSecurity]
         public delegate void dtor_delegate(char* str);
 
         /// <summary>
@@ -67,7 +68,7 @@
 
         private static void copy_impl(string src, cef_string_t* dst)
         {
-            cef_string_clear(dst);
+            libcef.string_clear(dst);
 
             if (string.IsNullOrEmpty(src))
             {
@@ -108,7 +109,7 @@
                 }
                 else
 #endif
-                cef_string_set(ptr, src == null ? 0 : src.Length, dst, copy ? 1 : 0);
+                libcef.string_set(ptr, src == null ? 0 : src.Length, dst, copy ? 1 : 0);
             }
         }
 
@@ -123,17 +124,18 @@
                 }
                 else
 #endif
-                cef_string_set(ptr, src == null ? 0 : src.Length, dst, 1);
+                libcef.string_set(ptr, src == null ? 0 : src.Length, dst, 1);
             }
         }
 
         public static void Clear(cef_string_t* str)
         {
-            cef_string_clear(str);
+            libcef.string_clear(str);
         }
+    }
 
-        #region LibCef String NativeMethods
-
+    unsafe partial class libcef
+    {
         /// <summary>
         /// These functions set string values. If |copy| is true (1) the value will be
         /// copied instead of referenced. It is up to the user to properly manage
@@ -144,7 +146,7 @@
         ///                                     cef_string_utf16_t* output, int copy);
         /// </remarks>
         [DllImport(libcef.DllName, EntryPoint = "cef_string_utf16_set", CallingConvention = libcef.Call)]
-        private static extern int cef_string_set(char* src, int src_len, cef_string_t* output, int copy);
+        public static extern int string_set(char* src, int src_len, cef_string_t* output, int copy);
 
         /// <summary>
         /// These functions clear string values. The structure itself is not freed.
@@ -154,8 +156,6 @@
         /// CEF_EXPORT void cef_string_utf16_clear(cef_string_utf16_t* str);
         /// </remarks>
         [DllImport(libcef.DllName, EntryPoint = "cef_string_utf16_clear", CallingConvention = libcef.Call)]
-        private static extern void cef_string_clear(cef_string_t* str);
-
-        #endregion
+        public static extern void string_clear(cef_string_t* str);
     }
 }

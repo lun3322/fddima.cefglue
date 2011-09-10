@@ -222,7 +222,7 @@
 
         private void ThrowIfReadOnly()
         {
-            if (!this.owner) throw new CefGlueException("CefCookie object is in non editable state.");
+            if (!this.owner) throw new CefException("CefCookie object is in non editable state.");
         }
     }
 }

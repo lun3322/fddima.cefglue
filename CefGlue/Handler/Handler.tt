@@ -5,16 +5,16 @@
 <#@ include file="Handler.ttinclude" #><#
 
     HandlerSchema["CefClient"].ReversibleNativePointer = true;
-	HandlerSchema["CefClient"].Disposable = true;
-	
-	HandlerSchema["CefV8Handler"].ReversibleNativePointer = true;
-	
-	var def = new HandlerDef(){
-		ClassName = "CefUserData",
-		StructName = "cefglue_userdata_t",
-	};
-	HandlerSchema.Add(def.ClassName, def);
-	HandlerSchema["CefUserData"].ReversibleNativePointer = true;
+    HandlerSchema["CefClient"].Disposable = true;
+
+    HandlerSchema["CefV8Handler"].ReversibleNativePointer = true;
+
+    var def = new HandlerDef(){
+        ClassName = "CefUserData",
+        StructName = "cefglue_userdata_t",
+    };
+    HandlerSchema.Add(def.ClassName, def);
+    HandlerSchema["CefUserData"].ReversibleNativePointer = true;
 
     GenerateHandlerClasses();
 #>

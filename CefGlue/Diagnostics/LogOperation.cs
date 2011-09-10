@@ -1,4 +1,5 @@
-﻿namespace CefGlue.Diagnostics
+﻿#if DIAGNOSTICS
+namespace CefGlue.Diagnostics
 {
     using System;
 
@@ -14,3 +15,4 @@
         Dispose
     }
 }
+#endif

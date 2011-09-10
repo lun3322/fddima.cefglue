@@ -7,7 +7,7 @@
     using Core;
     using Diagnostics;
 
-    public static unsafe class Cef
+    public static unsafe partial class Cef
     {
         private static CefSettings s_currentSettings;
         private static bool s_multiThreadedMessageLoop;
@@ -35,6 +35,7 @@
             }
         }
 
+        // TODO: rename property
         public static bool IsInitialized { get { return s_currentSettings != null; } }
 
         internal static bool MultiThreadedMessageLoop { get { return s_multiThreadedMessageLoop; } }
@@ -52,7 +53,7 @@
         /// <exception cref="Exception"></exception>
         public static void Initialize(CefSettings settings)
         {
-            if (IsInitialized) throw new CefGlueException("CEF already initialized.");
+            if (IsInitialized) throw new CefException("CEF already initialized.");
 #if DIAGNOSTICS
             cef_string_t.OnCreate = (ptr, str) =>
             {
@@ -80,7 +81,7 @@
             var initialized = libcef.initialize(n_settings) != 0;
             cef_settings_t.Free(n_settings);
 
-            if (!initialized) throw new CefGlueException("CEF failed to initialize.");
+            if (!initialized) throw new CefException("CEF failed to initialize.");
 
             CurrentSettings = settings;
         }
@@ -307,7 +308,7 @@
 
         /// <summary>
         /// Add an entry to the cross-origin access whitelist.
-        //
+        ///
         /// The same-origin policy restricts how scripts hosted from different
         /// origins (scheme + domain) can communicate. By default, scripts can
         /// only access resources with the same origin. Scripts hosted on the
@@ -317,14 +318,14 @@
         /// on http://target.example.com if the http://target.example.com request
         /// returns an "Access-Control-Allow-Origin: https://source.example.com"
         /// response header.
-        //
+        ///
         /// Scripts in separate frames or iframes and hosted from the same
         /// protocol and domain suffix can execute cross-origin JavaScript if
         /// both pages set the document.domain value to the same domain suffix.
         /// For example, scheme://foo.example.com and scheme://bar.example.com
         /// can communicate using JavaScript if both domains set
         /// document.domain="example.com".
-        //
+        ///
         /// This function is used to allow access to origins that would otherwise
         /// violate the same-origin policy. Scripts hosted underneath the fully
         /// qualified |source_origin| URL (like http://www.example.com) will be
@@ -511,12 +512,12 @@
 
         private static void ThrowIfNotInitialized()
         {
-            if (!IsInitialized) throw new CefGlueException("CEF is not initialized.");
+            if (!IsInitialized) throw new CefException("CEF is not initialized.");
         }
 
         private static void ThrowPostTaskError()
         {
-            throw new CefGlueException("Post task error.");
+            throw new CefException("Post task error.");
         }
     }
 }

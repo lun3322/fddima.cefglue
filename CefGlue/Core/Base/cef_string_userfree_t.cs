@@ -3,8 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Text;
 
     /// <summary>
     /// It is sometimes necessary for the system to allocate string structures with
@@ -20,7 +21,7 @@
         {
             if (str != null)
             {
-                cef_string_userfree_free(this);
+                libcef.string_userfree_free(this);
                 str = null;
             }
         }
@@ -42,7 +43,7 @@
             if (str != null)
             {
                 var result = cef_string_t.ToString(str);
-                cef_string_userfree_free(this);
+                libcef.string_userfree_free(this);
                 str = null;
                 return result;
             }
@@ -51,9 +52,10 @@
                 return null;
             }
         }
+    }
 
-        #region LibCef UserFreeString NativeMethods
-
+    unsafe partial class libcef
+    {
         /// <summary>
         /// These functions allocate a new string structure.
         /// They must be freed by calling the associated free function.
@@ -62,7 +64,7 @@
         /// CEF_EXPORT cef_string_userfree_utf16_t cef_string_userfree_utf16_alloc();
         /// </remarks>
         [DllImport(libcef.DllName, EntryPoint = "cef_string_userfree_utf16_alloc", CallingConvention = libcef.Call)]
-        private static extern cef_string_userfree_t cef_string_userfree_alloc();
+        public static extern cef_string_userfree_t string_userfree_alloc();
 
         /// <summary>
         /// These functions free the string structure allocated by the associated alloc function.
@@ -72,8 +74,6 @@
         /// CEF_EXPORT void cef_string_userfree_utf16_free(cef_string_userfree_utf16_t str);
         /// </remarks>
         [DllImport(libcef.DllName, EntryPoint = "cef_string_userfree_utf16_free", CallingConvention = libcef.Call)]
-        private static extern void cef_string_userfree_free(cef_string_userfree_t str);
-
-        #endregion
+        public static extern void string_userfree_free(cef_string_userfree_t str);
     }
 }

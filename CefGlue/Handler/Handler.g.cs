@@ -29,12 +29,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_task_t.execute_delegate bs_execute;
 
-        public CefTask()
+        protected CefTask()
         {
             this.refct = 0;
             this.ptr = cef_task_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -60,36 +60,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefTask, this.ptr, "~CefTask");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_task_t.Free(this.ptr);
+                cef_task_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -97,17 +105,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -115,10 +123,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -169,11 +177,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefTask");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefCookieVisitor 
@@ -195,12 +203,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_cookie_visitor_t.visit_delegate bs_visit;
 
-        public CefCookieVisitor()
+        protected CefCookieVisitor()
         {
             this.refct = 0;
             this.ptr = cef_cookie_visitor_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -226,36 +234,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, "~CefCookieVisitor");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_cookie_visitor_t.Free(this.ptr);
+                cef_cookie_visitor_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -263,17 +279,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -281,10 +297,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -335,11 +351,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefCookieVisitor");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefLifeSpanHandler 
@@ -365,12 +381,12 @@ namespace CefGlue
         private cef_life_span_handler_t.do_close_delegate bs_do_close;
         private cef_life_span_handler_t.on_before_close_delegate bs_on_before_close;
 
-        public CefLifeSpanHandler()
+        protected CefLifeSpanHandler()
         {
             this.refct = 0;
             this.ptr = cef_life_span_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -408,36 +424,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, "~CefLifeSpanHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_life_span_handler_t.Free(this.ptr);
+                cef_life_span_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -445,17 +469,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -463,10 +487,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -517,11 +541,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefLifeSpanHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefLoadHandler 
@@ -545,12 +569,12 @@ namespace CefGlue
         private cef_load_handler_t.on_load_end_delegate bs_on_load_end;
         private cef_load_handler_t.on_load_error_delegate bs_on_load_error;
 
-        public CefLoadHandler()
+        protected CefLoadHandler()
         {
             this.refct = 0;
             this.ptr = cef_load_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -582,36 +606,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, "~CefLoadHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_load_handler_t.Free(this.ptr);
+                cef_load_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -619,17 +651,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -637,10 +669,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -691,11 +723,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefLoadHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefRequestHandler 
@@ -722,12 +754,12 @@ namespace CefGlue
         private cef_request_handler_t.get_download_handler_delegate bs_get_download_handler;
         private cef_request_handler_t.get_auth_credentials_delegate bs_get_auth_credentials;
 
-        public CefRequestHandler()
+        protected CefRequestHandler()
         {
             this.refct = 0;
             this.ptr = cef_request_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -768,36 +800,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, "~CefRequestHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_request_handler_t.Free(this.ptr);
+                cef_request_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -805,17 +845,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -823,10 +863,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -877,11 +917,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefRequestHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefDisplayHandler 
@@ -908,12 +948,12 @@ namespace CefGlue
         private cef_display_handler_t.on_status_message_delegate bs_on_status_message;
         private cef_display_handler_t.on_console_message_delegate bs_on_console_message;
 
-        public CefDisplayHandler()
+        protected CefDisplayHandler()
         {
             this.refct = 0;
             this.ptr = cef_display_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -954,36 +994,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, "~CefDisplayHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_display_handler_t.Free(this.ptr);
+                cef_display_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -991,17 +1039,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -1009,10 +1057,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -1063,11 +1111,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefDisplayHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefFocusHandler 
@@ -1090,12 +1138,12 @@ namespace CefGlue
         private cef_focus_handler_t.on_take_focus_delegate bs_on_take_focus;
         private cef_focus_handler_t.on_set_focus_delegate bs_on_set_focus;
 
-        public CefFocusHandler()
+        protected CefFocusHandler()
         {
             this.refct = 0;
             this.ptr = cef_focus_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -1124,36 +1172,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, "~CefFocusHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_focus_handler_t.Free(this.ptr);
+                cef_focus_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -1161,17 +1217,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -1179,10 +1235,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -1233,11 +1289,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefFocusHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefKeyboardHandler 
@@ -1259,12 +1315,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_keyboard_handler_t.on_key_event_delegate bs_on_key_event;
 
-        public CefKeyboardHandler()
+        protected CefKeyboardHandler()
         {
             this.refct = 0;
             this.ptr = cef_keyboard_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -1290,36 +1346,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, "~CefKeyboardHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_keyboard_handler_t.Free(this.ptr);
+                cef_keyboard_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -1327,17 +1391,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -1345,10 +1409,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -1399,11 +1463,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefKeyboardHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefMenuHandler 
@@ -1427,12 +1491,12 @@ namespace CefGlue
         private cef_menu_handler_t.get_menu_label_delegate bs_get_menu_label;
         private cef_menu_handler_t.on_menu_action_delegate bs_on_menu_action;
 
-        public CefMenuHandler()
+        protected CefMenuHandler()
         {
             this.refct = 0;
             this.ptr = cef_menu_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -1464,36 +1528,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, "~CefMenuHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_menu_handler_t.Free(this.ptr);
+                cef_menu_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -1501,17 +1573,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -1519,10 +1591,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -1573,11 +1645,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefMenuHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefPrintHandler 
@@ -1600,12 +1672,12 @@ namespace CefGlue
         private cef_print_handler_t.get_print_options_delegate bs_get_print_options;
         private cef_print_handler_t.get_print_header_footer_delegate bs_get_print_header_footer;
 
-        public CefPrintHandler()
+        protected CefPrintHandler()
         {
             this.refct = 0;
             this.ptr = cef_print_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -1634,36 +1706,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, "~CefPrintHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_print_handler_t.Free(this.ptr);
+                cef_print_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -1671,17 +1751,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -1689,10 +1769,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -1743,11 +1823,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefPrintHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefFindHandler 
@@ -1769,12 +1849,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_find_handler_t.on_find_result_delegate bs_on_find_result;
 
-        public CefFindHandler()
+        protected CefFindHandler()
         {
             this.refct = 0;
             this.ptr = cef_find_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -1800,36 +1880,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, "~CefFindHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_find_handler_t.Free(this.ptr);
+                cef_find_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -1837,17 +1925,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -1855,10 +1943,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -1909,11 +1997,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefFindHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefJSDialogHandler 
@@ -1937,12 +2025,12 @@ namespace CefGlue
         private cef_jsdialog_handler_t.on_jsconfirm_delegate bs_on_jsconfirm;
         private cef_jsdialog_handler_t.on_jsprompt_delegate bs_on_jsprompt;
 
-        public CefJSDialogHandler()
+        protected CefJSDialogHandler()
         {
             this.refct = 0;
             this.ptr = cef_jsdialog_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -1974,36 +2062,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, "~CefJSDialogHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_jsdialog_handler_t.Free(this.ptr);
+                cef_jsdialog_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -2011,17 +2107,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -2029,10 +2125,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -2083,11 +2179,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefJSDialogHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefJSBindingHandler 
@@ -2109,12 +2205,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_jsbinding_handler_t.on_jsbinding_delegate bs_on_jsbinding;
 
-        public CefJSBindingHandler()
+        protected CefJSBindingHandler()
         {
             this.refct = 0;
             this.ptr = cef_jsbinding_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -2140,36 +2236,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, "~CefJSBindingHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_jsbinding_handler_t.Free(this.ptr);
+                cef_jsbinding_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -2177,17 +2281,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -2195,10 +2299,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -2249,11 +2353,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefJSBindingHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefRenderHandler 
@@ -2281,12 +2385,12 @@ namespace CefGlue
         private cef_render_handler_t.on_paint_delegate bs_on_paint;
         private cef_render_handler_t.on_cursor_change_delegate bs_on_cursor_change;
 
-        public CefRenderHandler()
+        protected CefRenderHandler()
         {
             this.refct = 0;
             this.ptr = cef_render_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -2330,36 +2434,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, "~CefRenderHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_render_handler_t.Free(this.ptr);
+                cef_render_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -2367,17 +2479,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -2385,10 +2497,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -2439,11 +2551,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefRenderHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefClient : IDisposable
@@ -2457,38 +2569,28 @@ namespace CefGlue
         /// <summary>
         /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
         /// </summary>
-        internal static CefClient From(cef_client_t* pointer)
+        internal static CefClient From(cef_client_t* ptr)
         {
 #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefClient, pointer, "From");
+            Cef.Logger.Trace(LogTarget.CefClient, ptr, "From");
 #endif
-            if (pointer == null) ThrowNullNativePointer();
+            if (ptr == null) throw new ArgumentNullException("ptr");
             CefClient value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("CefClient not found.");
+            value.ReleaseRef();
             return value;
         }
-		
-		internal static CefClient FromOrDefault(cef_client_t* pointer)
-		{
-#if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefClient, pointer, "FromOrDefault");
-#endif
-            if (pointer == null) return null;
-            CefClient value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
-            return value;
-		}
-		
-		private static void ThrowObjectNotFound()
-		{
-		    throw new CefGlueException("CefClient not found.");
-		}
-		
-        private static void ThrowNullNativePointer()
+
+        internal static CefClient FromOrDefault(cef_client_t* ptr)
         {
-            throw new NullReferenceException("CefClient");
+#if DIAGNOSTICS
+            Cef.Logger.Trace(LogTarget.CefClient, ptr, "FromOrDefault");
+#endif
+            if (ptr == null) return null;
+            CefClient value;
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("CefClient not found.");
+            value.ReleaseRef();
+            return value;
         }
 
 
@@ -2512,12 +2614,12 @@ namespace CefGlue
         private cef_client_t.get_jsbinding_handler_delegate bs_get_jsbinding_handler;
         private cef_client_t.get_render_handler_delegate bs_get_render_handler;
 
-        public CefClient()
+        protected CefClient()
         {
             this.refct = 0;
             this.ptr = cef_client_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -2576,48 +2678,56 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefClient, this.ptr, "~CefClient");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
         public void Dispose()
         {
-		    if (this.RefCount == 0)
-			{
-			    Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-			else
-			{
+            if (this.RefCount == 0)
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            else
+            {
                 this.disposed = true;
             }
         }
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_client_t.Free(this.ptr);
+                cef_client_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -2625,17 +2735,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -2643,10 +2753,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -2697,11 +2807,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefClient");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefReadHandler 
@@ -2726,12 +2836,12 @@ namespace CefGlue
         private cef_read_handler_t.tell_delegate bs_tell;
         private cef_read_handler_t.eof_delegate bs_eof;
 
-        public CefReadHandler()
+        protected CefReadHandler()
         {
             this.refct = 0;
             this.ptr = cef_read_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -2766,36 +2876,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, "~CefReadHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_read_handler_t.Free(this.ptr);
+                cef_read_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -2803,17 +2921,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -2821,10 +2939,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -2875,11 +2993,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefReadHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefWriteHandler 
@@ -2904,12 +3022,12 @@ namespace CefGlue
         private cef_write_handler_t.tell_delegate bs_tell;
         private cef_write_handler_t.flush_delegate bs_flush;
 
-        public CefWriteHandler()
+        protected CefWriteHandler()
         {
             this.refct = 0;
             this.ptr = cef_write_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -2944,36 +3062,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, "~CefWriteHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_write_handler_t.Free(this.ptr);
+                cef_write_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -2981,17 +3107,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -2999,10 +3125,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -3053,11 +3179,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefWriteHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefV8Handler 
@@ -3071,38 +3197,28 @@ namespace CefGlue
         /// <summary>
         /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
         /// </summary>
-        internal static CefV8Handler From(cef_v8handler_t* pointer)
+        internal static CefV8Handler From(cef_v8handler_t* ptr)
         {
 #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefV8Handler, pointer, "From");
+            Cef.Logger.Trace(LogTarget.CefV8Handler, ptr, "From");
 #endif
-            if (pointer == null) ThrowNullNativePointer();
+            if (ptr == null) throw new ArgumentNullException("ptr");
             CefV8Handler value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("CefV8Handler not found.");
+            value.ReleaseRef();
             return value;
         }
-		
-		internal static CefV8Handler FromOrDefault(cef_v8handler_t* pointer)
-		{
-#if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefV8Handler, pointer, "FromOrDefault");
-#endif
-            if (pointer == null) return null;
-            CefV8Handler value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
-            return value;
-		}
-		
-		private static void ThrowObjectNotFound()
-		{
-		    throw new CefGlueException("CefV8Handler not found.");
-		}
-		
-        private static void ThrowNullNativePointer()
+
+        internal static CefV8Handler FromOrDefault(cef_v8handler_t* ptr)
         {
-            throw new NullReferenceException("CefV8Handler");
+#if DIAGNOSTICS
+            Cef.Logger.Trace(LogTarget.CefV8Handler, ptr, "FromOrDefault");
+#endif
+            if (ptr == null) return null;
+            CefV8Handler value;
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("CefV8Handler not found.");
+            value.ReleaseRef();
+            return value;
         }
 
 
@@ -3115,12 +3231,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_v8handler_t.execute_delegate bs_execute;
 
-        public CefV8Handler()
+        protected CefV8Handler()
         {
             this.refct = 0;
             this.ptr = cef_v8handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -3146,36 +3262,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, "~CefV8Handler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_v8handler_t.Free(this.ptr);
+                cef_v8handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -3183,17 +3307,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -3201,10 +3325,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -3255,11 +3379,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefV8Handler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefV8Accessor 
@@ -3282,12 +3406,12 @@ namespace CefGlue
         private cef_v8accessor_t.get_delegate bs_get;
         private cef_v8accessor_t.set_delegate bs_set;
 
-        public CefV8Accessor()
+        protected CefV8Accessor()
         {
             this.refct = 0;
             this.ptr = cef_v8accessor_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -3316,36 +3440,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, "~CefV8Accessor");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_v8accessor_t.Free(this.ptr);
+                cef_v8accessor_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -3353,17 +3485,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -3371,10 +3503,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -3425,11 +3557,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefV8Accessor");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefSchemeHandlerFactory 
@@ -3451,12 +3583,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_scheme_handler_factory_t.create_delegate bs_create;
 
-        public CefSchemeHandlerFactory()
+        protected CefSchemeHandlerFactory()
         {
             this.refct = 0;
             this.ptr = cef_scheme_handler_factory_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -3482,36 +3614,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, "~CefSchemeHandlerFactory");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_scheme_handler_factory_t.Free(this.ptr);
+                cef_scheme_handler_factory_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -3519,17 +3659,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -3537,10 +3677,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -3591,11 +3731,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefSchemeHandlerFactory");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefSchemeHandler 
@@ -3619,12 +3759,12 @@ namespace CefGlue
         private cef_scheme_handler_t.cancel_delegate bs_cancel;
         private cef_scheme_handler_t.read_response_delegate bs_read_response;
 
-        public CefSchemeHandler()
+        protected CefSchemeHandler()
         {
             this.refct = 0;
             this.ptr = cef_scheme_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -3656,36 +3796,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, "~CefSchemeHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_scheme_handler_t.Free(this.ptr);
+                cef_scheme_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -3693,17 +3841,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -3711,10 +3859,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -3765,11 +3913,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefSchemeHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefDownloadHandler 
@@ -3792,12 +3940,12 @@ namespace CefGlue
         private cef_download_handler_t.received_data_delegate bs_received_data;
         private cef_download_handler_t.complete_delegate bs_complete;
 
-        public CefDownloadHandler()
+        protected CefDownloadHandler()
         {
             this.refct = 0;
             this.ptr = cef_download_handler_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -3826,36 +3974,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, "~CefDownloadHandler");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_download_handler_t.Free(this.ptr);
+                cef_download_handler_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -3863,17 +4019,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -3881,10 +4037,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -3935,11 +4091,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefDownloadHandler");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefWebUrlRequestClient 
@@ -3966,12 +4122,12 @@ namespace CefGlue
         private cef_web_urlrequest_client_t.on_data_delegate bs_on_data;
         private cef_web_urlrequest_client_t.on_error_delegate bs_on_error;
 
-        public CefWebUrlRequestClient()
+        protected CefWebUrlRequestClient()
         {
             this.refct = 0;
             this.ptr = cef_web_urlrequest_client_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -4012,36 +4168,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, "~CefWebUrlRequestClient");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_web_urlrequest_client_t.Free(this.ptr);
+                cef_web_urlrequest_client_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -4049,17 +4213,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -4067,10 +4231,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -4121,11 +4285,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefWebUrlRequestClient");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefDomVisitor 
@@ -4147,12 +4311,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_domvisitor_t.visit_delegate bs_visit;
 
-        public CefDomVisitor()
+        protected CefDomVisitor()
         {
             this.refct = 0;
             this.ptr = cef_domvisitor_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -4178,36 +4342,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, "~CefDomVisitor");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_domvisitor_t.Free(this.ptr);
+                cef_domvisitor_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -4215,17 +4387,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -4233,10 +4405,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -4287,11 +4459,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefDomVisitor");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefDomEventListener 
@@ -4313,12 +4485,12 @@ namespace CefGlue
         private cef_base_t.get_refct_delegate bs_get_refct;
         private cef_domevent_listener_t.handle_event_delegate bs_handle_event;
 
-        public CefDomEventListener()
+        protected CefDomEventListener()
         {
             this.refct = 0;
             this.ptr = cef_domevent_listener_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -4344,36 +4516,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, "~CefDomEventListener");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_domevent_listener_t.Free(this.ptr);
+                cef_domevent_listener_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -4381,17 +4561,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -4399,10 +4579,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -4453,11 +4633,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefDomEventListener");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefContentFilter 
@@ -4480,12 +4660,12 @@ namespace CefGlue
         private cef_content_filter_t.process_data_delegate bs_process_data;
         private cef_content_filter_t.drain_delegate bs_drain;
 
-        public CefContentFilter()
+        protected CefContentFilter()
         {
             this.refct = 0;
             this.ptr = cef_content_filter_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -4514,36 +4694,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, "~CefContentFilter");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cef_content_filter_t.Free(this.ptr);
+                cef_content_filter_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -4551,17 +4739,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -4569,10 +4757,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -4623,11 +4811,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefContentFilter");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 
     public abstract unsafe partial class CefUserData 
@@ -4641,38 +4829,28 @@ namespace CefGlue
         /// <summary>
         /// This is get object from pointer table, but note that this is works only when object passed to native side (i.e. RefCount > 0).
         /// </summary>
-        internal static CefUserData From(cefglue_userdata_t* pointer)
+        internal static CefUserData From(cefglue_userdata_t* ptr)
         {
 #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefUserData, pointer, "From");
+            Cef.Logger.Trace(LogTarget.CefUserData, ptr, "From");
 #endif
-            if (pointer == null) ThrowNullNativePointer();
+            if (ptr == null) throw new ArgumentNullException("ptr");
             CefUserData value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("CefUserData not found.");
+            value.ReleaseRef();
             return value;
         }
-		
-		internal static CefUserData FromOrDefault(cefglue_userdata_t* pointer)
-		{
-#if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefUserData, pointer, "FromOrDefault");
-#endif
-            if (pointer == null) return null;
-            CefUserData value;
-            if (!pointers.TryGetValue((IntPtr)pointer, out value)) ThrowObjectNotFound();
-			value.ReleaseRef();
-            return value;
-		}
-		
-		private static void ThrowObjectNotFound()
-		{
-		    throw new CefGlueException("CefUserData not found.");
-		}
-		
-        private static void ThrowNullNativePointer()
+
+        internal static CefUserData FromOrDefault(cefglue_userdata_t* ptr)
         {
-            throw new NullReferenceException("CefUserData");
+#if DIAGNOSTICS
+            Cef.Logger.Trace(LogTarget.CefUserData, ptr, "FromOrDefault");
+#endif
+            if (ptr == null) return null;
+            CefUserData value;
+            if (!pointers.TryGetValue((IntPtr)ptr, out value)) throw new CefException("CefUserData not found.");
+            value.ReleaseRef();
+            return value;
         }
 
 
@@ -4684,12 +4862,12 @@ namespace CefGlue
         private cef_base_t.release_delegate bs_release;
         private cef_base_t.get_refct_delegate bs_get_refct;
 
-        public CefUserData()
+        protected CefUserData()
         {
             this.refct = 0;
             this.ptr = cefglue_userdata_t.Alloc();
 #if DIAGNOSTICS
-			Interlocked.Increment(ref ObjectCt);
+            Interlocked.Increment(ref ObjectCt);
 #endif
 
 #if DIAGNOSTICS
@@ -4712,36 +4890,44 @@ namespace CefGlue
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, "~CefUserData");
 #endif
-			Dispose(false);
+            Dispose(false);
         }
 
 
-		protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
 #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.Dispose, "Disposing=[{0}]", disposing);
 #endif
 
-			this.disposed = true;
+            this.disposed = true;
 
-			if (this.ptr != null)
+            if (this.ptr != null)
             {
 #if DIAGNOSTICS
                 Interlocked.Decrement(ref ObjectCt);
 #endif
-				cefglue_userdata_t.Free(this.ptr);
+                cefglue_userdata_t.Free(this.ptr);
                 this.ptr = null;
-			}
+            }
 
             if (disposing)
-			{
-			}
+            {
+            }
+        }
+
+        protected object SyncRoot
+        {
+            get
+            {
+                return this;
+            }
         }
 
         /// <summary>
         /// The AddRef method increments the reference count for the object.
-		/// It should be called for every new copy of a pointer to a given object.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// It should be called for every new copy of a pointer to a given object.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int AddRef()
         {
@@ -4749,17 +4935,17 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.AddRef, "{0}", result);
             #endif
-			if (result == 1)
-			{
-				pointers.Add((IntPtr)ptr, this);
-			}
+            if (result == 1)
+            {
+                pointers.Add((IntPtr)ptr, this);
+            }
             return result;
         }
 
         /// <summary>
         /// The Release method decrements the reference count for the object.
-		/// If the reference count on the object falls to 0, then the object should free itself from memory.
-		/// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
+        /// If the reference count on the object falls to 0, then the object should free itself from memory.
+        /// The resulting reference count value is returned and should be used for diagnostic/testing purposes only.
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
@@ -4767,10 +4953,10 @@ namespace CefGlue
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.ReleaseRef, "{0}", result);
             #endif
-			if (result == 0)
-			{
+            if (result == 0)
+            {
                 pointers.Remove((IntPtr)ptr);
-			}
+            }
             return result;
         }
 
@@ -4821,11 +5007,11 @@ namespace CefGlue
             throw new ObjectDisposedException("CefUserData");
         }
 
-		[Conditional("DEBUG")]
-		private void CheckNativePointer()
-		{
+        [Conditional("DEBUG")]
+        private void CheckNativePointer()
+        {
             if (this.ptr == null) ThrowObjectDisposedException();
-		}
+        }
     }
 }
 

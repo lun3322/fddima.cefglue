@@ -82,6 +82,20 @@
             this.browser.CloseDevTools();
         }
 
+        public IEnumerable<string> GetFrameNames()
+        {
+            // TODO: FIX THIS CODE
+            IEnumerable<string> frameNames = null;
+            CefTask.Post(CefThreadId.UI, () =>
+            {
+                var frames = this.browser.GetFrameNames();
+                var val = frames.GetValue(0);
+                frameNames = frames.AsEnumerable();
+            });
+            while (frameNames == null) Application.DoEvents();
+            return frameNames;
+        }
+
         // frame-related
 
         public void LoadURL(string url)
@@ -95,6 +109,5 @@
         {
             LoadURL(url.ToString());
         }
-
     }
 }

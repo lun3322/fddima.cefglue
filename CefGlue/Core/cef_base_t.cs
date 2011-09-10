@@ -23,7 +23,7 @@
         /// </remarks>
         public IntPtr add_ref;
 
-        [UnmanagedFunctionPointer(libcef.Callback)]
+        [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int add_ref_delegate(cef_base_t* self);
 
         /// <summary>
@@ -34,7 +34,7 @@
         /// </remarks>
         public IntPtr release;
 
-        [UnmanagedFunctionPointer(libcef.Callback)]
+        [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int release_delegate(cef_base_t* self);
 
         /// <summary>
@@ -45,7 +45,7 @@
         /// </remarks>
         public IntPtr get_refct;
 
-        [UnmanagedFunctionPointer(libcef.Callback)]
+        [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
         public delegate int get_refct_delegate(cef_base_t* self);
     }
 }

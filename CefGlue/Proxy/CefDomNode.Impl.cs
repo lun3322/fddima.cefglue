@@ -12,7 +12,7 @@ namespace CefGlue
         {
             get
             {
-                return (CefDomNodeType)this.get_type(this.ptr);
+                return (CefDomNodeType)cef_domnode_t.invoke_get_type(this.ptr);
             }
         }
 
@@ -23,7 +23,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_text(this.ptr) != 0;
+                return cef_domnode_t.invoke_is_text(this.ptr) != 0;
             }
         }
 
@@ -34,7 +34,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_element(this.ptr) != 0;
+                return cef_domnode_t.invoke_is_element(this.ptr) != 0;
             }
         }
 
@@ -43,7 +43,7 @@ namespace CefGlue
         /// </summary>
         public bool IsSame(CefDomNode that)
         {
-            return this.is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
+            return cef_domnode_t.invoke_is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace CefGlue
         /// </summary>
         public string GetName()
         {
-            var n_name = this.get_name(this.ptr);
+            var n_name = cef_domnode_t.invoke_get_name(this.ptr);
             return n_name.GetStringAndFree();
         }
 
@@ -60,7 +60,7 @@ namespace CefGlue
         /// </summary>
         public string GetValue()
         {
-            var n_value = this.get_value(this.ptr);
+            var n_value = cef_domnode_t.invoke_get_value(this.ptr);
             return n_value.GetStringAndFree();
         }
 
@@ -73,7 +73,7 @@ namespace CefGlue
             fixed (char* value_str = value)
             {
                 var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
-                return this.set_value(this.ptr, &n_value) != 0;
+                return cef_domnode_t.invoke_set_value(this.ptr, &n_value) != 0;
             }
         }
 
@@ -82,7 +82,7 @@ namespace CefGlue
         /// </summary>
         public string GetAsMarkup()
         {
-            var n_asMarkup = this.get_as_markup(this.ptr);
+            var n_asMarkup = cef_domnode_t.invoke_get_as_markup(this.ptr);
             return n_asMarkup.GetStringAndFree();
         }
 
@@ -91,7 +91,7 @@ namespace CefGlue
         /// </summary>
         public CefDomDocument GetDocument()
         {
-            var n_document = this.get_document(this.ptr);
+            var n_document = cef_domnode_t.invoke_get_document(this.ptr);
             return CefDomDocument.From(n_document);
         }
 
@@ -100,7 +100,7 @@ namespace CefGlue
         /// </summary>
         public CefDomNode GetParent()
         {
-            var n_parent = this.get_parent(this.ptr);
+            var n_parent = cef_domnode_t.invoke_get_parent(this.ptr);
             return CefDomNode.From(n_parent);
         }
 
@@ -109,7 +109,7 @@ namespace CefGlue
         /// </summary>
         public CefDomNode GetPreviousSibling()
         {
-            var n_result = this.get_previous_sibling(this.ptr);
+            var n_result = cef_domnode_t.invoke_get_previous_sibling(this.ptr);
             return CefDomNode.From(n_result);
         }
 
@@ -118,7 +118,7 @@ namespace CefGlue
         /// </summary>
         public CefDomNode GetNextSibling()
         {
-            var n_result = this.get_next_sibling(this.ptr);
+            var n_result = cef_domnode_t.invoke_get_next_sibling(this.ptr);
             return CefDomNode.From(n_result);
         }
 
@@ -129,7 +129,7 @@ namespace CefGlue
         {
             get
             {
-                return this.has_children(this.ptr) != 0;
+                return cef_domnode_t.invoke_has_children(this.ptr) != 0;
             }
         }
 
@@ -139,7 +139,7 @@ namespace CefGlue
         public CefDomNode GetFirstChild()
         {
             return CefDomNode.From(
-                this.get_first_child(this.ptr)
+                cef_domnode_t.invoke_get_first_child(this.ptr)
                 );
         }
 
@@ -149,7 +149,7 @@ namespace CefGlue
         public CefDomNode GetLastChild()
         {
             return CefDomNode.From(
-                this.get_last_child(this.ptr)
+                cef_domnode_t.invoke_get_last_child(this.ptr)
                 );
         }
 
@@ -166,7 +166,7 @@ namespace CefGlue
             fixed (char* eventType_str = eventType)
             {
                 var n_eventType = new cef_string_t(eventType_str, eventType != null ? eventType.Length : 0);
-                this.add_event_listener(this.ptr, &n_eventType, listener.GetNativePointerAndAddRef(), useCapture ? 1 : 0);
+                cef_domnode_t.invoke_add_event_listener(this.ptr, &n_eventType, listener.GetNativePointerAndAddRef(), useCapture ? 1 : 0);
             }
         }
 
@@ -181,7 +181,7 @@ namespace CefGlue
         /// </remarks>
         public string GetElementTagName()
         {
-            var n_result = this.get_element_tag_name(this.ptr);
+            var n_result = cef_domnode_t.invoke_get_element_tag_name(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -193,7 +193,7 @@ namespace CefGlue
         /// </remarks>
         public bool HasElementAttributes()
         {
-            return this.has_element_attributes(this.ptr) != 0;
+            return cef_domnode_t.invoke_has_element_attributes(this.ptr) != 0;
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace CefGlue
             fixed (char* attrName_str = attrName)
             {
                 var n_attrName = new cef_string_t(attrName_str, attrName != null ? attrName.Length : 0);
-                return this.has_element_attribute(this.ptr, &n_attrName) != 0;
+                return cef_domnode_t.invoke_has_element_attribute(this.ptr, &n_attrName) != 0;
             }
         }
 
@@ -222,7 +222,7 @@ namespace CefGlue
             fixed (char* attrName_str = attrName)
             {
                 var n_attrName = new cef_string_t(attrName_str, attrName != null ? attrName.Length : 0);
-                var n_value = this.get_element_attribute(this.ptr, &n_attrName);
+                var n_value = cef_domnode_t.invoke_get_element_attribute(this.ptr, &n_attrName);
                 return n_value.GetStringAndFree();
             }
         }
@@ -236,7 +236,7 @@ namespace CefGlue
         public CefStringMap GetElementAttributes()
         {
             var map = new CefStringMap();
-            this.get_element_attributes(this.ptr, map.GetNativeHandle());
+            cef_domnode_t.invoke_get_element_attributes(this.ptr, map.GetNativeHandle());
             return map;
         }
 
@@ -255,7 +255,7 @@ namespace CefGlue
                 var n_attrName = new cef_string_t(attrName_str, attrName != null ? attrName.Length : 0);
                 var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
 
-                return this.set_element_attribute(this.ptr, &n_attrName, &n_value) != 0;
+                return cef_domnode_t.invoke_set_element_attribute(this.ptr, &n_attrName, &n_value) != 0;
             }
         }
 
@@ -267,7 +267,7 @@ namespace CefGlue
         /// </remarks>
         public string GetElementInnerText()
         {
-            var n_result = this.get_element_inner_text(this.ptr);
+            var n_result = cef_domnode_t.invoke_get_element_inner_text(this.ptr);
             return n_result.GetStringAndFree();
         }
 

@@ -32,12 +32,14 @@
         public void Dispose()
         {
             this.ptr = null;
-            
+
             if (this.paperMetrics != null) { this.paperMetrics.Dispose(); }
             this.paperMetrics = null;
 
             if (this.paperMargins != null) { this.paperMargins.Dispose(); }
             this.paperMargins = null;
+
+            GC.SuppressFinalize(this);
         }
 
         public CefPageOrientation PageOrientation

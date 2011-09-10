@@ -12,7 +12,7 @@ namespace CefGlue
         {
             get
             {
-                var n_type = this.get_type(this.ptr);
+                var n_type = cef_domevent_t.invoke_get_type(this.ptr);
                 return n_type.GetStringAndFree();
             }
         }
@@ -24,7 +24,7 @@ namespace CefGlue
         {
             get
             {
-                return (CefDomEventCategory)this.get_category(this.ptr);
+                return (CefDomEventCategory)cef_domevent_t.invoke_get_category(this.ptr);
             }
         }
 
@@ -35,7 +35,7 @@ namespace CefGlue
         {
             get
             {
-                return (CefDomEventPhase)this.get_phase(this.ptr);
+                return (CefDomEventPhase)cef_domevent_t.invoke_get_phase(this.ptr);
             }
         }
 
@@ -46,7 +46,7 @@ namespace CefGlue
         {
             get
             {
-                return this.can_bubble(this.ptr) != 0;
+                return cef_domevent_t.invoke_can_bubble(this.ptr) != 0;
             }
         }
 
@@ -57,7 +57,7 @@ namespace CefGlue
         {
             get
             {
-                return this.can_cancel(this.ptr) != 0;
+                return cef_domevent_t.invoke_can_cancel(this.ptr) != 0;
             }
         }
 
@@ -67,7 +67,7 @@ namespace CefGlue
         public CefDomDocument GetDocument()
         {
             return CefDomDocument.From(
-                this.get_document(this.ptr)
+                cef_domevent_t.invoke_get_document(this.ptr)
                 );
         }
 
@@ -77,7 +77,7 @@ namespace CefGlue
         public CefDomNode GetTarget()
         {
             return CefDomNode.From(
-                this.get_target(this.ptr)
+                cef_domevent_t.invoke_get_target(this.ptr)
                 );
         }
 
@@ -87,7 +87,7 @@ namespace CefGlue
         public CefDomNode GetCurrentTarget()
         {
             return CefDomNode.From(
-                this.get_current_target(this.ptr)
+                cef_domevent_t.invoke_get_current_target(this.ptr)
                 );
         }
 

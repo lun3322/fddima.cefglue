@@ -10,7 +10,7 @@ namespace CefGlue
         /// </summary>
         public int GetStatus()
         {
-            return this.get_status(this.ptr);
+            return cef_response_t.invoke_get_status(this.ptr);
         }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace CefGlue
         /// </summary>
         public void SetStatus(int status)
         {
-            this.set_status(this.ptr, status);
+            cef_response_t.invoke_set_status(this.ptr, status);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace CefGlue
         /// </summary>
         public string GetStatusText()
         {
-            var n_result = this.get_status_text(this.ptr);
+            var n_result = cef_response_t.invoke_get_status_text(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -39,7 +39,7 @@ namespace CefGlue
             {
                 var n_statusText = new cef_string_t(statusText_str, statusText != null ? statusText.Length : 0);
 
-                this.set_status_text(this.ptr, &n_statusText);
+                cef_response_t.invoke_set_status_text(this.ptr, &n_statusText);
             }
         }
 
@@ -48,7 +48,7 @@ namespace CefGlue
         /// </summary>
         public string GetMimeType()
         {
-            var n_result = this.get_mime_type(this.ptr);
+            var n_result = cef_response_t.invoke_get_mime_type(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -61,7 +61,7 @@ namespace CefGlue
             {
                 var n_mimeType = new cef_string_t(mimeType_str, mimeType != null ? mimeType.Length : 0);
 
-                this.set_mime_type(this.ptr, &n_mimeType);
+                cef_response_t.invoke_set_mime_type(this.ptr, &n_mimeType);
             }
         }
 
@@ -74,7 +74,7 @@ namespace CefGlue
             {
                 var n_name = new cef_string_t(name_str, name != null ? name.Length : 0);
 
-                var n_result = this.get_header(this.ptr, &n_name);
+                var n_result = cef_response_t.invoke_get_header(this.ptr, &n_name);
                 return n_result.GetStringAndFree();
             }
         }
@@ -85,7 +85,7 @@ namespace CefGlue
         public CefStringMap GetHeaderMap()
         {
             var map = new CefStringMap();
-            this.get_header_map(this.ptr, map.GetNativeHandle());
+            cef_response_t.invoke_get_header_map(this.ptr, map.GetNativeHandle());
             return map;
         }
 
@@ -94,7 +94,7 @@ namespace CefGlue
         /// </summary>
         public void SetHeaderMap(CefStringMap headerMap)
         {
-            this.set_header_map(this.ptr, headerMap.GetNativeHandle());
+            cef_response_t.invoke_set_header_map(this.ptr, headerMap.GetNativeHandle());
         }
 
     }

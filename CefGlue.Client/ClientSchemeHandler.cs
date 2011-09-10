@@ -29,14 +29,31 @@
 
         protected override bool ProcessRequest(CefRequest request, out string redirectUrl, CefResponse response, out int responseLength)
         {
-            var url = request.GetURL();
+            var urlString = request.GetURL();
 
-            var asm = typeof(ClientSchemeHandler).Assembly;
-            var resPrefix = "CefGlue.Client.ClientScheme.";
-            var urlPrefix = "client://";
-            if (url.StartsWith(urlPrefix))
+            string errorMessage = null;
+            int errorStatus = 0;
+            string errorStatusText = null;
+
+            try
             {
-                var resName = resPrefix + url.Substring(urlPrefix.Length).Replace('/', '.');
+                var uri = new Uri(urlString);
+                var path = uri.Host + uri.AbsolutePath;
+
+                var asm = typeof(ClientSchemeHandler).Assembly;
+                var resPrefix = "CefGlue.Client.ClientScheme.";
+
+                // convert path to resource name
+                var parts = path.Split('/');
+                for (var i = 0; i < parts.Length-1; i++)
+                {
+                    var filename = Path.GetFileNameWithoutExtension(parts[i]);
+                    var extension = Path.GetExtension(parts[i]);
+
+                    parts[i] = filename.Replace(".", "._").Replace('-', '_') + extension;
+                }
+
+                var resName = resPrefix + string.Join(".", parts);
                 this.stream = asm.GetManifestResourceStream(resName);
 
                 if (this.stream != null)
@@ -45,21 +62,27 @@
                     redirectUrl = null;
                     responseLength = -1; // (int)stream.Length;
                     response.SetStatus(200);
-                    response.SetMimeType(GetMimeTypeFromUriSuffix(url));
+                    response.SetMimeType(GetMimeTypeFromUriSuffix(path));
                     response.SetStatusText("OK");
                     return true;
                 }
             }
+            catch (Exception ex)
+            {
+                errorStatus = 500;
+                errorStatusText = "Internal Error";
+                errorMessage = "<!doctype html><html><body><h1>Internal Error!</h1><pre>" + ex.ToString() + "</pre></body></html>";
+            }
 
-            // not found - no response
-            var message = "<!doctype html><html><body><h1>Not Found!</h1><p>The requested url [" + url + "] not found!</p></body></html>";
-            var bytes = Encoding.UTF8.GetBytes(message);
+            // not found or error while processing request
+            errorMessage = errorMessage ?? "<!doctype html><html><body><h1>Not Found!</h1><p>The requested url [" + urlString + "] not found!</p></body></html>";
+            var bytes = Encoding.UTF8.GetBytes(errorMessage);
             this.stream = new MemoryStream(bytes, false);
 
             redirectUrl = null;
             responseLength = -1;
-            response.SetStatus(404);
-            response.SetStatusText("Not Found");
+            response.SetStatus(errorStatus != 0 ? errorStatus : 404);
+            response.SetStatusText(errorStatusText ?? "Not Found");
             response.SetMimeType("text/html");
             return true;
         }

@@ -57,7 +57,7 @@ namespace CefGlue
         /// </summary>
         public void Close()
         {
-            this.close_browser(this.ptr);
+            cef_browser_t.invoke_close_browser(this.ptr);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace CefGlue
         {
             get
             {
-                return this.can_go_back(this.ptr) != 0;
+                return cef_browser_t.invoke_can_go_back(this.ptr) != 0;
             }
         }
 
@@ -76,7 +76,7 @@ namespace CefGlue
         /// </summary>
         public void GoBack()
         {
-            this.go_back(this.ptr);
+            cef_browser_t.invoke_go_back(this.ptr);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CefGlue
         {
             get
             {
-                return this.can_go_forward(this.ptr) != 0;
+                return cef_browser_t.invoke_can_go_forward(this.ptr) != 0;
             }
         }
 
@@ -95,7 +95,7 @@ namespace CefGlue
         /// </summary>
         public void GoForward()
         {
-            this.go_forward(this.ptr);
+            cef_browser_t.invoke_go_forward(this.ptr);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace CefGlue
         /// </summary>
         public void Reload()
         {
-            this.reload(this.ptr);
+            cef_browser_t.invoke_reload(this.ptr);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace CefGlue
         /// </summary>
         public void ReloadIgnoreCache()
         {
-            this.reload_ignore_cache(this.ptr);
+            cef_browser_t.invoke_reload_ignore_cache(this.ptr);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace CefGlue
         /// </summary>
         public void StopLoad()
         {
-            this.stop_load(this.ptr);
+            cef_browser_t.invoke_stop_load(this.ptr);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace CefGlue
         /// </summary>
         public void SetFocus(bool enable)
         {
-            this.set_focus(this.ptr, enable ? 1 : 0);
+            cef_browser_t.invoke_set_focus(this.ptr, enable ? 1 : 0);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace CefGlue
         {
             get
             {
-                return this.get_window_handle(this.ptr);
+                return cef_browser_t.invoke_get_window_handle(this.ptr);
             }
         }
 
@@ -152,7 +152,7 @@ namespace CefGlue
         {
             get
             {
-                return this.get_opener_window_handle(this.ptr);
+                return cef_browser_t.invoke_get_opener_window_handle(this.ptr);
             }
         }
 
@@ -163,7 +163,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_popup(this.ptr) != 0;
+                return cef_browser_t.invoke_is_popup(this.ptr) != 0;
             }
         }
 
@@ -173,7 +173,7 @@ namespace CefGlue
         public CefClient GetClient()
         {
             return CefClient.From(
-                this.get_client(this.ptr)
+                cef_browser_t.invoke_get_client(this.ptr)
                 );
         }
 
@@ -183,7 +183,7 @@ namespace CefGlue
         public CefFrame GetMainFrame()
         {
             return CefFrame.From(
-                this.get_main_frame(this.ptr)
+                cef_browser_t.invoke_get_main_frame(this.ptr)
                 );
         }
 
@@ -194,7 +194,7 @@ namespace CefGlue
         public CefFrame GetFocusedFrame()
         {
             return CefFrame.From(
-                this.get_focused_frame(this.ptr)
+                cef_browser_t.invoke_get_focused_frame(this.ptr)
                 );
         }
 
@@ -208,7 +208,7 @@ namespace CefGlue
             {
                 var n_name = new cef_string_t(str, name != null ? name.Length : 0);
                 return CefFrame.FromOrDefault(
-                    this.get_frame(this.ptr, &n_name)
+                    cef_browser_t.invoke_get_frame(this.ptr, &n_name)
                     );
             }
         }
@@ -220,7 +220,7 @@ namespace CefGlue
         public CefStringList GetFrameNames()
         {
             var list = new CefStringList();
-            this.get_frame_names(this.ptr, list.GetNativeHandle());
+            cef_browser_t.invoke_get_frame_names(this.ptr, list.GetNativeHandle());
             return list;
         }
 
@@ -236,7 +236,7 @@ namespace CefGlue
             fixed (char* str = searchText)
             {
                 var n_searchText = new cef_string_t(str, searchText != null ? searchText.Length : 0);
-                this.find(this.ptr, identifier, &n_searchText, forward ? 1 : 0, matchCase ? 1 : 0, findNext ? 1 : 0);
+                cef_browser_t.invoke_find(this.ptr, identifier, &n_searchText, forward ? 1 : 0, matchCase ? 1 : 0, findNext ? 1 : 0);
             }
         }
 
@@ -245,7 +245,7 @@ namespace CefGlue
         /// </summary>
         public void StopFinding(bool clearSelection)
         {
-            this.stop_finding(this.ptr, clearSelection ? 1 : 0);
+            cef_browser_t.invoke_stop_finding(this.ptr, clearSelection ? 1 : 0);
         }
 
         /// <summary>
@@ -255,11 +255,11 @@ namespace CefGlue
         {
             get
             {
-                return this.get_zoom_level(this.ptr);
+                return cef_browser_t.invoke_get_zoom_level(this.ptr);
             }
             set
             {
-                this.set_zoom_level(this.ptr, value);
+                cef_browser_t.invoke_set_zoom_level(this.ptr, value);
             }
         }
 
@@ -268,7 +268,7 @@ namespace CefGlue
         /// </summary>
         public void ShowDevTools()
         {
-            this.show_dev_tools(this.ptr);
+            cef_browser_t.invoke_show_dev_tools(this.ptr);
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace CefGlue
         /// </summary>
         public void CloseDevTools()
         {
-            this.close_dev_tools(this.ptr);
+            cef_browser_t.invoke_close_dev_tools(this.ptr);
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_window_rendering_disabled(this.ptr) != 0;
+                return cef_browser_t.invoke_is_window_rendering_disabled(this.ptr) != 0;
             }
         }
 
@@ -300,7 +300,7 @@ namespace CefGlue
             int m_width;
             int m_height;
 
-            var result = this.get_size(this.ptr, (cef_paint_element_type_t)type, &m_width, &m_height);
+            var result = cef_browser_t.invoke_get_size(this.ptr, (cef_paint_element_type_t)type, &m_width, &m_height);
 
             width = m_width;
             height = m_height;
@@ -314,7 +314,7 @@ namespace CefGlue
         /// </summary>
         public void SetSize(CefPaintElementType type, int width, int height)
         {
-            this.set_size(this.ptr, (cef_paint_element_type_t)type, width, height);
+            cef_browser_t.invoke_set_size(this.ptr, (cef_paint_element_type_t)type, width, height);
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_popup_visible(this.ptr) != 0;
+                return cef_browser_t.invoke_is_popup_visible(this.ptr) != 0;
             }
         }
 
@@ -334,7 +334,7 @@ namespace CefGlue
         /// </summary>
         public void HidePopup()
         {
-            this.hide_popup(this.ptr);
+            cef_browser_t.invoke_hide_popup(this.ptr);
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace CefGlue
             cef_rect_t n_dirtyRect;
             dirtyRect.To(&n_dirtyRect);
 
-            this.invalidate(this.ptr, &n_dirtyRect);
+            cef_browser_t.invoke_invalidate(this.ptr, &n_dirtyRect);
         }
 
         /// <summary>
@@ -357,7 +357,7 @@ namespace CefGlue
         /// </summary>
         public bool GetImage(CefPaintElementType type, int width, int height, IntPtr buffer)
         {
-            return this.get_image(this.ptr, (cef_paint_element_type_t)type, width, height, (void*)buffer) != 0;
+            return cef_browser_t.invoke_get_image(this.ptr, (cef_paint_element_type_t)type, width, height, (void*)buffer) != 0;
         }
 
         /// <summary>
@@ -365,7 +365,7 @@ namespace CefGlue
         /// </summary>
         public void SendKeyEvent(CefKeyType type, int key, CefHandlerKeyEventModifiers modifiers, bool sysChar, bool imeChar)
         {
-            this.send_key_event(this.ptr, (cef_key_type_t)type, key, (int)modifiers, sysChar ? 1 : 0, imeChar ? 1 : 0);
+            cef_browser_t.invoke_send_key_event(this.ptr, (cef_key_type_t)type, key, (int)modifiers, sysChar ? 1 : 0, imeChar ? 1 : 0);
         }
 
         /// <summary>
@@ -374,7 +374,7 @@ namespace CefGlue
         /// </summary>
         public void SendMouseClickEvent(int x, int y, CefMouseButtonType type, bool mouseUp, int clickCount)
         {
-            this.send_mouse_click_event(this.ptr, x, y, (cef_mouse_button_type_t)type, mouseUp ? 1 : 0, clickCount);
+            cef_browser_t.invoke_send_mouse_click_event(this.ptr, x, y, (cef_mouse_button_type_t)type, mouseUp ? 1 : 0, clickCount);
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace CefGlue
         /// </summary>
         public void SendMouseMoveEvent(int x, int y, bool mouseLeave)
         {
-            this.send_mouse_move_event(this.ptr, x, y, mouseLeave ? 1 : 0);
+            cef_browser_t.invoke_send_mouse_move_event(this.ptr, x, y, mouseLeave ? 1 : 0);
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace CefGlue
         /// </summary>
         public void SendMouseWheelEvent(int x, int y, int delta)
         {
-            this.send_mouse_wheel_event(this.ptr, x, y, delta);
+            cef_browser_t.invoke_send_mouse_wheel_event(this.ptr, x, y, delta);
         }
 
         /// <summary>
@@ -400,7 +400,7 @@ namespace CefGlue
         /// </summary>
         public void SendFocusEvent(bool setFocus)
         {
-            this.send_focus_event(this.ptr, setFocus ? 1 : 0);
+            cef_browser_t.invoke_send_focus_event(this.ptr, setFocus ? 1 : 0);
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace CefGlue
         /// </summary>
         public void SendCaptureLostEvent()
         {
-            this.send_capture_lost_event(this.ptr);
+            cef_browser_t.invoke_send_capture_lost_event(this.ptr);
         }
     }
 }

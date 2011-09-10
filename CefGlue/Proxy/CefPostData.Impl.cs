@@ -20,7 +20,7 @@ namespace CefGlue
         /// </summary>
         public int GetElementCount()
         {
-            return this.get_element_count(this.ptr);
+            return cef_post_data_t.invoke_get_element_count(this.ptr);
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace CefGlue
         public CefPostDataElement GetElements(int elementIndex)
         {
             return CefPostDataElement.From(
-                this.get_elements(this.ptr, elementIndex)
+                cef_post_data_t.invoke_get_elements(this.ptr, elementIndex)
                 );
         }
 
@@ -39,7 +39,7 @@ namespace CefGlue
         /// </summary>
         public bool RemoveElement(CefPostDataElement element)
         {
-            return this.remove_element(this.ptr, element.GetNativePointerAndAddRef()) != 0;
+            return cef_post_data_t.invoke_remove_element(this.ptr, element.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace CefGlue
         /// </summary>
         public bool AddElement(CefPostDataElement element)
         {
-            return this.add_element(this.ptr, element.GetNativePointerAndAddRef()) != 0;
+            return cef_post_data_t.invoke_add_element(this.ptr, element.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace CefGlue
         /// </summary>
         public void RemoveElements()
         {
-            this.remove_elements(this.ptr);
+            cef_post_data_t.invoke_remove_elements(this.ptr);
         }
 
     }

@@ -12,7 +12,7 @@ namespace CefGlue
         {
             get
             {
-                return (CefDomDocumentType)this.get_type(this.ptr);
+                return (CefDomDocumentType)cef_domdocument_t.invoke_get_type(this.ptr);
             }
         }
 
@@ -22,7 +22,7 @@ namespace CefGlue
         public CefDomNode GetDocument()
         {
             return CefDomNode.From(
-                this.get_document(this.ptr)
+                cef_domdocument_t.invoke_get_document(this.ptr)
                 );
         }
 
@@ -32,7 +32,7 @@ namespace CefGlue
         public CefDomNode GetBody()
         {
             return CefDomNode.From(
-                this.get_body(this.ptr)
+                cef_domdocument_t.invoke_get_body(this.ptr)
                 );
         }
 
@@ -42,7 +42,7 @@ namespace CefGlue
         public CefDomNode GetHead()
         {
             return CefDomNode.From(
-                this.get_head(this.ptr)
+                cef_domdocument_t.invoke_get_head(this.ptr)
                 );
         }
 
@@ -51,7 +51,7 @@ namespace CefGlue
         /// </summary>
         public string GetTitle()
         {
-            var n_result = this.get_title(this.ptr);
+            var n_result = cef_domdocument_t.invoke_get_title(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -64,7 +64,7 @@ namespace CefGlue
             {
                 var n_id = new cef_string_t(id_str, id != null ? id.Length : 0);
                 return CefDomNode.From(
-                    this.get_element_by_id(this.ptr, &n_id)
+                    cef_domdocument_t.invoke_get_element_by_id(this.ptr, &n_id)
                     );
             }
         }
@@ -75,7 +75,7 @@ namespace CefGlue
         public CefDomNode GetFocusedNode()
         {
             return CefDomNode.From(
-                this.get_focused_node(this.ptr)
+                cef_domdocument_t.invoke_get_focused_node(this.ptr)
                 );
         }
 
@@ -86,7 +86,7 @@ namespace CefGlue
         {
             get
             {
-                return this.has_selection(this.ptr) != 0;
+                return cef_domdocument_t.invoke_has_selection(this.ptr) != 0;
             }
         }
 
@@ -96,7 +96,7 @@ namespace CefGlue
         public CefDomNode GetSelectionStartNode()
         {
             return CefDomNode.From(
-                this.get_selection_start_node(this.ptr)
+                cef_domdocument_t.invoke_get_selection_start_node(this.ptr)
                 );
         }
 
@@ -105,7 +105,7 @@ namespace CefGlue
         /// </summary>
         public int GetSelectionStartOffset()
         {
-            return this.get_selection_start_offset(this.ptr);
+            return cef_domdocument_t.invoke_get_selection_start_offset(this.ptr);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace CefGlue
         public CefDomNode GetSelectionEndNode()
         {
             return CefDomNode.From(
-                this.get_selection_end_node(this.ptr)
+                cef_domdocument_t.invoke_get_selection_end_node(this.ptr)
                 );
         }
 
@@ -123,7 +123,7 @@ namespace CefGlue
         /// </summary>
         public int GetSelectionEndOffset()
         {
-            return this.get_selection_end_offset(this.ptr);
+            return cef_domdocument_t.invoke_get_selection_end_offset(this.ptr);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace CefGlue
         /// </summary>
         public string GetSelectionAsMarkup()
         {
-            var n_result = this.get_selection_as_markup(this.ptr);
+            var n_result = cef_domdocument_t.invoke_get_selection_as_markup(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -140,7 +140,7 @@ namespace CefGlue
         /// </summary>
         public string GetSelectionAsText()
         {
-            var n_result = this.get_selection_as_text(this.ptr);
+            var n_result = cef_domdocument_t.invoke_get_selection_as_text(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -149,7 +149,7 @@ namespace CefGlue
         /// </summary>
         public string GetBaseURL()
         {
-            var n_result = this.get_base_url(this.ptr);
+            var n_result = cef_domdocument_t.invoke_get_base_url(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -161,7 +161,7 @@ namespace CefGlue
             fixed (char* partialUrl_str = partialUrl)
             {
                 var n_partialUrl = new cef_string_t(partialUrl_str, partialUrl != null ? partialUrl.Length : 0);
-                var n_result = this.get_complete_url(this.ptr, &n_partialUrl);
+                var n_result = cef_domdocument_t.invoke_get_complete_url(this.ptr, &n_partialUrl);
                 return n_result.GetStringAndFree();
             }
         }

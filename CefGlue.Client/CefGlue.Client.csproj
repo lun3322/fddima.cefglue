@@ -51,6 +51,9 @@
     <ApplicationIcon>
     </ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,6 +75,8 @@
     </Compile>
     <Compile Include="ClientSchemeHandler.cs" />
     <Compile Include="ClientSchemeHandlerFactory.cs" />
+    <Compile Include="Examples\ScriptableObject\TestObject1.cs" />
+    <Compile Include="TestScriptableObject.cs" />
     <Compile Include="ClientV8Handler.cs" />
     <Compile Include="ConsoleForm.cs">
       <SubType>Form</SubType>
@@ -112,6 +117,7 @@
     </None>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\MIT.LICENSE" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -156,6 +162,23 @@
   <ItemGroup>
     <EmbeddedResource Include="ClientScheme\tests\jse\Performance.html" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\so\Performance.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine-html.js" />
+    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine.css" />
+    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine.js" />
+    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine_favicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\spec\ScriptableObjectSpec.js" />
+    <EmbeddedResource Include="ClientScheme\tests\spec\SpecHelper.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClientScheme\tests\SpecRunner.html" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\DefaultProject.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

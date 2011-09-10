@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Client", "CefGlue.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Windows.Forms", "CefGlue.Windows.Forms\CefGlue.Windows.Forms.csproj", "{432E4102-0457-4123-AD92-301AC6883C1B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402ADDB5-8DF3-4B70-9365-5545B6855C05}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

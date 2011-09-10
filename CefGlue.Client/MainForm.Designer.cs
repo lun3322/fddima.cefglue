@@ -35,6 +35,7 @@
             this.fileExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksCefGlueHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksCefHomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarksGoogleSearchMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.browserMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +47,8 @@
             this.browserZoomInMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.browserZoomOutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.browserResetZoomMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.browserGetFrameNamesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleShowOrHideMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleClearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +57,8 @@
             this.javaScriptExtensionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testsJseDumpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testsJsePerformanceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptableObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.performanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -67,6 +72,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.runTestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -106,6 +112,7 @@
             // 
             this.bookmarksMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bookmarksCefGlueHomeMenuItem,
+            this.documentationToolStripMenuItem,
             this.bookmarksCefHomeMenuItem,
             this.bookmarksGoogleSearchMenuItem});
             this.bookmarksMenuItem.Name = "bookmarksMenuItem";
@@ -119,6 +126,14 @@
             this.bookmarksCefGlueHomeMenuItem.Tag = "https://bitbucket.org/fddima/cefglue";
             this.bookmarksCefGlueHomeMenuItem.Text = "&CefGlue Project";
             this.bookmarksCefGlueHomeMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // documentationToolStripMenuItem
+            // 
+            this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.documentationToolStripMenuItem.Tag = "http://cefglue.dmitriid.com/doc/";
+            this.documentationToolStripMenuItem.Text = "CefGlue &Documentation";
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
             // 
             // bookmarksCefHomeMenuItem
             // 
@@ -146,7 +161,9 @@
             this.toolStripSeparator2,
             this.browserZoomInMenuItem,
             this.browserZoomOutMenuItem,
-            this.browserResetZoomMenuItem});
+            this.browserResetZoomMenuItem,
+            this.toolStripSeparator3,
+            this.browserGetFrameNamesMenuItem});
             this.browserMenuItem.Name = "browserMenuItem";
             this.browserMenuItem.Size = new System.Drawing.Size(61, 20);
             this.browserMenuItem.Text = "&Browser";
@@ -203,6 +220,18 @@
             this.browserResetZoomMenuItem.Text = "Reset Zoom";
             this.browserResetZoomMenuItem.Click += new System.EventHandler(this.browserResetZoomMenuItem_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(188, 6);
+            // 
+            // browserGetFrameNamesMenuItem
+            // 
+            this.browserGetFrameNamesMenuItem.Name = "browserGetFrameNamesMenuItem";
+            this.browserGetFrameNamesMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.browserGetFrameNamesMenuItem.Text = "Get Frame Names";
+            this.browserGetFrameNamesMenuItem.Click += new System.EventHandler(this.browserGetFrameNamesMenuItem_Click);
+            // 
             // consoleMenuItem
             // 
             this.consoleMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -230,7 +259,8 @@
             // 
             this.testsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.testsCustomSchemeMenuItem,
-            this.javaScriptExtensionToolStripMenuItem});
+            this.javaScriptExtensionToolStripMenuItem,
+            this.scriptableObjectToolStripMenuItem});
             this.testsMenuItem.Name = "testsMenuItem";
             this.testsMenuItem.Size = new System.Drawing.Size(46, 20);
             this.testsMenuItem.Text = "&Tests";
@@ -267,6 +297,23 @@
             this.testsJsePerformanceMenuItem.Tag = "client://tests/jse/Performance.html";
             this.testsJsePerformanceMenuItem.Text = "&Performance";
             this.testsJsePerformanceMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
+            // scriptableObjectToolStripMenuItem
+            // 
+            this.scriptableObjectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.runTestsToolStripMenuItem,
+            this.performanceToolStripMenuItem});
+            this.scriptableObjectToolStripMenuItem.Name = "scriptableObjectToolStripMenuItem";
+            this.scriptableObjectToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.scriptableObjectToolStripMenuItem.Text = "Scriptable Object";
+            // 
+            // performanceToolStripMenuItem
+            // 
+            this.performanceToolStripMenuItem.Name = "performanceToolStripMenuItem";
+            this.performanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.performanceToolStripMenuItem.Tag = "client://tests/so/Performance.html";
+            this.performanceToolStripMenuItem.Text = "Performance";
+            this.performanceToolStripMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
             // 
             // helpMenuItem
             // 
@@ -389,6 +436,14 @@
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.statusLabel.Visible = false;
             // 
+            // runTestsToolStripMenuItem
+            // 
+            this.runTestsToolStripMenuItem.Name = "runTestsToolStripMenuItem";
+            this.runTestsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.runTestsToolStripMenuItem.Tag = "client://tests/SpecRunner.html?spec=ScriptableObject";
+            this.runTestsToolStripMenuItem.Text = "Run &Tests";
+            this.runTestsToolStripMenuItem.Click += new System.EventHandler(this.navigateByTagMenuItemClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -450,6 +505,12 @@
         private System.Windows.Forms.ToolStripMenuItem javaScriptExtensionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testsJseDumpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testsJsePerformanceMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem browserGetFrameNamesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scriptableObjectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem performanceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runTestsToolStripMenuItem;
     }
 }
 

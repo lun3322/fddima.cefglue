@@ -11,9 +11,9 @@ namespace CefGlue
     using Diagnostics;
 
     public sealed unsafe partial class CefBrowser : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -21,25 +21,21 @@ namespace CefGlue
         /// </summary>
         internal static CefBrowser From(cef_browser_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefBrowser(ptr);
+            return new CefBrowser(ptr);
         }
-		
+
         internal static CefBrowser FromOrDefault(cef_browser_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefBrowser(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefBrowser");
+            return new CefBrowser(ptr);
         }
 
         private cef_browser_t* ptr;
 
         private CefBrowser(cef_browser_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -77,84 +73,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -163,7 +81,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_browser_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -174,7 +93,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_browser_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -182,7 +102,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_browser_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_browser_t* NativePointer
@@ -199,974 +123,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_browser_t.parent_window_will_close_delegate sd3;
-
-        private cef_browser_t.parent_window_will_close_delegate parent_window_will_close
-        {
-            get
-            {
-				var mptr = this.ptr->parent_window_will_close;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.parent_window_will_close_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.parent_window_will_close_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_browser_t.close_browser_delegate sd4;
-
-        private cef_browser_t.close_browser_delegate close_browser
-        {
-            get
-            {
-				var mptr = this.ptr->close_browser;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.close_browser_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.close_browser_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_browser_t.can_go_back_delegate sd5;
-
-        private cef_browser_t.can_go_back_delegate can_go_back
-        {
-            get
-            {
-				var mptr = this.ptr->can_go_back;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.can_go_back_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.can_go_back_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_browser_t.go_back_delegate sd6;
-
-        private cef_browser_t.go_back_delegate go_back
-        {
-            get
-            {
-				var mptr = this.ptr->go_back;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.go_back_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.go_back_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_browser_t.can_go_forward_delegate sd7;
-
-        private cef_browser_t.can_go_forward_delegate can_go_forward
-        {
-            get
-            {
-				var mptr = this.ptr->can_go_forward;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.can_go_forward_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.can_go_forward_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_browser_t.go_forward_delegate sd8;
-
-        private cef_browser_t.go_forward_delegate go_forward
-        {
-            get
-            {
-				var mptr = this.ptr->go_forward;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.go_forward_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.go_forward_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_browser_t.reload_delegate sd9;
-
-        private cef_browser_t.reload_delegate reload
-        {
-            get
-            {
-				var mptr = this.ptr->reload;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.reload_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.reload_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_browser_t.reload_ignore_cache_delegate sda;
-
-        private cef_browser_t.reload_ignore_cache_delegate reload_ignore_cache
-        {
-            get
-            {
-				var mptr = this.ptr->reload_ignore_cache;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.reload_ignore_cache_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.reload_ignore_cache_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_browser_t.stop_load_delegate sdb;
-
-        private cef_browser_t.stop_load_delegate stop_load
-        {
-            get
-            {
-				var mptr = this.ptr->stop_load;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.stop_load_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.stop_load_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_browser_t.set_focus_delegate sdc;
-
-        private cef_browser_t.set_focus_delegate set_focus
-        {
-            get
-            {
-				var mptr = this.ptr->set_focus;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.set_focus_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.set_focus_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_browser_t.get_window_handle_delegate sdd;
-
-        private cef_browser_t.get_window_handle_delegate get_window_handle
-        {
-            get
-            {
-				var mptr = this.ptr->get_window_handle;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_window_handle_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_window_handle_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_browser_t.get_opener_window_handle_delegate sde;
-
-        private cef_browser_t.get_opener_window_handle_delegate get_opener_window_handle
-        {
-            get
-            {
-				var mptr = this.ptr->get_opener_window_handle;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_opener_window_handle_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_opener_window_handle_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_browser_t.is_popup_delegate sdf;
-
-        private cef_browser_t.is_popup_delegate is_popup
-        {
-            get
-            {
-				var mptr = this.ptr->is_popup;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.is_popup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.is_popup_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp10;
-		private static cef_browser_t.get_client_delegate sd10;
-
-        private cef_browser_t.get_client_delegate get_client
-        {
-            get
-            {
-				var mptr = this.ptr->get_client;
-				if (mptr == sp10)
-				{
-					return sd10;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_client_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_client_delegate));
-					if (sp10 == IntPtr.Zero)
-					{
-						sd10 = mdelegate;
-						sp10 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp11;
-		private static cef_browser_t.get_main_frame_delegate sd11;
-
-        private cef_browser_t.get_main_frame_delegate get_main_frame
-        {
-            get
-            {
-				var mptr = this.ptr->get_main_frame;
-				if (mptr == sp11)
-				{
-					return sd11;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_main_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_main_frame_delegate));
-					if (sp11 == IntPtr.Zero)
-					{
-						sd11 = mdelegate;
-						sp11 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp12;
-		private static cef_browser_t.get_focused_frame_delegate sd12;
-
-        private cef_browser_t.get_focused_frame_delegate get_focused_frame
-        {
-            get
-            {
-				var mptr = this.ptr->get_focused_frame;
-				if (mptr == sp12)
-				{
-					return sd12;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_focused_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_focused_frame_delegate));
-					if (sp12 == IntPtr.Zero)
-					{
-						sd12 = mdelegate;
-						sp12 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp13;
-		private static cef_browser_t.get_frame_delegate sd13;
-
-        private cef_browser_t.get_frame_delegate get_frame
-        {
-            get
-            {
-				var mptr = this.ptr->get_frame;
-				if (mptr == sp13)
-				{
-					return sd13;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_frame_delegate));
-					if (sp13 == IntPtr.Zero)
-					{
-						sd13 = mdelegate;
-						sp13 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp14;
-		private static cef_browser_t.get_frame_names_delegate sd14;
-
-        private cef_browser_t.get_frame_names_delegate get_frame_names
-        {
-            get
-            {
-				var mptr = this.ptr->get_frame_names;
-				if (mptr == sp14)
-				{
-					return sd14;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_frame_names_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_frame_names_delegate));
-					if (sp14 == IntPtr.Zero)
-					{
-						sd14 = mdelegate;
-						sp14 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp15;
-		private static cef_browser_t.find_delegate sd15;
-
-        private cef_browser_t.find_delegate find
-        {
-            get
-            {
-				var mptr = this.ptr->find;
-				if (mptr == sp15)
-				{
-					return sd15;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.find_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.find_delegate));
-					if (sp15 == IntPtr.Zero)
-					{
-						sd15 = mdelegate;
-						sp15 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp16;
-		private static cef_browser_t.stop_finding_delegate sd16;
-
-        private cef_browser_t.stop_finding_delegate stop_finding
-        {
-            get
-            {
-				var mptr = this.ptr->stop_finding;
-				if (mptr == sp16)
-				{
-					return sd16;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.stop_finding_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.stop_finding_delegate));
-					if (sp16 == IntPtr.Zero)
-					{
-						sd16 = mdelegate;
-						sp16 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp17;
-		private static cef_browser_t.get_zoom_level_delegate sd17;
-
-        private cef_browser_t.get_zoom_level_delegate get_zoom_level
-        {
-            get
-            {
-				var mptr = this.ptr->get_zoom_level;
-				if (mptr == sp17)
-				{
-					return sd17;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_zoom_level_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_zoom_level_delegate));
-					if (sp17 == IntPtr.Zero)
-					{
-						sd17 = mdelegate;
-						sp17 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp18;
-		private static cef_browser_t.set_zoom_level_delegate sd18;
-
-        private cef_browser_t.set_zoom_level_delegate set_zoom_level
-        {
-            get
-            {
-				var mptr = this.ptr->set_zoom_level;
-				if (mptr == sp18)
-				{
-					return sd18;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.set_zoom_level_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.set_zoom_level_delegate));
-					if (sp18 == IntPtr.Zero)
-					{
-						sd18 = mdelegate;
-						sp18 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp19;
-		private static cef_browser_t.show_dev_tools_delegate sd19;
-
-        private cef_browser_t.show_dev_tools_delegate show_dev_tools
-        {
-            get
-            {
-				var mptr = this.ptr->show_dev_tools;
-				if (mptr == sp19)
-				{
-					return sd19;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.show_dev_tools_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.show_dev_tools_delegate));
-					if (sp19 == IntPtr.Zero)
-					{
-						sd19 = mdelegate;
-						sp19 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1a;
-		private static cef_browser_t.close_dev_tools_delegate sd1a;
-
-        private cef_browser_t.close_dev_tools_delegate close_dev_tools
-        {
-            get
-            {
-				var mptr = this.ptr->close_dev_tools;
-				if (mptr == sp1a)
-				{
-					return sd1a;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.close_dev_tools_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.close_dev_tools_delegate));
-					if (sp1a == IntPtr.Zero)
-					{
-						sd1a = mdelegate;
-						sp1a = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1b;
-		private static cef_browser_t.is_window_rendering_disabled_delegate sd1b;
-
-        private cef_browser_t.is_window_rendering_disabled_delegate is_window_rendering_disabled
-        {
-            get
-            {
-				var mptr = this.ptr->is_window_rendering_disabled;
-				if (mptr == sp1b)
-				{
-					return sd1b;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.is_window_rendering_disabled_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.is_window_rendering_disabled_delegate));
-					if (sp1b == IntPtr.Zero)
-					{
-						sd1b = mdelegate;
-						sp1b = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1c;
-		private static cef_browser_t.get_size_delegate sd1c;
-
-        private cef_browser_t.get_size_delegate get_size
-        {
-            get
-            {
-				var mptr = this.ptr->get_size;
-				if (mptr == sp1c)
-				{
-					return sd1c;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_size_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_size_delegate));
-					if (sp1c == IntPtr.Zero)
-					{
-						sd1c = mdelegate;
-						sp1c = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1d;
-		private static cef_browser_t.set_size_delegate sd1d;
-
-        private cef_browser_t.set_size_delegate set_size
-        {
-            get
-            {
-				var mptr = this.ptr->set_size;
-				if (mptr == sp1d)
-				{
-					return sd1d;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.set_size_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.set_size_delegate));
-					if (sp1d == IntPtr.Zero)
-					{
-						sd1d = mdelegate;
-						sp1d = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1e;
-		private static cef_browser_t.is_popup_visible_delegate sd1e;
-
-        private cef_browser_t.is_popup_visible_delegate is_popup_visible
-        {
-            get
-            {
-				var mptr = this.ptr->is_popup_visible;
-				if (mptr == sp1e)
-				{
-					return sd1e;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.is_popup_visible_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.is_popup_visible_delegate));
-					if (sp1e == IntPtr.Zero)
-					{
-						sd1e = mdelegate;
-						sp1e = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1f;
-		private static cef_browser_t.hide_popup_delegate sd1f;
-
-        private cef_browser_t.hide_popup_delegate hide_popup
-        {
-            get
-            {
-				var mptr = this.ptr->hide_popup;
-				if (mptr == sp1f)
-				{
-					return sd1f;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.hide_popup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.hide_popup_delegate));
-					if (sp1f == IntPtr.Zero)
-					{
-						sd1f = mdelegate;
-						sp1f = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp20;
-		private static cef_browser_t.invalidate_delegate sd20;
-
-        private cef_browser_t.invalidate_delegate invalidate
-        {
-            get
-            {
-				var mptr = this.ptr->invalidate;
-				if (mptr == sp20)
-				{
-					return sd20;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.invalidate_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.invalidate_delegate));
-					if (sp20 == IntPtr.Zero)
-					{
-						sd20 = mdelegate;
-						sp20 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp21;
-		private static cef_browser_t.get_image_delegate sd21;
-
-        private cef_browser_t.get_image_delegate get_image
-        {
-            get
-            {
-				var mptr = this.ptr->get_image;
-				if (mptr == sp21)
-				{
-					return sd21;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.get_image_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.get_image_delegate));
-					if (sp21 == IntPtr.Zero)
-					{
-						sd21 = mdelegate;
-						sp21 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp22;
-		private static cef_browser_t.send_key_event_delegate sd22;
-
-        private cef_browser_t.send_key_event_delegate send_key_event
-        {
-            get
-            {
-				var mptr = this.ptr->send_key_event;
-				if (mptr == sp22)
-				{
-					return sd22;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.send_key_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.send_key_event_delegate));
-					if (sp22 == IntPtr.Zero)
-					{
-						sd22 = mdelegate;
-						sp22 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp23;
-		private static cef_browser_t.send_mouse_click_event_delegate sd23;
-
-        private cef_browser_t.send_mouse_click_event_delegate send_mouse_click_event
-        {
-            get
-            {
-				var mptr = this.ptr->send_mouse_click_event;
-				if (mptr == sp23)
-				{
-					return sd23;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.send_mouse_click_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.send_mouse_click_event_delegate));
-					if (sp23 == IntPtr.Zero)
-					{
-						sd23 = mdelegate;
-						sp23 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp24;
-		private static cef_browser_t.send_mouse_move_event_delegate sd24;
-
-        private cef_browser_t.send_mouse_move_event_delegate send_mouse_move_event
-        {
-            get
-            {
-				var mptr = this.ptr->send_mouse_move_event;
-				if (mptr == sp24)
-				{
-					return sd24;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.send_mouse_move_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.send_mouse_move_event_delegate));
-					if (sp24 == IntPtr.Zero)
-					{
-						sd24 = mdelegate;
-						sp24 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp25;
-		private static cef_browser_t.send_mouse_wheel_event_delegate sd25;
-
-        private cef_browser_t.send_mouse_wheel_event_delegate send_mouse_wheel_event
-        {
-            get
-            {
-				var mptr = this.ptr->send_mouse_wheel_event;
-				if (mptr == sp25)
-				{
-					return sd25;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.send_mouse_wheel_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.send_mouse_wheel_event_delegate));
-					if (sp25 == IntPtr.Zero)
-					{
-						sd25 = mdelegate;
-						sp25 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp26;
-		private static cef_browser_t.send_focus_event_delegate sd26;
-
-        private cef_browser_t.send_focus_event_delegate send_focus_event
-        {
-            get
-            {
-				var mptr = this.ptr->send_focus_event;
-				if (mptr == sp26)
-				{
-					return sd26;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.send_focus_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.send_focus_event_delegate));
-					if (sp26 == IntPtr.Zero)
-					{
-						sd26 = mdelegate;
-						sp26 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp27;
-		private static cef_browser_t.send_capture_lost_event_delegate sd27;
-
-        private cef_browser_t.send_capture_lost_event_delegate send_capture_lost_event
-        {
-            get
-            {
-				var mptr = this.ptr->send_capture_lost_event;
-				if (mptr == sp27)
-				{
-					return sd27;
-				}
-				else
-				{
-					var mdelegate = (cef_browser_t.send_capture_lost_event_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_browser_t.send_capture_lost_event_delegate));
-					if (sp27 == IntPtr.Zero)
-					{
-						sd27 = mdelegate;
-						sp27 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefFrame : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -1174,25 +136,21 @@ namespace CefGlue
         /// </summary>
         internal static CefFrame From(cef_frame_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefFrame(ptr);
+            return new CefFrame(ptr);
         }
-		
+
         internal static CefFrame FromOrDefault(cef_frame_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefFrame(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefFrame");
+            return new CefFrame(ptr);
         }
 
         private cef_frame_t* ptr;
 
         private CefFrame(cef_frame_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -1230,84 +188,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -1316,7 +196,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_frame_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -1327,7 +208,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_frame_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -1335,7 +217,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_frame_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_frame_t* NativePointer
@@ -1352,584 +238,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_frame_t.undo_delegate sd3;
-
-        private cef_frame_t.undo_delegate undo
-        {
-            get
-            {
-				var mptr = this.ptr->undo;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.undo_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.undo_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_frame_t.redo_delegate sd4;
-
-        private cef_frame_t.redo_delegate redo
-        {
-            get
-            {
-				var mptr = this.ptr->redo;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.redo_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.redo_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_frame_t.cut_delegate sd5;
-
-        private cef_frame_t.cut_delegate cut
-        {
-            get
-            {
-				var mptr = this.ptr->cut;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.cut_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.cut_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_frame_t.copy_delegate sd6;
-
-        private cef_frame_t.copy_delegate copy
-        {
-            get
-            {
-				var mptr = this.ptr->copy;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.copy_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.copy_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_frame_t.paste_delegate sd7;
-
-        private cef_frame_t.paste_delegate paste
-        {
-            get
-            {
-				var mptr = this.ptr->paste;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.paste_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.paste_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_frame_t.del_delegate sd8;
-
-        private cef_frame_t.del_delegate del
-        {
-            get
-            {
-				var mptr = this.ptr->del;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.del_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.del_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_frame_t.select_all_delegate sd9;
-
-        private cef_frame_t.select_all_delegate select_all
-        {
-            get
-            {
-				var mptr = this.ptr->select_all;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.select_all_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.select_all_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_frame_t.print_delegate sda;
-
-        private cef_frame_t.print_delegate print
-        {
-            get
-            {
-				var mptr = this.ptr->print;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.print_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.print_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_frame_t.view_source_delegate sdb;
-
-        private cef_frame_t.view_source_delegate view_source
-        {
-            get
-            {
-				var mptr = this.ptr->view_source;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.view_source_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.view_source_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_frame_t.get_source_delegate sdc;
-
-        private cef_frame_t.get_source_delegate get_source
-        {
-            get
-            {
-				var mptr = this.ptr->get_source;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.get_source_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.get_source_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_frame_t.get_text_delegate sdd;
-
-        private cef_frame_t.get_text_delegate get_text
-        {
-            get
-            {
-				var mptr = this.ptr->get_text;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.get_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.get_text_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_frame_t.load_request_delegate sde;
-
-        private cef_frame_t.load_request_delegate load_request
-        {
-            get
-            {
-				var mptr = this.ptr->load_request;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.load_request_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.load_request_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_frame_t.load_url_delegate sdf;
-
-        private cef_frame_t.load_url_delegate load_url
-        {
-            get
-            {
-				var mptr = this.ptr->load_url;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.load_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.load_url_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp10;
-		private static cef_frame_t.load_string_delegate sd10;
-
-        private cef_frame_t.load_string_delegate load_string
-        {
-            get
-            {
-				var mptr = this.ptr->load_string;
-				if (mptr == sp10)
-				{
-					return sd10;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.load_string_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.load_string_delegate));
-					if (sp10 == IntPtr.Zero)
-					{
-						sd10 = mdelegate;
-						sp10 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp11;
-		private static cef_frame_t.load_stream_delegate sd11;
-
-        private cef_frame_t.load_stream_delegate load_stream
-        {
-            get
-            {
-				var mptr = this.ptr->load_stream;
-				if (mptr == sp11)
-				{
-					return sd11;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.load_stream_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.load_stream_delegate));
-					if (sp11 == IntPtr.Zero)
-					{
-						sd11 = mdelegate;
-						sp11 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp12;
-		private static cef_frame_t.execute_java_script_delegate sd12;
-
-        private cef_frame_t.execute_java_script_delegate execute_java_script
-        {
-            get
-            {
-				var mptr = this.ptr->execute_java_script;
-				if (mptr == sp12)
-				{
-					return sd12;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.execute_java_script_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.execute_java_script_delegate));
-					if (sp12 == IntPtr.Zero)
-					{
-						sd12 = mdelegate;
-						sp12 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp13;
-		private static cef_frame_t.is_main_delegate sd13;
-
-        private cef_frame_t.is_main_delegate is_main
-        {
-            get
-            {
-				var mptr = this.ptr->is_main;
-				if (mptr == sp13)
-				{
-					return sd13;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.is_main_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.is_main_delegate));
-					if (sp13 == IntPtr.Zero)
-					{
-						sd13 = mdelegate;
-						sp13 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp14;
-		private static cef_frame_t.is_focused_delegate sd14;
-
-        private cef_frame_t.is_focused_delegate is_focused
-        {
-            get
-            {
-				var mptr = this.ptr->is_focused;
-				if (mptr == sp14)
-				{
-					return sd14;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.is_focused_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.is_focused_delegate));
-					if (sp14 == IntPtr.Zero)
-					{
-						sd14 = mdelegate;
-						sp14 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp15;
-		private static cef_frame_t.get_name_delegate sd15;
-
-        private cef_frame_t.get_name_delegate get_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_name;
-				if (mptr == sp15)
-				{
-					return sd15;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.get_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.get_name_delegate));
-					if (sp15 == IntPtr.Zero)
-					{
-						sd15 = mdelegate;
-						sp15 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp16;
-		private static cef_frame_t.get_url_delegate sd16;
-
-        private cef_frame_t.get_url_delegate get_url
-        {
-            get
-            {
-				var mptr = this.ptr->get_url;
-				if (mptr == sp16)
-				{
-					return sd16;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.get_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.get_url_delegate));
-					if (sp16 == IntPtr.Zero)
-					{
-						sd16 = mdelegate;
-						sp16 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp17;
-		private static cef_frame_t.get_browser_delegate sd17;
-
-        private cef_frame_t.get_browser_delegate get_browser
-        {
-            get
-            {
-				var mptr = this.ptr->get_browser;
-				if (mptr == sp17)
-				{
-					return sd17;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.get_browser_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.get_browser_delegate));
-					if (sp17 == IntPtr.Zero)
-					{
-						sd17 = mdelegate;
-						sp17 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp18;
-		private static cef_frame_t.visit_dom_delegate sd18;
-
-        private cef_frame_t.visit_dom_delegate visit_dom
-        {
-            get
-            {
-				var mptr = this.ptr->visit_dom;
-				if (mptr == sp18)
-				{
-					return sd18;
-				}
-				else
-				{
-					var mdelegate = (cef_frame_t.visit_dom_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_frame_t.visit_dom_delegate));
-					if (sp18 == IntPtr.Zero)
-					{
-						sd18 = mdelegate;
-						sp18 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefRequest : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -1937,25 +251,21 @@ namespace CefGlue
         /// </summary>
         internal static CefRequest From(cef_request_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefRequest(ptr);
+            return new CefRequest(ptr);
         }
-		
+
         internal static CefRequest FromOrDefault(cef_request_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefRequest(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefRequest");
+            return new CefRequest(ptr);
         }
 
         private cef_request_t* ptr;
 
         private CefRequest(cef_request_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -1993,84 +303,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -2079,7 +311,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_request_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -2090,7 +323,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_request_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -2098,7 +332,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_request_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_request_t* NativePointer
@@ -2115,350 +353,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_request_t.get_url_delegate sd3;
-
-        private cef_request_t.get_url_delegate get_url
-        {
-            get
-            {
-				var mptr = this.ptr->get_url;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.get_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.get_url_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_request_t.set_url_delegate sd4;
-
-        private cef_request_t.set_url_delegate set_url
-        {
-            get
-            {
-				var mptr = this.ptr->set_url;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_url_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_request_t.get_method_delegate sd5;
-
-        private cef_request_t.get_method_delegate get_method
-        {
-            get
-            {
-				var mptr = this.ptr->get_method;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.get_method_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.get_method_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_request_t.set_method_delegate sd6;
-
-        private cef_request_t.set_method_delegate set_method
-        {
-            get
-            {
-				var mptr = this.ptr->set_method;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_method_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_method_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_request_t.get_post_data_delegate sd7;
-
-        private cef_request_t.get_post_data_delegate get_post_data
-        {
-            get
-            {
-				var mptr = this.ptr->get_post_data;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.get_post_data_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.get_post_data_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_request_t.set_post_data_delegate sd8;
-
-        private cef_request_t.set_post_data_delegate set_post_data
-        {
-            get
-            {
-				var mptr = this.ptr->set_post_data;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_post_data_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_post_data_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_request_t.get_header_map_delegate sd9;
-
-        private cef_request_t.get_header_map_delegate get_header_map
-        {
-            get
-            {
-				var mptr = this.ptr->get_header_map;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.get_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.get_header_map_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_request_t.set_header_map_delegate sda;
-
-        private cef_request_t.set_header_map_delegate set_header_map
-        {
-            get
-            {
-				var mptr = this.ptr->set_header_map;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_header_map_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_request_t.set_delegate sdb;
-
-        private cef_request_t.set_delegate set
-        {
-            get
-            {
-				var mptr = this.ptr->set;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_request_t.get_flags_delegate sdc;
-
-        private cef_request_t.get_flags_delegate get_flags
-        {
-            get
-            {
-				var mptr = this.ptr->get_flags;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.get_flags_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.get_flags_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_request_t.set_flags_delegate sdd;
-
-        private cef_request_t.set_flags_delegate set_flags
-        {
-            get
-            {
-				var mptr = this.ptr->set_flags;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_flags_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_flags_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_request_t.get_first_party_for_cookies_delegate sde;
-
-        private cef_request_t.get_first_party_for_cookies_delegate get_first_party_for_cookies
-        {
-            get
-            {
-				var mptr = this.ptr->get_first_party_for_cookies;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.get_first_party_for_cookies_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.get_first_party_for_cookies_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_request_t.set_first_party_for_cookies_delegate sdf;
-
-        private cef_request_t.set_first_party_for_cookies_delegate set_first_party_for_cookies
-        {
-            get
-            {
-				var mptr = this.ptr->set_first_party_for_cookies;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_request_t.set_first_party_for_cookies_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_request_t.set_first_party_for_cookies_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefPostData : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -2466,25 +366,21 @@ namespace CefGlue
         /// </summary>
         internal static CefPostData From(cef_post_data_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefPostData(ptr);
+            return new CefPostData(ptr);
         }
-		
+
         internal static CefPostData FromOrDefault(cef_post_data_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefPostData(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefPostData");
+            return new CefPostData(ptr);
         }
 
         private cef_post_data_t* ptr;
 
         private CefPostData(cef_post_data_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -2522,84 +418,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -2608,7 +426,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_post_data_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -2619,7 +438,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_post_data_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -2627,7 +447,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_post_data_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_post_data_t* NativePointer
@@ -2644,142 +468,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_post_data_t.get_element_count_delegate sd3;
-
-        private cef_post_data_t.get_element_count_delegate get_element_count
-        {
-            get
-            {
-				var mptr = this.ptr->get_element_count;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_t.get_element_count_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_t.get_element_count_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_post_data_t.get_elements_delegate sd4;
-
-        private cef_post_data_t.get_elements_delegate get_elements
-        {
-            get
-            {
-				var mptr = this.ptr->get_elements;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_t.get_elements_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_t.get_elements_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_post_data_t.remove_element_delegate sd5;
-
-        private cef_post_data_t.remove_element_delegate remove_element
-        {
-            get
-            {
-				var mptr = this.ptr->remove_element;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_t.remove_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_t.remove_element_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_post_data_t.add_element_delegate sd6;
-
-        private cef_post_data_t.add_element_delegate add_element
-        {
-            get
-            {
-				var mptr = this.ptr->add_element;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_t.add_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_t.add_element_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_post_data_t.remove_elements_delegate sd7;
-
-        private cef_post_data_t.remove_elements_delegate remove_elements
-        {
-            get
-            {
-				var mptr = this.ptr->remove_elements;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_t.remove_elements_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_t.remove_elements_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefPostDataElement : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -2787,25 +481,21 @@ namespace CefGlue
         /// </summary>
         internal static CefPostDataElement From(cef_post_data_element_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefPostDataElement(ptr);
+            return new CefPostDataElement(ptr);
         }
-		
+
         internal static CefPostDataElement FromOrDefault(cef_post_data_element_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefPostDataElement(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefPostDataElement");
+            return new CefPostDataElement(ptr);
         }
 
         private cef_post_data_element_t* ptr;
 
         private CefPostDataElement(cef_post_data_element_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -2843,84 +533,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -2929,7 +541,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_post_data_element_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -2940,7 +553,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_post_data_element_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -2948,7 +562,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_post_data_element_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_post_data_element_t* NativePointer
@@ -2965,194 +583,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_post_data_element_t.set_to_empty_delegate sd3;
-
-        private cef_post_data_element_t.set_to_empty_delegate set_to_empty
-        {
-            get
-            {
-				var mptr = this.ptr->set_to_empty;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.set_to_empty_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.set_to_empty_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_post_data_element_t.set_to_file_delegate sd4;
-
-        private cef_post_data_element_t.set_to_file_delegate set_to_file
-        {
-            get
-            {
-				var mptr = this.ptr->set_to_file;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.set_to_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.set_to_file_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_post_data_element_t.set_to_bytes_delegate sd5;
-
-        private cef_post_data_element_t.set_to_bytes_delegate set_to_bytes
-        {
-            get
-            {
-				var mptr = this.ptr->set_to_bytes;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.set_to_bytes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.set_to_bytes_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_post_data_element_t.get_type_delegate sd6;
-
-        private cef_post_data_element_t.get_type_delegate get_type
-        {
-            get
-            {
-				var mptr = this.ptr->get_type;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.get_type_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_post_data_element_t.get_file_delegate sd7;
-
-        private cef_post_data_element_t.get_file_delegate get_file
-        {
-            get
-            {
-				var mptr = this.ptr->get_file;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.get_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.get_file_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_post_data_element_t.get_bytes_count_delegate sd8;
-
-        private cef_post_data_element_t.get_bytes_count_delegate get_bytes_count
-        {
-            get
-            {
-				var mptr = this.ptr->get_bytes_count;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.get_bytes_count_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.get_bytes_count_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_post_data_element_t.get_bytes_delegate sd9;
-
-        private cef_post_data_element_t.get_bytes_delegate get_bytes
-        {
-            get
-            {
-				var mptr = this.ptr->get_bytes;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_post_data_element_t.get_bytes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_post_data_element_t.get_bytes_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefResponse : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -3160,25 +596,21 @@ namespace CefGlue
         /// </summary>
         internal static CefResponse From(cef_response_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefResponse(ptr);
+            return new CefResponse(ptr);
         }
-		
+
         internal static CefResponse FromOrDefault(cef_response_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefResponse(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefResponse");
+            return new CefResponse(ptr);
         }
 
         private cef_response_t* ptr;
 
         private CefResponse(cef_response_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -3216,84 +648,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -3302,7 +656,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_response_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -3313,7 +668,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_response_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -3321,7 +677,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_response_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_response_t* NativePointer
@@ -3338,246 +698,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_response_t.get_status_delegate sd3;
-
-        private cef_response_t.get_status_delegate get_status
-        {
-            get
-            {
-				var mptr = this.ptr->get_status;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.get_status_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.get_status_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_response_t.set_status_delegate sd4;
-
-        private cef_response_t.set_status_delegate set_status
-        {
-            get
-            {
-				var mptr = this.ptr->set_status;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.set_status_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.set_status_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_response_t.get_status_text_delegate sd5;
-
-        private cef_response_t.get_status_text_delegate get_status_text
-        {
-            get
-            {
-				var mptr = this.ptr->get_status_text;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.get_status_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.get_status_text_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_response_t.set_status_text_delegate sd6;
-
-        private cef_response_t.set_status_text_delegate set_status_text
-        {
-            get
-            {
-				var mptr = this.ptr->set_status_text;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.set_status_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.set_status_text_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_response_t.get_mime_type_delegate sd7;
-
-        private cef_response_t.get_mime_type_delegate get_mime_type
-        {
-            get
-            {
-				var mptr = this.ptr->get_mime_type;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.get_mime_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.get_mime_type_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_response_t.set_mime_type_delegate sd8;
-
-        private cef_response_t.set_mime_type_delegate set_mime_type
-        {
-            get
-            {
-				var mptr = this.ptr->set_mime_type;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.set_mime_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.set_mime_type_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_response_t.get_header_delegate sd9;
-
-        private cef_response_t.get_header_delegate get_header
-        {
-            get
-            {
-				var mptr = this.ptr->get_header;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.get_header_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.get_header_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_response_t.get_header_map_delegate sda;
-
-        private cef_response_t.get_header_map_delegate get_header_map
-        {
-            get
-            {
-				var mptr = this.ptr->get_header_map;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.get_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.get_header_map_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_response_t.set_header_map_delegate sdb;
-
-        private cef_response_t.set_header_map_delegate set_header_map
-        {
-            get
-            {
-				var mptr = this.ptr->set_header_map;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_response_t.set_header_map_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_response_t.set_header_map_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefStreamReader : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -3585,25 +711,21 @@ namespace CefGlue
         /// </summary>
         internal static CefStreamReader From(cef_stream_reader_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefStreamReader(ptr);
+            return new CefStreamReader(ptr);
         }
-		
+
         internal static CefStreamReader FromOrDefault(cef_stream_reader_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefStreamReader(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefStreamReader");
+            return new CefStreamReader(ptr);
         }
 
         private cef_stream_reader_t* ptr;
 
         private CefStreamReader(cef_stream_reader_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -3641,84 +763,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -3727,7 +771,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_stream_reader_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -3738,7 +783,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_stream_reader_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -3746,7 +792,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_stream_reader_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_stream_reader_t* NativePointer
@@ -3763,116 +813,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_stream_reader_t.read_delegate sd3;
-
-        private cef_stream_reader_t.read_delegate read
-        {
-            get
-            {
-				var mptr = this.ptr->read;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_reader_t.read_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_reader_t.read_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_stream_reader_t.seek_delegate sd4;
-
-        private cef_stream_reader_t.seek_delegate seek
-        {
-            get
-            {
-				var mptr = this.ptr->seek;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_reader_t.seek_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_reader_t.seek_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_stream_reader_t.tell_delegate sd5;
-
-        private cef_stream_reader_t.tell_delegate tell
-        {
-            get
-            {
-				var mptr = this.ptr->tell;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_reader_t.tell_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_reader_t.tell_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_stream_reader_t.eof_delegate sd6;
-
-        private cef_stream_reader_t.eof_delegate eof
-        {
-            get
-            {
-				var mptr = this.ptr->eof;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_reader_t.eof_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_reader_t.eof_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefStreamWriter : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -3880,25 +826,21 @@ namespace CefGlue
         /// </summary>
         internal static CefStreamWriter From(cef_stream_writer_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefStreamWriter(ptr);
+            return new CefStreamWriter(ptr);
         }
-		
+
         internal static CefStreamWriter FromOrDefault(cef_stream_writer_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefStreamWriter(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefStreamWriter");
+            return new CefStreamWriter(ptr);
         }
 
         private cef_stream_writer_t* ptr;
 
         private CefStreamWriter(cef_stream_writer_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -3936,84 +878,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -4022,7 +886,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_stream_writer_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -4033,7 +898,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_stream_writer_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -4041,7 +907,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_stream_writer_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_stream_writer_t* NativePointer
@@ -4058,116 +928,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_stream_writer_t.write_delegate sd3;
-
-        private cef_stream_writer_t.write_delegate write
-        {
-            get
-            {
-				var mptr = this.ptr->write;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_writer_t.write_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_writer_t.write_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_stream_writer_t.seek_delegate sd4;
-
-        private cef_stream_writer_t.seek_delegate seek
-        {
-            get
-            {
-				var mptr = this.ptr->seek;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_writer_t.seek_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_writer_t.seek_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_stream_writer_t.tell_delegate sd5;
-
-        private cef_stream_writer_t.tell_delegate tell
-        {
-            get
-            {
-				var mptr = this.ptr->tell;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_writer_t.tell_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_writer_t.tell_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_stream_writer_t.flush_delegate sd6;
-
-        private cef_stream_writer_t.flush_delegate flush
-        {
-            get
-            {
-				var mptr = this.ptr->flush;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_stream_writer_t.flush_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_stream_writer_t.flush_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefV8Context : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -4175,25 +941,21 @@ namespace CefGlue
         /// </summary>
         internal static CefV8Context From(cef_v8context_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefV8Context(ptr);
+            return new CefV8Context(ptr);
         }
-		
+
         internal static CefV8Context FromOrDefault(cef_v8context_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefV8Context(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefV8Context");
+            return new CefV8Context(ptr);
         }
 
         private cef_v8context_t* ptr;
 
         private CefV8Context(cef_v8context_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -4231,84 +993,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -4317,7 +1001,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_v8context_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -4328,7 +1013,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_v8context_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -4336,7 +1022,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_v8context_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_v8context_t* NativePointer
@@ -4353,142 +1043,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_v8context_t.get_browser_delegate sd3;
-
-        private cef_v8context_t.get_browser_delegate get_browser
-        {
-            get
-            {
-				var mptr = this.ptr->get_browser;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_v8context_t.get_browser_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8context_t.get_browser_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_v8context_t.get_frame_delegate sd4;
-
-        private cef_v8context_t.get_frame_delegate get_frame
-        {
-            get
-            {
-				var mptr = this.ptr->get_frame;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_v8context_t.get_frame_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8context_t.get_frame_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_v8context_t.get_global_delegate sd5;
-
-        private cef_v8context_t.get_global_delegate get_global
-        {
-            get
-            {
-				var mptr = this.ptr->get_global;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_v8context_t.get_global_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8context_t.get_global_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_v8context_t.enter_delegate sd6;
-
-        private cef_v8context_t.enter_delegate enter
-        {
-            get
-            {
-				var mptr = this.ptr->enter;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_v8context_t.enter_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8context_t.enter_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_v8context_t.exit_delegate sd7;
-
-        private cef_v8context_t.exit_delegate exit
-        {
-            get
-            {
-				var mptr = this.ptr->exit;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_v8context_t.exit_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8context_t.exit_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefV8Value : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -4496,25 +1056,21 @@ namespace CefGlue
         /// </summary>
         internal static CefV8Value From(cef_v8value_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefV8Value(ptr);
+            return new CefV8Value(ptr);
         }
-		
+
         internal static CefV8Value FromOrDefault(cef_v8value_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefV8Value(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefV8Value");
+            return new CefV8Value(ptr);
         }
 
         private cef_v8value_t* ptr;
 
         private CefV8Value(cef_v8value_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -4552,84 +1108,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -4638,7 +1116,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_v8value_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -4649,7 +1128,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_v8value_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -4657,7 +1137,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_v8value_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_v8value_t* NativePointer
@@ -4674,844 +1158,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_v8value_t.is_undefined_delegate sd3;
-
-        private cef_v8value_t.is_undefined_delegate is_undefined
-        {
-            get
-            {
-				var mptr = this.ptr->is_undefined;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_undefined_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_undefined_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_v8value_t.is_null_delegate sd4;
-
-        private cef_v8value_t.is_null_delegate is_null
-        {
-            get
-            {
-				var mptr = this.ptr->is_null;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_null_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_null_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_v8value_t.is_bool_delegate sd5;
-
-        private cef_v8value_t.is_bool_delegate is_bool
-        {
-            get
-            {
-				var mptr = this.ptr->is_bool;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_bool_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_bool_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_v8value_t.is_int_delegate sd6;
-
-        private cef_v8value_t.is_int_delegate is_int
-        {
-            get
-            {
-				var mptr = this.ptr->is_int;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_int_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_int_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_v8value_t.is_double_delegate sd7;
-
-        private cef_v8value_t.is_double_delegate is_double
-        {
-            get
-            {
-				var mptr = this.ptr->is_double;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_double_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_double_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_v8value_t.is_date_delegate sd8;
-
-        private cef_v8value_t.is_date_delegate is_date
-        {
-            get
-            {
-				var mptr = this.ptr->is_date;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_date_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_date_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_v8value_t.is_string_delegate sd9;
-
-        private cef_v8value_t.is_string_delegate is_string
-        {
-            get
-            {
-				var mptr = this.ptr->is_string;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_string_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_string_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_v8value_t.is_object_delegate sda;
-
-        private cef_v8value_t.is_object_delegate is_object
-        {
-            get
-            {
-				var mptr = this.ptr->is_object;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_object_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_object_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_v8value_t.is_array_delegate sdb;
-
-        private cef_v8value_t.is_array_delegate is_array
-        {
-            get
-            {
-				var mptr = this.ptr->is_array;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_array_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_array_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_v8value_t.is_function_delegate sdc;
-
-        private cef_v8value_t.is_function_delegate is_function
-        {
-            get
-            {
-				var mptr = this.ptr->is_function;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_function_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_function_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_v8value_t.is_same_delegate sdd;
-
-        private cef_v8value_t.is_same_delegate is_same
-        {
-            get
-            {
-				var mptr = this.ptr->is_same;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.is_same_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.is_same_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_v8value_t.get_bool_value_delegate sde;
-
-        private cef_v8value_t.get_bool_value_delegate get_bool_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_bool_value;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_bool_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_bool_value_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_v8value_t.get_int_value_delegate sdf;
-
-        private cef_v8value_t.get_int_value_delegate get_int_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_int_value;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_int_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_int_value_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp10;
-		private static cef_v8value_t.get_double_value_delegate sd10;
-
-        private cef_v8value_t.get_double_value_delegate get_double_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_double_value;
-				if (mptr == sp10)
-				{
-					return sd10;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_double_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_double_value_delegate));
-					if (sp10 == IntPtr.Zero)
-					{
-						sd10 = mdelegate;
-						sp10 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp11;
-		private static cef_v8value_t.get_date_value_delegate sd11;
-
-        private cef_v8value_t.get_date_value_delegate get_date_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_date_value;
-				if (mptr == sp11)
-				{
-					return sd11;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_date_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_date_value_delegate));
-					if (sp11 == IntPtr.Zero)
-					{
-						sd11 = mdelegate;
-						sp11 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp12;
-		private static cef_v8value_t.get_string_value_delegate sd12;
-
-        private cef_v8value_t.get_string_value_delegate get_string_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_string_value;
-				if (mptr == sp12)
-				{
-					return sd12;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_string_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_string_value_delegate));
-					if (sp12 == IntPtr.Zero)
-					{
-						sd12 = mdelegate;
-						sp12 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp13;
-		private static cef_v8value_t.has_value_bykey_delegate sd13;
-
-        private cef_v8value_t.has_value_bykey_delegate has_value_bykey
-        {
-            get
-            {
-				var mptr = this.ptr->has_value_bykey;
-				if (mptr == sp13)
-				{
-					return sd13;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.has_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.has_value_bykey_delegate));
-					if (sp13 == IntPtr.Zero)
-					{
-						sd13 = mdelegate;
-						sp13 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp14;
-		private static cef_v8value_t.has_value_byindex_delegate sd14;
-
-        private cef_v8value_t.has_value_byindex_delegate has_value_byindex
-        {
-            get
-            {
-				var mptr = this.ptr->has_value_byindex;
-				if (mptr == sp14)
-				{
-					return sd14;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.has_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.has_value_byindex_delegate));
-					if (sp14 == IntPtr.Zero)
-					{
-						sd14 = mdelegate;
-						sp14 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp15;
-		private static cef_v8value_t.delete_value_bykey_delegate sd15;
-
-        private cef_v8value_t.delete_value_bykey_delegate delete_value_bykey
-        {
-            get
-            {
-				var mptr = this.ptr->delete_value_bykey;
-				if (mptr == sp15)
-				{
-					return sd15;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.delete_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.delete_value_bykey_delegate));
-					if (sp15 == IntPtr.Zero)
-					{
-						sd15 = mdelegate;
-						sp15 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp16;
-		private static cef_v8value_t.delete_value_byindex_delegate sd16;
-
-        private cef_v8value_t.delete_value_byindex_delegate delete_value_byindex
-        {
-            get
-            {
-				var mptr = this.ptr->delete_value_byindex;
-				if (mptr == sp16)
-				{
-					return sd16;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.delete_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.delete_value_byindex_delegate));
-					if (sp16 == IntPtr.Zero)
-					{
-						sd16 = mdelegate;
-						sp16 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp17;
-		private static cef_v8value_t.get_value_bykey_delegate sd17;
-
-        private cef_v8value_t.get_value_bykey_delegate get_value_bykey
-        {
-            get
-            {
-				var mptr = this.ptr->get_value_bykey;
-				if (mptr == sp17)
-				{
-					return sd17;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_value_bykey_delegate));
-					if (sp17 == IntPtr.Zero)
-					{
-						sd17 = mdelegate;
-						sp17 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp18;
-		private static cef_v8value_t.get_value_byindex_delegate sd18;
-
-        private cef_v8value_t.get_value_byindex_delegate get_value_byindex
-        {
-            get
-            {
-				var mptr = this.ptr->get_value_byindex;
-				if (mptr == sp18)
-				{
-					return sd18;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_value_byindex_delegate));
-					if (sp18 == IntPtr.Zero)
-					{
-						sd18 = mdelegate;
-						sp18 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp19;
-		private static cef_v8value_t.set_value_bykey_delegate sd19;
-
-        private cef_v8value_t.set_value_bykey_delegate set_value_bykey
-        {
-            get
-            {
-				var mptr = this.ptr->set_value_bykey;
-				if (mptr == sp19)
-				{
-					return sd19;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.set_value_bykey_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.set_value_bykey_delegate));
-					if (sp19 == IntPtr.Zero)
-					{
-						sd19 = mdelegate;
-						sp19 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1a;
-		private static cef_v8value_t.set_value_byindex_delegate sd1a;
-
-        private cef_v8value_t.set_value_byindex_delegate set_value_byindex
-        {
-            get
-            {
-				var mptr = this.ptr->set_value_byindex;
-				if (mptr == sp1a)
-				{
-					return sd1a;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.set_value_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.set_value_byindex_delegate));
-					if (sp1a == IntPtr.Zero)
-					{
-						sd1a = mdelegate;
-						sp1a = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1b;
-		private static cef_v8value_t.set_value_byaccessor_delegate sd1b;
-
-        private cef_v8value_t.set_value_byaccessor_delegate set_value_byaccessor
-        {
-            get
-            {
-				var mptr = this.ptr->set_value_byaccessor;
-				if (mptr == sp1b)
-				{
-					return sd1b;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.set_value_byaccessor_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.set_value_byaccessor_delegate));
-					if (sp1b == IntPtr.Zero)
-					{
-						sd1b = mdelegate;
-						sp1b = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1c;
-		private static cef_v8value_t.get_keys_delegate sd1c;
-
-        private cef_v8value_t.get_keys_delegate get_keys
-        {
-            get
-            {
-				var mptr = this.ptr->get_keys;
-				if (mptr == sp1c)
-				{
-					return sd1c;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_keys_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_keys_delegate));
-					if (sp1c == IntPtr.Zero)
-					{
-						sd1c = mdelegate;
-						sp1c = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1d;
-		private static cef_v8value_t.get_user_data_delegate sd1d;
-
-        private cef_v8value_t.get_user_data_delegate get_user_data
-        {
-            get
-            {
-				var mptr = this.ptr->get_user_data;
-				if (mptr == sp1d)
-				{
-					return sd1d;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_user_data_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_user_data_delegate));
-					if (sp1d == IntPtr.Zero)
-					{
-						sd1d = mdelegate;
-						sp1d = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1e;
-		private static cef_v8value_t.get_array_length_delegate sd1e;
-
-        private cef_v8value_t.get_array_length_delegate get_array_length
-        {
-            get
-            {
-				var mptr = this.ptr->get_array_length;
-				if (mptr == sp1e)
-				{
-					return sd1e;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_array_length_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_array_length_delegate));
-					if (sp1e == IntPtr.Zero)
-					{
-						sd1e = mdelegate;
-						sp1e = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1f;
-		private static cef_v8value_t.get_function_name_delegate sd1f;
-
-        private cef_v8value_t.get_function_name_delegate get_function_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_function_name;
-				if (mptr == sp1f)
-				{
-					return sd1f;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_function_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_function_name_delegate));
-					if (sp1f == IntPtr.Zero)
-					{
-						sd1f = mdelegate;
-						sp1f = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp20;
-		private static cef_v8value_t.get_function_handler_delegate sd20;
-
-        private cef_v8value_t.get_function_handler_delegate get_function_handler
-        {
-            get
-            {
-				var mptr = this.ptr->get_function_handler;
-				if (mptr == sp20)
-				{
-					return sd20;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.get_function_handler_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.get_function_handler_delegate));
-					if (sp20 == IntPtr.Zero)
-					{
-						sd20 = mdelegate;
-						sp20 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp21;
-		private static cef_v8value_t.execute_function_delegate sd21;
-
-        private cef_v8value_t.execute_function_delegate execute_function
-        {
-            get
-            {
-				var mptr = this.ptr->execute_function;
-				if (mptr == sp21)
-				{
-					return sd21;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.execute_function_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.execute_function_delegate));
-					if (sp21 == IntPtr.Zero)
-					{
-						sd21 = mdelegate;
-						sp21 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp22;
-		private static cef_v8value_t.execute_function_with_context_delegate sd22;
-
-        private cef_v8value_t.execute_function_with_context_delegate execute_function_with_context
-        {
-            get
-            {
-				var mptr = this.ptr->execute_function_with_context;
-				if (mptr == sp22)
-				{
-					return sd22;
-				}
-				else
-				{
-					var mdelegate = (cef_v8value_t.execute_function_with_context_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_v8value_t.execute_function_with_context_delegate));
-					if (sp22 == IntPtr.Zero)
-					{
-						sd22 = mdelegate;
-						sp22 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefWebUrlRequest : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -5519,25 +1171,21 @@ namespace CefGlue
         /// </summary>
         internal static CefWebUrlRequest From(cef_web_urlrequest_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefWebUrlRequest(ptr);
+            return new CefWebUrlRequest(ptr);
         }
-		
+
         internal static CefWebUrlRequest FromOrDefault(cef_web_urlrequest_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefWebUrlRequest(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefWebUrlRequest");
+            return new CefWebUrlRequest(ptr);
         }
 
         private cef_web_urlrequest_t* ptr;
 
         private CefWebUrlRequest(cef_web_urlrequest_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -5575,84 +1223,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -5661,7 +1231,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_web_urlrequest_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -5672,7 +1243,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_web_urlrequest_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -5680,7 +1252,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_web_urlrequest_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_web_urlrequest_t* NativePointer
@@ -5697,64 +1273,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_web_urlrequest_t.cancel_delegate sd3;
-
-        private cef_web_urlrequest_t.cancel_delegate cancel
-        {
-            get
-            {
-				var mptr = this.ptr->cancel;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_web_urlrequest_t.cancel_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_web_urlrequest_t.cancel_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_web_urlrequest_t.get_state_delegate sd4;
-
-        private cef_web_urlrequest_t.get_state_delegate get_state
-        {
-            get
-            {
-				var mptr = this.ptr->get_state;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_web_urlrequest_t.get_state_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_web_urlrequest_t.get_state_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefXmlReader : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -5762,25 +1286,21 @@ namespace CefGlue
         /// </summary>
         internal static CefXmlReader From(cef_xml_reader_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefXmlReader(ptr);
+            return new CefXmlReader(ptr);
         }
-		
+
         internal static CefXmlReader FromOrDefault(cef_xml_reader_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefXmlReader(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefXmlReader");
+            return new CefXmlReader(ptr);
         }
 
         private cef_xml_reader_t* ptr;
 
         private CefXmlReader(cef_xml_reader_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -5818,84 +1338,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -5904,7 +1346,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_xml_reader_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -5915,7 +1358,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_xml_reader_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -5923,7 +1367,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_xml_reader_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_xml_reader_t* NativePointer
@@ -5940,766 +1388,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_xml_reader_t.move_to_next_node_delegate sd3;
-
-        private cef_xml_reader_t.move_to_next_node_delegate move_to_next_node
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_next_node;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_next_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_next_node_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_xml_reader_t.close_delegate sd4;
-
-        private cef_xml_reader_t.close_delegate close
-        {
-            get
-            {
-				var mptr = this.ptr->close;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.close_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.close_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_xml_reader_t.has_error_delegate sd5;
-
-        private cef_xml_reader_t.has_error_delegate has_error
-        {
-            get
-            {
-				var mptr = this.ptr->has_error;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.has_error_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.has_error_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_xml_reader_t.get_error_delegate sd6;
-
-        private cef_xml_reader_t.get_error_delegate get_error
-        {
-            get
-            {
-				var mptr = this.ptr->get_error;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_error_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_error_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_xml_reader_t.get_type_delegate sd7;
-
-        private cef_xml_reader_t.get_type_delegate get_type
-        {
-            get
-            {
-				var mptr = this.ptr->get_type;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_type_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_xml_reader_t.get_depth_delegate sd8;
-
-        private cef_xml_reader_t.get_depth_delegate get_depth
-        {
-            get
-            {
-				var mptr = this.ptr->get_depth;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_depth_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_depth_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_xml_reader_t.get_local_name_delegate sd9;
-
-        private cef_xml_reader_t.get_local_name_delegate get_local_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_local_name;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_local_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_local_name_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_xml_reader_t.get_prefix_delegate sda;
-
-        private cef_xml_reader_t.get_prefix_delegate get_prefix
-        {
-            get
-            {
-				var mptr = this.ptr->get_prefix;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_prefix_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_prefix_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_xml_reader_t.get_qualified_name_delegate sdb;
-
-        private cef_xml_reader_t.get_qualified_name_delegate get_qualified_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_qualified_name;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_qualified_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_qualified_name_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_xml_reader_t.get_namespace_uri_delegate sdc;
-
-        private cef_xml_reader_t.get_namespace_uri_delegate get_namespace_uri
-        {
-            get
-            {
-				var mptr = this.ptr->get_namespace_uri;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_namespace_uri_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_namespace_uri_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_xml_reader_t.get_base_uri_delegate sdd;
-
-        private cef_xml_reader_t.get_base_uri_delegate get_base_uri
-        {
-            get
-            {
-				var mptr = this.ptr->get_base_uri;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_base_uri_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_base_uri_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_xml_reader_t.get_xml_lang_delegate sde;
-
-        private cef_xml_reader_t.get_xml_lang_delegate get_xml_lang
-        {
-            get
-            {
-				var mptr = this.ptr->get_xml_lang;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_xml_lang_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_xml_lang_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_xml_reader_t.is_empty_element_delegate sdf;
-
-        private cef_xml_reader_t.is_empty_element_delegate is_empty_element
-        {
-            get
-            {
-				var mptr = this.ptr->is_empty_element;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.is_empty_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.is_empty_element_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp10;
-		private static cef_xml_reader_t.has_value_delegate sd10;
-
-        private cef_xml_reader_t.has_value_delegate has_value
-        {
-            get
-            {
-				var mptr = this.ptr->has_value;
-				if (mptr == sp10)
-				{
-					return sd10;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.has_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.has_value_delegate));
-					if (sp10 == IntPtr.Zero)
-					{
-						sd10 = mdelegate;
-						sp10 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp11;
-		private static cef_xml_reader_t.get_value_delegate sd11;
-
-        private cef_xml_reader_t.get_value_delegate get_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_value;
-				if (mptr == sp11)
-				{
-					return sd11;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_value_delegate));
-					if (sp11 == IntPtr.Zero)
-					{
-						sd11 = mdelegate;
-						sp11 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp12;
-		private static cef_xml_reader_t.has_attributes_delegate sd12;
-
-        private cef_xml_reader_t.has_attributes_delegate has_attributes
-        {
-            get
-            {
-				var mptr = this.ptr->has_attributes;
-				if (mptr == sp12)
-				{
-					return sd12;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.has_attributes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.has_attributes_delegate));
-					if (sp12 == IntPtr.Zero)
-					{
-						sd12 = mdelegate;
-						sp12 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp13;
-		private static cef_xml_reader_t.get_attribute_count_delegate sd13;
-
-        private cef_xml_reader_t.get_attribute_count_delegate get_attribute_count
-        {
-            get
-            {
-				var mptr = this.ptr->get_attribute_count;
-				if (mptr == sp13)
-				{
-					return sd13;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_attribute_count_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_attribute_count_delegate));
-					if (sp13 == IntPtr.Zero)
-					{
-						sd13 = mdelegate;
-						sp13 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp14;
-		private static cef_xml_reader_t.get_attribute_byindex_delegate sd14;
-
-        private cef_xml_reader_t.get_attribute_byindex_delegate get_attribute_byindex
-        {
-            get
-            {
-				var mptr = this.ptr->get_attribute_byindex;
-				if (mptr == sp14)
-				{
-					return sd14;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_attribute_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_attribute_byindex_delegate));
-					if (sp14 == IntPtr.Zero)
-					{
-						sd14 = mdelegate;
-						sp14 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp15;
-		private static cef_xml_reader_t.get_attribute_byqname_delegate sd15;
-
-        private cef_xml_reader_t.get_attribute_byqname_delegate get_attribute_byqname
-        {
-            get
-            {
-				var mptr = this.ptr->get_attribute_byqname;
-				if (mptr == sp15)
-				{
-					return sd15;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_attribute_byqname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_attribute_byqname_delegate));
-					if (sp15 == IntPtr.Zero)
-					{
-						sd15 = mdelegate;
-						sp15 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp16;
-		private static cef_xml_reader_t.get_attribute_bylname_delegate sd16;
-
-        private cef_xml_reader_t.get_attribute_bylname_delegate get_attribute_bylname
-        {
-            get
-            {
-				var mptr = this.ptr->get_attribute_bylname;
-				if (mptr == sp16)
-				{
-					return sd16;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_attribute_bylname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_attribute_bylname_delegate));
-					if (sp16 == IntPtr.Zero)
-					{
-						sd16 = mdelegate;
-						sp16 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp17;
-		private static cef_xml_reader_t.get_inner_xml_delegate sd17;
-
-        private cef_xml_reader_t.get_inner_xml_delegate get_inner_xml
-        {
-            get
-            {
-				var mptr = this.ptr->get_inner_xml;
-				if (mptr == sp17)
-				{
-					return sd17;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_inner_xml_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_inner_xml_delegate));
-					if (sp17 == IntPtr.Zero)
-					{
-						sd17 = mdelegate;
-						sp17 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp18;
-		private static cef_xml_reader_t.get_outer_xml_delegate sd18;
-
-        private cef_xml_reader_t.get_outer_xml_delegate get_outer_xml
-        {
-            get
-            {
-				var mptr = this.ptr->get_outer_xml;
-				if (mptr == sp18)
-				{
-					return sd18;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_outer_xml_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_outer_xml_delegate));
-					if (sp18 == IntPtr.Zero)
-					{
-						sd18 = mdelegate;
-						sp18 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp19;
-		private static cef_xml_reader_t.get_line_number_delegate sd19;
-
-        private cef_xml_reader_t.get_line_number_delegate get_line_number
-        {
-            get
-            {
-				var mptr = this.ptr->get_line_number;
-				if (mptr == sp19)
-				{
-					return sd19;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.get_line_number_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.get_line_number_delegate));
-					if (sp19 == IntPtr.Zero)
-					{
-						sd19 = mdelegate;
-						sp19 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1a;
-		private static cef_xml_reader_t.move_to_attribute_byindex_delegate sd1a;
-
-        private cef_xml_reader_t.move_to_attribute_byindex_delegate move_to_attribute_byindex
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_attribute_byindex;
-				if (mptr == sp1a)
-				{
-					return sd1a;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_attribute_byindex_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_attribute_byindex_delegate));
-					if (sp1a == IntPtr.Zero)
-					{
-						sd1a = mdelegate;
-						sp1a = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1b;
-		private static cef_xml_reader_t.move_to_attribute_byqname_delegate sd1b;
-
-        private cef_xml_reader_t.move_to_attribute_byqname_delegate move_to_attribute_byqname
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_attribute_byqname;
-				if (mptr == sp1b)
-				{
-					return sd1b;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_attribute_byqname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_attribute_byqname_delegate));
-					if (sp1b == IntPtr.Zero)
-					{
-						sd1b = mdelegate;
-						sp1b = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1c;
-		private static cef_xml_reader_t.move_to_attribute_bylname_delegate sd1c;
-
-        private cef_xml_reader_t.move_to_attribute_bylname_delegate move_to_attribute_bylname
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_attribute_bylname;
-				if (mptr == sp1c)
-				{
-					return sd1c;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_attribute_bylname_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_attribute_bylname_delegate));
-					if (sp1c == IntPtr.Zero)
-					{
-						sd1c = mdelegate;
-						sp1c = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1d;
-		private static cef_xml_reader_t.move_to_first_attribute_delegate sd1d;
-
-        private cef_xml_reader_t.move_to_first_attribute_delegate move_to_first_attribute
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_first_attribute;
-				if (mptr == sp1d)
-				{
-					return sd1d;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_first_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_first_attribute_delegate));
-					if (sp1d == IntPtr.Zero)
-					{
-						sd1d = mdelegate;
-						sp1d = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1e;
-		private static cef_xml_reader_t.move_to_next_attribute_delegate sd1e;
-
-        private cef_xml_reader_t.move_to_next_attribute_delegate move_to_next_attribute
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_next_attribute;
-				if (mptr == sp1e)
-				{
-					return sd1e;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_next_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_next_attribute_delegate));
-					if (sp1e == IntPtr.Zero)
-					{
-						sd1e = mdelegate;
-						sp1e = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1f;
-		private static cef_xml_reader_t.move_to_carrying_element_delegate sd1f;
-
-        private cef_xml_reader_t.move_to_carrying_element_delegate move_to_carrying_element
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_carrying_element;
-				if (mptr == sp1f)
-				{
-					return sd1f;
-				}
-				else
-				{
-					var mdelegate = (cef_xml_reader_t.move_to_carrying_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_xml_reader_t.move_to_carrying_element_delegate));
-					if (sp1f == IntPtr.Zero)
-					{
-						sd1f = mdelegate;
-						sp1f = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefZipReader : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -6707,25 +1401,21 @@ namespace CefGlue
         /// </summary>
         internal static CefZipReader From(cef_zip_reader_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefZipReader(ptr);
+            return new CefZipReader(ptr);
         }
-		
+
         internal static CefZipReader FromOrDefault(cef_zip_reader_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefZipReader(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefZipReader");
+            return new CefZipReader(ptr);
         }
 
         private cef_zip_reader_t* ptr;
 
         private CefZipReader(cef_zip_reader_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -6763,84 +1453,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -6849,7 +1461,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_zip_reader_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -6860,7 +1473,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_zip_reader_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -6868,7 +1482,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_zip_reader_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_zip_reader_t* NativePointer
@@ -6885,324 +1503,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_zip_reader_t.move_to_first_file_delegate sd3;
-
-        private cef_zip_reader_t.move_to_first_file_delegate move_to_first_file
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_first_file;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.move_to_first_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.move_to_first_file_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_zip_reader_t.move_to_next_file_delegate sd4;
-
-        private cef_zip_reader_t.move_to_next_file_delegate move_to_next_file
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_next_file;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.move_to_next_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.move_to_next_file_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_zip_reader_t.move_to_file_delegate sd5;
-
-        private cef_zip_reader_t.move_to_file_delegate move_to_file
-        {
-            get
-            {
-				var mptr = this.ptr->move_to_file;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.move_to_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.move_to_file_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_zip_reader_t.close_delegate sd6;
-
-        private cef_zip_reader_t.close_delegate close
-        {
-            get
-            {
-				var mptr = this.ptr->close;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.close_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.close_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_zip_reader_t.get_file_name_delegate sd7;
-
-        private cef_zip_reader_t.get_file_name_delegate get_file_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_file_name;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.get_file_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.get_file_name_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_zip_reader_t.get_file_size_delegate sd8;
-
-        private cef_zip_reader_t.get_file_size_delegate get_file_size
-        {
-            get
-            {
-				var mptr = this.ptr->get_file_size;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.get_file_size_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.get_file_size_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_zip_reader_t.get_file_last_modified_delegate sd9;
-
-        private cef_zip_reader_t.get_file_last_modified_delegate get_file_last_modified
-        {
-            get
-            {
-				var mptr = this.ptr->get_file_last_modified;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.get_file_last_modified_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.get_file_last_modified_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_zip_reader_t.open_file_delegate sda;
-
-        private cef_zip_reader_t.open_file_delegate open_file
-        {
-            get
-            {
-				var mptr = this.ptr->open_file;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.open_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.open_file_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_zip_reader_t.close_file_delegate sdb;
-
-        private cef_zip_reader_t.close_file_delegate close_file
-        {
-            get
-            {
-				var mptr = this.ptr->close_file;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.close_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.close_file_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_zip_reader_t.read_file_delegate sdc;
-
-        private cef_zip_reader_t.read_file_delegate read_file
-        {
-            get
-            {
-				var mptr = this.ptr->read_file;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.read_file_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.read_file_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_zip_reader_t.tell_delegate sdd;
-
-        private cef_zip_reader_t.tell_delegate tell
-        {
-            get
-            {
-				var mptr = this.ptr->tell;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.tell_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.tell_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_zip_reader_t.eof_delegate sde;
-
-        private cef_zip_reader_t.eof_delegate eof
-        {
-            get
-            {
-				var mptr = this.ptr->eof;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_zip_reader_t.eof_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_zip_reader_t.eof_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefDomDocument : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -7210,25 +1516,21 @@ namespace CefGlue
         /// </summary>
         internal static CefDomDocument From(cef_domdocument_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefDomDocument(ptr);
+            return new CefDomDocument(ptr);
         }
-		
+
         internal static CefDomDocument FromOrDefault(cef_domdocument_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefDomDocument(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefDomDocument");
+            return new CefDomDocument(ptr);
         }
 
         private cef_domdocument_t* ptr;
 
         private CefDomDocument(cef_domdocument_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -7266,84 +1568,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -7352,7 +1576,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_domdocument_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -7363,7 +1588,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_domdocument_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -7371,7 +1597,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_domdocument_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_domdocument_t* NativePointer
@@ -7388,428 +1618,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_domdocument_t.get_type_delegate sd3;
-
-        private cef_domdocument_t.get_type_delegate get_type
-        {
-            get
-            {
-				var mptr = this.ptr->get_type;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_type_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_domdocument_t.get_document_delegate sd4;
-
-        private cef_domdocument_t.get_document_delegate get_document
-        {
-            get
-            {
-				var mptr = this.ptr->get_document;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_document_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_document_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_domdocument_t.get_body_delegate sd5;
-
-        private cef_domdocument_t.get_body_delegate get_body
-        {
-            get
-            {
-				var mptr = this.ptr->get_body;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_body_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_body_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_domdocument_t.get_head_delegate sd6;
-
-        private cef_domdocument_t.get_head_delegate get_head
-        {
-            get
-            {
-				var mptr = this.ptr->get_head;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_head_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_head_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_domdocument_t.get_title_delegate sd7;
-
-        private cef_domdocument_t.get_title_delegate get_title
-        {
-            get
-            {
-				var mptr = this.ptr->get_title;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_title_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_title_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_domdocument_t.get_element_by_id_delegate sd8;
-
-        private cef_domdocument_t.get_element_by_id_delegate get_element_by_id
-        {
-            get
-            {
-				var mptr = this.ptr->get_element_by_id;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_element_by_id_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_element_by_id_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_domdocument_t.get_focused_node_delegate sd9;
-
-        private cef_domdocument_t.get_focused_node_delegate get_focused_node
-        {
-            get
-            {
-				var mptr = this.ptr->get_focused_node;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_focused_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_focused_node_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_domdocument_t.has_selection_delegate sda;
-
-        private cef_domdocument_t.has_selection_delegate has_selection
-        {
-            get
-            {
-				var mptr = this.ptr->has_selection;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.has_selection_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.has_selection_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_domdocument_t.get_selection_start_node_delegate sdb;
-
-        private cef_domdocument_t.get_selection_start_node_delegate get_selection_start_node
-        {
-            get
-            {
-				var mptr = this.ptr->get_selection_start_node;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_selection_start_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_selection_start_node_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_domdocument_t.get_selection_start_offset_delegate sdc;
-
-        private cef_domdocument_t.get_selection_start_offset_delegate get_selection_start_offset
-        {
-            get
-            {
-				var mptr = this.ptr->get_selection_start_offset;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_selection_start_offset_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_selection_start_offset_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_domdocument_t.get_selection_end_node_delegate sdd;
-
-        private cef_domdocument_t.get_selection_end_node_delegate get_selection_end_node
-        {
-            get
-            {
-				var mptr = this.ptr->get_selection_end_node;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_selection_end_node_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_selection_end_node_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_domdocument_t.get_selection_end_offset_delegate sde;
-
-        private cef_domdocument_t.get_selection_end_offset_delegate get_selection_end_offset
-        {
-            get
-            {
-				var mptr = this.ptr->get_selection_end_offset;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_selection_end_offset_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_selection_end_offset_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_domdocument_t.get_selection_as_markup_delegate sdf;
-
-        private cef_domdocument_t.get_selection_as_markup_delegate get_selection_as_markup
-        {
-            get
-            {
-				var mptr = this.ptr->get_selection_as_markup;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_selection_as_markup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_selection_as_markup_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp10;
-		private static cef_domdocument_t.get_selection_as_text_delegate sd10;
-
-        private cef_domdocument_t.get_selection_as_text_delegate get_selection_as_text
-        {
-            get
-            {
-				var mptr = this.ptr->get_selection_as_text;
-				if (mptr == sp10)
-				{
-					return sd10;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_selection_as_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_selection_as_text_delegate));
-					if (sp10 == IntPtr.Zero)
-					{
-						sd10 = mdelegate;
-						sp10 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp11;
-		private static cef_domdocument_t.get_base_url_delegate sd11;
-
-        private cef_domdocument_t.get_base_url_delegate get_base_url
-        {
-            get
-            {
-				var mptr = this.ptr->get_base_url;
-				if (mptr == sp11)
-				{
-					return sd11;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_base_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_base_url_delegate));
-					if (sp11 == IntPtr.Zero)
-					{
-						sd11 = mdelegate;
-						sp11 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp12;
-		private static cef_domdocument_t.get_complete_url_delegate sd12;
-
-        private cef_domdocument_t.get_complete_url_delegate get_complete_url
-        {
-            get
-            {
-				var mptr = this.ptr->get_complete_url;
-				if (mptr == sp12)
-				{
-					return sd12;
-				}
-				else
-				{
-					var mdelegate = (cef_domdocument_t.get_complete_url_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domdocument_t.get_complete_url_delegate));
-					if (sp12 == IntPtr.Zero)
-					{
-						sd12 = mdelegate;
-						sp12 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefDomNode : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -7817,25 +1631,21 @@ namespace CefGlue
         /// </summary>
         internal static CefDomNode From(cef_domnode_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefDomNode(ptr);
+            return new CefDomNode(ptr);
         }
-		
+
         internal static CefDomNode FromOrDefault(cef_domnode_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefDomNode(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefDomNode");
+            return new CefDomNode(ptr);
         }
 
         private cef_domnode_t* ptr;
 
         private CefDomNode(cef_domnode_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -7873,84 +1683,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -7959,7 +1691,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_domnode_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -7970,7 +1703,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_domnode_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -7978,7 +1712,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_domnode_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_domnode_t* NativePointer
@@ -7995,610 +1733,12 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_domnode_t.get_type_delegate sd3;
-
-        private cef_domnode_t.get_type_delegate get_type
-        {
-            get
-            {
-				var mptr = this.ptr->get_type;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_type_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_domnode_t.is_text_delegate sd4;
-
-        private cef_domnode_t.is_text_delegate is_text
-        {
-            get
-            {
-				var mptr = this.ptr->is_text;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.is_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.is_text_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_domnode_t.is_element_delegate sd5;
-
-        private cef_domnode_t.is_element_delegate is_element
-        {
-            get
-            {
-				var mptr = this.ptr->is_element;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.is_element_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.is_element_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_domnode_t.is_same_delegate sd6;
-
-        private cef_domnode_t.is_same_delegate is_same
-        {
-            get
-            {
-				var mptr = this.ptr->is_same;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.is_same_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.is_same_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_domnode_t.get_name_delegate sd7;
-
-        private cef_domnode_t.get_name_delegate get_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_name;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_name_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_domnode_t.get_value_delegate sd8;
-
-        private cef_domnode_t.get_value_delegate get_value
-        {
-            get
-            {
-				var mptr = this.ptr->get_value;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_value_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_domnode_t.set_value_delegate sd9;
-
-        private cef_domnode_t.set_value_delegate set_value
-        {
-            get
-            {
-				var mptr = this.ptr->set_value;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.set_value_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.set_value_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_domnode_t.get_as_markup_delegate sda;
-
-        private cef_domnode_t.get_as_markup_delegate get_as_markup
-        {
-            get
-            {
-				var mptr = this.ptr->get_as_markup;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_as_markup_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_as_markup_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spb;
-		private static cef_domnode_t.get_document_delegate sdb;
-
-        private cef_domnode_t.get_document_delegate get_document
-        {
-            get
-            {
-				var mptr = this.ptr->get_document;
-				if (mptr == spb)
-				{
-					return sdb;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_document_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_document_delegate));
-					if (spb == IntPtr.Zero)
-					{
-						sdb = mdelegate;
-						spb = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spc;
-		private static cef_domnode_t.get_parent_delegate sdc;
-
-        private cef_domnode_t.get_parent_delegate get_parent
-        {
-            get
-            {
-				var mptr = this.ptr->get_parent;
-				if (mptr == spc)
-				{
-					return sdc;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_parent_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_parent_delegate));
-					if (spc == IntPtr.Zero)
-					{
-						sdc = mdelegate;
-						spc = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spd;
-		private static cef_domnode_t.get_previous_sibling_delegate sdd;
-
-        private cef_domnode_t.get_previous_sibling_delegate get_previous_sibling
-        {
-            get
-            {
-				var mptr = this.ptr->get_previous_sibling;
-				if (mptr == spd)
-				{
-					return sdd;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_previous_sibling_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_previous_sibling_delegate));
-					if (spd == IntPtr.Zero)
-					{
-						sdd = mdelegate;
-						spd = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spe;
-		private static cef_domnode_t.get_next_sibling_delegate sde;
-
-        private cef_domnode_t.get_next_sibling_delegate get_next_sibling
-        {
-            get
-            {
-				var mptr = this.ptr->get_next_sibling;
-				if (mptr == spe)
-				{
-					return sde;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_next_sibling_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_next_sibling_delegate));
-					if (spe == IntPtr.Zero)
-					{
-						sde = mdelegate;
-						spe = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spf;
-		private static cef_domnode_t.has_children_delegate sdf;
-
-        private cef_domnode_t.has_children_delegate has_children
-        {
-            get
-            {
-				var mptr = this.ptr->has_children;
-				if (mptr == spf)
-				{
-					return sdf;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.has_children_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.has_children_delegate));
-					if (spf == IntPtr.Zero)
-					{
-						sdf = mdelegate;
-						spf = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp10;
-		private static cef_domnode_t.get_first_child_delegate sd10;
-
-        private cef_domnode_t.get_first_child_delegate get_first_child
-        {
-            get
-            {
-				var mptr = this.ptr->get_first_child;
-				if (mptr == sp10)
-				{
-					return sd10;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_first_child_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_first_child_delegate));
-					if (sp10 == IntPtr.Zero)
-					{
-						sd10 = mdelegate;
-						sp10 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp11;
-		private static cef_domnode_t.get_last_child_delegate sd11;
-
-        private cef_domnode_t.get_last_child_delegate get_last_child
-        {
-            get
-            {
-				var mptr = this.ptr->get_last_child;
-				if (mptr == sp11)
-				{
-					return sd11;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_last_child_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_last_child_delegate));
-					if (sp11 == IntPtr.Zero)
-					{
-						sd11 = mdelegate;
-						sp11 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp12;
-		private static cef_domnode_t.add_event_listener_delegate sd12;
-
-        private cef_domnode_t.add_event_listener_delegate add_event_listener
-        {
-            get
-            {
-				var mptr = this.ptr->add_event_listener;
-				if (mptr == sp12)
-				{
-					return sd12;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.add_event_listener_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.add_event_listener_delegate));
-					if (sp12 == IntPtr.Zero)
-					{
-						sd12 = mdelegate;
-						sp12 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp13;
-		private static cef_domnode_t.get_element_tag_name_delegate sd13;
-
-        private cef_domnode_t.get_element_tag_name_delegate get_element_tag_name
-        {
-            get
-            {
-				var mptr = this.ptr->get_element_tag_name;
-				if (mptr == sp13)
-				{
-					return sd13;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_element_tag_name_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_element_tag_name_delegate));
-					if (sp13 == IntPtr.Zero)
-					{
-						sd13 = mdelegate;
-						sp13 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp14;
-		private static cef_domnode_t.has_element_attributes_delegate sd14;
-
-        private cef_domnode_t.has_element_attributes_delegate has_element_attributes
-        {
-            get
-            {
-				var mptr = this.ptr->has_element_attributes;
-				if (mptr == sp14)
-				{
-					return sd14;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.has_element_attributes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.has_element_attributes_delegate));
-					if (sp14 == IntPtr.Zero)
-					{
-						sd14 = mdelegate;
-						sp14 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp15;
-		private static cef_domnode_t.has_element_attribute_delegate sd15;
-
-        private cef_domnode_t.has_element_attribute_delegate has_element_attribute
-        {
-            get
-            {
-				var mptr = this.ptr->has_element_attribute;
-				if (mptr == sp15)
-				{
-					return sd15;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.has_element_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.has_element_attribute_delegate));
-					if (sp15 == IntPtr.Zero)
-					{
-						sd15 = mdelegate;
-						sp15 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp16;
-		private static cef_domnode_t.get_element_attribute_delegate sd16;
-
-        private cef_domnode_t.get_element_attribute_delegate get_element_attribute
-        {
-            get
-            {
-				var mptr = this.ptr->get_element_attribute;
-				if (mptr == sp16)
-				{
-					return sd16;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_element_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_element_attribute_delegate));
-					if (sp16 == IntPtr.Zero)
-					{
-						sd16 = mdelegate;
-						sp16 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp17;
-		private static cef_domnode_t.get_element_attributes_delegate sd17;
-
-        private cef_domnode_t.get_element_attributes_delegate get_element_attributes
-        {
-            get
-            {
-				var mptr = this.ptr->get_element_attributes;
-				if (mptr == sp17)
-				{
-					return sd17;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_element_attributes_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_element_attributes_delegate));
-					if (sp17 == IntPtr.Zero)
-					{
-						sd17 = mdelegate;
-						sp17 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp18;
-		private static cef_domnode_t.set_element_attribute_delegate sd18;
-
-        private cef_domnode_t.set_element_attribute_delegate set_element_attribute
-        {
-            get
-            {
-				var mptr = this.ptr->set_element_attribute;
-				if (mptr == sp18)
-				{
-					return sd18;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.set_element_attribute_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.set_element_attribute_delegate));
-					if (sp18 == IntPtr.Zero)
-					{
-						sd18 = mdelegate;
-						sp18 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp19;
-		private static cef_domnode_t.get_element_inner_text_delegate sd19;
-
-        private cef_domnode_t.get_element_inner_text_delegate get_element_inner_text
-        {
-            get
-            {
-				var mptr = this.ptr->get_element_inner_text;
-				if (mptr == sp19)
-				{
-					return sd19;
-				}
-				else
-				{
-					var mdelegate = (cef_domnode_t.get_element_inner_text_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domnode_t.get_element_inner_text_delegate));
-					if (sp19 == IntPtr.Zero)
-					{
-						sd19 = mdelegate;
-						sp19 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 
     public sealed unsafe partial class CefDomEvent : IDisposable
-	{
+    {
 #if DIAGNOSTICS
-		internal static int ObjectCt;
+        internal static int ObjectCt;
 #endif
 
         /// <summary>
@@ -8606,25 +1746,21 @@ namespace CefGlue
         /// </summary>
         internal static CefDomEvent From(cef_domevent_t* ptr)
         {
-            if (ptr == null) ThrowNullNativePointer();
-			return new CefDomEvent(ptr);
+            return new CefDomEvent(ptr);
         }
-		
+
         internal static CefDomEvent FromOrDefault(cef_domevent_t* ptr)
         {
             if (ptr == null) return null;
-            else return new CefDomEvent(ptr);
-        }
-
-        private static void ThrowNullNativePointer()
-        {
-            throw new NullReferenceException("CefDomEvent");
+            return new CefDomEvent(ptr);
         }
 
         private cef_domevent_t* ptr;
 
         private CefDomEvent(cef_domevent_t* ptr)
         {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
             this.ptr = ptr;
 
 #if DIAGNOSTICS
@@ -8662,84 +1798,6 @@ namespace CefGlue
         #endregion
 
 
-        private static IntPtr sp0;
-		private static cef_base_t.add_ref_delegate sd0;
-
-        private cef_base_t.add_ref_delegate add_ref
-        {
-            get
-            {
-				var mptr = this.ptr->@base.add_ref;
-				if (mptr == sp0)
-				{
-					return sd0;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.add_ref_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.add_ref_delegate));
-					if (sp0 == IntPtr.Zero)
-					{
-						sd0 = mdelegate;
-						sp0 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp1;
-		private static cef_base_t.release_delegate sd1;
-
-        private cef_base_t.release_delegate release
-        {
-            get
-            {
-				var mptr = this.ptr->@base.release;
-				if (mptr == sp1)
-				{
-					return sd1;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.release_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.release_delegate));
-					if (sp1 == IntPtr.Zero)
-					{
-						sd1 = mdelegate;
-						sp1 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp2;
-		private static cef_base_t.get_refct_delegate sd2;
-
-        private cef_base_t.get_refct_delegate get_refct
-        {
-            get
-            {
-				var mptr = this.ptr->@base.get_refct;
-				if (mptr == sp2)
-				{
-					return sd2;
-				}
-				else
-				{
-					var mdelegate = (cef_base_t.get_refct_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_base_t.get_refct_delegate));
-					if (sp2 == IntPtr.Zero)
-					{
-						sd2 = mdelegate;
-						sp2 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
         /// <summary>
         /// The AddRef method increments the reference count for the object. It should
         /// be called for every new copy of a pointer to a given object. The resulting
@@ -8748,7 +1806,8 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            return add_ref(&this.ptr->@base);
+            return cef_domevent_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
         }
 
         /// <summary>
@@ -8759,7 +1818,8 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef()
         {
-            return release(&this.ptr->@base);
+            return cef_domevent_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
         }
 
         /// <summary>
@@ -8767,7 +1827,11 @@ namespace CefGlue
         /// </summary>
         internal int RefCount
         {
-            get { return get_refct(&this.ptr->@base); }
+            get
+            {
+                return cef_domevent_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
         }
 
         internal cef_domevent_t* NativePointer
@@ -8784,214 +1848,6 @@ namespace CefGlue
             return this.ptr;
         }
 
-
-        private static IntPtr sp3;
-		private static cef_domevent_t.get_type_delegate sd3;
-
-        private cef_domevent_t.get_type_delegate get_type
-        {
-            get
-            {
-				var mptr = this.ptr->get_type;
-				if (mptr == sp3)
-				{
-					return sd3;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.get_type_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.get_type_delegate));
-					if (sp3 == IntPtr.Zero)
-					{
-						sd3 = mdelegate;
-						sp3 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp4;
-		private static cef_domevent_t.get_category_delegate sd4;
-
-        private cef_domevent_t.get_category_delegate get_category
-        {
-            get
-            {
-				var mptr = this.ptr->get_category;
-				if (mptr == sp4)
-				{
-					return sd4;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.get_category_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.get_category_delegate));
-					if (sp4 == IntPtr.Zero)
-					{
-						sd4 = mdelegate;
-						sp4 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp5;
-		private static cef_domevent_t.get_phase_delegate sd5;
-
-        private cef_domevent_t.get_phase_delegate get_phase
-        {
-            get
-            {
-				var mptr = this.ptr->get_phase;
-				if (mptr == sp5)
-				{
-					return sd5;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.get_phase_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.get_phase_delegate));
-					if (sp5 == IntPtr.Zero)
-					{
-						sd5 = mdelegate;
-						sp5 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp6;
-		private static cef_domevent_t.can_bubble_delegate sd6;
-
-        private cef_domevent_t.can_bubble_delegate can_bubble
-        {
-            get
-            {
-				var mptr = this.ptr->can_bubble;
-				if (mptr == sp6)
-				{
-					return sd6;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.can_bubble_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.can_bubble_delegate));
-					if (sp6 == IntPtr.Zero)
-					{
-						sd6 = mdelegate;
-						sp6 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp7;
-		private static cef_domevent_t.can_cancel_delegate sd7;
-
-        private cef_domevent_t.can_cancel_delegate can_cancel
-        {
-            get
-            {
-				var mptr = this.ptr->can_cancel;
-				if (mptr == sp7)
-				{
-					return sd7;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.can_cancel_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.can_cancel_delegate));
-					if (sp7 == IntPtr.Zero)
-					{
-						sd7 = mdelegate;
-						sp7 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp8;
-		private static cef_domevent_t.get_document_delegate sd8;
-
-        private cef_domevent_t.get_document_delegate get_document
-        {
-            get
-            {
-				var mptr = this.ptr->get_document;
-				if (mptr == sp8)
-				{
-					return sd8;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.get_document_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.get_document_delegate));
-					if (sp8 == IntPtr.Zero)
-					{
-						sd8 = mdelegate;
-						sp8 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr sp9;
-		private static cef_domevent_t.get_target_delegate sd9;
-
-        private cef_domevent_t.get_target_delegate get_target
-        {
-            get
-            {
-				var mptr = this.ptr->get_target;
-				if (mptr == sp9)
-				{
-					return sd9;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.get_target_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.get_target_delegate));
-					if (sp9 == IntPtr.Zero)
-					{
-						sd9 = mdelegate;
-						sp9 = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
-
-        private static IntPtr spa;
-		private static cef_domevent_t.get_current_target_delegate sda;
-
-        private cef_domevent_t.get_current_target_delegate get_current_target
-        {
-            get
-            {
-				var mptr = this.ptr->get_current_target;
-				if (mptr == spa)
-				{
-					return sda;
-				}
-				else
-				{
-					var mdelegate = (cef_domevent_t.get_current_target_delegate)Marshal.GetDelegateForFunctionPointer(mptr, typeof(cef_domevent_t.get_current_target_delegate));
-					if (spa == IntPtr.Zero)
-					{
-						sda = mdelegate;
-						spa = mptr;
-					}
-					return mdelegate;
-				}
-            }
-        }
-		
     }
 }
 

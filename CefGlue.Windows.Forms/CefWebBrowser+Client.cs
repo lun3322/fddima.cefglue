@@ -14,6 +14,8 @@
             private CefLoadHandler loadHandler;
             private CefDisplayHandler displayHandler;
 
+            private CefJSBindingHandler jsBindingHandler;
+
             public Client(CefWebBrowser control)
             {
                 this.lifeSpanHandler = new LifeSpanHandler(control);
@@ -26,7 +28,7 @@
                 //var printHandler = new CefPrintHandler();
                 //var findHandler = new CefFindHandler();
                 //var jsDialogHandler = new CefJSDialogHandler();
-                //var jsBindingHandler = new CefJSBindingHandler();
+                this.jsBindingHandler = new JSBindingHandler();
                 //var renderHandler = new CefRenderHandler();
             }
 
@@ -52,6 +54,11 @@
             protected override CefDisplayHandler GetDisplayHandler()
             {
                 return this.displayHandler;
+            }
+
+            protected override CefJSBindingHandler GetJSBindingHandler()
+            {
+                return this.jsBindingHandler;
             }
         }
     }

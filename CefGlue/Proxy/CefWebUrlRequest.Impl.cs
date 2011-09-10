@@ -23,7 +23,7 @@ namespace CefGlue
         /// </summary>
         public void Cancel()
         {
-            this.cancel(this.ptr);
+            cef_web_urlrequest_t.invoke_cancel(this.ptr);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace CefGlue
         /// </summary>
         public CefWebUrlRequestState GetState()
         {
-            return (CefWebUrlRequestState)this.get_state(this.ptr);
+            return (CefWebUrlRequestState)cef_web_urlrequest_t.invoke_get_state(this.ptr);
         }
 
     }

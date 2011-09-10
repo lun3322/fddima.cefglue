@@ -20,7 +20,7 @@ namespace CefGlue
         /// </summary>
         public void SetToEmpty()
         {
-            this.set_to_empty(this.ptr);
+            cef_post_data_element_t.invoke_set_to_empty(this.ptr);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace CefGlue
             fixed (char* fileName_str = fileName)
             {
                 var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
-                this.set_to_file(this.ptr, &n_fileName);
+                cef_post_data_element_t.invoke_set_to_file(this.ptr, &n_fileName);
             }
         }
 
@@ -41,7 +41,7 @@ namespace CefGlue
         /// </summary>
         public void SetToBytes(int size, IntPtr bytes)
         {
-            this.set_to_bytes(this.ptr, size, (void*)bytes);
+            cef_post_data_element_t.invoke_set_to_bytes(this.ptr, size, (void*)bytes);
 
             // TODO: make usable method overrides (byte[] bytes, int offset, int length), (byte[] bytes, int length), (byte[] bytes)
         }
@@ -53,7 +53,7 @@ namespace CefGlue
         {
             get
             {
-                return (CefPostDataElementType)this.get_type(this.ptr);
+                return (CefPostDataElementType)cef_post_data_element_t.invoke_get_type(this.ptr);
             }
         }
 
@@ -62,7 +62,7 @@ namespace CefGlue
         /// </summary>
         public string GetFile()
         {
-            var n_result = this.get_file(this.ptr);
+            var n_result = cef_post_data_element_t.invoke_get_file(this.ptr);
             return n_result.GetStringAndFree();
         }
 
@@ -71,7 +71,7 @@ namespace CefGlue
         /// </summary>
         public int GetBytesCount()
         {
-            return this.get_bytes_count(this.ptr);
+            return cef_post_data_element_t.invoke_get_bytes_count(this.ptr);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace CefGlue
         /// </summary>
         public int GetBytes(int size, IntPtr bytes)
         {
-            return this.get_bytes(this.ptr, size, (void*)bytes);
+            return cef_post_data_element_t.invoke_get_bytes(this.ptr, size, (void*)bytes);
             // TODO: make usable overrides
         }
 

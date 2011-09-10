@@ -10,7 +10,7 @@ namespace CefGlue
         /// </summary>
         public void Undo()
         {
-            this.undo(this.ptr);
+            cef_frame_t.invoke_undo(this.ptr);
         }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace CefGlue
         /// </summary>
         public void Redo()
         {
-            this.redo(this.ptr);
+            cef_frame_t.invoke_redo(this.ptr);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace CefGlue
         /// </summary>
         public void Cut()
         {
-            this.cut(this.ptr);
+            cef_frame_t.invoke_cut(this.ptr);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace CefGlue
         /// </summary>
         public void Copy()
         {
-            this.copy(this.ptr);
+            cef_frame_t.invoke_copy(this.ptr);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CefGlue
         /// </summary>
         public void Paste()
         {
-            this.paste(this.ptr);
+            cef_frame_t.invoke_paste(this.ptr);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace CefGlue
         /// </summary>
         public void Delete()
         {
-            this.del(this.ptr);
+            cef_frame_t.invoke_del(this.ptr);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace CefGlue
         /// </summary>
         public void SelectAll()
         {
-            this.select_all(this.ptr);
+            cef_frame_t.invoke_select_all(this.ptr);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace CefGlue
         /// </summary>
         public void Print()
         {
-            this.print(this.ptr);
+            cef_frame_t.invoke_print(this.ptr);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace CefGlue
         /// </summary>
         public void ViewSource()
         {
-            this.view_source(this.ptr);
+            cef_frame_t.invoke_view_source(this.ptr);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace CefGlue
         /// </summary>
         public string GetSource()
         {
-            cef_string_userfree_t n_source = this.get_source(this.ptr);
+            cef_string_userfree_t n_source = cef_frame_t.invoke_get_source(this.ptr);
             return n_source.GetStringAndFree();
         }
 
@@ -94,7 +94,7 @@ namespace CefGlue
         /// </summary>
         public string GetText()
         {
-            cef_string_userfree_t n_text = this.get_text(this.ptr);
+            cef_string_userfree_t n_text = cef_frame_t.invoke_get_text(this.ptr);
             return n_text.GetStringAndFree();
         }
 
@@ -103,7 +103,7 @@ namespace CefGlue
         /// </summary>
         public void LoadRequest(CefRequest request)
         {
-            this.load_request(this.ptr, request.GetNativePointerAndAddRef());
+            cef_frame_t.invoke_load_request(this.ptr, request.GetNativePointerAndAddRef());
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace CefGlue
             fixed (char* str = url)
             {
                 cef_string_t n_url = new cef_string_t(str, url != null ? url.Length : 0);
-                this.load_url(this.ptr, &n_url);
+                cef_frame_t.invoke_load_url(this.ptr, &n_url);
             }
         }
 
@@ -129,7 +129,7 @@ namespace CefGlue
                 var n_content = new cef_string_t(content_str, content != null ? content.Length : 0);
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
 
-                this.load_string(this.ptr, &n_content, &n_url);
+                cef_frame_t.invoke_load_string(this.ptr, &n_content, &n_url);
             }
         }
 
@@ -142,7 +142,7 @@ namespace CefGlue
             {
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
 
-                this.load_stream(this.ptr, stream.GetNativePointerAndAddRef(), &n_url);
+                cef_frame_t.invoke_load_stream(this.ptr, stream.GetNativePointerAndAddRef(), &n_url);
             }
         }
 
@@ -160,7 +160,7 @@ namespace CefGlue
                 var n_jsCode = new cef_string_t(jsCode_str, jsCode != null ? jsCode.Length : 0);
                 var n_scriptUrl = new cef_string_t(scriptUrl_str, scriptUrl != null ? scriptUrl.Length : 0);
 
-                this.execute_java_script(this.ptr, &n_jsCode, &n_scriptUrl, startLine);
+                cef_frame_t.invoke_execute_java_script(this.ptr, &n_jsCode, &n_scriptUrl, startLine);
             }
         }
 
@@ -171,7 +171,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_main(this.ptr) != 0;
+                return cef_frame_t.invoke_is_main(this.ptr) != 0;
             }
         }
 
@@ -183,7 +183,7 @@ namespace CefGlue
         {
             get
             {
-                return this.is_focused(this.ptr) != 0;
+                return cef_frame_t.invoke_is_focused(this.ptr) != 0;
             }
         }
 
@@ -192,7 +192,7 @@ namespace CefGlue
         /// </summary>
         public string GetName()
         {
-            cef_string_userfree_t n_name = this.get_name(this.ptr);
+            cef_string_userfree_t n_name = cef_frame_t.invoke_get_name(this.ptr);
             return n_name.GetStringAndFree();
         }
 
@@ -202,7 +202,7 @@ namespace CefGlue
         /// </summary>
         public string GetURL()
         {
-            cef_string_userfree_t n_url = this.get_url(this.ptr);
+            cef_string_userfree_t n_url = cef_frame_t.invoke_get_url(this.ptr);
             return n_url.GetStringAndFree();
         }
 
@@ -212,7 +212,7 @@ namespace CefGlue
         public CefBrowser GetBrowser()
         {
             return CefBrowser.From(
-                this.get_browser(this.ptr)
+                cef_frame_t.invoke_get_browser(this.ptr)
                 );
         }
 
@@ -221,7 +221,7 @@ namespace CefGlue
         /// </summary>
         public void VisitDom(CefDomVisitor visitor)
         {
-            this.visit_dom(this.ptr, visitor.GetNativePointerAndAddRef());
+            cef_frame_t.invoke_visit_dom(this.ptr, visitor.GetNativePointerAndAddRef());
         }
 
     }
