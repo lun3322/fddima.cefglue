@@ -15,6 +15,16 @@ Latest [on-line documentation](http://cefglue.dmitriid.com/doc/) available.
 CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
 
 
+### Version 0.4.4-cef-r275
+
+Download [CefGlue-0.4.4-cef-r275.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.4-cef-r275.zip), [cef_binary_r275_VS2008.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r275_VS2008.zip)
+
+- Fixes for crashes on application exit (issue #42).
+- Client now support command line (to run it in different modes like multithreaded/singlethreaded message loop, and different message loop workers, note, that only multithreaded message loop is official way).
+- More simple types support for ScriptableObject.
+- Fixes for debug builds.
+
+
 ### Version 0.4.3-cef-r275
 
 Download [CefGlue-0.4.3-cef-r275.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.3-cef-r275.zip), [cef_binary_r275_VS2008.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r275_VS2008.zip)
