@@ -7,6 +7,8 @@
     using Core;
     using Diagnostics;
 
+    // TODO: do exception checking in handler impls, and reporting about them
+
     public static unsafe partial class Cef
     {
         private static CefSettings s_currentSettings;

@@ -10,6 +10,7 @@ namespace CefGlue.Diagnostics
     using System.Text;
     using System.Threading;
     using System.Globalization;
+    using System.Runtime.InteropServices;
 
     [CLSCompliant(false)]
     public sealed class Logger
@@ -82,8 +83,11 @@ namespace CefGlue.Diagnostics
 
         public void Close()
         {
-            writer.Close();
-            writer = null;
+            if (writer != null)
+            {
+                writer.Close();
+                writer = null;
+            }
         }
 
         public void SetTarget(LogTarget target, bool enabled)
@@ -618,59 +622,79 @@ namespace CefGlue.Diagnostics
         #endregion
 
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void Write(LogSeverity severity, LogTarget target, IntPtr objectId, LogOperation operation, string message)
         {
-            if (this.writer != null)
+            var now = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff");
+
+            lock (this)
             {
-                try
+                if (this.writer != null)
                 {
-                    this.writer.Flush();
+                    try
+                    {
+                        this.writer.Flush();
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        this.writer = null;
+                    }
                 }
-                catch (ObjectDisposedException)
+
+                if (this.writer == null) Open();
+                if (this.disabled) return;
+
+                this.writer.Write(now);
+                this.writer.Write('|');
+
+                var threadId = Thread.CurrentThread.ManagedThreadId;
+                if (threadId == gcFinalizerThreadId)
                 {
-                    this.writer = null;
+                    this.writer.Write("GC");
                 }
-            }
+                else
+                {
+                    this.writer.Write(threadId.ToString().PadLeft(2));
+                }
+                this.writer.Write('|');
+                this.writer.Write("{0:X8}", GetCurrentThreadId());
+                this.writer.Write('|');
+                if (Cef.CurrentlyOn(CefThreadId.UI))
+                {
+                    this.writer.Write("Cef:UI  ");
+                }
+                else if (Cef.CurrentlyOn(CefThreadId.IO))
+                {
+                    this.writer.Write("Cef:IO  ");
+                }
+                else if (Cef.CurrentlyOn(CefThreadId.File))
+                {
+                    this.writer.Write("Cef:File");
+                }
+                else this.writer.Write("???:????");
 
-            if (this.writer == null) Open();
-            if (this.disabled) return;
+                this.writer.Write('|');
+                this.writer.Write(severityNames[(int)severity]);
+                this.writer.Write('|');
+                this.writer.Write(targetNames[(int)target]);
+                this.writer.Write('|');
+                if (objectId == IntPtr.Zero)
+                {
+                    this.writer.Write("        ");
+                }
+                else
+                {
+                    this.writer.Write("{0:X8}", (uint)objectId);
+                }
+                this.writer.Write('|');
+                if (operation != LogOperation.None)
+                {
+                    this.writer.Write(operationNames[(int)operation]);
+                    if (message != null) this.writer.Write(": ");
+                }
+                this.writer.WriteLine(message ?? string.Empty);
 
-            this.writer.Write(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff"));
-            this.writer.Write('|');
-
-            var threadId = Thread.CurrentThread.ManagedThreadId;
-            if (threadId == gcFinalizerThreadId)
-            {
-                this.writer.Write("GC");
+                if (this.autoFlush) writer.Flush();
             }
-            else
-            {
-                this.writer.Write(threadId.ToString().PadLeft(2));
-            }
-
-            this.writer.Write('|');
-            this.writer.Write(severityNames[(int)severity]);
-            this.writer.Write('|');
-            this.writer.Write(targetNames[(int)target]);
-            this.writer.Write('|');
-            if (objectId == IntPtr.Zero)
-            {
-                this.writer.Write("        ");
-            }
-            else
-            {
-                this.writer.Write("{0:X8}", (uint)objectId);
-            }
-            this.writer.Write('|');
-            if (operation != LogOperation.None)
-            {
-                this.writer.Write(operationNames[(int)operation]);
-                if (message != null) this.writer.Write(": ");
-            }
-            this.writer.WriteLine(message ?? string.Empty);
-
-            if (this.autoFlush) writer.Flush();
         }
 
         private static string[] GetEnumNameValueMap(Type type, bool autoPadding = true)
@@ -697,6 +721,8 @@ namespace CefGlue.Diagnostics
             return names;
         }
 
+        [DllImport("kernel32.dll")]
+        private static extern uint GetCurrentThreadId();
     }
 }
 #endif

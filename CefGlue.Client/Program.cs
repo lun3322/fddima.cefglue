@@ -15,11 +15,19 @@
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            var options = Options.Parse(args);
+            if (options.Help)
+            {
+                MessageBox.Show(options.GetHelpText(), "CefGlue Client");
+                return;
+            }
+
+
             var settings = new CefSettings();
-            settings.MultiThreadedMessageLoop = true;
-            settings.CachePath = Path.GetDirectoryName(Application.ExecutablePath) + "/cache/";
+            settings.MultiThreadedMessageLoop = options.MultiThreadedMessageLoop;
+            settings.CachePath = Path.GetDirectoryName(Application.ExecutablePath) + "/cache";
             settings.LogFile = Path.GetDirectoryName(Application.ExecutablePath) + "/CEF.log";
             settings.LogSeverity = CefLogSeverity.Verbose;
             try
@@ -32,9 +40,12 @@
                 return;
             }
 
+            var version = Application.ProductVersion; // TODO: make Cef.Version property
+
             Cef.RegisterExtension("clientExtension",
             @"
 var cefGlue = cefGlue || {};
+Object.defineProperty(cefGlue, ""version"", { value: """ + version + @""", configurable: false });
 if (!cefGlue.client) {
     cefGlue.client = {
         dump: function() {
@@ -118,8 +129,8 @@ if (!cefGlue.client) {
             Cef.RegisterScriptableObject(testObject1, ScriptableObjectOptions.Extension);
             Cef.RegisterScriptableObject("myTestObject1", testObject1, ScriptableObjectOptions.Extension);
 
-            Cef.RegisterCustomScheme("client", true, true, false);
-            Cef.RegisterSchemeHandlerFactory("client", null, new ClientSchemeHandlerFactory());
+            Cef.RegisterCustomScheme("res", true, true, false);
+            Cef.RegisterSchemeHandlerFactory("res", null, new ClientSchemeHandlerFactory());
 
             // This is shows that handler works like zombie - when handler is used by native side only
             // it prevents to be collected by GC.
@@ -152,24 +163,34 @@ if (!cefGlue.client) {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            bool cefMessageLoop = false;
-
-            if (!Cef.CurrentSettings.MultiThreadedMessageLoop && !cefMessageLoop)
+            if (!Cef.CurrentSettings.MultiThreadedMessageLoop && !options.CefMessageLoop)
             {
                 Application.Idle += (sender, e) => { Cef.DoMessageLoopWork(); };
             }
+
             using (var mainForm = new MainForm())
             {
-                if (cefMessageLoop)
+                if (Cef.CurrentSettings.MultiThreadedMessageLoop || !options.CefMessageLoop)
+                {
+                    Application.Run(mainForm);
+                }
+                else
                 {
                     mainForm.Show();
                     Cef.RunMessageLoop();
                 }
-                else
+
+                /*
+                if (!cefMessageLoop)
                 {
-                    Application.Run(mainForm);
+                    for (var i = 0; i < 1000; i++)
+                    {
+                        Cef.DoMessageLoopWork();
+                    }
                 }
+                */
             }
+
 
             Cef.Shutdown();
         }

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <title>CefGlue Project</title>
+
+    <link rel="stylesheet" type="text/css" href="css/site.css">
+
+    <style>
+        body
+        {
+            background: url(./img/new-chromium-logo.png);
+            background-repeat: no-repeat;
+
+            -webkit-user-select: none;
+            user-select: none;
+            cursor: default;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="header" style="background:rgba(245, 245, 245, 0.5);">
+    <span id="CefGlueLogo">CefGlue Project</span>
+</div>
+
+<div id="contentLayout" style="-webkit-box-pack:end">
+
+<div style="background:rgba(245, 245, 245, 0.7); padding:.5em 1em; border-top: 1px solid #E5E5E5; border-bottom: 1px solid #E5E5E5; font-family: segoe ui, tahoma; font-size:10pt">
+    <p>Version <span id="VersionLabel">unknown</span></p>
+    <p>Copyright &copy; 2011 <!-- a href="https://bitbucket.org/fddima/cefglue" -->CefGlue Project<!-- /a --></p>
+    <p>Built on <!-- a href="http://code.google.com/p/chromiumembedded/"-->Chromium Embedded Framework<!-- /a --></p>
+    <br />
+    <br />
+    <br />
+</div>
+
+</div>
+
+<script>
+    if (cefGlue) {
+        document.getElementById("VersionLabel").innerText = cefGlue.version;
+    }
+</script>
+
+</body>
+</html>

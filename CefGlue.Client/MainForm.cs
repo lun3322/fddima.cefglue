@@ -11,10 +11,16 @@
     using System.Windows.Forms;
     using CefGlue;
     using CefGlue.Windows.Forms;
+    using System.Threading;
 
     public partial class MainForm : Form
     {
+        private const string homeUrl = "res://client/index.html";
+
         private string caption;
+        private CefBrowserSettings browserSettings;
+        private BrowserSettingsForm browserSettingsForm;
+
         private CefWebBrowser browser;
 
         private ConsoleForm consoleForm;
@@ -25,47 +31,35 @@
             InitializeComponent();
             // this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            CreateMenu();
-
             this.caption = this.Text;
+
+            this.browserSettings = new CefBrowserSettings();
+            this.browserSettings.FileAccessFromFileUrlsAllowed = true;
 
             this.consoleForm = new ConsoleForm();
             consoleForm.BindData(consoleMessages);
 
-            this.browser = CreateBrowserControl();
+            // TODO: check that form works correctly even with browser==null
+            // TODO: also update state when browser was be destroyed
+            // TODO: to create new browser use home page or adressbar test
+            CreateBrowserControl();
         }
 
-        private void CreateMenu()
+        protected override void DestroyHandle()
         {
-            // TODO: Dynamically create menu here!
+            base.DestroyHandle();
+
+            // TODO: do it only for CEF message loop -> detect cef message loop can be done if Cef.RunMessageLoop was be run, and it can be reflected in Cef.CurrentSettings
+            if (!Cef.CurrentSettings.MultiThreadedMessageLoop)
+            {
+                NativeMethods.PostQuitMessage(0);
+            }
         }
 
-        private CefWebBrowser CreateBrowserControl()
+        private void CreateBrowserControl()
         {
-            var settings = new CefBrowserSettings();
-            // settings.WebSecurityDisabled = true;
-            // settings.DragDropDisabled = true;
-            // settings.MinimumFontSize = 20;
-            // settings.ImageLoadDisabled = true;
-            // settings.JavaScriptDisabled = true;
-            // settings.JavaScriptOpenWindowsDisallowed = false;
-            // settings.JavaScriptCloseWindowsDisallowed = true;
-            // settings.JavaScriptAccessClipboardDisallowed = true;
-            // settings.DefaultEncoding = "Windows-1251";
-            // settings.EncodingDetectorEnabled = false;
-            // settings.DeveloperToolsDisabled = true;
-            // settings.CaretBrowsingEnabled = true;
-
-            var startUrl = this.bookmarksCefGlueHomeMenuItem.Tag as string;
-            //var startUrl = this.testsJsePerformanceMenuItem.Tag as string;
-            //var startUrl = this.performanceToolStripMenuItem.Tag as string;
-            //var startUrl = this.runTestsToolStripMenuItem.Tag as string;
-
-            var browser = new CefWebBrowser(settings, startUrl);
-            browser.Parent = this;
+            this.browser = new CefWebBrowser(browserSettings, homeUrl);
             browser.Dock = DockStyle.Fill;
-            browser.BringToFront();
-
             browser.BackColor = Color.White;
 
             browser.CanGoBackChanged += new EventHandler(browser_CanGoBackChanged);
@@ -75,23 +69,40 @@
             browser.StatusMessage += new EventHandler<StatusMessageEventArgs>(browser_StatusMessage);
             browser.ConsoleMessage += new EventHandler<ConsoleMessageEventArgs>(browser_ConsoleMessage);
 
-            return browser;
+            browser.Parent = this;
+            browser.BringToFront();
         }
 
-        protected override void  OnShown(EventArgs e)
+        private void browserCreateMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.browserSettingsForm == null)
+            {
+                this.browserSettingsForm = new BrowserSettingsForm();
+                this.browserSettingsForm.BrowserSettings = browserSettings;
+            }
+
+            var result = this.browserSettingsForm.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                browserCloseMenuItem.PerformClick();
+                CreateBrowserControl();
+            }
+        }
+
+        private void browserCloseMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.browser != null)
+            {
+                this.browser.Dispose();
+                this.browser = null;
+            }
+        }
+
+        protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
             browser.Focus();
-        }
-
-        private void navigateByTagMenuItemClick(object sender, EventArgs e)
-        {
-            var item = sender as ToolStripItem;
-            if (item != null && this.goButton.Enabled)
-            {
-                this.addressTextBox.Text = item.Tag as string ?? "";
-                this.goButton.PerformClick();
-            }
         }
 
         void browser_CanGoBackChanged(object sender, EventArgs e)
@@ -145,34 +156,9 @@
             this.consoleMessages.Add(e);
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            /*
-            if (this.browser != null)
-            {
-                if (!this.browser.IsDisposed)
-                {
-                    this.browser.Close();
-                }
-            }
-            */
-
-            if (!Cef.CurrentSettings.MultiThreadedMessageLoop)
-            {
-                NativeMethods.PostQuitMessage(0);
-            }
-        }
-
         private void fileExitMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void browserCloseMenuItem_Click(object sender, EventArgs e)
-        {
-            this.browser.Close();
         }
 
         private void browserShowDevToolsMenuItem_Click(object sender, EventArgs e)
@@ -203,6 +189,11 @@
         private void reloadButton_Click(object sender, EventArgs e)
         {
             this.browser.Reload();
+        }
+
+        private void homeButton_Click(object sender, EventArgs e)
+        {
+            this.browser.LoadURL(homeUrl);
         }
 
         private void goButton_Click(object sender, EventArgs e)
@@ -256,5 +247,12 @@
             MessageBox.Show(string.Join(", ", names));
         }
 
+        private void helpAboutMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new AboutForm())
+            {
+                form.ShowDialog();
+            }
+        }
     }
 }

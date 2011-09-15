@@ -77,9 +77,23 @@
             return new CefStringList(this.list.Copy());
         }
 
+        private static IEnumerable<string> emptySequence = new string[0];
+
         public IEnumerable<string> AsEnumerable()
         {
+            // TODO: CefStringList must be IEnumerable<string>
+            // TODO: create empty enumerator for empty list
+
             var count = this.Count;
+            if (count == 0)
+            {
+                return emptySequence;
+            }
+            else return AsEnumerableCore(count);
+        }
+
+        private IEnumerable<string> AsEnumerableCore(int count)
+        {
             for (var i = 0; i < count; i++)
             {
                 yield return this[i];

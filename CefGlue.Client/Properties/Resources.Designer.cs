@@ -88,6 +88,13 @@ namespace CefGlue.Client.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap home_16 {
+            get {
+                object obj = ResourceManager.GetObject("home_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap reload_16 {
             get {
                 object obj = ResourceManager.GetObject("reload_16", resourceCulture);

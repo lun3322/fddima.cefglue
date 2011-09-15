@@ -73,9 +73,22 @@
     <Compile Include="..\CefGlue.Version.cs">
       <Link>Properties\CefGlue.Version.cs</Link>
     </Compile>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClientSchemeHandler.cs" />
     <Compile Include="ClientSchemeHandlerFactory.cs" />
+    <Compile Include="BrowserSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BrowserSettingsForm.Designer.cs">
+      <DependentUpon>BrowserSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Examples\ScriptableObject\TestObject1.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="TestScriptableObject.cs" />
     <Compile Include="ClientV8Handler.cs" />
     <Compile Include="ConsoleForm.cs">
@@ -96,8 +109,14 @@
     <Compile Include="ToolStripSpringTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConsoleForm.resx">
       <DependentUpon>ConsoleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BrowserSettingsForm.resx">
+      <DependentUpon>BrowserSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -117,7 +136,6 @@
     </None>
     <None Include="App.config" />
     <None Include="app.manifest" />
-    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\MIT.LICENSE" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -145,6 +163,7 @@
     <None Include="Resources\blue_arrow_right_16.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\MIT.LICENSE" />
     <None Include="Resources\close_16.png" />
   </ItemGroup>
   <ItemGroup>
@@ -154,31 +173,32 @@
     <None Include="Resources\go_16.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\jse\Dump.html" />
+    <EmbeddedResource Include="Resources\client\css\site.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\CustomScheme.html" />
+    <EmbeddedResource Include="Resources\client\index.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\jse\Performance.html" />
+    <EmbeddedResource Include="Resources\client\ExtensionDump.html" />
+    <EmbeddedResource Include="Resources\client\ExtensionPerformance.html" />
+    <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine-html.js" />
+    <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine.css" />
+    <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine.js" />
+    <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine_favicon.png" />
+    <EmbeddedResource Include="Resources\client\ScriptableObjectPerformance.html" />
+    <EmbeddedResource Include="Resources\client\SpecRunner.html" />
+    <EmbeddedResource Include="Resources\client\spec\ScriptableObjectSpec.js" />
+    <EmbeddedResource Include="Resources\client\spec\SpecHelper.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\so\Performance.html" />
+    <None Include="Resources\home_16.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine-html.js" />
-    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine.css" />
-    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine.js" />
-    <EmbeddedResource Include="ClientScheme\tests\lib\jasmine-1.1.0.rc1\jasmine_favicon.png" />
+    <EmbeddedResource Include="Resources\client\about.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\spec\ScriptableObjectSpec.js" />
-    <EmbeddedResource Include="ClientScheme\tests\spec\SpecHelper.js" />
+    <EmbeddedResource Include="Resources\client\img\new-chromium-logo.png" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ClientScheme\tests\SpecRunner.html" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\DefaultProject.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

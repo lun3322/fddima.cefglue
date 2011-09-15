@@ -38,10 +38,10 @@
             try
             {
                 var uri = new Uri(urlString);
-                var path = uri.Host + uri.AbsolutePath;
+                var path = uri.Host + uri.AbsolutePath; // ignore host
 
                 var asm = typeof(ClientSchemeHandler).Assembly;
-                var resPrefix = "CefGlue.Client.ClientScheme.";
+                var resPrefix = "CefGlue.Client.Resources.";
 
                 // convert path to resource name
                 var parts = path.Split('/');

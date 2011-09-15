@@ -122,6 +122,7 @@
     <Compile Include="Core\Struct\cef_time_t.cs" />
     <Compile Include="Core\Struct\cef_urlparts_t.cs" />
     <Compile Include="Core\Struct\cef_window_info_t.cs" />
+    <Compile Include="Diagnostics\WM.cs" />
     <Compile Include="ScriptableObject\Attributes\NamingConvention.cs" />
     <Compile Include="ScriptableObject\Attributes\ScriptableObjectAttribute.cs" />
     <Compile Include="ScriptableObject\Attributes\ScriptableAttribute.cs" />
