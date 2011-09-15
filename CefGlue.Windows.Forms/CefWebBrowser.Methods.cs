@@ -19,6 +19,7 @@
         /// </summary>
         public void Close()
         {
+            // TODO: change this method - it must Dispose itself
             if (this.browser != null)
             {
                 this.browser.Close();

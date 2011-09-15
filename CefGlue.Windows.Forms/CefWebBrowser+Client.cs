@@ -34,6 +34,7 @@
 
             protected override void Dispose(bool disposing)
             {
+                // FIXME: Dispose in Client
                 if (this.lifeSpanHandler != null) { this.lifeSpanHandler = null; }
                 if (this.loadHandler != null) { this.loadHandler = null; }
                 if (this.displayHandler != null) { this.displayHandler = null; }

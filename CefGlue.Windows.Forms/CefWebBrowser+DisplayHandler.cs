@@ -23,10 +23,11 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnNavStateChange: CanGoBack=[{0}] CanGoForward=[{1}]", canGoBack, canGoForward);
 #endif
-                if (this.control.IsDisposed) return;
-
-                this.control.CanGoBack = canGoBack;
-                this.control.CanGoForward = canGoForward;
+                if (!browser.IsPopup)
+                {
+                    this.control.CanGoBack = canGoBack; // TODO: do it async
+                    this.control.CanGoForward = canGoForward;
+                }
             }
 
             protected override void OnAddressChange(CefBrowser browser, CefFrame frame, string url)
@@ -34,11 +35,9 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnAddressChange: URL=[{0}]", url);
 #endif
-                if (this.control.IsDisposed) return;
-
                 if (!browser.IsPopup)
                 {
-                    this.control.Address = url;
+                    this.control.Address = url; // TODO: do it async
                 }
             }
 
@@ -47,11 +46,9 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnTitleChange: Title=[{0}]", title);
 #endif
-                if (this.control.IsDisposed) return;
-
                 if (!browser.IsPopup)
                 {
-                    this.control.Title = title;
+                    this.control.Title = title; // TODO: do it async
                 }
                 else
                 {
@@ -64,7 +61,6 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnTooltip: Text=[{0}]", text);
 #endif
-                if (this.control.IsDisposed) return false;
 
                 return false;
             }
@@ -74,7 +70,7 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "DisplayHandler.OnStatusMessage: Type=[{0}] Value=[{1}]", type, value);
 #endif
-                if (this.control.IsDisposed) return;
+                // TODO: popups support...
 
                 if (value.Length == 0)
                 {
@@ -85,7 +81,8 @@
                 {
                     this.statusMessages[type] = value;
                 }
-                this.control.OnStatusMessage(new StatusMessageEventArgs(type, value ?? ""));
+
+                this.control.PostStatusMessage(new StatusMessageEventArgs(type, value ?? ""));
             }
 
             protected override bool OnConsoleMessage(CefBrowser browser, string message, string source, int line)
@@ -95,7 +92,8 @@
 #endif
                 if (this.control.IsDisposed) return false;
 
-                this.control.OnConsoleMessage(new ConsoleMessageEventArgs(message, source, line));
+                this.control.PostConsoleMessage(new ConsoleMessageEventArgs(message, source, line));
+
                 return true;
             }
 

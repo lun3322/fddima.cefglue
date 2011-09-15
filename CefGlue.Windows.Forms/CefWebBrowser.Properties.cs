@@ -13,7 +13,7 @@
 
     partial class CefWebBrowser
     {
-        private string title = null;
+        private string title = "";
         private bool canGoBack = false;
         private bool canGoForward = false;
         private string address = null;
@@ -26,20 +26,15 @@
         {
             get
             {
-                if (this.title == null)
-                {
-                    // FIXME: check that browser created
-                    // FIXME: this.title = this.browser.Title;
-                    this.title = "";
-                }
                 return this.title;
             }
             private set
             {
+                // TODO: check null?
                 if (this.title != value)
                 {
                     this.title = value;
-                    OnTitleChanged(EventArgs.Empty);
+                    this.PostTitleChanged();
                 }
             }
         }
@@ -58,7 +53,7 @@
                 if (this.canGoBack != value)
                 {
                     this.canGoBack = value;
-                    OnCanGoBackChanged(EventArgs.Empty);
+                    this.PostCanGoBackChanged();
                 }
             }
         }
@@ -77,7 +72,7 @@
                 if (this.canGoForward != value)
                 {
                     this.canGoForward = value;
-                    OnCanGoForwardChanged(EventArgs.Empty);
+                    this.PostCanGoForwardChanged();
                 }
             }
         }
@@ -101,7 +96,7 @@
                 if (this.address != value)
                 {
                     this.address = value;
-                    OnAddressChanged(EventArgs.Empty);
+                    this.PostAddressChanged();
                 }
             }
         }

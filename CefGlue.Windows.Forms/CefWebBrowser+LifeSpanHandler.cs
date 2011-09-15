@@ -68,10 +68,18 @@
 #endif
                 if (!browser.IsPopup)
                 {
+                    if (this.control.IsDisposed)
+                    {
+                        browser.Close();
+                        return;
+                    }
+
                     this.control.browser = browser;
                     this.control.browserWindowHandle = browser.WindowHandle;
 
                     this.control.SetStyle(ControlStyles.Opaque, true);
+
+                    this.control.ResizeBrowserWindow();
 
                     // FIXME: this is invalid - can't be accessed from another thread
                     /*
