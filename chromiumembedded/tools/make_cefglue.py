@@ -6,6 +6,10 @@ from cef_parser import *
 
 def is_handler_class(cls):
     name = cls.get_capi_name();
+
+    if name == "cef_scheme_handler_callback_t":
+    	return False
+
     return (re.match(".*handler_.*", name) != None 
             or re.match(".*_listener_.*", name) != None 
             or re.match(".*_filter_.*", name) != None 

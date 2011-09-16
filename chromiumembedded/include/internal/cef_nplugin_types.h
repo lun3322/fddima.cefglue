@@ -33,8 +33,8 @@
 
 #include "cef_export.h"
 #include "cef_string.h"
-#include "npapi/npapi.h"
-#include "npapi/nphostapi.h"
+#include "third_party/npapi/bindings/npapi.h"
+#include "third_party/npapi/bindings/nphostapi.h"
 
 #ifdef __cplusplus
 extern "C" {

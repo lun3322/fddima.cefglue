@@ -7,50 +7,113 @@ namespace CefGlue
     unsafe partial class CefSchemeHandler
     {
         /// <summary>
-        /// Process the request. All response generation should take place in
-        /// this method. If there is no response set |response_length| to zero or
-        /// return false and ReadResponse() will not be called. If the response
-        /// length is not known set |response_length| to -1 and ReadResponse()
-        /// will be called until it returns false or until the value of
-        /// |bytes_read| is set to 0. If the response length is known set
-        /// |response_length| to a positive value and ReadResponse() will be
-        /// called until it returns false, the value of |bytes_read| is set to 0
-        /// or the specified number of bytes have been read. Use the |response|
-        /// object to set the mime type, http status code and optional header
-        /// values for the response and return true. To redirect the request to a
-        /// new URL set |redirectUrl| to the new URL and return true.
+        /// Begin processing the request. To handle the request return true and
+        /// call HeadersAvailable() once the response header information is
+        /// available (HeadersAvailable() can also be called from inside this
+        /// method if header information is available immediately). To redirect
+        /// the request to a new URL set |redirectUrl| to the new URL and return
+        /// true. To cancel the request return false.
         /// </summary>
-        private int process_request(cef_scheme_handler_t* self, cef_request_t* request, cef_string_t* redirectUrl, cef_response_t* response, int* response_length)
+        private int process_request(cef_scheme_handler_t* self, cef_request_t* request, cef_string_t* redirectUrl, cef_scheme_handler_callback_t* callback)
         {
             ThrowIfObjectDisposed();
 
-            var m_request = CefRequest.From(request);
-            string m_redirectUrl;
-            var m_response = CefResponse.From(response);
-            int m_responseLength;
+            var mRequest = CefRequest.From(request);
+            string mRedirectUrl = null;
+            var mCallback = CefSchemeHandlerCallback.From(callback);
 
-            var handled = this.ProcessRequest(m_request, out m_redirectUrl, m_response, out m_responseLength);
-
-            *response_length = m_responseLength;
+            var handled = this.ProcessRequest(mRequest, ref mRedirectUrl, mCallback);
 
             if (handled)
             {
-                cef_string_t.Copy(m_redirectUrl, redirectUrl);
+                cef_string_t.Copy(mRedirectUrl, redirectUrl);
             }
 
             return handled ? 1 : 0;
         }
 
         /// <summary>
-        /// Process the request.
-        /// All response generation should take place in this method.
-        /// If there is no response set |response_length| to zero or return false and ReadResponse() will not be called.
-        /// If the response length is not known set |response_length| to -1 and ReadResponse() will be called until it returns false or until the value of |bytes_read| is set to 0.
-        /// If the response length is known set |response_length| to a positive value and ReadResponse() will be called until it returns false, the value of |bytes_read| is set to 0 or the specified number of bytes have been read.
-        /// Use the |response| object to set the mime type, http status code and optional header values for the response and return true.
+        /// Begin processing the request.
+        /// 
+        /// To handle the request return true and call HeadersAvailable() once the response header information is
+        /// available (HeadersAvailable() can also be called from inside this
+        /// method if header information is available immediately).
+        /// 
         /// To redirect the request to a new URL set |redirectUrl| to the new URL and return true.
+        /// 
+        /// To cancel the request return false.
         /// </summary>
-        protected abstract bool ProcessRequest(CefRequest request, out string redirectUrl, CefResponse response, out int responseLength);
+        protected abstract bool ProcessRequest(CefRequest request, ref string redirectUrl, CefSchemeHandlerCallback callback);
+
+
+        /// <summary>
+        /// Retrieve response header information. If the response length is not
+        /// known set |response_length| to -1 and ReadResponse() will be called
+        /// until it returns false. If the response length is known set
+        /// |response_length| to a positive value and ReadResponse() will be
+        /// called until it returns false or the specified number of bytes have
+        /// been read. Use the |response| object to set the mime type, http
+        /// status code and other optional header values.
+        /// </summary>
+        private void get_response_headers(cef_scheme_handler_t* self, cef_response_t* response, long* response_length)
+        {
+            ThrowIfObjectDisposed();
+
+            var mResponse = CefResponse.From(response);
+            long mResponseLength;
+
+            this.GetResponseHeaders(mResponse, out mResponseLength);
+
+            *response_length = mResponseLength;
+        }
+
+        /// <summary>
+        /// Retrieve response header information.
+        /// If the response length is not known set |response_length| to -1 and ReadResponse() will be called
+        /// until it returns false.
+        /// 
+        /// If the response length is known set |response_length| to a positive value and ReadResponse() will be
+        /// called until it returns false or the specified number of bytes have
+        /// been read.
+        /// 
+        /// Use the |response| object to set the mime type, http status code and other optional header values.
+        /// </summary>
+        protected abstract void GetResponseHeaders(CefResponse response, out long responseLength);
+
+
+        /// <summary>
+        /// Read response data. If data is available immediately copy up to
+        /// |bytes_to_read| bytes into |data_out|, set |bytes_read| to the number
+        /// of bytes copied, and return true. To read the data at a later time
+        /// set |bytes_read| to 0, return true and call BytesAvailable() when the
+        /// data is available. To indicate response completion return false.
+        /// </summary>
+        private int read_response(cef_scheme_handler_t* self, void* data_out, int bytes_to_read, int* bytes_read, cef_scheme_handler_callback_t* callback)
+        {
+            ThrowIfObjectDisposed();
+
+            var mCallback = CefSchemeHandlerCallback.From(callback);
+
+            using (var mStream = new UnmanagedMemoryStream((byte*)data_out, bytes_to_read, bytes_to_read, FileAccess.Write))
+            {
+                int mBytesRead;
+                var handled = this.ReadResponse(mStream, bytes_to_read, out mBytesRead, mCallback);
+                *bytes_read = mBytesRead;
+                return handled ? 1 : 0;
+            }
+        }
+
+        /// <summary>
+        /// Read response data.
+        /// If data is available immediately copy up to |bytes_to_read| bytes into |data_out|, set |bytes_read| to the number
+        /// of bytes copied, and return true.
+        /// 
+        /// To read the data at a later time set |bytes_read| to 0, return true and call BytesAvailable() when the
+        /// data is available.
+        /// 
+        /// To indicate response completion return false.
+        /// </summary>
+        protected abstract bool ReadResponse(Stream stream, int bytesToRead, out int bytesRead, CefSchemeHandlerCallback callback);
 
 
         /// <summary>
@@ -67,33 +130,6 @@ namespace CefGlue
         /// Cancel processing of the request.
         /// </summary>
         protected abstract void Cancel();
-
-
-        /// <summary>
-        /// Copy up to |bytes_to_read| bytes into |data_out|. If the copy
-        /// succeeds set |bytes_read| to the number of bytes copied and return
-        /// true. If the copy fails return false and ReadResponse() will not be
-        /// called again.
-        /// </summary>
-        private int read_response(cef_scheme_handler_t* self, void* data_out, int bytes_to_read, int* bytes_read)
-        {
-            ThrowIfObjectDisposed();
-
-            using (var m_stream = new UnmanagedMemoryStream((byte*)data_out, bytes_to_read, bytes_to_read, FileAccess.Write))
-            {
-                int m_bytesRead;
-                var handled = this.ReadResponse(m_stream, bytes_to_read, out m_bytesRead);
-                *bytes_read = m_bytesRead;
-                return handled ? 1 : 0;
-            }
-        }
-
-        /// <summary>
-        /// Copy up to |bytes_to_read| bytes into |data_out|.
-        /// If the copy succeeds set |bytes_read| to the number of bytes copied and return true.
-        /// If the copy fails return false and ReadResponse() will not be called again.
-        /// </summary>
-        protected abstract bool ReadResponse(Stream stream, int bytesToRead, out int bytesRead);
 
 
     }

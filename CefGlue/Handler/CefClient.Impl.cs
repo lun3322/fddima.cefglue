@@ -241,5 +241,25 @@
         {
             return null;
         }
+
+        /// <summary>
+        /// Return the handler for drag events.
+        /// </summary>
+        private cef_drag_handler_t* get_drag_handler(cef_client_t* self)
+        {
+            ThrowIfObjectDisposed();
+
+            var handler = GetDragHandler();
+            return handler == null ? null : handler.GetNativePointerAndAddRef();
+        }
+
+        /// <summary>
+        /// Return the handler for drag events.
+        /// </summary>
+        protected virtual CefDragHandler GetDragHandler()
+        {
+            return null;
+        }
+
     }
 }

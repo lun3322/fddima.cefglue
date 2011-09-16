@@ -417,6 +417,29 @@
         }
     }
 
+    unsafe partial struct cef_drag_handler_t
+    {
+        private static int s_size;
+
+        static cef_drag_handler_t()
+        {
+            s_size = Marshal.SizeOf(typeof(cef_drag_handler_t));
+        }
+
+        internal static cef_drag_handler_t* Alloc()
+        {
+            var ptr = (cef_drag_handler_t*)Marshal.AllocHGlobal(s_size);
+            *ptr = new cef_drag_handler_t();
+            ptr->@base.size = s_size;
+            return ptr;
+        }
+
+        internal static void Free(cef_drag_handler_t* ptr)
+        {
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+    }
+
     unsafe partial struct cef_download_handler_t
     {
         private static int s_size;
@@ -435,6 +458,29 @@
         }
 
         internal static void Free(cef_download_handler_t* ptr)
+        {
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+    }
+
+    unsafe partial struct cef_scheme_handler_factory_t
+    {
+        private static int s_size;
+
+        static cef_scheme_handler_factory_t()
+        {
+            s_size = Marshal.SizeOf(typeof(cef_scheme_handler_factory_t));
+        }
+
+        internal static cef_scheme_handler_factory_t* Alloc()
+        {
+            var ptr = (cef_scheme_handler_factory_t*)Marshal.AllocHGlobal(s_size);
+            *ptr = new cef_scheme_handler_factory_t();
+            ptr->@base.size = s_size;
+            return ptr;
+        }
+
+        internal static void Free(cef_scheme_handler_factory_t* ptr)
         {
             Marshal.FreeHGlobal((IntPtr)ptr);
         }
@@ -481,29 +527,6 @@
         }
 
         internal static void Free(cef_content_filter_t* ptr)
-        {
-            Marshal.FreeHGlobal((IntPtr)ptr);
-        }
-    }
-
-    unsafe partial struct cef_scheme_handler_factory_t
-    {
-        private static int s_size;
-
-        static cef_scheme_handler_factory_t()
-        {
-            s_size = Marshal.SizeOf(typeof(cef_scheme_handler_factory_t));
-        }
-
-        internal static cef_scheme_handler_factory_t* Alloc()
-        {
-            var ptr = (cef_scheme_handler_factory_t*)Marshal.AllocHGlobal(s_size);
-            *ptr = new cef_scheme_handler_factory_t();
-            ptr->@base.size = s_size;
-            return ptr;
-        }
-
-        internal static void Free(cef_scheme_handler_factory_t* ptr)
         {
             Marshal.FreeHGlobal((IntPtr)ptr);
         }

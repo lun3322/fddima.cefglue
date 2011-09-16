@@ -168,6 +168,16 @@ Dictionary<string, HandlerDef> CreateHandlerSchema()
     def.AddCallback("on_cursor_change");
     schema.Add(def.ClassName, def);
 
+    // CefDragHandler
+    def = new HandlerDef()
+    {
+        ClassName = "CefDragHandler",
+        StructName = "cef_drag_handler_t",
+    };
+    def.AddCallback("on_drag_start");
+    def.AddCallback("on_drag_enter");
+    schema.Add(def.ClassName, def);
+
     // CefClient
     def = new HandlerDef()
     {
@@ -186,6 +196,7 @@ Dictionary<string, HandlerDef> CreateHandlerSchema()
     def.AddCallback("get_jsdialog_handler");
     def.AddCallback("get_jsbinding_handler");
     def.AddCallback("get_render_handler");
+    def.AddCallback("get_drag_handler");
     schema.Add(def.ClassName, def);
 
     // CefReadHandler
@@ -247,8 +258,9 @@ Dictionary<string, HandlerDef> CreateHandlerSchema()
         StructName = "cef_scheme_handler_t",
     };
     def.AddCallback("process_request");
-    def.AddCallback("cancel");
+    def.AddCallback("get_response_headers");
     def.AddCallback("read_response");
+    def.AddCallback("cancel");
     schema.Add(def.ClassName, def);
 
     // CefDownloadHandler
