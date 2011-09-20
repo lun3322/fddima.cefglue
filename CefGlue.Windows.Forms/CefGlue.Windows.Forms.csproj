@@ -74,6 +74,9 @@
     <Compile Include="CefWebBrowser+JSBindingHandler.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CefWebBrowser+JSDialogHandler.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StatusMessageEventArgs.cs" />
     <Compile Include="CefWebBrowser.cs">
       <SubType>Component</SubType>
