@@ -15,6 +15,8 @@ namespace CefGlue.Diagnostics
         // 
         CefString,
 
+        // TODO: generate it from ProxySchema and HandlerSchema
+
         // Handlers
         CefClient,
         CefContentFilter,
@@ -41,6 +43,7 @@ namespace CefGlue.Diagnostics
         CefV8Accessor,
         CefV8Handler,
         CefWriteHandler,
+        CefDragHandler,
 
         // Proxies
         CefBrowser,
@@ -60,6 +63,8 @@ namespace CefGlue.Diagnostics
         CefWebUrlRequestClient,
         CefXmlReader,
         CefZipReader,
+        CefDragData,
+        CefSchemeHandlerCallback,
     }
 }
 #endif

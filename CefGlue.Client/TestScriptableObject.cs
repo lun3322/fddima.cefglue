@@ -43,6 +43,12 @@
 
         public bool Enabled { get; set; }
 
+        public bool ThrowingProperty
+        {
+            get { throw new InvalidOperationException("i'm throwing getter!"); }
+            set { throw new InvalidOperationException("i'm throwing setter!"); }
+        }
+
         public int Subtract(int a, int b)
         {
             return a - b;
