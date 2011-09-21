@@ -5958,7 +5958,7 @@ namespace CefGlue.Core
         /// </summary>
         public IntPtr get;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
-        public delegate int get_delegate(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval);
+        public delegate int get_delegate(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval, cef_string_t* exception);
 
         /// <summary>
         /// Called to set an accessor value. |name| is the name of the property
@@ -5968,7 +5968,7 @@ namespace CefGlue.Core
         /// </summary>
         public IntPtr set;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
-        public delegate int set_delegate(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value);
+        public delegate int set_delegate(cef_v8accessor_t* self, /*const*/ cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value, cef_string_t* exception);
 
     };
 

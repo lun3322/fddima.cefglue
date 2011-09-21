@@ -25,7 +25,7 @@
             this.dispatchTable = binder.PropertyDispatchTable;
         }
 
-        internal unsafe override int get(cef_v8accessor_t* self, cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval)
+        internal unsafe override int get(cef_v8accessor_t* self, cef_string_t* name, cef_v8value_t* @object, cef_v8value_t** retval, cef_string_t* exception)
         {
             var prop = this.dispatchTable.GetOrDefault(name);
             if (prop == null) return 0;
@@ -46,8 +46,8 @@
             }
             catch (Exception ex)
             {
-                // FIXME: cef issue #327 http://code.google.com/p/chromiumembedded/issues/detail?id=327
-                throw new NotImplementedException();
+                // TODO: how exceptions must be formatted ?
+                cef_string_t.Copy(ex.ToString(), exception);
             }
 
             // TODO: this pointer must be typed
@@ -56,7 +56,7 @@
             return 1;
         }
 
-        internal override unsafe int set(cef_v8accessor_t* self, cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value)
+        internal override unsafe int set(cef_v8accessor_t* self, cef_string_t* name, cef_v8value_t* @object, cef_v8value_t* value, cef_string_t* exception)
         {
             var prop = this.dispatchTable.GetOrDefault(name);
             if (prop == null) return 0;
@@ -77,8 +77,8 @@
             }
             catch (Exception ex)
             {
-                // FIXME: cef issue #327 http://code.google.com/p/chromiumembedded/issues/detail?id=327
-                throw new NotImplementedException();
+                // TODO: how exceptions must be formatted ?
+                cef_string_t.Copy(ex.ToString(), exception);
             }
 
             // TODO: this pointer must be typed
@@ -88,12 +88,12 @@
             return 1;
         }
 
-        protected override bool Get(string name, CefV8Value obj, out CefV8Value returnValue)
+        protected override bool Get(string name, CefV8Value obj, out CefV8Value returnValue, out string exception)
         {
             throw new NotSupportedException();
         }
 
-        protected override bool Set(string name, CefV8Value obj, CefV8Value value)
+        protected override bool Set(string name, CefV8Value obj, CefV8Value value, out string exception)
         {
             throw new NotSupportedException();
         }
