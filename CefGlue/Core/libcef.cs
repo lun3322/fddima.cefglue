@@ -2880,7 +2880,7 @@ namespace CefGlue.Core
         /// </summary>
         public IntPtr get_auth_credentials;
         [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
-        public delegate int get_auth_credentials_delegate(cef_request_handler_t* self, cef_browser_t* browser, int isProxy, /*const*/ cef_string_t* host, /*const*/ cef_string_t* realm, /*const*/ cef_string_t* scheme, cef_string_t* username, cef_string_t* password);
+        public delegate int get_auth_credentials_delegate(cef_request_handler_t* self, cef_browser_t* browser, int isProxy, /*const*/ cef_string_t* host, int port, /*const*/ cef_string_t* realm, /*const*/ cef_string_t* scheme, cef_string_t* username, cef_string_t* password);
 
     };
 
