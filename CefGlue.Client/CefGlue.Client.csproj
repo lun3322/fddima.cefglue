@@ -25,6 +25,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile />
+    <NoWarn>1591, 1587</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>

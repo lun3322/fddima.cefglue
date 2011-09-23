@@ -67,39 +67,39 @@ namespace CefGlue.Core
         /// using the keyword 'native'. The calling of a native function is
         /// restricted to the scope in which the prototype of the native function
         /// is defined. This function may be called on any thread.
-        //
+        ///
         /// Example JavaScript extension code: &lt;pre&gt;
-        ///   /// create the 'example' global object if it doesn't already exist.
+        ///   // create the 'example' global object if it doesn't already exist.
         ///   if (!example)
         ///     example = {};
-        ///   /// create the 'example.test' global object if it doesn't already exist.
+        ///   // create the 'example.test' global object if it doesn't already exist.
         ///   if (!example.test)
         ///     example.test = {};
         ///   (function() {
-        ///     /// Define the function 'example.test.myfunction'.
+        ///     // Define the function 'example.test.myfunction'.
         ///     example.test.myfunction = function() {
-        ///       /// Call CefV8Handler::Execute() with the function name 'MyFunction'
-        ///       /// and no arguments.
+        ///       // Call CefV8Handler::Execute() with the function name 'MyFunction'
+        ///       // and no arguments.
         ///       native function MyFunction();
         ///       return MyFunction();
         ///     };
-        ///     /// Define the getter function for parameter 'example.test.myparam'.
+        ///     // Define the getter function for parameter 'example.test.myparam'.
         ///     example.test.__defineGetter__('myparam', function() {
-        ///       /// Call CefV8Handler::Execute() with the function name 'GetMyParam'
-        ///       /// and no arguments.
+        ///       // Call CefV8Handler::Execute() with the function name 'GetMyParam'
+        ///       // and no arguments.
         ///       native function GetMyParam();
         ///       return GetMyParam();
         ///     });
-        ///     /// Define the setter function for parameter 'example.test.myparam'.
+        ///     // Define the setter function for parameter 'example.test.myparam'.
         ///     example.test.__defineSetter__('myparam', function(b) {
-        ///       /// Call CefV8Handler::Execute() with the function name 'SetMyParam'
-        ///       /// and a single argument.
+        ///       // Call CefV8Handler::Execute() with the function name 'SetMyParam'
+        ///       // and a single argument.
         ///       native function SetMyParam();
         ///       if(b) SetMyParam(b);
         ///     });
-        //
-        ///     /// Extension definitions can also contain normal JavaScript variables
-        ///     /// and functions.
+        ///
+        ///     // Extension definitions can also contain normal JavaScript variables
+        ///     // and functions.
         ///     var myint = 0;
         ///     example.test.increment = function() {
         ///       myint += 1;
@@ -107,13 +107,13 @@ namespace CefGlue.Core
         ///     };
         ///   })();
         /// &lt;/pre&gt; Example usage in the page: &lt;pre&gt;
-        ///   /// Call the function.
+        ///   // Call the function.
         ///   example.test.myfunction();
-        ///   /// Set the parameter.
+        ///   // Set the parameter.
         ///   example.test.myparam = value;
-        ///   /// Get the parameter.
+        ///   // Get the parameter.
         ///   value = example.test.myparam;
-        ///   /// Call another function.
+        ///   // Call another function.
         ///   example.test.increment();
         /// &lt;/pre&gt;
         /// </summary>
@@ -123,12 +123,12 @@ namespace CefGlue.Core
         /// <summary>
         /// Register a custom scheme. This function should not be called for the
         /// built-in HTTP, HTTPS, FILE, FTP, ABOUT and DATA schemes.
-        //
+        ///
         /// If |is_standard| is true (1) the scheme will be treated as a standard
         /// scheme. Standard schemes are subject to URL canonicalization and
         /// parsing rules as defined in the Common Internet Scheme Syntax RFC
         /// 1738 Section 3.1 available at http://www.ietf.org/rfc/rfc1738.txt
-        //
+        ///
         /// In particular, the syntax for standard scheme URLs must be of the
         /// form: &lt;pre&gt;
         ///  [scheme]://[username]:[password]@[host]:[port]/[url-path]
@@ -139,22 +139,22 @@ namespace CefGlue.Core
         /// "scheme://username:password@host:port/path" in the most explicit
         /// case. For example, "scheme:host/path" and "scheme:///host/path" will
         /// both be canonicalized to "scheme://host/path".
-        //
+        ///
         /// For non-standard scheme URLs only the "scheme:" component is parsed
         /// and canonicalized. The remainder of the URL will be passed to the
         /// handler as-is. For example, "scheme:///some%20text" will remain the
         /// same. Non-standard scheme URLs cannot be used as a target for form
         /// submission.
-        //
+        ///
         /// If |is_local| is true (1) the scheme will be treated as local (i.e.,
         /// with the same security rules as those applied to "file" URLs). This
         /// means that normal pages cannot link to or access URLs of this scheme.
-        //
+        ///
         /// If |is_display_isolated| is true (1) the scheme will be treated as
         /// display- isolated. This means that pages cannot display these URLs
         /// unless they are from the same scheme. For example, pages in another
         /// origin cannot create iframes or hyperlinks to URLs with this scheme.
-        //
+        ///
         /// This function may be called on any thread. It should only be called
         /// once per unique |scheme_name| value. If |scheme_name| is already
         /// registered or if an error occurs this function will return false (0).
@@ -187,7 +187,7 @@ namespace CefGlue.Core
 
         /// <summary>
         /// Add an entry to the cross-origin access whitelist.
-        //
+        ///
         /// The same-origin policy restricts how scripts hosted from different
         /// origins (scheme + domain) can communicate. By default, scripts can
         /// only access resources with the same origin. Scripts hosted on the
@@ -197,14 +197,14 @@ namespace CefGlue.Core
         /// on http://target.example.com if the http://target.example.com request
         /// returns an "Access-Control-Allow-Origin: https://source.example.com"
         /// response header.
-        //
+        ///
         /// Scripts in separate frames or iframes and hosted from the same
         /// protocol and domain suffix can execute cross-origin JavaScript if
         /// both pages set the document.domain value to the same domain suffix.
         /// For example, scheme://foo.example.com and scheme://bar.example.com
         /// can communicate using JavaScript if both domains set
         /// document.domain="example.com".
-        //
+        ///
         /// This function is used to allow access to origins that would otherwise
         /// violate the same-origin policy. Scripts hosted underneath the fully
         /// qualified |source_origin| URL (like http://www.example.com) will be
