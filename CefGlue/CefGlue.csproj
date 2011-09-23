@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1C0D2EE0-FB5F-4A4F-8C4F-A3B47FF0839A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CefGlue</RootNamespace>
+    <AssemblyName>CefGlue</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <SccProjectName>&lt;Project Location In Database&gt;</SccProjectName>
+    <SccLocalPath>&lt;Local Binding Root of Project&gt;</SccLocalPath>
+    <SccAuxPath>&lt;Source Control Database&gt;</SccAuxPath>
+    <SccProvider>Mercurial Source Control Package</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>bin\Debug\CefGlue.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>bin\Release\CefGlue.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\CefGlue.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CefGlue.AssemblyInfo.cs">
+      <Link>Properties\CefGlue.AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\CefGlue.Version.cs">
+      <Link>Properties\CefGlue.Version.cs</Link>
+    </Compile>
+    <Compile Include="Base\CefStringList.cs" />
+    <Compile Include="Base\CefStringMap.cs" />
+    <Compile Include="Cef.cs" />
+    <Compile Include="Cef.ScriptableObject.cs" />
+    <Compile Include="Core\alloc.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>alloc.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Base\bool_t.cs" />
+    <Compile Include="Core\Base\cef_cursor_handle_t.cs" />
+    <Compile Include="Core\Base\cef_string_list_t.cs" />
+    <Compile Include="Core\Base\cef_string_map_t.cs" />
+    <Compile Include="Core\Base\cef_string_t.cs" />
+    <Compile Include="Core\Base\cef_string_userfree_t.cs" />
+    <Compile Include="Core\Base\cef_window_handle_t.cs" />
+    <Compile Include="Core\Base\time_t.cs" />
+    <Compile Include="Core\cefglue_userdata_t.cs" />
+    <Compile Include="Core\cef_base_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_document_type_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_event_category_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_event_phase_t.cs" />
+    <Compile Include="Core\Enum\cef_dom_node_type_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_errorcode_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_keyevent_modifiers_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_keyevent_type_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_menucapabilitybits_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_menuid_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_menutypebits_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_navtype_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_statustype_t.cs" />
+    <Compile Include="Core\Enum\cef_key_type_t.cs" />
+    <Compile Include="Core\Enum\cef_log_severity_t.cs" />
+    <Compile Include="Core\Enum\cef_mouse_button_type_t.cs" />
+    <Compile Include="Core\Enum\cef_page_orientation.cs" />
+    <Compile Include="Core\Enum\cef_paint_element_type_t.cs" />
+    <Compile Include="Core\Enum\cef_paper_type_t.cs" />
+    <Compile Include="Core\Enum\cef_postdataelement_type_t.cs" />
+    <Compile Include="Core\Enum\cef_thread_id_t.cs" />
+    <Compile Include="Core\Enum\cef_v8_accesscontrol_t.cs" />
+    <Compile Include="Core\Enum\cef_v8_propertyattribute_t.cs" />
+    <Compile Include="Core\Enum\cef_weburlrequest_flags_t.cs" />
+    <Compile Include="Core\Enum\cef_weburlrequest_state_t.cs" />
+    <Compile Include="Core\Enum\cef_xml_encoding_type_t.cs" />
+    <Compile Include="Core\Enum\cef_xml_node_type_t.cs" />
+    <Compile Include="Core\libcef.cs" />
+    <Compile Include="Core\Struct\cef_browser_settings_t.cs" />
+    <Compile Include="Core\Struct\cef_cookie_t.cs" />
+    <Compile Include="Core\Struct\cef_handler_menuinfo_t.cs" />
+    <Compile Include="Core\Struct\cef_paper_metrics.cs" />
+    <Compile Include="Core\Struct\cef_popup_features_t.cs" />
+    <Compile Include="Core\Struct\cef_print_info_t.cs" />
+    <Compile Include="Core\Struct\cef_print_margins.cs" />
+    <Compile Include="Core\Struct\cef_print_options_t.cs" />
+    <Compile Include="Core\Struct\cef_rect_t.cs" />
+    <Compile Include="Core\Struct\cef_settings_t.cs" />
+    <Compile Include="Core\Struct\cef_time_t.cs" />
+    <Compile Include="Core\Struct\cef_urlparts_t.cs" />
+    <Compile Include="Core\Struct\cef_window_info_t.cs" />
+    <Compile Include="Diagnostics\WM.cs" />
+    <Compile Include="ScriptableObject\Attributes\NamingConvention.cs" />
+    <Compile Include="ScriptableObject\Attributes\ScriptableObjectAttribute.cs" />
+    <Compile Include="ScriptableObject\Attributes\ScriptableAttribute.cs" />
+    <Compile Include="ScriptableObject\InvokeMethodBuilder.cs" />
+    <Compile Include="ScriptableObject\InvokeMethodHelper.cs" />
+    <Compile Include="ScriptableObject\NameHelper.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectDef.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectOptions.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectV8Accessor.cs" />
+    <Compile Include="ScriptableObject\ExceptionBuilder.cs" />
+    <Compile Include="Common\CefConvert.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectException.cs" />
+    <Compile Include="ScriptableObject\MethodDefAttributes.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectV8Handler.cs" />
+    <Compile Include="ScriptableObject\PropertyDef.cs" />
+    <Compile Include="ScriptableObject\DispatchTable.cs" />
+    <Compile Include="Core\win\NativeMethods.cs" />
+    <Compile Include="Core\win\RECT.cs" />
+    <Compile Include="Core\win\WindowStyles.cs" />
+    <Compile Include="Core\win\WindowStylesEx.cs" />
+    <Compile Include="Diagnostics\Diagnostics.cs" />
+    <Compile Include="Diagnostics\GCFinalizerThreadId.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Diagnostics\LogOperation.cs" />
+    <Compile Include="Diagnostics\LogSeverity.cs" />
+    <Compile Include="Diagnostics\LogTarget.cs" />
+    <Compile Include="Diagnostics\ObjectCt.cs" />
+    <Compile Include="Enum\CefDomDocumentType.cs" />
+    <Compile Include="Enum\CefDomEventCategory.cs" />
+    <Compile Include="Enum\CefDomEventPhase.cs" />
+    <Compile Include="Enum\CefDomNodeType.cs" />
+    <Compile Include="Enum\CefHandlerKeyEventModifiers.cs" />
+    <Compile Include="Enum\CefHandlerKeyEventType.cs" />
+    <Compile Include="Enum\CefHandlerMenuCapabilityBits.cs" />
+    <Compile Include="Enum\CefHandlerMenuId.cs" />
+    <Compile Include="Enum\CefHandlerMenuTypeBits.cs" />
+    <Compile Include="Enum\CefHandlerNavType.cs" />
+    <Compile Include="Enum\CefKeyType.cs" />
+    <Compile Include="Enum\CefMouseButtonType.cs" />
+    <Compile Include="Enum\CefPageOrientation.cs" />
+    <Compile Include="Enum\CefPaintElementType.cs" />
+    <Compile Include="Enum\CefPaperType.cs" />
+    <Compile Include="Enum\CefPostDataElementType.cs" />
+    <Compile Include="Enum\CefThreadId.cs" />
+    <Compile Include="Enum\CefV8AccessControl.cs" />
+    <Compile Include="Enum\CefV8PropertyAttribute.cs" />
+    <Compile Include="Enum\CefWebUrlRequestFlags.cs" />
+    <Compile Include="Enum\CefWebUrlRequestState.cs" />
+    <Compile Include="Enum\CefXmlEncodingType.cs" />
+    <Compile Include="Enum\CefXmlNodeType.cs" />
+    <Compile Include="Handler\CefClient.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefContentFilter.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefCookieVisitor.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefDisplayHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefDomEventListener.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefDomVisitor.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefDownloadHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefFindHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefFocusHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefJSBindingHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefJSDialogHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefKeyboardHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefLifeSpanHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefLoadHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefMenuHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefPrintHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefReadHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefRenderHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefRequestHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefSchemeHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefSchemeHandlerFactory.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefTask.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefV8Accessor.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefV8Handler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefWebUrlRequestClient.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\CefWriteHandler.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handler\Handler.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Handler.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Core\ObjectTable.cs" />
+    <Compile Include="Proxy\CefBrowser.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefDomDocument.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefDomEvent.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefDomNode.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefFrame.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefPostData.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefPostDataElement.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefRequest.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefResponse.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefStreamReader.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefStreamWriter.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefV8Context.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefV8Value.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefWebUrlRequest.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefXmlReader.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\CefZipReader.Impl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxy\Proxy.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Proxy.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScriptableObject\MethodDef.cs" />
+    <Compile Include="ScriptableObject\ReflectionExtensions.cs" />
+    <Compile Include="ScriptableObject\ScriptableObjectBinder.cs" />
+    <Compile Include="Struct\CefBrowserSettings.cs" />
+    <Compile Include="CefException.cs" />
+    <Compile Include="Enum\CefHandlerErrorCode.cs" />
+    <Compile Include="Enum\CefLogSeverity.cs" />
+    <Compile Include="Struct\CefRect.cs" />
+    <Compile Include="Struct\CefSettings.cs" />
+    <Compile Include="Enum\CefHandlerStatusType.cs" />
+    <Compile Include="Struct\CefWindowInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Struct\CefPopupFeatures.cs" />
+    <Compile Include="Struct\CefCookie.cs" />
+    <Compile Include="Struct\CefHandlerMenuInfo.cs" />
+    <Compile Include="Struct\CefPaperMetrics.cs" />
+    <Compile Include="Struct\CefPrintInfo.cs" />
+    <Compile Include="Struct\CefPrintMargins.cs" />
+    <Compile Include="Struct\CefPrintOptions.cs" />
+    <Compile Include="Struct\CefUrlParts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CefGlue.snk">
+      <Link>Properties\CefGlue.snk</Link>
+    </None>
+    <None Include="Core\alloc.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>alloc.g.cs</LastGenOutput>
+    </None>
+    <None Include="Handler\Handler.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Handler.g.cs</LastGenOutput>
+    </None>
+    <None Include="Handler\Handler.ttinclude" />
+    <None Include="Proxy\Proxy.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Proxy.g.cs</LastGenOutput>
+    </None>
+    <None Include="Proxy\Proxy.ttinclude" />
+    <None Include="Templates\CefGlue.ttinclude" />
+    <None Include="Templates\HandlerSchema.ttinclude" />
+    <None Include="Templates\ProxySchema.ttinclude" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\DefaultProject.targets" />
+  <!-- process *.tt templates on each build  -->
+  <PropertyGroup>
+    <TransformOnBuild>true</TransformOnBuild>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\TextTemplating\v10.0\Microsoft.TextTemplating.targets" Condition="Exists( '$(MSBuildExtensionsPath)\Microsoft\VisualStudio\TextTemplating\v10.0\Microsoft.TextTemplating.targets' )" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <!--
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
