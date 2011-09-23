@@ -125,6 +125,7 @@
     <Compile Include="Core\Struct\cef_urlparts_t.cs" />
     <Compile Include="Core\Struct\cef_window_info_t.cs" />
     <Compile Include="Diagnostics\WM.cs" />
+    <Compile Include="Emit\DynamicMethodHelper.cs" />
     <Compile Include="Enum\CefDragOperations.cs" />
     <Compile Include="Enum\CefGraphicsImplementation.cs" />
     <Compile Include="Handler\CefDragHandler.Impl.cs" />
@@ -133,8 +134,9 @@
     <Compile Include="ScriptableObject\Attributes\NamingConvention.cs" />
     <Compile Include="ScriptableObject\Attributes\ScriptableObjectAttribute.cs" />
     <Compile Include="ScriptableObject\Attributes\ScriptableAttribute.cs" />
-    <Compile Include="ScriptableObject\InvokeMethodBuilder.cs" />
-    <Compile Include="ScriptableObject\InvokeMethodHelper.cs" />
+    <Compile Include="Emit\EmitHelper.cs" />
+    <Compile Include="ScriptableObject\MethodInvokerBuilder.cs" />
+    <Compile Include="ScriptableObject\MethodInvokerHelper.cs" />
     <Compile Include="ScriptableObject\NameHelper.cs" />
     <Compile Include="ScriptableObject\ScriptableObjectDef.cs" />
     <Compile Include="ScriptableObject\ScriptableObjectOptions.cs" />
