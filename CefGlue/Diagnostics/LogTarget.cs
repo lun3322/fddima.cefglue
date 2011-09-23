@@ -7,13 +7,11 @@ namespace CefGlue.Diagnostics
     {
         Default = 0,
 
-        ObjectCt,
-
-        //
-        CefUserData,
-
-        // 
         CefString,
+        ObjectCt,
+        ScriptableObject,
+        CefWebBrowser,
+        CefUserData,
 
         // TODO: generate it from ProxySchema and HandlerSchema
 
