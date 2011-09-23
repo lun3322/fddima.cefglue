@@ -8,12 +8,11 @@
     using System.Text;
     using Core;
 
-    // TODO: allow create compile method invokers in sync way (now it is lazy). ???
-
     internal sealed class MethodDef : DispatchTableEntry
     {
         private MethodDefAttributes attributes;
         private object methods;
+        private InvokeMethod invoke;
 
         public MethodDef(string name, MethodDefAttributes attributes)
             : base(name)
@@ -23,9 +22,6 @@
             this.attributes = attributes;
         }
 
-        // internal delegate void InvokeCoreDelegate(object obj, int argumentsCount, cef_v8value_t** arguments, cef_v8value_t** returnValue);
-        // private delegate void InvokeMethodDelegate(object obj, CefV8Value[] arguments, out CefV8Value returnValue);
-
         public MethodDefAttributes Attributes { get { return this.attributes; } }
 
         public bool Hidden { get { return (this.attributes & MethodDefAttributes.Hidden) != 0; } }
@@ -33,6 +29,7 @@
         public bool Setter { get { return (this.attributes & MethodDefAttributes.Setter) != 0; } }
         public bool Static { get { return (this.attributes & MethodDefAttributes.Static) != 0; } }
         public bool HasOverloads { get { return (this.attributes & MethodDefAttributes.HasOverloads) != 0; } }
+        public bool Compiled { get { return (this.attributes & MethodDefAttributes.Compiled) != 0; } }
 
         public void Add(MethodInfo method)
         {
@@ -68,10 +65,12 @@
             var isStatic = (attributes & MethodDefAttributes.Static) != 0;
             var isHasOverloads = (attributes & MethodDefAttributes.HasOverloads) != 0;
             var isPropertyAccessor = isGetter || isSetter;
+            var isCompiled = (attributes & MethodDefAttributes.Compiled) != 0;
 
             if (isGetter && isSetter) throw new InvalidOperationException("Property accessor can be getter or setter, but not both.");
             if (isPropertyAccessor && !isHidden) throw new InvalidOperationException("Property accessor methods must be hidden.");
             if (isHasOverloads) throw new InvalidOperationException("HasOverloads attribute can't be set directly.");
+            if (isCompiled) throw new InvalidOperationException("Compiled attribute can't be set directly.");
         }
 
         public string[] GetArgumentNames()
@@ -102,18 +101,26 @@
             }
         }
 
-        private InvokeMethod invoke;
+        public void Compile()
+        {
+            if (!this.Compiled)
+            {
+                if (HasOverloads)
+                {
+                    throw new NotSupportedException("Overloads currently is not supported.");
+                }
+
+                this.invoke = InvokeMethodBuilder.Create(this, (MethodInfo)methods);
+
+                this.attributes |= MethodDefAttributes.Compiled;
+            }
+        }
 
         internal unsafe void Invoke(object instance, int argumentsCount, cef_v8value_t** arguments, cef_v8value_t** retval)
         {
-            if (HasOverloads)
+            if (!this.Compiled)
             {
-                throw new NotSupportedException("Overloads currently is not supported.");
-            }
-
-            if (this.invoke == null)
-            {
-                this.invoke = InvokeMethodBuilder.Create(this, (MethodInfo)methods);
+                this.Compile();
             }
 
             this.invoke(instance, argumentsCount, arguments, retval);

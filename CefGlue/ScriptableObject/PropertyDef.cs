@@ -22,7 +22,6 @@
 
         public MethodDef SetMethod { get { return this.setMethod; } }
 
-
         public void Add(MethodDef method)
         {
             if ((method.Attributes & MethodDefAttributes.Getter) != 0)

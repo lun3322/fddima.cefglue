@@ -53,5 +53,16 @@
         {
             return a - b;
         }
+
+        public string Overload()
+        {
+            return "#1";
+        }
+
+        [Scriptable(false)]
+        public string Overload(int arg1)
+        {
+            return "#2";
+        }
     }
 }

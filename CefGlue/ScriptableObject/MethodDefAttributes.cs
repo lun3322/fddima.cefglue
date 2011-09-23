@@ -38,5 +38,10 @@
         /// Method has overloads.
         /// </summary>
         HasOverloads = 0x10,
+
+        /// <summary>
+        /// Method compiled.
+        /// </summary>
+        Compiled = 0x20,
     }
 }
