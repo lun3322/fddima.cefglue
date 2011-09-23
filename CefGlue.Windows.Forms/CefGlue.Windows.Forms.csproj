@@ -31,7 +31,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <DocumentationFile>bin\x86\Debug\CefGlue.Windows.Forms.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591, 1587</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>

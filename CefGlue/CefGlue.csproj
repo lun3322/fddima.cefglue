@@ -31,7 +31,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>bin\Debug\CefGlue.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591, 1587</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DefineConstants>TRACE</DefineConstants>

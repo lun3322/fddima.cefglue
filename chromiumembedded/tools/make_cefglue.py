@@ -243,10 +243,10 @@ def format_comment_cefglue(comment, indent, translate_map = None, maxchars = 80)
 	result = string.replace(result, "&", "&amp;");
 	result = string.replace(result, "<", "&lt;");
 	result = string.replace(result, ">", "&gt;");
-	result = string.replace(result, "// ", "{=__cefglue_placeholder_1}")
+	result = re.compile("^" + indent + "\/\/(?!\/)", re.MULTILINE).sub("{=__cefglue_placeholder_1}", result)
 	result = string.replace(result, "///\n", "/// <summary>\n", 1)
 	result = string.replace(result, "///\n", "/// </summary>\n", 1)
-	result = string.replace(result, "{=__cefglue_placeholder_1}", "/// ")
+	result = string.replace(result, "{=__cefglue_placeholder_1}", indent + "///")
 	return result
 
 def make_cefglue_global_funcs(funcs, defined_names, translate_map, indent):
