@@ -15,12 +15,29 @@
 
     partial class CefWebBrowser
     {
+        public event EventHandler IsLoadingChanged;
         public event EventHandler TitleChanged;
         public event EventHandler CanGoBackChanged;
         public event EventHandler CanGoForwardChanged;
         public event EventHandler AddressChanged;
         public event EventHandler<StatusMessageEventArgs> StatusMessage;
         public event EventHandler<ConsoleMessageEventArgs> ConsoleMessage;
+
+        protected virtual void OnIsLoadingChanged(EventArgs e)
+        {
+            RequireUIThread();
+
+            var handler = IsLoadingChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private void PostIsLoadingChanged()
+        {
+            this.synchronizationContext.Post((state) => { this.OnIsLoadingChanged(EventArgs.Empty); }, null);
+        }
 
         protected virtual void OnTitleChanged(EventArgs e)
         {

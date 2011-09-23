@@ -13,12 +13,31 @@
 
     partial class CefWebBrowser
     {
+        private bool isLoading = false;
         private string title = "";
         private bool canGoBack = false;
         private bool canGoForward = false;
         private string address = null;
 
         public string StartUrl { get; set; }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool IsLoading
+        {
+            get
+            {
+                return this.isLoading;
+            }
+            private set
+            {
+                if (this.isLoading != value)
+                {
+                    this.isLoading = value;
+                    this.PostIsLoadingChanged();
+                }
+            }
+        }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
