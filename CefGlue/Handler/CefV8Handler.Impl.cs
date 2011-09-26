@@ -38,14 +38,13 @@ namespace CefGlue
 
             if (handled)
             {
-                if (m_returnValue != null)
-                {
-                    *retval = m_returnValue.GetNativePointerAndAddRef();
-                }
-
                 if (m_exception != null)
                 {
                     cef_string_t.Copy(m_exception, exception);
+                }
+                else if (m_returnValue != null)
+                {
+                    *retval = m_returnValue.GetNativePointerAndAddRef();
                 }
             }
 

@@ -1160,6 +1160,121 @@ namespace CefGlue
 
     }
 
+    public sealed unsafe partial class CefSchemeHandlerCallback : IDisposable
+    {
+#if DIAGNOSTICS
+        internal static int ObjectCt;
+#endif
+
+        /// <summary>
+        /// Create CefSchemeHandlerCallback proxy from pointer.
+        /// </summary>
+        internal static CefSchemeHandlerCallback From(cef_scheme_handler_callback_t* ptr)
+        {
+            return new CefSchemeHandlerCallback(ptr);
+        }
+
+        internal static CefSchemeHandlerCallback FromOrDefault(cef_scheme_handler_callback_t* ptr)
+        {
+            if (ptr == null) return null;
+            return new CefSchemeHandlerCallback(ptr);
+        }
+
+        private cef_scheme_handler_callback_t* ptr;
+
+        private CefSchemeHandlerCallback(cef_scheme_handler_callback_t* ptr)
+        {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
+            this.ptr = ptr;
+
+#if DIAGNOSTICS
+            Interlocked.Increment(ref ObjectCt);
+            Cef.Logger.Trace(LogTarget.CefSchemeHandlerCallback, this.ptr, LogOperation.Create);
+#endif
+
+            // if (addRef) this.AddRef();
+        }
+
+        #region IDisposable
+        ~CefSchemeHandlerCallback()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (this.ptr != null)
+            {
+                var refct = ReleaseRef();
+#if DIAGNOSTICS
+                var total = Interlocked.Decrement(ref ObjectCt);
+                Cef.Logger.Trace(LogTarget.CefSchemeHandlerCallback, this.ptr, LogOperation.Dispose, "RefCount=[{0}]", refct);
+#endif
+                this.ptr = null;
+            }
+        }
+        #endregion
+
+
+        /// <summary>
+        /// The AddRef method increments the reference count for the object. It should
+        /// be called for every new copy of a pointer to a given object. The resulting
+        /// reference count value is returned and should be used for diagnostic/testing
+        /// purposes only.
+        /// </summary>
+        internal int AddRef()
+        {
+            return cef_scheme_handler_callback_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
+        }
+
+        /// <summary>
+        /// The Release method decrements the reference count for the object. If the
+        /// reference count on the object falls to 0, then the object should free
+        /// itself from memory.  The resulting reference count value is returned and
+        /// should be used for diagnostic/testing purposes only.
+        /// </summary>
+        internal int ReleaseRef()
+        {
+            return cef_scheme_handler_callback_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
+        }
+
+        /// <summary>
+        /// Return the current number of references.
+        /// </summary>
+        internal int RefCount
+        {
+            get
+            {
+                return cef_scheme_handler_callback_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
+        }
+
+        internal cef_scheme_handler_callback_t* NativePointer
+        {
+            get
+            {
+                return this.ptr;
+            }
+        }
+
+        internal cef_scheme_handler_callback_t* GetNativePointerAndAddRef()
+        {
+            AddRef();
+            return this.ptr;
+        }
+
+    }
+
     public sealed unsafe partial class CefWebUrlRequest : IDisposable
     {
 #if DIAGNOSTICS
@@ -1843,6 +1958,121 @@ namespace CefGlue
         }
 
         internal cef_domevent_t* GetNativePointerAndAddRef()
+        {
+            AddRef();
+            return this.ptr;
+        }
+
+    }
+
+    public sealed unsafe partial class CefDragData : IDisposable
+    {
+#if DIAGNOSTICS
+        internal static int ObjectCt;
+#endif
+
+        /// <summary>
+        /// Create CefDragData proxy from pointer.
+        /// </summary>
+        internal static CefDragData From(cef_drag_data_t* ptr)
+        {
+            return new CefDragData(ptr);
+        }
+
+        internal static CefDragData FromOrDefault(cef_drag_data_t* ptr)
+        {
+            if (ptr == null) return null;
+            return new CefDragData(ptr);
+        }
+
+        private cef_drag_data_t* ptr;
+
+        private CefDragData(cef_drag_data_t* ptr)
+        {
+            if (ptr == null) throw new ArgumentNullException("ptr");
+
+            this.ptr = ptr;
+
+#if DIAGNOSTICS
+            Interlocked.Increment(ref ObjectCt);
+            Cef.Logger.Trace(LogTarget.CefDragData, this.ptr, LogOperation.Create);
+#endif
+
+            // if (addRef) this.AddRef();
+        }
+
+        #region IDisposable
+        ~CefDragData()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (this.ptr != null)
+            {
+                var refct = ReleaseRef();
+#if DIAGNOSTICS
+                var total = Interlocked.Decrement(ref ObjectCt);
+                Cef.Logger.Trace(LogTarget.CefDragData, this.ptr, LogOperation.Dispose, "RefCount=[{0}]", refct);
+#endif
+                this.ptr = null;
+            }
+        }
+        #endregion
+
+
+        /// <summary>
+        /// The AddRef method increments the reference count for the object. It should
+        /// be called for every new copy of a pointer to a given object. The resulting
+        /// reference count value is returned and should be used for diagnostic/testing
+        /// purposes only.
+        /// </summary>
+        internal int AddRef()
+        {
+            return cef_drag_data_t.invoke_add_ref((cef_base_t*)this.ptr);
+            // return add_ref(&this.ptr->@base);
+        }
+
+        /// <summary>
+        /// The Release method decrements the reference count for the object. If the
+        /// reference count on the object falls to 0, then the object should free
+        /// itself from memory.  The resulting reference count value is returned and
+        /// should be used for diagnostic/testing purposes only.
+        /// </summary>
+        internal int ReleaseRef()
+        {
+            return cef_drag_data_t.invoke_release((cef_base_t*)this.ptr);
+            // return release(&this.ptr->@base);
+        }
+
+        /// <summary>
+        /// Return the current number of references.
+        /// </summary>
+        internal int RefCount
+        {
+            get
+            {
+                return cef_drag_data_t.invoke_get_refct((cef_base_t*)this.ptr);
+                // return get_refct(&this.ptr->@base);
+            }
+        }
+
+        internal cef_drag_data_t* NativePointer
+        {
+            get
+            {
+                return this.ptr;
+            }
+        }
+
+        internal cef_drag_data_t* GetNativePointerAndAddRef()
         {
             AddRef();
             return this.ptr;

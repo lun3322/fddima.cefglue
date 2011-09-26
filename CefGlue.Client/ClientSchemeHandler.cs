@@ -12,6 +12,12 @@
     {
         private Stream stream;
 
+        private long responseLength;
+        private int status;
+        private string statusText;
+        private string mimeType;
+
+
         private void Close()
         {
             if (this.stream != null)
@@ -19,6 +25,10 @@
                 this.stream.Dispose();
                 this.stream = null;
             }
+            this.responseLength = 0;
+            this.status = 0;
+            this.statusText = null;
+            this.mimeType = null;
         }
 
         protected override void Dispose(bool disposing)
@@ -27,7 +37,7 @@
             base.Dispose(disposing);
         }
 
-        protected override bool ProcessRequest(CefRequest request, out string redirectUrl, CefResponse response, out int responseLength)
+        protected override bool ProcessRequest(CefRequest request, ref string redirectUrl, CefSchemeHandlerCallback callback)
         {
             var urlString = request.GetURL();
 
@@ -59,11 +69,11 @@
                 if (this.stream != null)
                 {
                     // found
-                    redirectUrl = null;
-                    responseLength = -1; // (int)stream.Length;
-                    response.SetStatus(200);
-                    response.SetMimeType(GetMimeTypeFromUriSuffix(path));
-                    response.SetStatusText("OK");
+                    this.responseLength = -1;
+                    this.status = 200;
+                    this.statusText = "OK";
+                    this.mimeType = GetMimeTypeFromUriSuffix(path);
+                    callback.HeadersAvailable();
                     return true;
                 }
             }
@@ -79,11 +89,11 @@
             var bytes = Encoding.UTF8.GetBytes(errorMessage);
             this.stream = new MemoryStream(bytes, false);
 
-            redirectUrl = null;
-            responseLength = -1;
-            response.SetStatus(errorStatus != 0 ? errorStatus : 404);
-            response.SetStatusText(errorStatusText ?? "Not Found");
-            response.SetMimeType("text/html");
+            this.responseLength = -1;
+            this.status = errorStatus != 0 ? errorStatus : 404;
+            this.statusText = errorStatusText ?? "Not Found";
+            this.mimeType = "text/html";
+            callback.HeadersAvailable();
             return true;
         }
 
@@ -92,7 +102,15 @@
             this.Close();
         }
 
-        protected override bool ReadResponse(Stream stream, int bytesToRead, out int bytesRead)
+        protected override void GetResponseHeaders(CefResponse response, out long responseLength)
+        {
+            responseLength = this.responseLength;
+            response.SetStatus(this.status);
+            response.SetStatusText(this.statusText);
+            response.SetMimeType(this.mimeType);
+        }
+
+        protected override bool ReadResponse(Stream stream, int bytesToRead, out int bytesRead, CefSchemeHandlerCallback callback)
         {
             byte[] buffer = new byte[bytesToRead];
             var readed = this.stream.Read(buffer, 0, buffer.Length);
@@ -106,7 +124,7 @@
             {
                 this.Close();
                 bytesRead = 0;
-                return true;
+                return false;
             }
         }
 

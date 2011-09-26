@@ -71,6 +71,12 @@
         // logged.
         ///
         public cef_log_severity_t log_severity;
+        
+        ///
+        // The graphics implementation that CEF will use for rendering GPU accelerated
+        // content like WebGL, accelerated layers and 3D CSS.
+        ///
+        public cef_graphics_implementation_t graphics_implementation;
 
 
         public static void Clear(cef_settings_t* self)

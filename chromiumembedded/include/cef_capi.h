@@ -471,6 +471,9 @@ typedef struct _cef_browser_t
   ///
   int (CEF_CALLBACK *is_popup)(struct _cef_browser_t* self);
 
+  // Returns true (1) if a document has been loaded in the browser.
+  int (CEF_CALLBACK *has_document)(struct _cef_browser_t* self);
+
   ///
   // Returns the client for this browser.
   ///
@@ -987,7 +990,7 @@ typedef struct _cef_request_handler_t
   ///
   int (CEF_CALLBACK *get_auth_credentials)(struct _cef_request_handler_t* self,
       struct _cef_browser_t* browser, int isProxy, const cef_string_t* host,
-      const cef_string_t* realm, const cef_string_t* scheme,
+      int port, const cef_string_t* realm, const cef_string_t* scheme,
       cef_string_t* username, cef_string_t* password);
 
 } cef_request_handler_t;
@@ -1336,6 +1339,38 @@ typedef struct _cef_render_handler_t
 
 
 ///
+// Implement this structure to handle events related to dragging. The functions
+// of this structure will be called on the UI thread.
+///
+typedef struct _cef_drag_handler_t
+{
+  // Base structure.
+  cef_base_t base;
+
+  ///
+  // Called when the browser window initiates a drag event. |dragData| contains
+  // the drag event data and |mask| represents the type of drag operation.
+  // Return false (0) for default drag handling behavior or true (1) to cancel
+  // the drag event.
+  ///
+  int (CEF_CALLBACK *on_drag_start)(struct _cef_drag_handler_t* self,
+      struct _cef_browser_t* browser, struct _cef_drag_data_t* dragData,
+      enum cef_drag_operations_mask_t mask);
+
+  ///
+  // Called when an external drag event enters the browser window. |dragData|
+  // contains the drag event data and |mask| represents the type of drag
+  // operation. Return false (0) for default drag handling behavior or true (1)
+  // to cancel the drag event.
+  ///
+  int (CEF_CALLBACK *on_drag_enter)(struct _cef_drag_handler_t* self,
+      struct _cef_browser_t* browser, struct _cef_drag_data_t* dragData,
+      enum cef_drag_operations_mask_t mask);
+
+} cef_drag_handler_t;
+
+
+///
 // Implement this structure to provide handler implementations.
 ///
 typedef struct _cef_client_t
@@ -1413,6 +1448,12 @@ typedef struct _cef_client_t
   // Return the handler for off-screen rendering events.
   ///
   struct _cef_render_handler_t* (CEF_CALLBACK *get_render_handler)(
+      struct _cef_client_t* self);
+
+  ///
+  // Return the handler for drag events.
+  ///
+  struct _cef_drag_handler_t* (CEF_CALLBACK *get_drag_handler)(
       struct _cef_client_t* self);
 
 } cef_client_t;
@@ -1961,7 +2002,7 @@ typedef struct _cef_v8accessor_t
   ///
   int (CEF_CALLBACK *get)(struct _cef_v8accessor_t* self,
       const cef_string_t* name, struct _cef_v8value_t* object,
-      struct _cef_v8value_t** retval);
+      struct _cef_v8value_t** retval, cef_string_t* exception);
 
   ///
   // Called to set an accessor value. |name| is the name of the property being
@@ -1971,7 +2012,7 @@ typedef struct _cef_v8accessor_t
   ///
   int (CEF_CALLBACK *set)(struct _cef_v8accessor_t* self,
       const cef_string_t* name, struct _cef_v8value_t* object,
-      struct _cef_v8value_t* value);
+      struct _cef_v8value_t* value, cef_string_t* exception);
 
 } cef_v8accessor_t;
 
@@ -2270,7 +2311,36 @@ typedef struct _cef_scheme_handler_factory_t
 
 
 ///
-// Structure used to represent a custom scheme handler structure. The functions
+// Structure used to facilitate asynchronous responses to custom scheme handler
+// requests. The functions of this structure may be called on any thread.
+///
+typedef struct _cef_scheme_handler_callback_t
+{
+  // Base structure.
+  cef_base_t base;
+
+  ///
+  // Notify that header information is now available for retrieval.
+  ///
+  void (CEF_CALLBACK *headers_available)(
+      struct _cef_scheme_handler_callback_t* self);
+
+  ///
+  // Notify that response data is now available for reading.
+  ///
+  void (CEF_CALLBACK *bytes_available)(
+      struct _cef_scheme_handler_callback_t* self);
+
+  ///
+  // Cancel processing of the request.
+  ///
+  void (CEF_CALLBACK *cancel)(struct _cef_scheme_handler_callback_t* self);
+
+} cef_scheme_handler_callback_t;
+
+
+///
+// Structure used to implement a custom scheme handler structure. The functions
 // of this structure will always be called on the IO thread.
 ///
 typedef struct _cef_scheme_handler_t
@@ -2279,35 +2349,44 @@ typedef struct _cef_scheme_handler_t
   cef_base_t base;
 
   ///
-  // Process the request. All response generation should take place in this
-  // function. If there is no response set |response_length| to zero or return
-  // false (0) and read_response() will not be called. If the response length is
-  // not known set |response_length| to -1 and read_response() will be called
-  // until it returns false (0) or until the value of |bytes_read| is set to 0.
-  // If the response length is known set |response_length| to a positive value
-  // and read_response() will be called until it returns false (0), the value of
-  // |bytes_read| is set to 0 or the specified number of bytes have been read.
-  // Use the |response| object to set the mime type, http status code and
-  // optional header values for the response and return true (1). To redirect
-  // the request to a new URL set |redirectUrl| to the new URL and return true
-  // (1).
+  // Begin processing the request. To handle the request return true (1) and
+  // call headers_available() once the response header information is available
+  // (headers_available() can also be called from inside this function if header
+  // information is available immediately). To redirect the request to a new URL
+  // set |redirectUrl| to the new URL and return true (1). To cancel the request
+  // return false (0).
   ///
   int (CEF_CALLBACK *process_request)(struct _cef_scheme_handler_t* self,
       struct _cef_request_t* request, cef_string_t* redirectUrl,
-      struct _cef_response_t* response, int* response_length);
+      struct _cef_scheme_handler_callback_t* callback);
 
   ///
-  // Cancel processing of the request.
+  // Retrieve response header information. If the response length is not known
+  // set |response_length| to -1 and read_response() will be called until it
+  // returns false (0). If the response length is known set |response_length| to
+  // a positive value and read_response() will be called until it returns false
+  // (0) or the specified number of bytes have been read. Use the |response|
+  // object to set the mime type, http status code and other optional header
+  // values.
   ///
-  void (CEF_CALLBACK *cancel)(struct _cef_scheme_handler_t* self);
+  void (CEF_CALLBACK *get_response_headers)(struct _cef_scheme_handler_t* self,
+      struct _cef_response_t* response, int64* response_length);
 
   ///
-  // Copy up to |bytes_to_read| bytes into |data_out|. If the copy succeeds set
-  // |bytes_read| to the number of bytes copied and return true (1). If the copy
-  // fails return false (0) and read_response() will not be called again.
+  // Read response data. If data is available immediately copy up to
+  // |bytes_to_read| bytes into |data_out|, set |bytes_read| to the number of
+  // bytes copied, and return true (1). To read the data at a later time set
+  // |bytes_read| to 0, return true (1) and call bytes_available() when the data
+  // is available. To indicate response completion return false (0).
   ///
   int (CEF_CALLBACK *read_response)(struct _cef_scheme_handler_t* self,
-      void* data_out, int bytes_to_read, int* bytes_read);
+      void* data_out, int bytes_to_read, int* bytes_read,
+      struct _cef_scheme_handler_callback_t* callback);
+
+  ///
+  // Request processing has been canceled.
+  ///
+  void (CEF_CALLBACK *cancel)(struct _cef_scheme_handler_t* self);
 
 } cef_scheme_handler_t;
 
@@ -3150,6 +3229,97 @@ typedef struct _cef_content_filter_t
       struct _cef_stream_reader_t** remainder);
 
 } cef_content_filter_t;
+
+
+///
+// Structure used to represent drag data. The functions of this structure may be
+// called on any thread.
+///
+typedef struct _cef_drag_data_t
+{
+  // Base structure.
+  cef_base_t base;
+
+  ///
+  // Returns true (1) if the drag data is a link.
+  ///
+  int (CEF_CALLBACK *is_link)(struct _cef_drag_data_t* self);
+
+  ///
+  // Returns true (1) if the drag data is a text or html fragment.
+  ///
+  int (CEF_CALLBACK *is_fragment)(struct _cef_drag_data_t* self);
+
+  ///
+  // Returns true (1) if the drag data is a file.
+  ///
+  int (CEF_CALLBACK *is_file)(struct _cef_drag_data_t* self);
+
+  ///
+  // Return the link URL that is being dragged.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_link_url)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the title associated with the link being dragged.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_link_title)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the metadata, if any, associated with the link being dragged.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_link_metadata)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the plain text fragment that is being dragged.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_fragment_text)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the text/html fragment that is being dragged.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_fragment_html)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the base URL that the fragment came from. This value is used for
+  // resolving relative URLs and may be NULL.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_fragment_base_url)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the extension of the file being dragged out of the browser window.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_file_extension)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Return the name of the file being dragged out of the browser window.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_file_name)(
+      struct _cef_drag_data_t* self);
+
+  ///
+  // Retrieve the list of file names that are being dragged into the browser
+  // window.
+  ///
+  int (CEF_CALLBACK *get_file_names)(struct _cef_drag_data_t* self,
+      cef_string_list_t names);
+
+} cef_drag_data_t;
 
 
 #ifdef __cplusplus

@@ -1,4 +1,4 @@
-// Copyright (c) 2009 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2010 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -28,29 +28,35 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#ifndef _CEF_TYPES_WIN_H
-#define _CEF_TYPES_WIN_H
+#ifndef _CEF_TYPES_MAC_H
+#define _CEF_TYPES_MAC_H
 
-#if defined(OS_WIN)
-#include <windows.h>
+#if defined(OS_MACOSX)
 #include "cef_string.h"
+
+// Window handle.
+#ifdef __cplusplus
+#ifdef __OBJC__
+@class NSView;
+#else
+class NSView;
+#endif
+#define cef_window_handle_t NSView*
+#else
+#define cef_window_handle_t void*
+#endif
+#define cef_cursor_handle_t void*
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-// Window handle.
-#define cef_window_handle_t HWND
-#define cef_cursor_handle_t HCURSOR
 
 ///
 // Supported graphics implementations.
 ///
 enum cef_graphics_implementation_t
 {
-  ANGLE_IN_PROCESS = 0,
-  ANGLE_IN_PROCESS_COMMAND_BUFFER,
-  DESKTOP_IN_PROCESS,
+  DESKTOP_IN_PROCESS = 0,
   DESKTOP_IN_PROCESS_COMMAND_BUFFER,
 };
 
@@ -59,24 +65,18 @@ enum cef_graphics_implementation_t
 ///
 typedef struct _cef_window_info_t
 {
-  // Standard parameters required by CreateWindowEx()
-  DWORD m_dwExStyle;
   cef_string_t m_windowName;
-  DWORD m_dwStyle;
   int m_x;
   int m_y;
   int m_nWidth;
   int m_nHeight;
-  cef_window_handle_t m_hWndParent;
-  HMENU m_hMenu;
+  int m_bHidden;
 
-  // If window rendering is disabled no browser window will be created. Set
-  // |m_hWndParent| to the window that will act as the parent for popup menus,
-  // dialog boxes, etc.
-  BOOL m_bWindowRenderingDisabled;
+  // NSView pointer for the parent view.
+  cef_window_handle_t m_ParentView;
   
-  // Handle for the new browser window.
-  cef_window_handle_t m_hWnd;
+  // NSView pointer for the new browser view.
+  cef_window_handle_t m_View;
 } cef_window_info_t;
 
 ///
@@ -84,8 +84,6 @@ typedef struct _cef_window_info_t
 ///
 typedef struct _cef_print_info_t
 {
-  HDC m_hDC;
-  RECT m_Rect;
   double m_Scale;
 } cef_print_info_t;
 
@@ -93,6 +91,6 @@ typedef struct _cef_print_info_t
 }
 #endif
 
-#endif // OS_WIN
+#endif // OS_MACOSX
 
-#endif // _CEF_TYPES_WIN_H
+#endif // _CEF_TYPES_MAC_H

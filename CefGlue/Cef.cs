@@ -7,6 +7,7 @@
     using Core;
     using Diagnostics;
 
+    // TODO: allow specify libcef.dll location (and other libraries?)
     // TODO: do exception checking in handler impls, and reporting about them
 
     public static unsafe partial class Cef

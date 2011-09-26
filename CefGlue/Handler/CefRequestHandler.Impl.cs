@@ -214,7 +214,7 @@ namespace CefGlue
         /// and return true to handle the request. Return false to cancel the
         /// request.
         /// </summary>
-        private int get_auth_credentials(cef_request_handler_t* self, cef_browser_t* browser, int isProxy, /*const*/ cef_string_t* host, /*const*/ cef_string_t* realm, /*const*/ cef_string_t* scheme, cef_string_t* username, cef_string_t* password)
+        private int get_auth_credentials(cef_request_handler_t* self, cef_browser_t* browser, int isProxy, /*const*/ cef_string_t* host, int port, /*const*/ cef_string_t* realm, /*const*/ cef_string_t* scheme, cef_string_t* username, cef_string_t* password)
         {
             ThrowIfObjectDisposed();
 
@@ -226,7 +226,7 @@ namespace CefGlue
             string m_username;
             string m_password;
 
-            var handled = this.GetAuthCredentials(m_browser, m_isProxy, m_host, m_realm, m_scheme, out m_username, out m_password);
+            var handled = this.GetAuthCredentials(m_browser, m_isProxy, m_host, port, m_realm, m_scheme, out m_username, out m_password);
 
             if (handled)
             {
@@ -244,7 +244,7 @@ namespace CefGlue
         /// Set |username| and |password| and return true to handle the request.
         /// Return false to cancel the request.
         /// </summary>
-        protected virtual bool GetAuthCredentials(CefBrowser browser, bool isProxy, string host, string realm, string scheme, out string username, out string password)
+        protected virtual bool GetAuthCredentials(CefBrowser browser, bool isProxy, string host, int port, string realm, string scheme, out string username, out string password)
         {
             username = null;
             password = null;

@@ -43,9 +43,52 @@
 
         public bool Enabled { get; set; }
 
+        public bool ThrowingProperty
+        {
+            get { throw new InvalidOperationException("i'm throwing getter!"); }
+            set { throw new InvalidOperationException("i'm throwing setter!"); }
+        }
+
         public int Subtract(int a, int b)
         {
             return a - b;
         }
+
+        // obj.overload() -> by argc
+        public string Overload()
+        {
+            return "#1";
+        }
+
+        // obj.overload(10) -> by argc
+        [Scriptable(false)]
+        public string Overload(int arg1)
+        {
+            return "#2";
+        }
+
+        // obj.overload(10) -> by argc
+        [Scriptable(false)]
+        public string Overload(short arg1)
+        {
+            return "#4";
+        }
+
+        // obj.overload(10, undefined) -> by argc + optional values
+        [Scriptable(false)]
+        public string Overload(int arg1, int arg2 = 20)
+        {
+            return "#3";
+        }
+
+
+        // obj.overloadOpt(10, undefined) -> by argc + optional values
+        // obj.overloadOpt(10) -> by argc + optional const (it is possible via create custom method marshaller)
+        [Scriptable(false)]
+        public string OverloadOpt(int arg1, int arg2 = 20)
+        {
+            return "#3";
+        }
+
     }
 }

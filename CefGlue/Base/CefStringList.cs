@@ -32,6 +32,12 @@
             this.list.Free();
         }
 
+        internal void Dispose()
+        {
+            this.list.Free();
+            GC.SuppressFinalize(this);
+        }
+
         internal cef_string_list_t GetNativeHandle()
         {
             return this.list;

@@ -15,6 +15,13 @@ Latest [on-line documentation](http://cefglue.dmitriid.com/doc/) available.
 CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
 
 
+### Version 0.4.5-cef-r293
+
+Download [CefGlue-0.4.5-cef-r293.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.5-cef-r293.zip), [cef_binary_r293_VS2008-VS2010.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r293_VS2008-VS2010.zip)
+
+- Compatible with CEF R293, it contains many fixes about V8 stuff, including memory leak.
+
+
 ### Version 0.4.4-cef-r275
 
 Download [CefGlue-0.4.4-cef-r275.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.4-cef-r275.zip), [cef_binary_r275_VS2008.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r275_VS2008.zip)
