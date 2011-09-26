@@ -177,6 +177,12 @@
             switch (member.MemberType)
             {
                 case MemberTypes.Method:
+
+                    if (((MethodInfo)member).IsSpecialName)
+                    {
+                        return false; // ignore generated methods (eg. event add/remove)
+                    }
+
                     scriptable = GetScriptableAttribute(member);
                     return scriptable != null ? scriptable.Visible : ((MethodInfo)member).IsPublic;
 
