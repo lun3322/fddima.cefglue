@@ -20,6 +20,7 @@
         public event EventHandler CanGoBackChanged;
         public event EventHandler CanGoForwardChanged;
         public event EventHandler AddressChanged;
+        public event EventHandler<KeyEventArgs> KeyEvent;
         public event EventHandler<StatusMessageEventArgs> StatusMessage;
         public event EventHandler<ConsoleMessageEventArgs> ConsoleMessage;
 
@@ -133,6 +134,17 @@
         private void PostConsoleMessage(ConsoleMessageEventArgs e)
         {
             this.synchronizationContext.Post((state) => { this.OnConsoleMessage((ConsoleMessageEventArgs)state); }, e);
+        }
+
+        private bool PostKeyEvent(CefHandlerKeyEventType type, int code, CefHandlerKeyEventModifiers modifiers, bool isSystemKey)
+        {
+            if (KeyEvent != null)
+            {
+                KeyEventArgs ea = new KeyEventArgs(type, code, modifiers, isSystemKey);
+                KeyEvent(this, ea);
+                return ea.Handled;
+            }
+            return false;
         }
 
         [Conditional("DEBUG")]

@@ -13,6 +13,7 @@
             private CefLifeSpanHandler lifeSpanHandler;
             private CefLoadHandler loadHandler;
             private CefDisplayHandler displayHandler;
+            private CefKeyboardHandler keyboardHandler;
 
             private CefJSDialogHandler jsDialogHandler;
             private CefJSBindingHandler jsBindingHandler;
@@ -24,7 +25,7 @@
                 //var requestHandler = new CefRequestHandler();
                 this.displayHandler = new DisplayHandler(control);
                 //var focusHandler = new CefFocusHandler();
-                //var keyboardHandler = new CefKeyboardHandler();
+                this.keyboardHandler = new KeyboardHandler(control);
                 //var menuHandler = new CefMenuHandler();
                 //var printHandler = new CefPrintHandler();
                 //var findHandler = new CefFindHandler();
@@ -39,6 +40,7 @@
                 if (this.lifeSpanHandler != null) { this.lifeSpanHandler = null; }
                 if (this.loadHandler != null) { this.loadHandler = null; }
                 if (this.displayHandler != null) { this.displayHandler = null; }
+                if (this.keyboardHandler != null) { this.keyboardHandler = null; }
 
                 base.Dispose(disposing);
             }
@@ -57,11 +59,17 @@
             {
                 return this.displayHandler;
             }
+            
+            protected override CefKeyboardHandler GetKeyboardHandler()
+            {
+                return this.keyboardHandler;
+            }
 
             protected override CefJSDialogHandler GetJSDialogHandler()
             {
                 return this.jsDialogHandler;
             }
+
 
             protected override CefJSBindingHandler GetJSBindingHandler()
             {
