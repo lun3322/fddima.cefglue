@@ -24,6 +24,7 @@
         private IList<string> _extraPluginPaths;
         private string _logFile;
         private CefLogSeverity _logSeverity;
+        private CefGraphicsImplementation graphicsImplementation;
 
         public CefSettings()
         {
@@ -146,6 +147,19 @@
             }
         }
 
+        /// <summary>
+        /// The graphics implementation that CEF will use for rendering GPU accelerated
+        /// content like WebGL, accelerated layers and 3D CSS.
+        /// </summary>
+        public CefGraphicsImplementation GraphicsImplementation
+        {
+            get { return this.graphicsImplementation; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.graphicsImplementation = value;
+            }
+        }
 
         internal bool IsReadOnly
         {
@@ -171,6 +185,7 @@
             ptr->extra_plugin_paths = cef_string_list_t.Create(this.ExtraPluginPaths);
             cef_string_t.Copy(this.LogFile, &ptr->log_file);
             ptr->log_severity = (cef_log_severity_t)this.LogSeverity;
+            ptr->graphics_implementation = (cef_graphics_implementation_t)this.GraphicsImplementation;
 
             return ptr;
         }

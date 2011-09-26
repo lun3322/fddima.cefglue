@@ -6,7 +6,7 @@
     using System.Text;
     using Core;
 
-    internal static class InvokeMethodHelper
+    internal static class MethodInvokerHelper
     {
         public static void ThrowArgumentCountMismatch()
         {

@@ -25,7 +25,7 @@
             }
 
             // force binder creation
-            var binder = ScriptableObjectBinder.Get(def.TargetType);
+            var binder = ScriptableObjectBinder.Get(def.TargetType, options);
 
             if (def.Extension)
             {
@@ -46,7 +46,7 @@
         {
             foreach (var def in scriptableObjects.Values.Where(_ => !_.Extension))
             {
-                var binder = ScriptableObjectBinder.Get(def.TargetType);
+                var binder = ScriptableObjectBinder.Get(def.TargetType, def.Options);
 
                 // TODO: support namespaced object names
                 // TODO: Dispose unused CefV8Values

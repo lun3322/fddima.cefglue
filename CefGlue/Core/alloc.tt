@@ -23,13 +23,14 @@
         new StructDef("cef_jsdialog_handler_t",  hasBase:true),
         new StructDef("cef_jsbinding_handler_t", hasBase:true),
         new StructDef("cef_render_handler_t",    hasBase:true),
+        new StructDef("cef_drag_handler_t",      hasBase:true),
 
         new StructDef("cef_download_handler_t",  hasBase:true),
-        new StructDef("cef_scheme_handler_t",    hasBase:true),
+
+        new StructDef("cef_scheme_handler_factory_t",  hasBase:true),
+        new StructDef("cef_scheme_handler_t",          hasBase:true),
 
         new StructDef("cef_content_filter_t",    hasBase:true),
-
-        new StructDef("cef_scheme_handler_factory_t", hasBase:true),
 
         new StructDef("cef_task_t",              hasBase:true),
 
@@ -48,51 +49,6 @@
 
         new StructDef("cefglue_userdata_t",      hasBase:true),
     };
-
-    var structNames = new string[] {
-        /*
-        "cef_browser_t",
-        "cef_content_filter_t",
-        "cef_cookie_t",
-        "cef_cookie_visitor_t",
-        "cef_domdocument_t",
-        "cef_domevent_listener_t",
-        "cef_domevent_t",
-        "cef_domnode_t",
-        "cef_domvisitor_t",
-        "cef_download_handler_t",
-        "cef_frame_t",
-        "cef_handler_menuinfo_t",
-        "cef_paper_metrics",
-        "cef_popup_features_t",
-        "cef_post_data_element_t",
-        "cef_post_data_t",
-        "cef_print_info_t",
-        "cef_print_margins",
-        "cef_print_options_t",
-        "cef_read_handler_t",
-        "cef_rect_t",
-        "cef_request_t",
-        "cef_response_t",
-        "cef_scheme_handler_factory_t",
-        "cef_scheme_handler_t",
-        "cef_stream_reader_t",
-        "cef_stream_writer_t",
-        "cef_string_t",
-        "cef_task_t",
-        "cef_time_t",
-        "cef_urlparts_t",
-        "cef_v8accessor_t",
-        "cef_v8context_t",
-        "cef_v8handler_t",
-        "cef_v8value_t",
-        "cef_web_urlrequest_client_t",
-        "cef_web_urlrequest_t",
-        "cef_write_handler_t",
-        "cef_xml_reader_t",
-        "cef_zip_reader_t",
-        */
-        };
 
     var nonSizeStructs = new Dictionary<string, bool>();
     nonSizeStructs["cef_handler_menuinfo_t"] = true;

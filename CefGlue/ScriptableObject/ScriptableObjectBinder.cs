@@ -17,7 +17,7 @@
     {
         private static readonly Dictionary<Type, ScriptableObjectBinder> binders = new Dictionary<Type, ScriptableObjectBinder>();
 
-        public static ScriptableObjectBinder Get(Type type)
+        public static ScriptableObjectBinder Get(Type type, ScriptableObjectOptions options)
         {
             // FIXME: this method must be thread-safe
             ScriptableObjectBinder value;
@@ -27,23 +27,24 @@
             }
             else
             {
-                var binder = new ScriptableObjectBinder(type);
+                var binder = new ScriptableObjectBinder(type, options);
                 binders[type] = binder;
                 return binder;
             }
         }
 
         private readonly Type type;
+        private readonly ScriptableObjectOptions options;
         private readonly NamingConvention namingConvention;
         private DispatchTable<MethodDef> dispatchTable;
         private DispatchTable<PropertyDef> propertyDispatchTable;
 
-        private ScriptableObjectBinder(Type type)
-            : this(type, NamingConvention.Default)
+        private ScriptableObjectBinder(Type type, ScriptableObjectOptions options)
+            : this(type, options, NamingConvention.Default)
         {
         }
 
-        private ScriptableObjectBinder(Type type, NamingConvention namingConvention)
+        private ScriptableObjectBinder(Type type, ScriptableObjectOptions options, NamingConvention namingConvention)
         {
             if (type == null) throw new ArgumentNullException("type");
 
@@ -51,12 +52,18 @@
             // TODO: support binding via interface
 
             this.type = type;
+            this.options = options;
             this.namingConvention = namingConvention;
 
             this.Create();
 
             Debug.Assert(this.dispatchTable != null);
             Debug.Assert(this.propertyDispatchTable != null);
+
+            if ((this.options & ScriptableObjectOptions.LazyCompile) == 0)
+            {
+                this.Compile();
+            }
         }
 
         public Type Type { get { return this.type; } }
@@ -142,6 +149,14 @@
 
             this.dispatchTable = dispatchTable;
             this.propertyDispatchTable = propertyDispatchTable;
+        }
+
+        private void Compile()
+        {
+            foreach (var method in this.dispatchTable.GetValues())
+            {
+                method.Compile();
+            }
         }
 
         private IEnumerable<MethodInfo> GetMethods()

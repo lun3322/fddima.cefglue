@@ -33,6 +33,7 @@ Dictionary<string, ProxyDef> CreateProxySchema()
     def.AddMethod("get_window_handle");
     def.AddMethod("get_opener_window_handle");
     def.AddMethod("is_popup");
+    def.AddMethod("has_document");
     def.AddMethod("get_client");
     def.AddMethod("get_main_frame");
     def.AddMethod("get_focused_frame");
@@ -232,6 +233,17 @@ Dictionary<string, ProxyDef> CreateProxySchema()
     def.AddMethod("execute_function_with_context");
     schema.Add(def.ClassName, def);
 
+    // CefSchemeHandlerCallback
+    def = new ProxyDef()
+    {
+        ClassName = "CefSchemeHandlerCallback",
+        StructName = "cef_scheme_handler_callback_t",
+    };
+    def.AddMethod("headers_available");
+    def.AddMethod("bytes_available");
+    def.AddMethod("cancel");
+    schema.Add(def.ClassName, def);
+
     // CefWebUrlRequest
     def = new ProxyDef()
     {
@@ -368,6 +380,26 @@ Dictionary<string, ProxyDef> CreateProxySchema()
     def.AddMethod("get_document");
     def.AddMethod("get_target");
     def.AddMethod("get_current_target");
+    schema.Add(def.ClassName, def);
+
+    // CefDragData
+    def = new ProxyDef()
+    {
+        ClassName = "CefDragData",
+        StructName = "cef_drag_data_t",
+    };
+    def.AddMethod("is_link");
+    def.AddMethod("is_fragment");
+    def.AddMethod("is_file");
+    def.AddMethod("get_link_url");
+    def.AddMethod("get_link_title");
+    def.AddMethod("get_link_metadata");
+    def.AddMethod("get_fragment_text");
+    def.AddMethod("get_fragment_html");
+    def.AddMethod("get_fragment_base_url");
+    def.AddMethod("get_file_extension");
+    def.AddMethod("get_file_name");
+    def.AddMethod("get_file_names");
     schema.Add(def.ClassName, def);
 
     return schema;

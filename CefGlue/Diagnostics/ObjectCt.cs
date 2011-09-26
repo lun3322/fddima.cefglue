@@ -10,6 +10,8 @@ namespace CefGlue.Diagnostics
     {
         public static void WriteDump()
         {
+            // TODO: generate it from ProxySchema and HandlerSchema
+
             Cef.Logger.Trace(LogTarget.ObjectCt, "ObjectCt Dump For Handlers:");
             Cef.Logger.Trace(LogTarget.CefClient, "ObjectCt=[{0}]", CefClient.ObjectCt);
             Cef.Logger.Trace(LogTarget.CefContentFilter, "ObjectCt=[{0}]", CefContentFilter.ObjectCt);

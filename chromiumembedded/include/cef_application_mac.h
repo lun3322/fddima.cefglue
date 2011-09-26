@@ -1,4 +1,4 @@
-// Copyright (c) 2009 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2011 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -27,72 +27,56 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#ifndef _CEF_APPLICATION_MAC_H
+#define _CEF_APPLICATION_MAC_H
+#pragma once
 
-#ifndef _CEF_TYPES_WIN_H
-#define _CEF_TYPES_WIN_H
+#include "cef.h"
 
-#if defined(OS_WIN)
-#include <windows.h>
-#include "cef_string.h"
+#if defined(OS_MACOSX) && defined(__OBJC__)
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifdef BUILDING_CEF_SHARED
 
-// Window handle.
-#define cef_window_handle_t HWND
-#define cef_cursor_handle_t HCURSOR
+// Use the existing CrAppProtocol definition.
+#include "base/message_pump_mac.h"
 
-///
-// Supported graphics implementations.
-///
-enum cef_graphics_implementation_t
-{
-  ANGLE_IN_PROCESS = 0,
-  ANGLE_IN_PROCESS_COMMAND_BUFFER,
-  DESKTOP_IN_PROCESS,
-  DESKTOP_IN_PROCESS_COMMAND_BUFFER,
+#else // BUILDING_CEF_SHARED
+
+#import <AppKit/AppKit.h>
+
+// Copy of CrAppProtocol definition from base/message_pump_mac.h.
+@protocol CrAppProtocol
+// Must return true if -[NSApplication sendEvent:] is currently on the stack.
+- (BOOL)isHandlingSendEvent;
+@end
+
+#endif // BUILDING_CEF_SHARED
+
+// All CEF client applications must subclass NSApplication and implement this
+// protocol.
+@protocol CefAppProtocol<CrAppProtocol>
+- (void)setHandlingSendEvent:(BOOL)handlingSendEvent;
+@end
+
+// Controls the state of |isHandlingSendEvent| in the event loop so that it is
+// reset properly.
+class CefScopedSendingEvent {
+public:
+  CefScopedSendingEvent()
+    : app_(static_cast<NSApplication<CefAppProtocol>*>(
+              [NSApplication sharedApplication])),
+      handling_([app_ isHandlingSendEvent]) {
+    [app_ setHandlingSendEvent:YES];
+  }
+  ~CefScopedSendingEvent() {
+    [app_ setHandlingSendEvent:handling_];
+  }
+  
+private:
+  NSApplication<CefAppProtocol>* app_;
+  BOOL handling_;
 };
 
-///
-// Class representing window information.
-///
-typedef struct _cef_window_info_t
-{
-  // Standard parameters required by CreateWindowEx()
-  DWORD m_dwExStyle;
-  cef_string_t m_windowName;
-  DWORD m_dwStyle;
-  int m_x;
-  int m_y;
-  int m_nWidth;
-  int m_nHeight;
-  cef_window_handle_t m_hWndParent;
-  HMENU m_hMenu;
+#endif  // defined(OS_MACOSX) && defined(__OBJC__)
 
-  // If window rendering is disabled no browser window will be created. Set
-  // |m_hWndParent| to the window that will act as the parent for popup menus,
-  // dialog boxes, etc.
-  BOOL m_bWindowRenderingDisabled;
-  
-  // Handle for the new browser window.
-  cef_window_handle_t m_hWnd;
-} cef_window_info_t;
-
-///
-// Class representing print context information.
-///
-typedef struct _cef_print_info_t
-{
-  HDC m_hDC;
-  RECT m_Rect;
-  double m_Scale;
-} cef_print_info_t;
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // OS_WIN
-
-#endif // _CEF_TYPES_WIN_H
+#endif // _CEF_APPLICATION_MAC_H

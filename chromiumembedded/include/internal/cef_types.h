@@ -135,6 +135,12 @@ typedef struct _cef_settings_t
   // logged.
   ///
   cef_log_severity_t log_severity;
+
+  ///
+  // The graphics implementation that CEF will use for rendering GPU accelerated
+  // content like WebGL, accelerated layers and 3D CSS.
+  ///
+  cef_graphics_implementation_t graphics_implementation;
 } cef_settings_t;
 
 ///
@@ -321,9 +327,11 @@ typedef struct _cef_browser_settings_t
   bool webgl_disabled;
 
   ///
-  // Set to true (1) to disable accelerated compositing.
+  // Set to true (1) to enable accelerated compositing. This is turned off by
+  // default because the current in-process GPU implementation does not
+  // support it correctly.
   ///
-  bool accelerated_compositing_disabled;
+  bool accelerated_compositing_enabled;
 
   ///
   // Set to true (1) to disable accelerated layers. This affects features like
@@ -548,6 +556,23 @@ enum cef_handler_errorcode_t
   ERR_RESPONSE_HEADERS_TOO_BIG = -325,
   ERR_CACHE_MISS = -400,
   ERR_INSECURE_RESPONSE = -501,
+};
+
+///
+// "Verb" of a drag-and-drop operation as negotiated between the source and
+// destination. These constants match their equivalents in WebCore's
+// DragActions.h and should not be renumbered.
+///
+enum cef_drag_operations_mask_t
+{
+    DRAG_OPERATION_NONE    = 0,
+    DRAG_OPERATION_COPY    = 1,
+    DRAG_OPERATION_LINK    = 2,
+    DRAG_OPERATION_GENERIC = 4,
+    DRAG_OPERATION_PRIVATE = 8,
+    DRAG_OPERATION_MOVE    = 16,
+    DRAG_OPERATION_DELETE  = 32,
+    DRAG_OPERATION_EVERY   = UINT_MAX
 };
 
 ///

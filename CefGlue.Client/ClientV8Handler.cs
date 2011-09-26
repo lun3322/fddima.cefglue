@@ -62,12 +62,58 @@
                 }
                 else if (name == "ReturnObject")
                 {
-                    var array = CefV8Value.CreateObject();
-                    array.SetValue("index", CefV8Value.CreateInt(123));
-                    array.SetValue("reply", CefV8Value.CreateString("hello!"));
-                    array.SetValue("success", CefV8Value.CreateBool(false));
+                    var obj1 = CefV8Value.CreateObject();
+                    obj1.SetValue("index", CefV8Value.CreateInt(123));
+                    obj1.SetValue("reply", CefV8Value.CreateString("hello!"));
+                    obj1.SetValue("success", CefV8Value.CreateBool(false));
+
+                    returnValue = obj1;
+                }
+                else if (name == "ReturnComplexArray")
+                {
+                    var obj1 = CefV8Value.CreateObject();
+                    obj1.SetValue("index", CefV8Value.CreateInt(123));
+                    obj1.SetValue("reply", CefV8Value.CreateString("hello!"));
+                    obj1.SetValue("success", CefV8Value.CreateBool(false));
+
+                    var array = CefV8Value.CreateArray();
+                    array.SetValue(0, CefV8Value.CreateInt(123));
+                    array.SetValue(1, CefV8Value.CreateString("hello!"));
+                    array.SetValue(2, CefV8Value.CreateBool(false));
+                    array.SetValue(3, obj1);
+                    array.SetValue(4, CefV8Value.CreateString("hello2!"));
+
+                    obj1 = CefV8Value.CreateObject();
+                    obj1.SetValue("index", CefV8Value.CreateInt(123));
+                    obj1.SetValue("reply", CefV8Value.CreateString("hello!"));
+                    obj1.SetValue("success", CefV8Value.CreateBool(false));
+
+                    var obj2 = CefV8Value.CreateObject();
+                    obj2.SetValue("i'm still", CefV8Value.CreateString("alive"));
+
+                    obj1.SetValue("inner", obj2);
+
+                    array.SetValue(5, obj1);
 
                     returnValue = array;
+                }
+                else if (name == "ReturnComplexObject")
+                {
+                    var obj1 = CefV8Value.CreateObject();
+                    obj1.SetValue("index", CefV8Value.CreateInt(123));
+                    obj1.SetValue("reply", CefV8Value.CreateString("hello!"));
+                    obj1.SetValue("success", CefV8Value.CreateBool(false));
+
+                    var obj2 = CefV8Value.CreateObject();
+                    obj2.SetValue("i'm still", CefV8Value.CreateString("alive"));
+
+                    obj1.SetValue("inner", obj2);
+
+                    obj2.Dispose(); // force to dispose object wrapper and underlying v8 persistent handle.
+                    // note, that obj2 will passed in obj before, but it anyway safe to destroy obj2 handle, 
+                    // 'cause v8 api internally always open handles.
+
+                    returnValue = obj1;
                 }
                 else if (name == "SubtractIntImplicit")
                 {

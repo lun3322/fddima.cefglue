@@ -186,9 +186,11 @@
         public bool_t webgl_disabled;
 
         ///
-        // Set to true (1) to disable accelerated compositing.
+        /// Set to true (1) to enable accelerated compositing. This is turned off by
+        /// default because the current in-process GPU implementation does not
+        /// support it correctly.
         ///
-        public bool_t accelerated_compositing_disabled;
+        public bool_t accelerated_compositing_enabled;
 
         ///
         // Set to true (1) to disable accelerated layers. This affects features like

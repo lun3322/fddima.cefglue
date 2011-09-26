@@ -168,6 +168,17 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Returns true if a document has been loaded in the browser.
+        /// </summary>
+        public bool HasDocument
+        {
+            get
+            {
+                return cef_browser_t.invoke_has_document(this.ptr) != 0;
+            }
+        }
+
+        /// <summary>
         /// Returns the client for this browser.
         /// </summary>
         public CefClient GetClient()

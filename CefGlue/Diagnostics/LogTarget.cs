@@ -7,13 +7,13 @@ namespace CefGlue.Diagnostics
     {
         Default = 0,
 
+        CefString,
         ObjectCt,
-
-        //
+        ScriptableObject,
+        CefWebBrowser,
         CefUserData,
 
-        // 
-        CefString,
+        // TODO: generate it from ProxySchema and HandlerSchema
 
         // Handlers
         CefClient,
@@ -41,6 +41,7 @@ namespace CefGlue.Diagnostics
         CefV8Accessor,
         CefV8Handler,
         CefWriteHandler,
+        CefDragHandler,
 
         // Proxies
         CefBrowser,
@@ -60,6 +61,8 @@ namespace CefGlue.Diagnostics
         CefWebUrlRequestClient,
         CefXmlReader,
         CefZipReader,
+        CefDragData,
+        CefSchemeHandlerCallback,
     }
 }
 #endif

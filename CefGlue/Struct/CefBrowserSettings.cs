@@ -650,17 +650,17 @@
         }
 
         /// <summary>
-        /// Set to true to disable accelerated compositing.
+        /// Set to true to enable accelerated compositing.
         /// </summary>
-        public bool AcceleratedCompositingDisabled
+        public bool AcceleratedCompositingEnabled
         {
             get
             {
-                return this._ptr->accelerated_compositing_disabled;
+                return this._ptr->accelerated_compositing_enabled;
             }
             set
             {
-                this._ptr->accelerated_compositing_disabled = value;
+                this._ptr->accelerated_compositing_enabled = value;
             }
         }
 
