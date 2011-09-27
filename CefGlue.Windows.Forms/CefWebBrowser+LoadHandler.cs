@@ -24,8 +24,11 @@
 #if DIAGNOSTICS
                 Cef.Logger.Trace(LogTarget.Default, "LoadHandler.OnLoadStart");
 #endif
+                // FIXME: This is doesn't support popup windows. Now it changes IsLoading property even if popup loading.
+                // It can be simple solved by checking browser.IsPopup, but it is good (hide popup's events)?
+                // Also it can be solved (it is required by anyway) to create different Client to Popup window - so client can know how it must be reported.
                 framesLoading++;
-                this.control.IsLoading = framesLoading > 0; // TODO: do it async
+                this.control.IsLoading = framesLoading > 0;
             }
 
             protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
@@ -38,7 +41,7 @@
                 {
                     framesLoading = 0;
                 }
-                this.control.IsLoading = framesLoading > 0; // TODO: do it async
+                this.control.IsLoading = framesLoading > 0;
             }
 
             protected override bool OnLoadError(CefBrowser browser, CefFrame frame, CefHandlerErrorCode errorCode, string failedUrl, ref string errorText)
@@ -51,7 +54,7 @@
                 {
                     framesLoading = 0;
                 }
-                this.control.IsLoading = framesLoading > 0; // TODO: do it async
+                this.control.IsLoading = framesLoading > 0;
 
                 errorText = "OnLoadError: ErrorCode=[" + errorCode.ToString() + "], URL=[" + failedUrl + "].";
                 return true;

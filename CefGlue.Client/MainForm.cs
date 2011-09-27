@@ -68,6 +68,7 @@
             browser.TitleChanged += new EventHandler(browser_TitleChanged);
             browser.StatusMessage += new EventHandler<StatusMessageEventArgs>(browser_StatusMessage);
             browser.ConsoleMessage += new EventHandler<ConsoleMessageEventArgs>(browser_ConsoleMessage);
+            browser.IsLoadingChanged += new EventHandler(browser_IsLoadingChanged);
 
             browser.Parent = this;
             browser.BringToFront();
@@ -135,6 +136,18 @@
             {
                 this.Text = this.caption;
             }
+        }
+
+        void browser_IsLoadingChanged(object sender, EventArgs e)
+        {
+            var isLoading = browser.IsLoading;
+            progressBar.Visible = isLoading;
+            
+            stopButton.Visible = isLoading;
+            reloadButton.Visible = !isLoading;
+
+            stopButton.Enabled = stopButton.Visible;
+            reloadButton.Enabled = reloadButton.Visible;
         }
 
         void browser_StatusMessage(object sender, StatusMessageEventArgs e)
