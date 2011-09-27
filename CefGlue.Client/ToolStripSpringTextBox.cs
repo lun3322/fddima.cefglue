@@ -11,6 +11,8 @@
     {
         public override Size GetPreferredSize(Size constrainingSize)
         {
+            if (!this.Visible) return DefaultSize;
+
             // Use the default size if the text box is on the overflow menu
             // or is on a vertical ToolStrip.
             if (IsOnOverflow || Owner.Orientation == Orientation.Vertical)
@@ -38,6 +40,7 @@
             {
                 // Ignore items on the overflow menu.
                 if (item.IsOnOverflow) continue;
+                if (!item.Visible) continue;
 
                 if (item is ToolStripSpringTextBox)
                 {
