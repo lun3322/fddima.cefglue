@@ -178,9 +178,10 @@
             {
                 case MemberTypes.Method:
 
-                    if (((MethodInfo)member).IsSpecialName)
+                    if (((MethodInfo)member).GetParameters()
+                        .Any(p => typeof(Delegate).IsAssignableFrom(p.ParameterType)))
                     {
-                        return false; // ignore generated methods (eg. event add/remove)
+                        return false; // ignore methods with Delegate parameter (eg. event add/remove)
                     }
 
                     scriptable = GetScriptableAttribute(member);
@@ -321,7 +322,7 @@
             foreach (var property in this.PropertyDispatchTable.GetValues())
             {
                 obj.SetValue(property.Name,
-                    (property.CanRead? CefV8AccessControl.AllCanRead : 0)
+                    (property.CanRead ? CefV8AccessControl.AllCanRead : 0)
                     | (property.CanWrite ? CefV8AccessControl.AllCanWrite : 0),
                     CefV8PropertyAttribute.DontDelete);
             }
