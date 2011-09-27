@@ -23,6 +23,7 @@
         public event EventHandler<KeyEventArgs> KeyEvent;
         public event EventHandler<StatusMessageEventArgs> StatusMessage;
         public event EventHandler<ConsoleMessageEventArgs> ConsoleMessage;
+        public event EventHandler<BeforeBrowseEventArgs> BeforeBrowse;
 
         protected virtual void OnIsLoadingChanged(EventArgs e)
         {
@@ -143,6 +144,17 @@
                 KeyEventArgs ea = new KeyEventArgs(type, code, modifiers, isSystemKey);
                 KeyEvent(this, ea);
                 return ea.Handled;
+            }
+            return false;
+        }
+
+        private bool PostBeforeBrowse(CefFrame frame, CefRequest request, CefHandlerNavType navType, bool isRedirect)
+        {
+            if (BeforeBrowse != null)
+            {
+                BeforeBrowseEventArgs ea = new BeforeBrowseEventArgs(frame, request, navType, isRedirect);
+                BeforeBrowse(this, ea);
+                return ea.Cancel;
             }
             return false;
         }
