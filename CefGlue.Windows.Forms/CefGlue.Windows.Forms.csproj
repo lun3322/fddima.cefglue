@@ -80,6 +80,10 @@
     <Compile Include="CefWebBrowser+KeyboardHandler.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CefWebBrowser+RequestHandler.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BeforeBrowseEventArgs.cs" />
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="StatusMessageEventArgs.cs" />
     <Compile Include="CefWebBrowser.cs">
