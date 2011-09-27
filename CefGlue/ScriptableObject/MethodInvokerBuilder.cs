@@ -75,36 +75,131 @@
                 )
                 .Emitter;
 
-            if (!this.def.HasOverloads)
+            if (!this.def.HasOverloads && this.def.GetMethods().Single().GetParameters().All(_ => !_.IsOptional))
             {
                 EmitInvoker(emit,
                     this.def.GetMethods().Single(),
+                    null,
                     this.def.Setter
                     );
             }
             else
             {
-                var methodsByArgc = this.def.GetMethods()
+                var methods = this.def.GetMethods()
                     .GroupBy(_ => _.GetParameters().Length, _ => _)
-                    .ToDictionary(_ => _.Key, _ => _.ToArray())
+                    .ToDictionary(_ => _.Key, _ => _.ToList())
                     ;
 
-                if (methodsByArgc.Values.Any(_ => _.Length > 1))
+                // expand methods with optional arguments
+                var methodsWithOptArgs = this.def.GetMethods().Where(_ => _.GetParameters().Any(p => p.IsOptional));
+                foreach (var m in methodsWithOptArgs)
                 {
-                    throw new ScriptableObjectException("Overloading by argument type variance currently is not supported.");
+                    // if full method signature already placed in methods dictionary
+                    var parameters = m.GetParameters();
+                    for (var k = parameters.Length - 1; k >= 0; k--)
+                    {
+                        if (!parameters[k].IsOptional) break;
+
+                        if (!methods.ContainsKey(k)) methods.Add(k, new List<MethodInfo>());
+
+                        // check, that if methods already includes this signature, then doesn't expand
+                        if (!methods[k].Any(_ =>
+                        {
+                            var p0 = _.GetParameters();
+                            for (var i = 0; i < k; i++)
+                            {
+                                if (parameters[i].ParameterType != p0[i].ParameterType) return false;
+                            }
+                            return true;
+                        }))
+                        {
+                            methods[k].Add(m);
+                        }
+                    }
+                }
+
+                // type variance handling
+                foreach (var k in methods.Keys)
+                {
+                    var mlist = methods[k];
+                    if (mlist.Count > 1) // if methods for argc==k has overloads
+                    {
+                        // detect arguments which have type variance
+                        List<int> vargs = new List<int>();
+                        for (int i = 0; i < k; i++)
+                        {
+                            if (mlist.Select(_ => _.GetParameters()[i].ParameterType).Distinct().Count() != 1)
+                            {
+                                vargs.Add(i);
+                            }
+                        }
+
+                        // TODO: hide methods which not reacheable by type priority (int hides short or byte)
+
+                        // stub, throw exception for currently unsupported
+                        if (vargs.Count > 0)
+                        {
+                            throw new ScriptableObjectException(
+                                string.Format("Overloading by argument type variance currently is not supported. name=[{0}], argc=[{1}], vargs=[{2}]",
+                                    this.def.Name, k, string.Join(", ", vargs)
+                                    )
+                                );
+                        }
+                    }
+                }
+
+                var defaultLabel = emit.DefineLabel();
+                var labels = new Label[methods.Keys.Max() + 1];
+                for (var i = 0; i < labels.Length; i++)
+                {
+                    if (methods.ContainsKey(i))
+                    {
+                        labels[i] = emit.DefineLabel();
+                    }
+                    else
+                    {
+                        labels[i] = defaultLabel;
+                    }
+                }
+
+                emit.LdArg(argumentsCountArgIndex)
+                    .Switch(labels)
+                    ;
+
+                emit.MarkLabel(defaultLabel)
+                    .Call(throwArgumentCountMismatchMethod)
+                    ;
+
+                // write labels
+                for (var i = 0; i < labels.Length; i++)
+                {
+                    if (labels[i] == defaultLabel) continue;
+
+                    emit.MarkLabel(labels[i]);
+
+                    EmitInvoker(emit,
+                        methods[i].Single(),
+                        i,
+                        false
+                        );
                 }
 
                 // TODO: check, optimize type variance or throw if not supported
-
-                throw new NotSupportedException("Overloads currently is not supported.");
             }
 
             return (MethodInvoker)emit.DynamicMethod.CreateDelegate(typeof(MethodInvoker));
         }
 
-        private static void EmitInvoker(EmitHelper emit, MethodInfo method, bool setter)
+        private static void EmitInvoker(EmitHelper emit, MethodInfo method, int? argc, bool setter)
         {
-            EmitThrowIfArgumentCountMismatch(emit, method.GetParameters().Length);
+            var parameters = method.GetParameters();
+            var methodArgC = parameters.Length;
+
+            if (!argc.HasValue)
+            {
+                EmitThrowIfArgumentCountMismatch(emit, methodArgC);
+                argc = methodArgC;
+            }
 
             emit.LdArg(retvalArgIndex);
 
@@ -115,15 +210,24 @@
             }
 
             // prepare arguments
-            var targetParamters = method.GetParameters();
-            for (var i = 0; i < targetParamters.Length; i++)
+            for (var i = 0; i < parameters.Length; i++)
             {
-                var parameter = targetParamters[i];
+                var parameter = parameters[i];
 
-                var changeTypeMethod = CefConvert.GetChangeTypeMethod(typeof(cef_v8value_t*), parameter.ParameterType);
+                if (i < argc.Value)
+                {
+                    var changeTypeMethod = CefConvert.GetChangeTypeMethod(typeof(cef_v8value_t*), parameter.ParameterType);
 
-                EmitLdV8Argument(emit, i);
-                emit.Call(changeTypeMethod);
+                    EmitLdV8Argument(emit, i);
+                    emit.Call(changeTypeMethod);
+                }
+                else
+                {
+                    // push default arg
+                    if (!parameter.IsOptional) throw new ScriptableObjectException("MethodInvoker compilation error.");
+
+                    EmitLdRawDefaultValue(emit, parameter.RawDefaultValue);
+                }
             }
 
             // call target method
@@ -149,7 +253,7 @@
                         .Pop()
                         .Ret()
                         .MarkLabel(returnValueLabel);
-                        ;
+                    ;
                 }
 
                 if (ForceVoidToUndefined)
@@ -173,6 +277,70 @@
 
             // return
             emit.Ret();
+        }
+
+        private static void EmitLdRawDefaultValue(EmitHelper emit, object value)
+        {
+            if (value == null)
+            {
+                emit.LdNull();
+            }
+            else
+            {
+                switch (Type.GetTypeCode(value.GetType()))
+                {
+                    case TypeCode.Empty:
+                        emit.LdNull();
+                        break;
+
+                    // case TypeCode.Object:
+                    // case TypeCode.DBNull:
+
+                    case TypeCode.Boolean:
+                        emit.LdConstI4(((bool)value) ? 1 : 0);
+                        break;
+
+                    case TypeCode.Char:
+                        emit.LdConstI4((int)(char)value);
+                        break;
+
+                    case TypeCode.SByte:
+                        emit.LdConstI4((int)(sbyte)value);
+                        break;
+
+                    case TypeCode.Byte:
+                        emit.LdConstI4((int)(byte)value);
+                        break;
+
+                    case TypeCode.Int16:
+                        emit.LdConstI4((int)(short)value);
+                        break;
+
+                    case TypeCode.UInt16:
+                        emit.LdConstI4((int)(ushort)value);
+                        break;
+
+                    case TypeCode.Int32:
+                        emit.LdConstI4((int)value);
+                        break;
+
+                    // TODO: support types for opt args
+                    // case TypeCode.UInt32:
+                    // case TypeCode.Int64:
+                    // case TypeCode.UInt64:
+                    // case TypeCode.Single:
+                    // case TypeCode.Double:
+                    // case TypeCode.Decimal:
+                    // case TypeCode.DateTime:
+
+                    case TypeCode.String:
+                        emit.LdStr((string)value);
+                        break;
+
+                    default:
+                        throw new ScriptableObjectException(string.Format("Type '{0}' for default values is not supported.", value.GetType().FullName));
+                }
+            }
         }
 
         private static void EmitThrowIfArgumentCountMismatch(EmitHelper emit, int expectedArgumentCount)

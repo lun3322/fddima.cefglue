@@ -45,8 +45,17 @@
                 case 3: il.Emit(OpCodes.Ldarg_3); break;
 
                 default:
-                    il.Emit(index <= 255 ? OpCodes.Ldarg_S : OpCodes.Ldarg, index);
-                    break;
+                    if (index <= byte.MaxValue)
+                    {
+                        il.Emit(OpCodes.Ldarg_S, (byte)index);
+                        break;
+                    }
+                    else if (index <= ushort.MaxValue)
+                    {
+                        il.Emit(OpCodes.Ldarg, (ushort)index);
+                        break;
+                    }
+                    else throw new ArgumentOutOfRangeException("index");
             }
 
             return this;
@@ -66,9 +75,9 @@
                 case 6: il.Emit(OpCodes.Ldc_I4_6); break;
                 case 7: il.Emit(OpCodes.Ldc_I4_7); break;
                 default:
-                    if (value >= -128 && value <= 127)
+                    if (sbyte.MinValue <= value && value <= sbyte.MaxValue)
                     {
-                        il.Emit(OpCodes.Ldc_I4_S, value);
+                        il.Emit(OpCodes.Ldc_I4_S, (sbyte)value);
                     }
                     else
                     {
@@ -94,6 +103,12 @@
         public EmitHelper LdNull()
         {
             il.Emit(OpCodes.Ldnull);
+            return this;
+        }
+
+        public EmitHelper LdStr(string value)
+        {
+            il.Emit(OpCodes.Ldstr, value);
             return this;
         }
 
@@ -154,6 +169,12 @@
         public EmitHelper Ret()
         {
             il.Emit(OpCodes.Ret);
+            return this;
+        }
+
+        public EmitHelper Switch(Label[] jumpTable)
+        {
+            il.Emit(OpCodes.Switch, jumpTable);
             return this;
         }
 

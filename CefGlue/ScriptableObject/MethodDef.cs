@@ -88,17 +88,11 @@
             }
         }
 
-        // TODO: get common arg names?
         public string[] GetArgumentNames()
         {
-            if (HasOverloads)
-            {
-                throw new NotSupportedException("Overloads currently is not supported.");
-            }
-
-            var methodInfo = (MethodInfo)this.methods;
-
-            return methodInfo.GetParameters().Select(_ => _.Name).ToArray();
+            // TODO: get common arg names?
+            var method = GetMethods().First();
+            return method.GetParameters().Select(_ => _.Name).ToArray();
         }
 
         public bool ReturnTypeIsVoid

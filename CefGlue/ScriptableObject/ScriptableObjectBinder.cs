@@ -10,9 +10,6 @@
 
     // TODO: report CEF to make non-configurable (or may be non-enumberable) Cef::Accessor / Cef::Handler
 
-    // TODO: we must check for methods which can't be supported...
-    // for example methods with ref/out parameters-
-
     internal class ScriptableObjectBinder
     {
         private static readonly Dictionary<Type, ScriptableObjectBinder> binders = new Dictionary<Type, ScriptableObjectBinder>();
@@ -177,7 +174,6 @@
             switch (member.MemberType)
             {
                 case MemberTypes.Method:
-
                     if (((MethodInfo)member).GetParameters()
                         .Any(p => typeof(Delegate).IsAssignableFrom(p.ParameterType)))
                     {

@@ -35,59 +35,62 @@
         public char? EchoNullableChar(char? value) { return value; }
         public float? EchoNullableSingle(float? value) { return value; }
 
+
         public void ArgumentCount0() { }
         public void ArgumentCount1(int arg1) { }
         public void ArgumentCount2(int arg1, int arg2) { }
 
-
-
-        public bool Enabled { get; set; }
-
-        public bool ThrowingProperty
+        public string ReadOnlyProperty { get { return "value"; } }
+        public string ReadWriteProperty { get; set; }
+        public string ThrowingProperty
         {
-            get { throw new InvalidOperationException("i'm throwing getter!"); }
-            set { throw new InvalidOperationException("i'm throwing setter!"); }
+            get { throw new InvalidOperationException("I'm throwing getter."); }
+            set { throw new InvalidOperationException("I'm throwing setter."); }
         }
+
+
+        public bool EchoOptBoolean(bool value = true) { return value; }
+        public char EchoOptChar(char value = 'a') { return value; }
+        public sbyte EchoOptSByte(sbyte value = -128) { return value; }
+        public byte EchoOptByte(byte value = 255) { return value; }
+        public short EchoOptInt16(short value = -32768) { return value; }
+        public ushort EchoOptUInt16(ushort value = 65535) { return value; }
+        public int EchoOptInt32(int value = -2147483648) { return value; }
+        public string EchoOptString(string value = "value") { return value; }
+
 
         public int Subtract(int a, int b)
         {
             return a - b;
         }
 
-        // obj.overload() -> by argc
         public string Overload()
         {
             return "#1";
         }
 
-        // obj.overload(10) -> by argc
-        [Scriptable(false)]
         public string Overload(int arg1)
         {
             return "#2";
         }
 
-        // obj.overload(10) -> by argc
+        public string Overload(int arg1, int arg2)
+        {
+            return "#3";
+        }
+
+        // TODO: this must be hidden automatically, 'cause we have more priority signature (int arg1)
         [Scriptable(false)]
         public string Overload(short arg1)
         {
             return "#4";
         }
 
-        // obj.overload(10, undefined) -> by argc + optional values
+        // TODO:
         [Scriptable(false)]
-        public string Overload(int arg1, int arg2 = 20)
+        public string Overload(int arg1, string arg2)
         {
-            return "#3";
-        }
-
-
-        // obj.overloadOpt(10, undefined) -> by argc + optional values
-        // obj.overloadOpt(10) -> by argc + optional const (it is possible via create custom method marshaller)
-        [Scriptable(false)]
-        public string OverloadOpt(int arg1, int arg2 = 20)
-        {
-            return "#3";
+            return "#4";
         }
 
     }

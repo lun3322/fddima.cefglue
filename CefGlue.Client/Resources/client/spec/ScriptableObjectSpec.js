@@ -32,7 +32,7 @@ describe("ScriptableObject", function () {
             if (data.expectFloat) {
                 data.expectFloat.forEach(function (value) {
                     it("(+) " + (value ? value.toString() : value), function () {
-                        expect( so[name](value).toFixed(4) ).toEqual(value.toFixed(4));
+                        expect(so[name](value).toFixed(4)).toEqual(value.toFixed(4));
                     });
                 });
             }
@@ -247,5 +247,75 @@ describe("ScriptableObject", function () {
             }).toThrow();
         });
     });
+
+    describe("properties", function () {
+        it("readOnlyProperty", function () {
+            expect(so.readOnlyProperty).toEqual("value");
+        });
+        it("readWriteProperty", function () {
+            so.readWriteProperty = "value0";
+            expect(so.readWriteProperty).toEqual("value0");
+            so.readWriteProperty = "value1";
+            expect(so.readWriteProperty).toEqual("value1");
+        });
+        it("throwingProperty (getter)", function () {
+            expect(function () {
+                so.throwingProperty;
+            }).toThrow();
+        });
+        it("throwingProperty (setter)", function () {
+            expect(function () {
+                so.throwingProperty = "value";
+            }).toThrow();
+        });
+    });
+
+    describe("optional arguments", function () {
+        it("boolean", function () {
+            expect(so.echoOptBoolean()).toEqual(true);
+            expect(so.echoOptBoolean(false)).toEqual(false);
+        });
+        it("char", function () {
+            expect(so.echoOptChar()).toEqual("a".charCodeAt(0));
+            expect(so.echoOptChar(105)).toEqual(105);
+        });
+        it("sbyte", function () {
+            expect(so.echoOptSByte()).toEqual(-128);
+            expect(so.echoOptSByte(127)).toEqual(127);
+        });
+        it("byte", function () {
+            expect(so.echoOptByte()).toEqual(255);
+            expect(so.echoOptByte(0)).toEqual(0);
+        });
+        it("int16", function () {
+            expect(so.echoOptInt16()).toEqual(-32768);
+            expect(so.echoOptInt16(32767)).toEqual(32767);
+        });
+        it("uint16", function () {
+            expect(so.echoOptUInt16()).toEqual(65535);
+            expect(so.echoOptUInt16(0)).toEqual(0);
+        });
+        it("int32", function () {
+            expect(so.echoOptInt32()).toEqual(-2147483648);
+            expect(so.echoOptInt32(2147483647)).toEqual(2147483647);
+        });
+        it("string", function () {
+            expect(so.echoOptString()).toEqual("value");
+            expect(so.echoOptString("hello!")).toEqual("hello!");
+        });
+    });
+
+    describe("overload", function () {
+        it("()", function () {
+            expect(so.overload()).toEqual("#1");
+        });
+        it("(int)", function () {
+            expect(so.overload(1)).toEqual("#2");
+        });
+        it("(int,int)", function () {
+            expect(so.overload(1,2)).toEqual("#3");
+        });
+    });
+
 
 });
