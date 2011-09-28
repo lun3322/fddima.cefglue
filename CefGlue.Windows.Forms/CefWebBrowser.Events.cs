@@ -139,10 +139,11 @@
 
         private bool PostKeyEvent(CefHandlerKeyEventType type, int code, CefHandlerKeyEventModifiers modifiers, bool isSystemKey)
         {
-            if (KeyEvent != null)
+            var handler = KeyEvent;
+            if (handler != null)
             {
                 KeyEventArgs ea = new KeyEventArgs(type, code, modifiers, isSystemKey);
-                KeyEvent(this, ea);
+                handler(this, ea);
                 return ea.Handled;
             }
             return false;
@@ -150,10 +151,11 @@
 
         private bool PostBeforeBrowse(CefFrame frame, CefRequest request, CefHandlerNavType navType, bool isRedirect)
         {
-            if (BeforeBrowse != null)
+            var handler = BeforeBrowse;
+            if (handler != null)
             {
                 BeforeBrowseEventArgs ea = new BeforeBrowseEventArgs(frame, request, navType, isRedirect);
-                BeforeBrowse(this, ea);
+                handler(this, ea);
                 return ea.Cancel;
             }
             return false;
