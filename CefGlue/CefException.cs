@@ -8,7 +8,6 @@
     using System.Security.Permissions;
     using System.Text;
 
-    // TODO: rename to CefException
     public class CefException : Exception
     {
         public CefException() : base() { }

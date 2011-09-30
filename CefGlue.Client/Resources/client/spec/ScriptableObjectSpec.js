@@ -2,7 +2,8 @@ describe("ScriptableObject", function () {
     var so;
 
     beforeEach(function () {
-        // TODO: must be cefGlue.scriptableObject.tests.jsBinding
+        // TODO: must be cefGlue.tests.scriptableObject.jsBinding
+        // TODO: same but cefGlue.tests.scriptableObject.v8Extension
         so = testScriptableObject;
     });
 
@@ -226,6 +227,19 @@ describe("ScriptableObject", function () {
         expectFloat: [0, -0x800000, +0x7FFFFF, 1.123],
         expectNull: [undefined, null],
         throws: [true, "hello!", new Date(), [], {}, function () { } ]
+    });
+
+    describeEcho("echoObject", {
+        expect: [
+            false, true,
+            0, -0x800000, +0x7FFFFF,
+            1.123, 2.234,
+            "hello!",
+            new Date()
+            ],
+        expectNaN: [NaN],
+        expectNull: [undefined, null],
+        throws: []
     });
 
     describe("argument count mismatch", function () {

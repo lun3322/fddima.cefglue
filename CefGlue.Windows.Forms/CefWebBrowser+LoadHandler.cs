@@ -21,9 +21,10 @@
 
             protected override void OnLoadStart(CefBrowser browser, CefFrame frame)
             {
-#if DIAGNOSTICS
-                Cef.Logger.Trace(LogTarget.Default, "LoadHandler.OnLoadStart");
-#endif
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLoadHandler, "LoadHandler.OnLoadStart");
+                #endif
+
                 // FIXME: This is doesn't support popup windows. Now it changes IsLoading property even if popup loading.
                 // It can be simple solved by checking browser.IsPopup, but it is good (hide popup's events)?
                 // Also it can be solved (it is required by anyway) to create different Client to Popup window - so client can know how it must be reported.
@@ -33,9 +34,10 @@
 
             protected override void OnLoadEnd(CefBrowser browser, CefFrame frame, int httpStatusCode)
             {
-#if DIAGNOSTICS
-                Cef.Logger.Trace(LogTarget.Default, "LoadHandler.OnLoadEnd: HttpStatusCode=[{0}]", httpStatusCode);
-#endif
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLoadHandler, "LoadHandler.OnLoadEnd: HttpStatusCode=[{0}]", httpStatusCode);
+                #endif
+
                 framesLoading--;
                 if (framesLoading < 0)
                 {
@@ -46,9 +48,10 @@
 
             protected override bool OnLoadError(CefBrowser browser, CefFrame frame, CefHandlerErrorCode errorCode, string failedUrl, ref string errorText)
             {
-#if DIAGNOSTICS
-                Cef.Logger.Trace(LogTarget.Default, "LoadHandler.OnLoadError: ErrorCode=[{0}] FailedUrl=[{1}] ErrorText=[{2}]", errorCode, failedUrl, errorText);
-#endif
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLoadHandler, "LoadHandler.OnLoadError: ErrorCode=[{0}] FailedUrl=[{1}] ErrorText=[{2}]", errorCode, failedUrl, errorText);
+                #endif
+
                 framesLoading--;
                 if (framesLoading < 0)
                 {

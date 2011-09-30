@@ -122,5 +122,112 @@
         {
             LoadURL(url.ToString());
         }
+
+        // TODO: move out InvokeScript methods to ScriptableObject feature?
+
+        public object InvokeScript(string memberName, params object[] args)
+        {
+            // TODO: check CefWebBrowser.InvokeScript implementation
+            if (Cef.CurrentlyOn(CefThreadId.UI))
+            {
+                return InvokeScript(this.mainFrameV8Context, memberName, args);
+            }
+            else
+            {
+                object result = null;
+                Exception exception = null;
+                ManualResetEvent mrevent = new ManualResetEvent(false);
+                CefTask.Post(CefThreadId.UI, () =>
+                {
+                    try
+                    {
+                        result = InvokeScript(this.mainFrameV8Context, memberName, args);
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        mrevent.Set();
+                    }
+                });
+                while (!mrevent.WaitOne(50)) // TODO: do it only if we are on WinForms UI thread
+                {
+                    Application.DoEvents();
+                }
+                mrevent.Dispose();
+
+                if (exception != null) throw exception;
+                return result;
+            }
+        }
+
+        private static object InvokeScript(CefV8Context context, string memberName, params object[] args)
+        {
+            if (context == null) throw new ArgumentNullException("context");
+
+            if (!context.Enter()) throw new CefException("Failed to enter V8 context.");
+            try
+            {
+                // TODO: this list can be private list of context, 'cause we can invoke only one function at one time
+                List<CefV8Value> proxies = new List<CefV8Value>(16);
+
+                // javascript 'this' object
+                CefV8Value obj = null;
+
+                CefV8Value target = context.GetGlobal();
+                proxies.Add(target);
+                if (!memberName.Contains('.'))
+                {
+                    obj = target;
+                    target = obj.GetValue(memberName);
+                    proxies.Add(target);
+                }
+                else
+                {
+                    foreach (var member in memberName.Split('.'))
+                    {
+                        obj = target;
+                        target = obj.GetValue(member); // TODO: do analysis of target - if it is not an object - throw
+                        if (!target.IsObject) throw new CefException("Argument 'memberName' must be member access expression to a function. Invalid object in path.");
+                        proxies.Add(target);
+                    }
+                }
+                if (!target.IsFunction) throw new ArgumentException("Argument 'memberName' must be member access expression to a function.");
+
+                CefV8Value[] v8Args;
+
+                if (args.Length == 0) v8Args = null;
+                else
+                {
+                    v8Args = new CefV8Value[args.Length]; // TODO: InvokeScript core can be optimized by prevent recreating arrays
+                    for (var i = 0; i < args.Length; i++)
+                    {
+                        var value = CefConvert.ToV8Value(args[i]);
+                        v8Args[i] = value;
+                    }
+                }
+
+                CefV8Value v8RetVal;
+                string exception;
+                target.ExecuteFunctionWithContext(context, obj, v8Args, out v8RetVal, out exception);
+
+                // force destroing of proxies, to avoid unneccessary GC load (CLR and V8)
+                foreach (var proxy in proxies) proxy.Dispose();
+                proxies.Clear();
+
+                if (!string.IsNullOrEmpty(exception)) throw new JavaScriptException(exception);
+
+                var result = CefConvert.ToObject(v8RetVal);
+                v8RetVal.Dispose();
+                return result;
+            }
+            finally
+            {
+                if (!context.Exit()) throw new CefException("Failed to exit V8 context.");
+            }
+        }
+
     }
 }

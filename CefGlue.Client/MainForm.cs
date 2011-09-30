@@ -142,7 +142,7 @@
         {
             var isLoading = browser.IsLoading;
             progressBar.Visible = isLoading;
-            
+
             stopButton.Visible = isLoading;
             reloadButton.Visible = !isLoading;
 
@@ -266,6 +266,22 @@
             {
                 form.ShowDialog();
             }
+        }
+
+        private void invokeScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var result = browser.InvokeScript("eval", "1+2");
+            MessageBox.Show("browser.InvokeScript(\"eval\", \"1+2\") returns " + result.ToString());
+
+            var count = 10000;
+            Stopwatch sw = Stopwatch.StartNew();
+            for (var i = 0; i < count; i++)
+            {
+                result = browser.InvokeScript("eval", "1+2");
+            }
+            sw.Stop();
+
+            MessageBox.Show(string.Format("{0} calls from platform UI thread of browser.InvokeScript(\"eval\", \"1+2\") tooks {1}ms", count, sw.ElapsedMilliseconds));
         }
     }
 }

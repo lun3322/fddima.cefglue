@@ -48,6 +48,8 @@
             this.consoleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleShowOrHideMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consoleClearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.invokeScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -73,6 +75,7 @@
             this.fileMenuItem,
             this.browserMenuItem,
             this.consoleMenuItem,
+            this.testToolStripMenuItem,
             this.helpMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -207,6 +210,21 @@
             this.consoleClearMenuItem.Text = "&Clear";
             this.consoleClearMenuItem.Click += new System.EventHandler(this.consoleClearMenuItem_Click);
             // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.invokeScriptToolStripMenuItem});
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.testToolStripMenuItem.Text = "&Test";
+            // 
+            // invokeScriptToolStripMenuItem
+            // 
+            this.invokeScriptToolStripMenuItem.Name = "invokeScriptToolStripMenuItem";
+            this.invokeScriptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.invokeScriptToolStripMenuItem.Text = "&InvokeScript";
+            this.invokeScriptToolStripMenuItem.Click += new System.EventHandler(this.invokeScriptToolStripMenuItem_Click);
+            // 
             // helpMenuItem
             // 
             this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -302,7 +320,7 @@
             // addressTextBox
             // 
             this.addressTextBox.Name = "addressTextBox";
-            this.addressTextBox.Size = new System.Drawing.Size(827, 25);
+            this.addressTextBox.Size = new System.Drawing.Size(858, 25);
             this.addressTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addressTextBox_KeyPress);
             // 
             // goButton
@@ -335,7 +353,7 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(860, 17);
+            this.statusLabel.Size = new System.Drawing.Size(993, 17);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "statusLabel";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -397,6 +415,8 @@
         private System.Windows.Forms.ToolStripMenuItem browserGetFrameNamesMenuItem;
         private System.Windows.Forms.ToolStripButton homeButton;
         private System.Windows.Forms.ToolStripMenuItem browserCreateMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem invokeScriptToolStripMenuItem;
     }
 }
 

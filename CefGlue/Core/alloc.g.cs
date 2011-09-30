@@ -3,7 +3,7 @@
     using System;
     using System.Runtime.InteropServices;
 
-    unsafe partial struct cef_settings_t
+    internal unsafe partial struct cef_settings_t
     {
         private static int s_size;
 
@@ -27,7 +27,7 @@
         }
     }
 
-    unsafe partial struct cef_window_info_t
+    internal unsafe partial struct cef_window_info_t
     {
         private static int s_size;
 
@@ -50,7 +50,7 @@
         }
     }
 
-    unsafe partial struct cef_browser_settings_t
+    internal unsafe partial struct cef_browser_settings_t
     {
         private static int s_size;
 
@@ -73,7 +73,7 @@
         }
     }
 
-    unsafe partial struct cef_popup_features_t
+    internal unsafe partial struct cef_popup_features_t
     {
         private static int s_size;
 
@@ -95,7 +95,7 @@
         }
     }
 
-    unsafe partial struct cef_cookie_t
+    internal unsafe partial struct cef_cookie_t
     {
         private static int s_size;
 
@@ -118,7 +118,7 @@
         }
     }
 
-    unsafe partial struct cef_client_t
+    internal unsafe partial struct cef_client_t
     {
         private static int s_size;
 
@@ -141,7 +141,7 @@
         }
     }
 
-    unsafe partial struct cef_life_span_handler_t
+    internal unsafe partial struct cef_life_span_handler_t
     {
         private static int s_size;
 
@@ -164,7 +164,7 @@
         }
     }
 
-    unsafe partial struct cef_load_handler_t
+    internal unsafe partial struct cef_load_handler_t
     {
         private static int s_size;
 
@@ -187,7 +187,7 @@
         }
     }
 
-    unsafe partial struct cef_request_handler_t
+    internal unsafe partial struct cef_request_handler_t
     {
         private static int s_size;
 
@@ -210,7 +210,7 @@
         }
     }
 
-    unsafe partial struct cef_display_handler_t
+    internal unsafe partial struct cef_display_handler_t
     {
         private static int s_size;
 
@@ -233,7 +233,7 @@
         }
     }
 
-    unsafe partial struct cef_focus_handler_t
+    internal unsafe partial struct cef_focus_handler_t
     {
         private static int s_size;
 
@@ -256,7 +256,7 @@
         }
     }
 
-    unsafe partial struct cef_keyboard_handler_t
+    internal unsafe partial struct cef_keyboard_handler_t
     {
         private static int s_size;
 
@@ -279,7 +279,7 @@
         }
     }
 
-    unsafe partial struct cef_menu_handler_t
+    internal unsafe partial struct cef_menu_handler_t
     {
         private static int s_size;
 
@@ -302,7 +302,7 @@
         }
     }
 
-    unsafe partial struct cef_print_handler_t
+    internal unsafe partial struct cef_print_handler_t
     {
         private static int s_size;
 
@@ -325,7 +325,7 @@
         }
     }
 
-    unsafe partial struct cef_find_handler_t
+    internal unsafe partial struct cef_find_handler_t
     {
         private static int s_size;
 
@@ -348,7 +348,7 @@
         }
     }
 
-    unsafe partial struct cef_jsdialog_handler_t
+    internal unsafe partial struct cef_jsdialog_handler_t
     {
         private static int s_size;
 
@@ -371,7 +371,7 @@
         }
     }
 
-    unsafe partial struct cef_jsbinding_handler_t
+    internal unsafe partial struct cef_jsbinding_handler_t
     {
         private static int s_size;
 
@@ -394,7 +394,7 @@
         }
     }
 
-    unsafe partial struct cef_render_handler_t
+    internal unsafe partial struct cef_render_handler_t
     {
         private static int s_size;
 
@@ -417,7 +417,7 @@
         }
     }
 
-    unsafe partial struct cef_drag_handler_t
+    internal unsafe partial struct cef_drag_handler_t
     {
         private static int s_size;
 
@@ -440,7 +440,7 @@
         }
     }
 
-    unsafe partial struct cef_download_handler_t
+    internal unsafe partial struct cef_download_handler_t
     {
         private static int s_size;
 
@@ -463,7 +463,7 @@
         }
     }
 
-    unsafe partial struct cef_scheme_handler_factory_t
+    internal unsafe partial struct cef_scheme_handler_factory_t
     {
         private static int s_size;
 
@@ -486,7 +486,7 @@
         }
     }
 
-    unsafe partial struct cef_scheme_handler_t
+    internal unsafe partial struct cef_scheme_handler_t
     {
         private static int s_size;
 
@@ -509,7 +509,7 @@
         }
     }
 
-    unsafe partial struct cef_content_filter_t
+    internal unsafe partial struct cef_content_filter_t
     {
         private static int s_size;
 
@@ -532,7 +532,7 @@
         }
     }
 
-    unsafe partial struct cef_task_t
+    internal unsafe partial struct cef_task_t
     {
         private static int s_size;
 
@@ -555,7 +555,7 @@
         }
     }
 
-    unsafe partial struct cef_cookie_visitor_t
+    internal unsafe partial struct cef_cookie_visitor_t
     {
         private static int s_size;
 
@@ -578,7 +578,7 @@
         }
     }
 
-    unsafe partial struct cef_v8handler_t
+    internal unsafe partial struct cef_v8handler_t
     {
         private static int s_size;
 
@@ -601,7 +601,7 @@
         }
     }
 
-    unsafe partial struct cef_v8accessor_t
+    internal unsafe partial struct cef_v8accessor_t
     {
         private static int s_size;
 
@@ -624,7 +624,7 @@
         }
     }
 
-    unsafe partial struct cef_domvisitor_t
+    internal unsafe partial struct cef_domvisitor_t
     {
         private static int s_size;
 
@@ -647,7 +647,7 @@
         }
     }
 
-    unsafe partial struct cef_domevent_listener_t
+    internal unsafe partial struct cef_domevent_listener_t
     {
         private static int s_size;
 
@@ -670,7 +670,7 @@
         }
     }
 
-    unsafe partial struct cef_read_handler_t
+    internal unsafe partial struct cef_read_handler_t
     {
         private static int s_size;
 
@@ -693,7 +693,7 @@
         }
     }
 
-    unsafe partial struct cef_write_handler_t
+    internal unsafe partial struct cef_write_handler_t
     {
         private static int s_size;
 
@@ -716,7 +716,7 @@
         }
     }
 
-    unsafe partial struct cef_web_urlrequest_client_t
+    internal unsafe partial struct cef_web_urlrequest_client_t
     {
         private static int s_size;
 
@@ -739,7 +739,7 @@
         }
     }
 
-    unsafe partial struct cefglue_userdata_t
+    internal unsafe partial struct cefglue_userdata_t
     {
         private static int s_size;
 

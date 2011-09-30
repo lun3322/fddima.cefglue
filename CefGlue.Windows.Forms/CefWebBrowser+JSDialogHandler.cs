@@ -20,6 +20,7 @@
 
             protected override bool OnJSAlert(CefBrowser browser, CefFrame frame, string message)
             {
+                // TODO: this is invalid, cross-thread problem.
                 MessageBox.Show(this.control, message, "CefJSDialogHandler.OnJSAlert");
                 return true;
             }
