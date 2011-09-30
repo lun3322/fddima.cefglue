@@ -35,6 +35,8 @@
         public char? EchoNullableChar(char? value) { return value; }
         public float? EchoNullableSingle(float? value) { return value; }
 
+        public object EchoObject(object value) { return value; }
+
 
         public void ArgumentCount0() { }
         public void ArgumentCount1(int arg1) { }

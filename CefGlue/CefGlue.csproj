@@ -67,6 +67,7 @@
     <Compile Include="Base\CefStringMap.cs" />
     <Compile Include="Cef.cs" />
     <Compile Include="Cef.ScriptableObject.cs" />
+    <Compile Include="JavaScriptException.cs" />
     <Compile Include="Core\alloc.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

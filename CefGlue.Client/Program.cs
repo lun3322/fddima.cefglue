@@ -12,58 +12,12 @@
 
     static class Program
     {
-        static void test1(int count, bool log)
-        {
-            long try0;
-            long try1;
-
-            Stopwatch w = new Stopwatch();
-            double d = 0;
-
-            w.Start();
-            for (int i = 0; i < count; i++)
-            {
-                try
-                {
-                    d = Math.Sin(1);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-            }
-            w.Stop();
-            try1 = w.ElapsedMilliseconds;
-
-            w.Reset();
-            w.Start();
-            for (int i = 0; i < count; i++)
-            {
-                if (i < count + 1)
-                {
-                    d = Math.Sin(1);
-                }
-                else
-                {
-                    Console.WriteLine("helllo!");
-                }
-            }
-            w.Stop();
-            try0 = w.ElapsedMilliseconds;
-
-            if (log) MessageBox.Show(string.Format("With Try/Catch: {0}\nWithout Try/Catch: {1}\n", try1, try0));
-        }
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main(string[] args)
         {
-            // test1(1000, false);
-            // test1(100000000, true);
-            // return;
-
             var options = Options.Parse(args);
             if (options.Help)
             {
@@ -89,7 +43,9 @@
 
             #if DIAGNOSTICS
             Cef.Logger.SetAllTargets(false);
-            Cef.Logger.SetTarget(Diagnostics.LogTarget.ScriptableObject, true);
+            // Cef.Logger.SetTarget(Diagnostics.LogTarget.ScriptableObject, true);
+            Cef.Logger.SetTarget(Diagnostics.LogTarget.CefWebBrowser, true);
+            Cef.Logger.SetTarget(Diagnostics.LogTarget.Default, true);
             #endif
 
             var version = Application.ProductVersion; // TODO: make Cef.Version property
@@ -168,6 +124,11 @@ if (!cefGlue.client) {
         get privateWorkingSet() {
             native function get_PrivateWorkingSet();
             return get_PrivateWorkingSet();
+        },
+
+        log: function(message) {
+            native function Log();
+            return Log.apply(this, arguments);
         }
     };
 };

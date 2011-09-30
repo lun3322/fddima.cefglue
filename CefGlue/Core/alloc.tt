@@ -78,7 +78,7 @@ namespace CefGlue.Core
     foreach(var def in structDefs)
     {
 #>
-    unsafe partial struct <#=def.Name#>
+    internal unsafe partial struct <#=def.Name#>
     {
         private static int s_size;
 

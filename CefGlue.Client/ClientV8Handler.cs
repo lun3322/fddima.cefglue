@@ -7,13 +7,25 @@
     using System.Globalization;
     using System.Diagnostics;
 
+#if DIAGNOSTICS
+    using CefGlue.Diagnostics;
+#endif
+
     internal class ClientV8Handler : CefV8Handler
     {
         protected override bool Execute(string name, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
         {
             try
             {
-                if (name == "ReturnVoid")
+                if (name == "Log")
+                {
+                    var message = arguments[0].GetStringValue();
+                    #if DIAGNOSTICS
+                    Cef.Logger.Info(LogTarget.Default, message);
+                    #endif
+                    returnValue = null;
+                }
+                else if (name == "ReturnVoid")
                 {
                     returnValue = null;
                 }

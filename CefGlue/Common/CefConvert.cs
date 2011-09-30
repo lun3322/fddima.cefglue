@@ -950,7 +950,118 @@
 
         #endregion
 
-        // TODO: V8.* -> System.Object  &&  System.Object -> V8.*
+        #region Object
+
+        [ChangeType]
+        public static object ToObject(CefV8Value value)
+        {
+            return ToObject(value.NativePointer);
+        }
+
+        [ChangeType]
+        internal static object ToObject(cef_v8value_t* value)
+        {
+            // TODO: CefConvert.ToObject - do test order from usage
+            if (cef_v8value_t.invoke_is_bool(value) != 0)
+            {
+                return cef_v8value_t.invoke_get_bool_value(value) != 0;
+            }
+            else if (cef_v8value_t.invoke_is_int(value) != 0)
+            {
+                return cef_v8value_t.invoke_get_int_value(value);
+            }
+            else if (cef_v8value_t.invoke_is_string(value) != 0)
+            {
+                var nResult = cef_v8value_t.invoke_get_string_value(value);
+                return nResult.GetStringAndFree();
+            }
+            else if (cef_v8value_t.invoke_is_null(value) != 0 || cef_v8value_t.invoke_is_undefined(value) != 0)
+            {
+                return null;
+            }
+            else if (cef_v8value_t.invoke_is_double(value) != 0)
+            {
+                return cef_v8value_t.invoke_get_double_value(value);
+            }
+            else if (cef_v8value_t.invoke_is_date(value) != 0)
+            {
+                var nResult = cef_v8value_t.invoke_get_date_value(value);
+                return nResult.ToDateTime();
+            }
+            else throw new InvalidCastException();
+        }
+
+        [ChangeType]
+        public static CefV8Value ToV8Value(object value)
+        {
+            return CefV8Value.From(ToNativeV8Value(value));
+        }
+
+        [ChangeType]
+        internal static cef_v8value_t* ToNativeV8Value(object value)
+        {
+            if (value == null) return libcef.v8value_create_null();
+
+            switch (Type.GetTypeCode(value.GetType()))
+            {
+                case TypeCode.Boolean:
+                    return ToNativeV8Value((bool)value);
+
+                case TypeCode.Char:
+                    return ToNativeV8Value((char)value);
+
+                case TypeCode.SByte:
+                    return ToNativeV8Value((sbyte)value);
+
+                case TypeCode.Byte:
+                    return ToNativeV8Value((byte)value);
+
+                case TypeCode.Int16:
+                    return ToNativeV8Value((short)value);
+
+                case TypeCode.UInt16:
+                    return ToNativeV8Value((ushort)value);
+
+                case TypeCode.Int32:
+                    return ToNativeV8Value((int)value);
+
+                case TypeCode.UInt32:
+                    // TODO: CefConvert UInt32 support
+                    throw new NotImplementedException(string.Format("Can't convert '{0}' to V8 value.", value.GetType()));
+
+                case TypeCode.Int64:
+                case TypeCode.UInt64:
+                    throw new NotSupportedException();
+
+                case TypeCode.Single:
+                    return ToNativeV8Value((float)value);
+
+                case TypeCode.Double:
+                    return ToNativeV8Value((double)value);
+
+                case TypeCode.DateTime:
+                    return ToNativeV8Value((DateTime)value);
+
+                case TypeCode.String:
+                    return ToNativeV8Value((string)value);
+
+                case TypeCode.Decimal:
+                    // TODO: CefConvert Decimal support
+                    throw new NotImplementedException(string.Format("Can't convert '{0}' to V8 value.", value.GetType()));
+
+                case TypeCode.Object:
+                    // TODO: CefConvert Object support
+                    throw new NotImplementedException(string.Format("Can't convert '{0}' to V8 value.", value.GetType()));
+
+                // case TypeCode.Empty:
+                // case TypeCode.DBNull:
+                default:
+                    throw new InvalidOperationException(string.Format("Can't convert '{0}' to V8 value.", value.GetType()));
+            }
+
+        }
+
+        #endregion
 
         public static MethodInfo GetChangeTypeMethod(Type from, Type to)
         {

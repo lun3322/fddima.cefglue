@@ -16,6 +16,7 @@
     [ToolboxBitmap(typeof(CefWebBrowser))]
     public partial class CefWebBrowser : Control
     {
+        // TODO: move most of this fields to BrowserCore/BrowserContext
         private SynchronizationContext synchronizationContext;
 
         private CefBrowserSettings settings;
@@ -24,6 +25,8 @@
 
         private CefBrowser browser;
         private IntPtr browserWindowHandle;
+
+        private CefV8Context mainFrameV8Context;
 
         public CefWebBrowser()
             : this(new CefBrowserSettings())
@@ -88,6 +91,7 @@
             if (this.browser != null) { this.browser.Dispose(); this.browser = null; }
             this.client = null;
             // if (this.client != null) { this.client.Dispose(); this.client = null; }
+            if (this.mainFrameV8Context != null) { this.mainFrameV8Context.Dispose(); this.mainFrameV8Context = null; }
         }
 
 

@@ -32,7 +32,7 @@
                 //var printHandler = new CefPrintHandler();
                 //var findHandler = new CefFindHandler();
                 this.jsDialogHandler = new JSDialogHandler(control);
-                this.jsBindingHandler = new JSBindingHandler();
+                this.jsBindingHandler = new JSBindingHandler(control);
                 //var renderHandler = new CefRenderHandler();
                 this.requestHandler = new RequestHandler(control);
             }
