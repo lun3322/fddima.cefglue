@@ -492,7 +492,7 @@ namespace CefGlue
             cef_string_t n_exception;
             bool result;
 
-            fixed (cef_v8value_t** n_arguments_ptr = &n_arguments[0])
+            fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
             {
                 result = cef_v8value_t.invoke_execute_function(
                     this.ptr,
@@ -522,7 +522,7 @@ namespace CefGlue
             cef_string_t n_exception;
             bool result;
 
-            fixed (cef_v8value_t** n_arguments_ptr = &n_arguments[0])
+            fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
             {
                 result = cef_v8value_t.invoke_execute_function_with_context(
                     this.ptr,
