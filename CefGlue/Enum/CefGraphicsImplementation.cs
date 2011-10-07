@@ -1,6 +1,7 @@
-﻿namespace CefGlue.Core
+﻿namespace CefGlue
 {
     using System;
+    using Core;
 
     public enum CefGraphicsImplementation
     {

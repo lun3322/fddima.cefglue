@@ -1,16 +1,13 @@
-﻿namespace CefGlue.Core
+﻿namespace CefGlue
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using Core;
 
     /// <summary>
-    /// "Verb" of a drag-and-drop operation as negotiated between the source and
-    /// destination. These constants match their equivalents in WebCore's
-    /// DragActions.h and should not be renumbered.
+    /// "Verb" of a drag-and-drop operation as negotiated between the source and destination.
+    /// These constants match their equivalents in WebCore's DragActions.h and should not be renumbered.
     /// </summary>
-    [Flags]
+    [Flags, CLSCompliant(false)]
     public enum CefDragOperations : uint
     {
         None = cef_drag_operations_mask_t.DRAG_OPERATION_NONE,
