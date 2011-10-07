@@ -30,6 +30,7 @@ namespace CefGlue
         /// Return false for default drag handling behavior 
         /// or true to cancel the drag event.
         /// </summary>
+        [CLSCompliant(false)]
         protected virtual bool OnDragStart(CefBrowser browser, CefDragData dragData, CefDragOperations mask)
         {
             return false;
@@ -61,6 +62,7 @@ namespace CefGlue
         /// Return false for default drag handling behavior
         /// or true to cancel the drag event.
         /// </summary>
+        [CLSCompliant(false)]
         protected virtual bool OnDragEnter(CefBrowser browser, CefDragData dragData, CefDragOperations mask)
         {
             return false;

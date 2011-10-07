@@ -88,6 +88,7 @@ namespace CefGlue
         /// <summary>
         /// Notifies the client of the upload progress.
         /// </summary>
+        [CLSCompliant(false)]
         protected virtual void OnProgress(CefWebUrlRequest requester, ulong bytesSent, ulong totalBytesToBeSent)
         {
         }
