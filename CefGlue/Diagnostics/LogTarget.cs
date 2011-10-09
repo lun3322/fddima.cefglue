@@ -42,6 +42,7 @@ namespace CefGlue.Diagnostics
         CefV8Handler,
         CefWriteHandler,
         CefDragHandler,
+        CefStorageVisitor,
 
         // Proxies
         CefBrowser,

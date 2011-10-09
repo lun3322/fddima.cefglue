@@ -67,6 +67,11 @@
     <Compile Include="Base\CefStringMap.cs" />
     <Compile Include="Cef.cs" />
     <Compile Include="Cef.ScriptableObject.cs" />
+    <Compile Include="Core\Enum\cef_storage_type_t.cs" />
+    <Compile Include="Core\Enum\cef_handler_focus_source_t.cs" />
+    <Compile Include="Enum\CefHandlerFocusSource.cs" />
+    <Compile Include="Enum\CefStorageType.cs" />
+    <Compile Include="Handler\CefStorageVisitor.Impl.cs" />
     <Compile Include="JavaScriptException.cs" />
     <Compile Include="Core\alloc.g.cs">
       <AutoGen>True</AutoGen>

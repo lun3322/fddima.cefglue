@@ -275,6 +275,14 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Clear the back/forward browsing history.
+        /// </summary>
+        public void ClearHistory()
+        {
+            cef_browser_t.invoke_clear_history(this.ptr);
+        }
+
+        /// <summary>
         /// Open developer tools in its own window.
         /// </summary>
         public void ShowDevTools()

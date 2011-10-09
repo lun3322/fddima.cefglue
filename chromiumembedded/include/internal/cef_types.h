@@ -141,6 +141,16 @@ typedef struct _cef_settings_t
   // content like WebGL, accelerated layers and 3D CSS.
   ///
   cef_graphics_implementation_t graphics_implementation;
+
+  ///
+  // Quota limit for localStorage data across all origins. Default size is 5MB.
+  ///
+  unsigned int local_storage_quota;
+
+  ///
+  // Quota limit for sessionStorage data per namespace. Default size is 5MB.
+  ///
+  unsigned int session_storage_quota;
 } cef_settings_t;
 
 ///
@@ -470,6 +480,15 @@ typedef struct _cef_cookie_t
 } cef_cookie_t;
 
 ///
+// Storage types.
+///
+enum cef_storage_type_t
+{
+  ST_LOCALSTORAGE = 0,
+  ST_SESSIONSTORAGE,
+};
+
+///
 // Mouse button types.
 ///
 enum cef_mouse_button_type_t
@@ -756,6 +775,25 @@ enum cef_weburlrequest_state_t
   WUR_STATE_DONE = 4,
   WUR_STATE_ERROR = 5,
   WUR_STATE_ABORT = 6,
+};
+
+///
+// Focus sources.
+///
+enum cef_handler_focus_source_t
+{
+  ///
+  // The source is explicit navigation via the API (LoadURL(), etc).
+  ///
+  FOCUS_SOURCE_NAVIGATION = 0,
+  ///
+  // The source is a system-generated focus event.
+  ///
+  FOCUS_SOURCE_SYSTEM,
+  ///
+  // The source is a child widget of the browser window requesting focus.
+  ///
+  FOCUS_SOURCE_WIDGET,
 };
 
 ///

@@ -43,6 +43,7 @@ Dictionary<string, ProxyDef> CreateProxySchema()
     def.AddMethod("stop_finding");
     def.AddMethod("get_zoom_level");
     def.AddMethod("set_zoom_level");
+    def.AddMethod("clear_history");
     def.AddMethod("show_dev_tools");
     def.AddMethod("close_dev_tools");
     def.AddMethod("is_window_rendering_disabled");

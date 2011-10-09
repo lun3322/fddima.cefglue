@@ -10,6 +10,7 @@
 #include <stddef.h>         // For size_t
 #include <string.h>         // for memcpy
 
+// Include path modified for CEF Binary Distribution.
 #include "port.h"    // Types that only need exist on certain systems
 
 #ifndef COMPILER_MSVC

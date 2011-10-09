@@ -7,6 +7,7 @@
 #pragma once
 
 #include <stdarg.h>
+// Include path modified for CEF Binary Distribution.
 #include "build_config.h"
 
 #ifdef COMPILER_MSVC

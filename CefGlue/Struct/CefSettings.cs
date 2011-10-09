@@ -25,6 +25,8 @@
         private string _logFile;
         private CefLogSeverity _logSeverity;
         private CefGraphicsImplementation graphicsImplementation;
+        private uint localStorageQuota;
+        private uint sessionStorageQuota;
 
         public CefSettings()
         {
@@ -161,6 +163,36 @@
             }
         }
 
+
+        /// <summary>
+        /// Quota limit for localStorage data across all origins. Default size is 5MB.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint LocalStorageQuota
+        {
+            get { return this.localStorageQuota; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.localStorageQuota = value;
+            }
+        }
+
+        /// <summary>
+        /// Quota limit for sessionStorage data per namespace. Default size is 5MB.
+        /// </summary>
+        [CLSCompliant(false)]
+        public uint SessionStorageQuota
+        {
+            get { return this.sessionStorageQuota; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.sessionStorageQuota = value;
+            }
+        }
+
+
         internal bool IsReadOnly
         {
             get { return _isReadOnly; }
@@ -186,6 +218,8 @@
             cef_string_t.Copy(this.LogFile, &ptr->log_file);
             ptr->log_severity = (cef_log_severity_t)this.LogSeverity;
             ptr->graphics_implementation = (cef_graphics_implementation_t)this.GraphicsImplementation;
+            ptr->local_storage_quota = this.LocalStorageQuota;
+            ptr->session_storage_quota = this.SessionStorageQuota;
 
             return ptr;
         }

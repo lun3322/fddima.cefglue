@@ -73,6 +73,7 @@ class CefRequest;
 class CefResponse;
 class CefSchemeHandler;
 class CefSchemeHandlerFactory;
+class CefStorageVisitor;
 class CefStreamReader;
 class CefStreamWriter;
 class CefTask;
@@ -389,6 +390,40 @@ bool CefSetCookie(const CefString& url, const CefCookie& cookie);
 bool CefDeleteCookies(const CefString& url, const CefString& cookie_name);
 
 
+typedef cef_storage_type_t CefStorageType;
+
+///
+// Visit storage of the specified type. If |origin| is non-empty only data
+// matching that origin will be visited. If |key| is non-empty only data
+// matching that key will be visited. Otherwise, all data for the storage
+// type will be visited. Returns false if the storage cannot be accessed.
+// Origin should be of the form scheme://domain.
+///
+/*--cef()--*/
+bool CefVisitStorage(CefStorageType type, const CefString& origin,
+                     const CefString& key,
+                     CefRefPtr<CefStorageVisitor> visitor);
+
+///
+// Sets storage of the specified type, origin, key and value. Returns false if
+// storage cannot be accessed. This method must be called on the UI thread.
+///
+/*--cef()--*/
+bool CefSetStorage(CefStorageType type, const CefString& origin,
+                   const CefString& key, const CefString& value);
+
+///
+// Deletes all storage of the specified type. If |origin| is non-empty only data
+// matching that origin will be cleared. If |key| is non-empty only data
+// matching that key will be cleared. Otherwise, all data for the storage type
+// will be cleared. Returns false if storage cannot be accessed. This method
+// must be called on the UI thread.
+///
+/*--cef()--*/
+bool CefDeleteStorage(CefStorageType type, const CefString& origin,
+                      const CefString& key);
+
+
 ///
 // Interface defining the reference count implementation methods. All framework
 // classes must extend the CefBase class.
@@ -525,6 +560,28 @@ public:
   /*--cef()--*/
   virtual bool Visit(const CefCookie& cookie, int count, int total,
                      bool& deleteCookie) =0;
+};
+
+
+///
+// Interface to implement for visiting storage. The methods of this class will
+// always be called on the UI thread.
+///
+/*--cef(source=client)--*/
+class CefStorageVisitor : public virtual CefBase
+{
+public:
+  ///
+  // Method that will be called once for each key/value data pair in storage.
+  // |count| is the 0-based index for the current pair. |total| is the total
+  // number of pairs. Set |deleteData| to true to delete the pair currently
+  // being visited. Return false to stop visiting pairs. This method may never
+  // be called if no data is found.
+  ///
+  /*--cef()--*/
+  virtual bool Visit(CefStorageType type, const CefString& origin,
+                     const CefString& key, const CefString& value, int count,
+                     int total, bool& deleteData) =0;
 };
 
 
@@ -703,6 +760,12 @@ public:
   ///
   /*--cef()--*/
   virtual void SetZoomLevel(double zoomLevel) =0;
+
+  ///
+  // Clear the back/forward browsing history.
+  ///
+  /*--cef()--*/
+  virtual void ClearHistory() =0;
 
   ///
   // Open developer tools in its own window.
@@ -1248,6 +1311,8 @@ public:
 class CefFocusHandler : public virtual CefBase
 {
 public:
+  typedef cef_handler_focus_source_t FocusSource;
+
   ///
   // Called when the browser component is about to loose focus. For instance, if
   // focus was on the last HTML element and the user pressed the TAB key. |next|
@@ -1259,14 +1324,13 @@ public:
                            bool next) {}
 
   ///
-  // Called when the browser component is requesting focus. |isWidget| will be
-  // true if the focus is requested for a child widget of the browser window.
-  // Return false to allow the focus to be set or true to cancel setting the
-  // focus.
+  // Called when the browser component is requesting focus. |source| indicates
+  // where the focus request is originating from. Return false to allow the
+  // focus to be set or true to cancel setting the focus.
   ///
   /*--cef()--*/
   virtual bool OnSetFocus(CefRefPtr<CefBrowser> browser,
-                          bool isWidget) { return false; }
+                          FocusSource source) { return false; }
 };
 
 
@@ -2512,10 +2576,13 @@ class CefSchemeHandlerFactory : public virtual CefBase
 {
 public:
   ///
-  // Return a new scheme handler instance to handle the request.
+  // Return a new scheme handler instance to handle the request. |browser| will
+  // be the browser window that initiated the request. If the request was
+  // initiated using the CefWebURLRequest API |browser| will be NULL.
   ///
   /*--cef()--*/
-  virtual CefRefPtr<CefSchemeHandler> Create(const CefString& scheme_name,
+  virtual CefRefPtr<CefSchemeHandler> Create(CefRefPtr<CefBrowser> browser,
+                                             const CefString& scheme_name,
                                              CefRefPtr<CefRequest> request) =0;
 };
 

@@ -32,6 +32,15 @@ Dictionary<string, HandlerDef> CreateHandlerSchema()
     def.AddCallback("visit");
     schema.Add(def.ClassName, def);
 
+    // CefStorageVisitor
+    def = new HandlerDef()
+    {
+        ClassName = "CefStorageVisitor",
+        StructName = "cef_storage_visitor_t",
+    };
+    def.AddCallback("visit");
+    schema.Add(def.ClassName, def);
+
     // CefLifeSpanHandler
     def = new HandlerDef()
     {

@@ -78,6 +78,16 @@
         ///
         public cef_graphics_implementation_t graphics_implementation;
 
+        ///
+        // Quota limit for localStorage data across all origins. Default size is 5MB.
+        ///
+        public uint local_storage_quota;
+        
+        ///
+        // Quota limit for sessionStorage data per namespace. Default size is 5MB.
+        ///
+        public uint session_storage_quota;
+
 
         public static void Clear(cef_settings_t* self)
         {

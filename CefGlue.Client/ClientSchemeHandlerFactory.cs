@@ -8,7 +8,7 @@
 
     internal sealed class ClientSchemeHandlerFactory : CefSchemeHandlerFactory
     {
-        protected override CefSchemeHandler Create(string schemeName, CefRequest request)
+        protected override CefSchemeHandler Create(CefBrowser browser, string schemeName, CefRequest request)
         {
             return new ClientSchemeHandler();
         }

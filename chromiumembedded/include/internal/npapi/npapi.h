@@ -52,6 +52,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 #else
+// Include path modified for CEF Binary Distribution.
 #include "basictypes.h"
 #endif  /* __native_client__ */
 
