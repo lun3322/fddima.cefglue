@@ -15,6 +15,15 @@ Latest [on-line documentation](http://cefglue.dmitriid.com/doc/) available.
 CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
 
 
+### Version 0.4.6-cef-r306
+
+Download [CefGlue-0.4.6-cef-r306.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.6-cef-r306.zip), [cef_binary_r306_windows.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r306_windows.zip)
+
+- Compatible with CEF R306.
+- Executing JS scripts via IvokeScript method.
+- Various CefWebBrowser improvements (IsLoading/IsLoadingChanged, KeyEvent, BeforeBrowse events). 
+
+
 ### Version 0.4.5-cef-r293
 
 Download [CefGlue-0.4.5-cef-r293.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.5-cef-r293.zip), [cef_binary_r293_VS2008-VS2010.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r293_VS2008-VS2010.zip)
