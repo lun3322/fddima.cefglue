@@ -47,6 +47,8 @@
 
         new StructDef("cef_web_urlrequest_client_t", hasBase:true),
 
+        new StructDef("cef_storage_visitor_t",   hasBase:true),
+
         new StructDef("cefglue_userdata_t",      hasBase:true),
     };
 

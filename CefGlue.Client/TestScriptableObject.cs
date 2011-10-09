@@ -6,6 +6,7 @@
     using System.Text;
     using CefGlue.ScriptableObject;
 
+    [CLSCompliant(false)]
     public sealed class TestScriptableObject
     {
         public void EchoVoid() { }

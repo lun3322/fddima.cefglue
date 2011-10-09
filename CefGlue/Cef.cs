@@ -512,6 +512,65 @@
             }
         }
 
+        /// <summary>
+        /// Visit storage of the specified type.
+        /// If |origin| is non-empty only data matching that origin will be visited.
+        /// If |key| is non-empty only data matching that key will be visited.
+        /// Otherwise, all data for the storage type will be visited.
+        /// Returns false if the storage cannot be accessed.
+        /// Origin should be of the form scheme://domain.
+        /// </summary>
+        public static bool VisitStorage(CefStorageType type, string origin, string key, CefStorageVisitor visitor)
+        {
+            fixed (char* origin_str = origin)
+            fixed (char* key_str = key)
+            {
+                var nOrigin = new cef_string_t(origin_str, origin != null ? origin.Length : 0);
+                var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return libcef.visit_storage((cef_storage_type_t)type, &nOrigin, &nKey, visitor.GetNativePointerAndAddRef()) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Sets storage of the specified type, origin, key and value.
+        /// Returns false if storage cannot be accessed.
+        /// This method must be called on the UI thread.
+        /// </summary>
+        public static bool SetStorage(CefStorageType type, string origin, string key, string value)
+        {
+            fixed (char* origin_str = origin)
+            fixed (char* key_str = key)
+            fixed (char* value_str = value)
+            {
+                var nOrigin = new cef_string_t(origin_str, origin != null ? origin.Length : 0);
+                var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
+                var nValue = new cef_string_t(value_str, value != null ? value.Length : 0);
+
+                return libcef.set_storage((cef_storage_type_t)type, &nOrigin, &nKey, &nValue) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Deletes all storage of the specified type.
+        /// If |origin| is non-empty only data matching that origin will be cleared.
+        /// If |key| is non-empty only data matching that key will be cleared.
+        /// Otherwise, all data for the storage type will be cleared.
+        /// Returns false if storage cannot be accessed.
+        /// This method must be called on the UI thread.
+        /// </summary>
+        public static bool DeleteStorage(CefStorageType type, string origin, string key)
+        {
+            fixed (char* origin_str = origin)
+            fixed (char* key_str = key)
+            {
+                var nOrigin = new cef_string_t(origin_str, origin != null ? origin.Length : 0);
+                var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
+
+                return libcef.delete_storage((cef_storage_type_t)type, &nOrigin, &nKey) != 0;
+            }
+        }
+
 
         private static void ThrowIfNotInitialized()
         {

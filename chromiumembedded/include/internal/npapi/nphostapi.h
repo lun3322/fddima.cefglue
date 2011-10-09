@@ -5,10 +5,15 @@
 #ifndef _NPHOSTAPI_H_
 #define _NPHOSTAPI_H_
 
+// Include path modified for CEF Binary Distribution.
 #include "port.h"
+// Include path modified for CEF Binary Distribution.
 #include "npapi.h"
+// Include path modified for CEF Binary Distribution.
 #include "npapi_extensions.h"
+// Include path modified for CEF Binary Distribution.
 #include "npfunctions.h"
+// Include path modified for CEF Binary Distribution.
 #include "npruntime.h"
 
 #ifdef __cplusplus

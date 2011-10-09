@@ -32,29 +32,26 @@ namespace CefGlue
 
 
         /// <summary>
-        /// Called when the browser component is requesting focus. |isWidget|
-        /// will be true if the focus is requested for a child widget of the
-        /// browser window. Return false to allow the focus to be set or true to
-        /// cancel setting the focus.
+        /// Called when the browser component is requesting focus. |source| indicates
+        /// where the focus request is originating from. Return false to allow the
+        /// focus to be set or true to cancel setting the focus.
         /// </summary>
-        private int on_set_focus(cef_focus_handler_t* self, cef_browser_t* browser, int isWidget)
+        private int on_set_focus(cef_focus_handler_t* self, cef_browser_t* browser, cef_handler_focus_source_t source)
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.From(browser);
-            var m_isWidget = isWidget != 0;
-
-            var handled = this.OnSetFocus(m_browser, m_isWidget);
+            var mBrowser = CefBrowser.From(browser);
+            var handled = this.OnSetFocus(mBrowser, (CefHandlerFocusSource)source);
 
             return handled ? 1 : 0;
         }
 
         /// <summary>
         /// Called when the browser component is requesting focus.
-        /// |isWidget| will be true if the focus is requested for a child widget of the browser window.
+        /// |source| indicates where the focus request is originating from.
         /// Return false to allow the focus to be set or true to cancel setting the focus.
         /// </summary>
-        protected virtual bool OnSetFocus(CefBrowser browser, bool isWidget)
+        protected virtual bool OnSetFocus(CefBrowser browser, CefHandlerFocusSource source)
         {
             return false;
         }

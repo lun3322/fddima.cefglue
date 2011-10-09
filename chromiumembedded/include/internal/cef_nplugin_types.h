@@ -33,7 +33,9 @@
 
 #include "cef_export.h"
 #include "cef_string.h"
+// Include path modified for CEF Binary Distribution.
 #include "npapi/npapi.h"
+// Include path modified for CEF Binary Distribution.
 #include "npapi/nphostapi.h"
 
 #ifdef __cplusplus

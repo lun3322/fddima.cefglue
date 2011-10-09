@@ -153,7 +153,12 @@
                     var result = Process.GetCurrentProcess().PrivateMemorySize64 / (1024.0 * 1024.0);
                     returnValue = CefV8Value.CreateDouble(result);
                 }
-                else returnValue = null;
+                else
+                {
+                    returnValue = null;
+                    exception = null;
+                    return false;
+                }
 
                 exception = null;
                 return true;
@@ -164,10 +169,6 @@
                 exception = ex.ToString();
                 return true;
             }
-
-            returnValue = null;
-            exception = null;
-            return false;
         }
 
         private string Dump(CefV8Value[] arguments)
