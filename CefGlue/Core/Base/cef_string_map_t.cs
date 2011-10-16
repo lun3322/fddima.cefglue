@@ -40,7 +40,7 @@
 
                 var result = libcef.string_map_find(this, &n_key, &n_value) != 0;
 
-                value = result ? n_value.ToString() : null;
+                value = result ? cef_string_t.ToString(&n_value) : null;
 
                 cef_string_t.Clear(&n_value);
                 return result;
@@ -51,7 +51,7 @@
         {
             cef_string_t n_key = new cef_string_t();
             var result = libcef.string_map_key(this, index, &n_key) != 0;
-            key = result ? n_key.ToString() : null;
+            key = result ? cef_string_t.ToString(&n_key) : null;
             cef_string_t.Clear(&n_key);
             return result;
         }
@@ -60,7 +60,7 @@
         {
             cef_string_t n_value = new cef_string_t();
             var result = libcef.string_map_value(this, index, &n_value) != 0;
-            value = result ? n_value.ToString() : null;
+            value = result ? cef_string_t.ToString(&n_value) : null;
             cef_string_t.Clear(&n_value);
             return result;
         }
