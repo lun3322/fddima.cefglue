@@ -15,6 +15,14 @@ Latest [on-line documentation](http://cefglue.dmitriid.com/doc/) available.
 CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
 
 
+### Version 0.4.7-cef-r306
+
+Download [CefGlue-0.4.7-cef-r306.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.7-cef-r306.zip), [cef_binary_r306_windows.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r306_windows.zip)
+
+- Ciritcal fix for unpredictable crashes on multiprocessor platforms.
+- Fix CefStringMap implementation.
+
+
 ### Version 0.4.6-cef-r306
 
 Download [CefGlue-0.4.6-cef-r306.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.6-cef-r306.zip), [cef_binary_r306_windows.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r306_windows.zip)
