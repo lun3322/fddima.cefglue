@@ -68,6 +68,7 @@ void GenerateHandlerClass(HandlerDef def)
         private int refct;
         private <#=def.StructName#>* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate <#=def.GetBackStoreName("add_ref")#>;
         private cef_base_t.release_delegate <#=def.GetBackStoreName("release")#>;
@@ -78,6 +79,7 @@ void GenerateHandlerClass(HandlerDef def)
 
         protected <#=def.ClassName#>()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = <#=def.StructName#>.Alloc();
 #if DIAGNOSTICS
@@ -154,14 +156,6 @@ void GenerateHandlerClass(HandlerDef def)
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -169,15 +163,18 @@ void GenerateHandlerClass(HandlerDef def)
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -187,15 +184,18 @@ void GenerateHandlerClass(HandlerDef def)
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.<#=def.ClassName#>, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
