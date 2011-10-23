@@ -23,6 +23,7 @@ namespace CefGlue
         private int refct;
         private cef_task_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -31,6 +32,7 @@ namespace CefGlue
 
         protected CefTask()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_task_t.Alloc();
 #if DIAGNOSTICS
@@ -86,14 +88,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -101,15 +95,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -119,15 +116,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefTask, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -197,6 +197,7 @@ namespace CefGlue
         private int refct;
         private cef_cookie_visitor_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -205,6 +206,7 @@ namespace CefGlue
 
         protected CefCookieVisitor()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_cookie_visitor_t.Alloc();
 #if DIAGNOSTICS
@@ -260,14 +262,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -275,15 +269,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -293,15 +290,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefCookieVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -371,6 +371,7 @@ namespace CefGlue
         private int refct;
         private cef_storage_visitor_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -379,6 +380,7 @@ namespace CefGlue
 
         protected CefStorageVisitor()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_storage_visitor_t.Alloc();
 #if DIAGNOSTICS
@@ -434,14 +436,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -449,15 +443,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefStorageVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefStorageVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -467,15 +464,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefStorageVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefStorageVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -545,6 +545,7 @@ namespace CefGlue
         private int refct;
         private cef_life_span_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -557,6 +558,7 @@ namespace CefGlue
 
         protected CefLifeSpanHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_life_span_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -624,14 +626,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -639,15 +633,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -657,15 +654,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -735,6 +735,7 @@ namespace CefGlue
         private int refct;
         private cef_load_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -745,6 +746,7 @@ namespace CefGlue
 
         protected CefLoadHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_load_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -806,14 +808,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -821,15 +815,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -839,15 +836,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefLoadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -917,6 +917,7 @@ namespace CefGlue
         private int refct;
         private cef_request_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -930,6 +931,7 @@ namespace CefGlue
 
         protected CefRequestHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_request_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -1000,14 +1002,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -1015,15 +1009,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1033,15 +1030,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefRequestHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1111,6 +1111,7 @@ namespace CefGlue
         private int refct;
         private cef_display_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -1124,6 +1125,7 @@ namespace CefGlue
 
         protected CefDisplayHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_display_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -1194,14 +1196,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -1209,15 +1203,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1227,15 +1224,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDisplayHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1305,6 +1305,7 @@ namespace CefGlue
         private int refct;
         private cef_focus_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -1314,6 +1315,7 @@ namespace CefGlue
 
         protected CefFocusHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_focus_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -1372,14 +1374,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -1387,15 +1381,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1405,15 +1402,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefFocusHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1483,6 +1483,7 @@ namespace CefGlue
         private int refct;
         private cef_keyboard_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -1491,6 +1492,7 @@ namespace CefGlue
 
         protected CefKeyboardHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_keyboard_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -1546,14 +1548,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -1561,15 +1555,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1579,15 +1576,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefKeyboardHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1657,6 +1657,7 @@ namespace CefGlue
         private int refct;
         private cef_menu_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -1667,6 +1668,7 @@ namespace CefGlue
 
         protected CefMenuHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_menu_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -1728,14 +1730,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -1743,15 +1737,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1761,15 +1758,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefMenuHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1839,6 +1839,7 @@ namespace CefGlue
         private int refct;
         private cef_print_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -1848,6 +1849,7 @@ namespace CefGlue
 
         protected CefPrintHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_print_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -1906,14 +1908,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -1921,15 +1915,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -1939,15 +1936,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefPrintHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2017,6 +2017,7 @@ namespace CefGlue
         private int refct;
         private cef_find_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -2025,6 +2026,7 @@ namespace CefGlue
 
         protected CefFindHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_find_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -2080,14 +2082,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -2095,15 +2089,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2113,15 +2110,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefFindHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2191,6 +2191,7 @@ namespace CefGlue
         private int refct;
         private cef_jsdialog_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -2201,6 +2202,7 @@ namespace CefGlue
 
         protected CefJSDialogHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_jsdialog_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -2262,14 +2264,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -2277,15 +2271,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2295,15 +2292,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefJSDialogHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2373,6 +2373,7 @@ namespace CefGlue
         private int refct;
         private cef_jsbinding_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -2381,6 +2382,7 @@ namespace CefGlue
 
         protected CefJSBindingHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_jsbinding_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -2436,14 +2438,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -2451,15 +2445,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2469,15 +2466,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefJSBindingHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2547,6 +2547,7 @@ namespace CefGlue
         private int refct;
         private cef_render_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -2561,6 +2562,7 @@ namespace CefGlue
 
         protected CefRenderHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_render_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -2634,14 +2636,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -2649,15 +2643,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2667,15 +2664,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefRenderHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2745,6 +2745,7 @@ namespace CefGlue
         private int refct;
         private cef_drag_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -2754,6 +2755,7 @@ namespace CefGlue
 
         protected CefDragHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_drag_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -2812,14 +2814,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -2827,15 +2821,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDragHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDragHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2845,15 +2842,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDragHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDragHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -2949,6 +2949,7 @@ namespace CefGlue
         private int refct;
         private cef_client_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -2969,6 +2970,7 @@ namespace CefGlue
 
         protected CefClient()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_client_t.Alloc();
 #if DIAGNOSTICS
@@ -3072,14 +3074,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -3087,15 +3081,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3105,15 +3102,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefClient, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3183,6 +3183,7 @@ namespace CefGlue
         private int refct;
         private cef_read_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -3194,6 +3195,7 @@ namespace CefGlue
 
         protected CefReadHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_read_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -3258,14 +3260,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -3273,15 +3267,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3291,15 +3288,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefReadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3369,6 +3369,7 @@ namespace CefGlue
         private int refct;
         private cef_write_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -3380,6 +3381,7 @@ namespace CefGlue
 
         protected CefWriteHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_write_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -3444,14 +3446,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -3459,15 +3453,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3477,15 +3474,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefWriteHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3581,6 +3581,7 @@ namespace CefGlue
         private int refct;
         private cef_v8handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -3589,6 +3590,7 @@ namespace CefGlue
 
         protected CefV8Handler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_v8handler_t.Alloc();
 #if DIAGNOSTICS
@@ -3644,14 +3646,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -3659,15 +3653,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3677,15 +3674,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefV8Handler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3755,6 +3755,7 @@ namespace CefGlue
         private int refct;
         private cef_v8accessor_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -3764,6 +3765,7 @@ namespace CefGlue
 
         protected CefV8Accessor()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_v8accessor_t.Alloc();
 #if DIAGNOSTICS
@@ -3822,14 +3824,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -3837,15 +3831,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3855,15 +3852,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefV8Accessor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -3933,6 +3933,7 @@ namespace CefGlue
         private int refct;
         private cef_scheme_handler_factory_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -3941,6 +3942,7 @@ namespace CefGlue
 
         protected CefSchemeHandlerFactory()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_scheme_handler_factory_t.Alloc();
 #if DIAGNOSTICS
@@ -3996,14 +3998,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -4011,15 +4005,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4029,15 +4026,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefSchemeHandlerFactory, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4107,6 +4107,7 @@ namespace CefGlue
         private int refct;
         private cef_scheme_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -4118,6 +4119,7 @@ namespace CefGlue
 
         protected CefSchemeHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_scheme_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -4182,14 +4184,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -4197,15 +4191,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4215,15 +4212,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefSchemeHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4293,6 +4293,7 @@ namespace CefGlue
         private int refct;
         private cef_download_handler_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -4302,6 +4303,7 @@ namespace CefGlue
 
         protected CefDownloadHandler()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_download_handler_t.Alloc();
 #if DIAGNOSTICS
@@ -4360,14 +4362,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -4375,15 +4369,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4393,15 +4390,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDownloadHandler, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4471,6 +4471,7 @@ namespace CefGlue
         private int refct;
         private cef_web_urlrequest_client_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -4484,6 +4485,7 @@ namespace CefGlue
 
         protected CefWebUrlRequestClient()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_web_urlrequest_client_t.Alloc();
 #if DIAGNOSTICS
@@ -4554,14 +4556,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -4569,15 +4563,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4587,15 +4584,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefWebUrlRequestClient, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4665,6 +4665,7 @@ namespace CefGlue
         private int refct;
         private cef_domvisitor_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -4673,6 +4674,7 @@ namespace CefGlue
 
         protected CefDomVisitor()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_domvisitor_t.Alloc();
 #if DIAGNOSTICS
@@ -4728,14 +4730,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -4743,15 +4737,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4761,15 +4758,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDomVisitor, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4839,6 +4839,7 @@ namespace CefGlue
         private int refct;
         private cef_domevent_listener_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -4847,6 +4848,7 @@ namespace CefGlue
 
         protected CefDomEventListener()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_domevent_listener_t.Alloc();
 #if DIAGNOSTICS
@@ -4902,14 +4904,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -4917,15 +4911,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -4935,15 +4932,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefDomEventListener, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -5013,6 +5013,7 @@ namespace CefGlue
         private int refct;
         private cef_content_filter_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -5022,6 +5023,7 @@ namespace CefGlue
 
         protected CefContentFilter()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cef_content_filter_t.Alloc();
 #if DIAGNOSTICS
@@ -5080,14 +5082,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -5095,15 +5089,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -5113,15 +5110,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefContentFilter, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -5217,6 +5217,7 @@ namespace CefGlue
         private int refct;
         private cefglue_userdata_t* ptr;
         private bool disposed;
+        protected readonly object SyncRoot;
 
         private cef_base_t.add_ref_delegate bs_add_ref;
         private cef_base_t.release_delegate bs_release;
@@ -5224,6 +5225,7 @@ namespace CefGlue
 
         protected CefUserData()
         {
+            this.SyncRoot = new object();
             this.refct = 0;
             this.ptr = cefglue_userdata_t.Alloc();
 #if DIAGNOSTICS
@@ -5276,14 +5278,6 @@ namespace CefGlue
             }
         }
 
-        protected object SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
         /// <summary>
         /// The AddRef method increments the reference count for the object.
         /// It should be called for every new copy of a pointer to a given object.
@@ -5291,15 +5285,18 @@ namespace CefGlue
         /// </summary>
         internal int AddRef()
         {
-            var result = Interlocked.Increment(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.AddRef, "{0}", result);
-            #endif
-            if (result == 1)
+            lock (this.SyncRoot)
             {
-                pointers.Add((IntPtr)ptr, this);
+                var result = ++this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.AddRef, "{0}", result);
+                #endif
+                if (result == 1)
+                {
+                    pointers.Add((IntPtr)ptr, this);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
@@ -5309,15 +5306,18 @@ namespace CefGlue
         /// </summary>
         internal int ReleaseRef(bool disposing = true)
         {
-            var result = Interlocked.Decrement(ref this.refct);
-            #if DIAGNOSTICS
-            Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.ReleaseRef, "{0}", result);
-            #endif
-            if (result == 0)
+            lock (this.SyncRoot)
             {
-                pointers.Remove((IntPtr)ptr);
+                var result = --this.refct;
+                #if DIAGNOSTICS
+                Cef.Logger.Trace(LogTarget.CefUserData, this.ptr, LogOperation.ReleaseRef, "{0}", result);
+                #endif
+                if (result == 0)
+                {
+                    pointers.Remove((IntPtr)ptr);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>
