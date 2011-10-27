@@ -20,7 +20,7 @@
             protected override bool OnBeforeMenu(CefBrowser browser, CefHandlerMenuInfo menuInfo)
             {
 #if DIAGNOSTICS
-                Cef.Logger.Trace(LogTarget.Default, "RequestHandler.OnBeforeMenu");
+                Cef.Logger.Trace(LogTarget.Default, "MenuHandler.OnBeforeMenu");
 #endif
                 return this.control.PostBeforeMenu(menuInfo);
             }
@@ -28,7 +28,7 @@
             protected override bool OnMenuAction(CefBrowser browser, CefHandlerMenuId menuId)
             {
 #if DIAGNOSTICS
-                Cef.Logger.Trace(LogTarget.Default, "RequestHandler.OnMenuAction");
+                Cef.Logger.Trace(LogTarget.Default, "MenuHandler.OnMenuAction");
 #endif
                 return this.control.PostMenuAction(menuId);
             }
