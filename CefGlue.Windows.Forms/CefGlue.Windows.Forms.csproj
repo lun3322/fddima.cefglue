@@ -102,6 +102,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetWindowPosFlags.cs" />
     <Compile Include="WM.cs" />
+    <Compile Include="CefWebBrowser+MenuHandler.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BeforeMenuEventArgs.cs" />
+    <Compile Include="MenuActionEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CefGlue.snk">

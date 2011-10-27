@@ -23,6 +23,8 @@
         public event EventHandler<KeyEventArgs> KeyEvent;
         public event EventHandler<StatusMessageEventArgs> StatusMessage;
         public event EventHandler<ConsoleMessageEventArgs> ConsoleMessage;
+        public event EventHandler<BeforeMenuEventArgs> BeforeMenu;
+        public event EventHandler<MenuActionEventArgs> MenuAction;
         public event EventHandler<BeforeBrowseEventArgs> BeforeBrowse;
 
         protected virtual void OnIsLoadingChanged(EventArgs e)
@@ -145,6 +147,30 @@
                 KeyEventArgs ea = new KeyEventArgs(type, code, modifiers, isSystemKey);
                 handler(this, ea);
                 return ea.Handled;
+            }
+            return false;
+        }
+
+        private bool PostBeforeMenu(CefHandlerMenuInfo menuInfo)
+        {
+            var handler = BeforeMenu;
+            if (handler != null)
+            {
+                BeforeMenuEventArgs ea = new BeforeMenuEventArgs(menuInfo);
+                handler(this, ea);
+                return ea.Cancel;
+            }
+            return false;
+        }
+
+        private bool PostMenuAction(CefHandlerMenuId menuId)
+        {
+            var handler = MenuAction;
+            if (handler != null)
+            {
+                MenuActionEventArgs ea = new MenuActionEventArgs(menuId);
+                handler(this, ea);
+                return ea.Cancel;
             }
             return false;
         }
