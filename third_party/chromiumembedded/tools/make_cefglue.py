@@ -21,8 +21,8 @@ def is_handler_class(cls):
             );
 
 def make_cefglue_handlerschema(classes, cefgluedir):
-    dir = cefgluedir + '/Templates';
-    filename = 'HandlerSchema.ttinclude';
+    dir = cefgluedir;
+    filename = 'HandlerSchema.g.ttinclude';
 
     result = """<#
 //
@@ -68,7 +68,7 @@ Dictionary<string, HandlerDef> CreateHandlerSchema()
     return
 
 def make_cefglue_handlerimpl(cls, cefgluedir):
-    dir = cefgluedir + '/obj/HandlerImpl/';
+    dir = cefgluedir + '/HandlerImpl/';
     filename = cls.get_cefglue_name() + ".Impl.cs";
     result = """namespace CefGlue
 {
@@ -117,8 +117,8 @@ def make_cefglue_handlerimpl(cls, cefgluedir):
     return
 
 def make_cefglue_proxyschema(classes, cefgluedir):
-    dir = cefgluedir + '/Templates';
-    filename = 'ProxySchema.ttinclude';
+    dir = cefgluedir;
+    filename = 'ProxySchema.g.ttinclude';
 
 
     result = """<#
@@ -165,7 +165,7 @@ Dictionary<string, ProxyDef> CreateProxySchema()
     return
 
 def make_cefglue_proxyimpl(cls, cefgluedir):
-    dir = cefgluedir + '/obj/ProxyImpl/';
+    dir = cefgluedir + '/ProxyImpl/';
     filename = cls.get_cefglue_name() + ".Impl.cs";
     result = """namespace CefGlue
 {
@@ -455,8 +455,8 @@ namespace CefGlue.Core
 
 
 def write_cefglue(header, cefgluedir, backup):
-    filedir = cefgluedir + '/Core'
-    file = filedir + '/libcef.cs'
+    filedir = cefgluedir;
+    file = filedir + '/libcef.g.cs'
 
     if not os.path.isdir(filedir):
         os.makedirs(filedir);
