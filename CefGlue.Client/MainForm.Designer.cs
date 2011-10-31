@@ -50,6 +50,7 @@
             this.consoleClearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.invokeScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.waitDocumentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -64,6 +65,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.visitDOMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -213,7 +215,9 @@
             // testToolStripMenuItem
             // 
             this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.invokeScriptToolStripMenuItem});
+            this.invokeScriptToolStripMenuItem,
+            this.waitDocumentToolStripMenuItem,
+            this.visitDOMToolStripMenuItem});
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.testToolStripMenuItem.Text = "&Test";
@@ -221,9 +225,16 @@
             // invokeScriptToolStripMenuItem
             // 
             this.invokeScriptToolStripMenuItem.Name = "invokeScriptToolStripMenuItem";
-            this.invokeScriptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.invokeScriptToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.invokeScriptToolStripMenuItem.Text = "&InvokeScript";
             this.invokeScriptToolStripMenuItem.Click += new System.EventHandler(this.invokeScriptToolStripMenuItem_Click);
+            // 
+            // waitDocumentToolStripMenuItem
+            // 
+            this.waitDocumentToolStripMenuItem.Name = "waitDocumentToolStripMenuItem";
+            this.waitDocumentToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.waitDocumentToolStripMenuItem.Text = "Wait Document";
+            this.waitDocumentToolStripMenuItem.Click += new System.EventHandler(this.waitDocumentToolStripMenuItem_Click);
             // 
             // helpMenuItem
             // 
@@ -359,6 +370,13 @@
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.statusLabel.Visible = false;
             // 
+            // visitDOMToolStripMenuItem
+            // 
+            this.visitDOMToolStripMenuItem.Name = "visitDOMToolStripMenuItem";
+            this.visitDOMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.visitDOMToolStripMenuItem.Text = "Visit DOM";
+            this.visitDOMToolStripMenuItem.Click += new System.EventHandler(this.visitDOMToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -417,6 +435,8 @@
         private System.Windows.Forms.ToolStripMenuItem browserCreateMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem invokeScriptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem waitDocumentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem visitDOMToolStripMenuItem;
     }
 }
 

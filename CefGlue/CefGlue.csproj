@@ -36,7 +36,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
@@ -54,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CefGlue.AssemblyInfo.cs">
@@ -65,13 +64,48 @@
     </Compile>
     <Compile Include="Base\CefStringList.cs" />
     <Compile Include="Base\CefStringMap.cs" />
+    <Compile Include="Base\ResourceHelper.cs" />
     <Compile Include="Cef.cs" />
-    <Compile Include="Cef.ScriptableObject.cs" />
     <Compile Include="Core\Enum\cef_storage_type_t.cs" />
     <Compile Include="Core\Enum\cef_handler_focus_source_t.cs" />
     <Compile Include="Enum\CefHandlerFocusSource.cs" />
     <Compile Include="Enum\CefStorageType.cs" />
     <Compile Include="Handler\CefStorageVisitor.Impl.cs" />
+    <Compile Include="JSBinding\JSBindingContext.cs" />
+    <Compile Include="Threading\CefActionTask.cs" />
+    <Compile Include="Threading\CefSendOrPostCallbackTask.cs" />
+    <Compile Include="Threading\CefThread.cs" />
+    <Compile Include="Threading\CefThreadSynchronizationContext.cs" />
+    <Compile Include="WebBrowser\CefWebBrowserCore.cs" />
+    <Compile Include="WebBrowser\Client\CefWebClientFactory.cs" />
+    <Compile Include="WebBrowser\CefWebFrameCore.cs" />
+    <Compile Include="WebBrowser\CefWebBrowserCore.IWebBrowser.cs" />
+    <Compile Include="WebBrowser\Client\CefWebClient.cs" />
+    <Compile Include="WebBrowser\Client\CefWebDisplayHandler.cs" />
+    <Compile Include="WebBrowser\Client\CefWebJSBindingHandler.cs" />
+    <Compile Include="WebBrowser\Client\CefWebJSDialogHandler.cs" />
+    <Compile Include="WebBrowser\Client\CefWebKeyboardHandler.cs" />
+    <Compile Include="WebBrowser\Client\CefWebLifeSpanHandler.cs" />
+    <Compile Include="WebBrowser\Client\CefWebLoadHandler.cs" />
+    <Compile Include="WebBrowser\CefWebBrowserCore.IWebFrame.cs" />
+    <Compile Include="WebBrowser\Client\CefWebProgressContentFilter.cs" />
+    <Compile Include="WebBrowser\Client\CefWebRequestHandler.cs" />
+    <Compile Include="WebBrowser\CefWebFrameCore.IWebFrame.cs" />
+    <Compile Include="WebBrowser\CefWebFrameCore.IJSBindingContext.cs" />
+    <Compile Include="WebBrowser\CefWebBrowserCore.IJSBindingContext.cs" />
+    <Compile Include="WebBrowser\CefWebBrowserCore.ReadyState.cs" />
+    <Compile Include="WebBrowser\CefReadyOptions.cs" />
+    <Compile Include="WebBrowser\CefWebBrowserCore.ProgressState.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefNavigatingEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\ConsoleMessageEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefNavigatedEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefDocumentCompletedEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefKeyEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefProgressChangedEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\StatusMessageEventArgs.cs" />
+    <Compile Include="WebBrowser\FrameReadyState.cs" />
+    <Compile Include="WebBrowser\IWebBrowser.cs" />
+    <Compile Include="WebBrowser\IWebFrame.cs" />
     <Compile Include="JavaScriptException.cs" />
     <Compile Include="Core\alloc.g.cs">
       <AutoGen>True</AutoGen>
@@ -116,7 +150,7 @@
     <Compile Include="Core\Enum\cef_xml_encoding_type_t.cs" />
     <Compile Include="Core\Enum\cef_xml_node_type_t.cs" />
     <Compile Include="Core\Enum\cef_drag_operations_mask_t.cs" />
-    <Compile Include="Core\libcef.cs" />
+    <Compile Include="Core\libcef.g.cs" />
     <Compile Include="Core\Struct\cef_browser_settings_t.cs" />
     <Compile Include="Core\Struct\cef_cookie_t.cs" />
     <Compile Include="Core\Struct\cef_handler_menuinfo_t.cs" />
@@ -135,25 +169,29 @@
     <Compile Include="Enum\CefDragOperations.cs" />
     <Compile Include="Enum\CefGraphicsImplementation.cs" />
     <Compile Include="Handler\CefDragHandler.Impl.cs" />
+    <Compile Include="JSBinding\IJSBindingContext.cs" />
+    <Compile Include="JSBinding\JSObjectBase.cs" />
+    <Compile Include="JSBinding\JSObjectBinder.cs" />
+    <Compile Include="JSBinding\JSObjectTypeBuilder.cs" />
     <Compile Include="Proxy\CefDragData.Impl.cs" />
     <Compile Include="Proxy\CefSchemeHandlerCallback.Impl.cs" />
-    <Compile Include="ScriptableObject\Attributes\NamingConvention.cs" />
-    <Compile Include="ScriptableObject\Attributes\ScriptableObjectAttribute.cs" />
-    <Compile Include="ScriptableObject\Attributes\ScriptableAttribute.cs" />
+    <Compile Include="JSBinding\Attributes\NamingConvention.cs" />
+    <Compile Include="JSBinding\Attributes\JSObjectAttribute.cs" />
+    <Compile Include="JSBinding\Attributes\JSBindAttribute.cs" />
     <Compile Include="Emit\EmitHelper.cs" />
-    <Compile Include="ScriptableObject\MethodInvokerBuilder.cs" />
-    <Compile Include="ScriptableObject\MethodInvokerHelper.cs" />
-    <Compile Include="ScriptableObject\NameHelper.cs" />
-    <Compile Include="ScriptableObject\ScriptableObjectDef.cs" />
-    <Compile Include="ScriptableObject\ScriptableObjectOptions.cs" />
-    <Compile Include="ScriptableObject\ScriptableObjectV8Accessor.cs" />
-    <Compile Include="ScriptableObject\ExceptionBuilder.cs" />
-    <Compile Include="Common\CefConvert.cs" />
-    <Compile Include="ScriptableObject\ScriptableObjectException.cs" />
-    <Compile Include="ScriptableObject\MethodDefAttributes.cs" />
-    <Compile Include="ScriptableObject\ScriptableObjectV8Handler.cs" />
-    <Compile Include="ScriptableObject\PropertyDef.cs" />
-    <Compile Include="ScriptableObject\DispatchTable.cs" />
+    <Compile Include="JSBinding\MethodInvokerBuilder.cs" />
+    <Compile Include="JSBinding\MethodInvokerHelper.cs" />
+    <Compile Include="JSBinding\NameHelper.cs" />
+    <Compile Include="JSBinding\JSObjectDef.cs" />
+    <Compile Include="JSBinding\JSBindingOptions.cs" />
+    <Compile Include="JSBinding\ScriptableObjectV8Accessor.cs" />
+    <Compile Include="JSBinding\ExceptionBuilder.cs" />
+    <Compile Include="Base\CefConvert.cs" />
+    <Compile Include="JSBinding\JSBindingException.cs" />
+    <Compile Include="JSBinding\MethodDefAttributes.cs" />
+    <Compile Include="JSBinding\ScriptableObjectV8Handler.cs" />
+    <Compile Include="JSBinding\PropertyDef.cs" />
+    <Compile Include="JSBinding\DispatchTable.cs" />
     <Compile Include="Core\win\NativeMethods.cs" />
     <Compile Include="Core\win\RECT.cs" />
     <Compile Include="Core\win\WindowStyles.cs" />
@@ -271,7 +309,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Handler.tt</DependentUpon>
     </Compile>
-    <Compile Include="Core\ObjectTable.cs" />
+    <Compile Include="Base\ObjectTable.cs" />
     <Compile Include="Proxy\CefBrowser.Impl.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -325,9 +363,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Proxy.tt</DependentUpon>
     </Compile>
-    <Compile Include="ScriptableObject\MethodDef.cs" />
-    <Compile Include="ScriptableObject\ReflectionExtensions.cs" />
-    <Compile Include="ScriptableObject\ScriptableObjectBinder.cs" />
+    <Compile Include="JSBinding\MethodDef.cs" />
+    <Compile Include="JSBinding\ReflectionExtensions.cs" />
+    <Compile Include="JSBinding\ScriptableObjectBinder.cs" />
     <Compile Include="Struct\CefBrowserSettings.cs" />
     <Compile Include="CefException.cs" />
     <Compile Include="Enum\CefHandlerErrorCode.cs" />
@@ -365,20 +403,21 @@
     </None>
     <None Include="Proxy\Proxy.ttinclude" />
     <None Include="Templates\CefGlue.ttinclude" />
-    <None Include="Templates\HandlerSchema.ttinclude" />
-    <None Include="Templates\ProxySchema.ttinclude" />
+    <None Include="Templates\HandlerSchema.g.ttinclude" />
+    <None Include="Templates\ProxySchema.g.ttinclude" />
+    <None Include="Templates\WebBrowserCoreDecorator.ttinclude">
+      <LastGenOutput>WebBrowserDecorator1.txt</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Core.js" />
+    <EmbeddedResource Include="Resources\XMLHttpRequest.js" />
+  </ItemGroup>
+  <Import Project="..\CefGlue.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\DefaultProject.targets" />
-  <!-- process *.tt templates on each build  -->
-  <PropertyGroup>
-    <TransformOnBuild>true</TransformOnBuild>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\TextTemplating\v10.0\Microsoft.TextTemplating.targets" Condition="Exists( '$(MSBuildExtensionsPath)\Microsoft\VisualStudio\TextTemplating\v10.0\Microsoft.TextTemplating.targets' )" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

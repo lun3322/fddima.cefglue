@@ -60,7 +60,7 @@ namespace CefGlue
         /// It is expected that whatever data was retained in the last ProcessData() call,
         /// it should be returned now by setting |remainder| if appropriate.
         /// </summary>
-        private void Drain(out CefStreamReader remainder)
+        protected virtual void Drain(out CefStreamReader remainder)
         {
             remainder = null;
         }

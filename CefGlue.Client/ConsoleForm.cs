@@ -9,6 +9,7 @@
     using System.Text;
     using System.Windows.Forms;
     using CefGlue.Windows.Forms;
+    using CefGlue.WebBrowser;
 
     public partial class ConsoleForm : Form
     {

@@ -105,6 +105,14 @@
         protected override void GetResponseHeaders(CefResponse response, out long responseLength)
         {
             responseLength = this.responseLength;
+            
+            if (responseLength != -1)
+            {
+                var headers = new CefStringMap();
+                headers.Append("Content-Length", responseLength.ToString());
+                response.SetHeaderMap(headers);
+            }
+
             response.SetStatus(this.status);
             response.SetStatusText(this.statusText);
             response.SetMimeType(this.mimeType);

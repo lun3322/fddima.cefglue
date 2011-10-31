@@ -646,31 +646,42 @@ namespace CefGlue.Diagnostics
                 this.writer.Write(now);
                 this.writer.Write('|');
 
+                this.writer.Write("{0:X8}|", (uint)(Process.GetCurrentProcess().Id));
+
                 var threadId = Thread.CurrentThread.ManagedThreadId;
-                if (threadId == gcFinalizerThreadId)
-                {
-                    this.writer.Write("GC");
-                }
-                else
-                {
-                    this.writer.Write(threadId.ToString().PadLeft(2));
-                }
+                this.writer.Write(threadId.ToString().PadLeft(2));
                 this.writer.Write('|');
                 this.writer.Write("{0:X8}", GetCurrentThreadId());
                 this.writer.Write('|');
                 if (Cef.CurrentlyOn(CefThreadId.UI))
                 {
-                    this.writer.Write("Cef:UI  ");
+                    this.writer.Write("CefUI  ");
                 }
                 else if (Cef.CurrentlyOn(CefThreadId.IO))
                 {
-                    this.writer.Write("Cef:IO  ");
+                    this.writer.Write("CefIO  ");
                 }
                 else if (Cef.CurrentlyOn(CefThreadId.File))
                 {
-                    this.writer.Write("Cef:File");
+                    this.writer.Write("CefFile");
                 }
-                else this.writer.Write("???:????");
+                else if (threadId == gcFinalizerThreadId)
+                {
+                    this.writer.Write("GC     ");
+                }
+                else
+                {
+                    var threadName = Thread.CurrentThread.Name;
+                    if (string.IsNullOrEmpty(threadName))
+                    {
+                        this.writer.Write("       ");
+                    }
+                    else
+                    {
+                        if (threadName.Length > 7) threadName = threadName.Substring(0, 7);
+                        this.writer.Write(threadName.PadRight(7));
+                    }
+                }
 
                 this.writer.Write('|');
                 this.writer.Write(severityNames[(int)severity]);

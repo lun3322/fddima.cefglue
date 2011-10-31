@@ -8,10 +8,12 @@
     using System.Drawing;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
     using CefGlue;
+    using CefGlue.WebBrowser;
     using CefGlue.Windows.Forms;
-    using System.Threading;
+    using CefGlue.Threading;
 
     public partial class MainForm : Form
     {
@@ -26,6 +28,8 @@
         private ConsoleForm consoleForm;
         private BindingList<ConsoleMessageEventArgs> consoleMessages = new BindingList<ConsoleMessageEventArgs>();
 
+        private EventConsoleForm eventConsoleForm;
+
         public MainForm()
         {
             InitializeComponent();
@@ -34,10 +38,11 @@
             this.caption = this.Text;
 
             this.browserSettings = new CefBrowserSettings();
-            this.browserSettings.FileAccessFromFileUrlsAllowed = true;
 
             this.consoleForm = new ConsoleForm();
             consoleForm.BindData(consoleMessages);
+
+            this.eventConsoleForm = new EventConsoleForm();
 
             // TODO: check that form works correctly even with browser==null
             // TODO: also update state when browser was be destroyed
@@ -66,9 +71,9 @@
             browser.CanGoForwardChanged += new EventHandler(browser_CanGoForwardChanged);
             browser.AddressChanged += new EventHandler(browser_AddressChanged);
             browser.TitleChanged += new EventHandler(browser_TitleChanged);
-            browser.StatusMessage += new EventHandler<StatusMessageEventArgs>(browser_StatusMessage);
+            // TODO: browser.StatusMessage += new EventHandler<StatusMessageEventArgs>(browser_StatusMessage);
             browser.ConsoleMessage += new EventHandler<ConsoleMessageEventArgs>(browser_ConsoleMessage);
-            browser.IsLoadingChanged += new EventHandler(browser_IsLoadingChanged);
+            // TODO: browser.IsLoadingChanged += new EventHandler(browser_IsLoadingChanged);
 
             browser.Parent = this;
             browser.BringToFront();
@@ -108,39 +113,52 @@
 
         void browser_CanGoBackChanged(object sender, EventArgs e)
         {
-            var browser = (CefWebBrowser)sender;
-            goBackButton.Enabled = browser.CanGoBack;
+            CefThread.PlatformUI.Post((_) =>
+            {
+                var browser = (IWebBrowser)sender;
+                goBackButton.Enabled = browser.CanGoBack;
+            }, null);
         }
 
         void browser_CanGoForwardChanged(object sender, EventArgs e)
         {
-            var browser = (CefWebBrowser)sender;
-            goForwardButton.Enabled = browser.CanGoForward;
+            CefThread.PlatformUI.Post((_) =>
+            {
+                var browser = (IWebBrowser)sender;
+                goForwardButton.Enabled = browser.CanGoForward;
+            }, null);
         }
 
         void browser_AddressChanged(object sender, EventArgs e)
         {
-            var browser = (CefWebBrowser)sender;
-            addressTextBox.Text = browser.Address;
+            CefThread.PlatformUI.Post((_) =>
+            {
+                var browser = ((IWebBrowser)sender);
+                addressTextBox.Text = browser.Address;
+            }, null);
         }
 
         void browser_TitleChanged(object sender, EventArgs e)
         {
-            var browser = (CefWebBrowser)sender;
-            var documentTitle = browser.Title;
-            if (documentTitle != "" && documentTitle != caption)
+            CefThread.PlatformUI.Post(_ =>
             {
-                this.Text = documentTitle + " - " + this.caption;
-            }
-            else
-            {
-                this.Text = this.caption;
-            }
+                var browser = ((IWebBrowser)sender);
+                var documentTitle = browser.Title;
+                if (documentTitle != "" && documentTitle != caption)
+                {
+                    this.Text = documentTitle + " - " + this.caption;
+                }
+                else
+                {
+                    this.Text = this.caption;
+                }
+            }, null);
         }
 
         void browser_IsLoadingChanged(object sender, EventArgs e)
         {
-            var isLoading = browser.IsLoading;
+            // FIXME: post it to platformUI thread
+            var isLoading = false; // TODO: browser.IsLoading;
             progressBar.Visible = isLoading;
 
             stopButton.Visible = isLoading;
@@ -152,6 +170,7 @@
 
         void browser_StatusMessage(object sender, StatusMessageEventArgs e)
         {
+            // FIXME: post it to platformUI thread
             var browser = (CefWebBrowser)sender;
             this.statusLabel.Visible = true;
             if (string.IsNullOrEmpty(e.Value))
@@ -206,12 +225,12 @@
 
         private void homeButton_Click(object sender, EventArgs e)
         {
-            this.browser.LoadURL(homeUrl);
+            this.browser.LoadUrl(homeUrl);
         }
 
         private void goButton_Click(object sender, EventArgs e)
         {
-            this.browser.LoadURL(addressTextBox.Text);
+            this.browser.LoadUrl(addressTextBox.Text);
         }
 
         private void addressTextBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -280,8 +299,48 @@
                 result = browser.InvokeScript("eval", "1+2");
             }
             sw.Stop();
-
             MessageBox.Show(string.Format("{0} calls from platform UI thread of browser.InvokeScript(\"eval\", \"1+2\") tooks {1}ms", count, sw.ElapsedMilliseconds));
+
+            CefThread.UI.Send((_) =>
+            {
+                sw = Stopwatch.StartNew();
+                for (var i = 0; i < count; i++)
+                {
+                    result = browser.InvokeScript("eval", "1+2");
+                }
+                sw.Stop();
+
+                CefThread.PlatformUI.Post((state) =>
+                {
+                    MessageBox.Show(string.Format("{0} calls from CEF UI thread of browser.InvokeScript(\"eval\", \"1+2\") tooks {1}ms", count, sw.ElapsedMilliseconds));
+                }, null);
+            }, null);
+        }
+
+        private void waitDocumentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.browser.LoadUrl("res://client/eventFlowTest.html");
+        }
+
+        private void visitDOMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.browser.VisitDom(new ClientDomVisitor());
+        }
+
+        private class ClientDomVisitor : CefDomVisitor
+        {
+            protected override void Visit(CefDomDocument document)
+            {
+                // TODO: use some kind of automatic proxy destroying via node map?
+                using (var body = document.GetBody())
+                {
+                    var name = body.GetName();
+                    CefThread.PlatformUI.Post((_) =>
+                    {
+                        MessageBox.Show(name);
+                    }, null);
+                }
+            }
         }
     }
 }

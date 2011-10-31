@@ -12,6 +12,10 @@
         private readonly object parent;
         private readonly ILGenerator il;
 
+        public EmitHelper(ILGenerator il)
+            : this(null, il)
+        { }
+
         public EmitHelper(object parent, ILGenerator il)
         {
             this.parent = parent;

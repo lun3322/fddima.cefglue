@@ -11,7 +11,7 @@
     <RootNamespace>CefGlue.Client</RootNamespace>
     <AssemblyName>CefGlue.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -29,7 +29,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -45,9 +45,7 @@
     <AssemblyOriginatorKeyFile>..\CefGlue.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationIcon>
     </ApplicationIcon>
@@ -62,7 +60,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -74,12 +71,13 @@
     <Compile Include="..\CefGlue.Version.cs">
       <Link>Properties\CefGlue.Version.cs</Link>
     </Compile>
-    <Compile Include="AboutForm.cs">
+    <Compile Include="AboutForm\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutForm.Designer.cs">
+    <Compile Include="AboutForm\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AboutForm\IAboutFormController.cs" />
     <Compile Include="ClientSchemeHandler.cs" />
     <Compile Include="ClientSchemeHandlerFactory.cs" />
     <Compile Include="BrowserSettingsForm.cs">
@@ -87,6 +85,12 @@
     </Compile>
     <Compile Include="BrowserSettingsForm.Designer.cs">
       <DependentUpon>BrowserSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EventConsoleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EventConsoleForm.Designer.cs">
+      <DependentUpon>EventConsoleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Examples\ScriptableObject\TestObject1.cs" />
     <Compile Include="Options.cs" />
@@ -110,7 +114,7 @@
     <Compile Include="ToolStripSpringTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <EmbeddedResource Include="AboutForm.resx">
+    <EmbeddedResource Include="AboutForm\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConsoleForm.resx">
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BrowserSettingsForm.resx">
       <DependentUpon>BrowserSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EventConsoleForm.resx">
+      <DependentUpon>EventConsoleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -186,9 +193,9 @@
     <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine.css" />
     <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine.js" />
     <EmbeddedResource Include="Resources\client\lib\jasmine-1.1.0.rc1\jasmine_favicon.png" />
-    <EmbeddedResource Include="Resources\client\ScriptableObjectPerformance.html" />
+    <EmbeddedResource Include="Resources\client\JSBindingPerformance.html" />
     <EmbeddedResource Include="Resources\client\SpecRunner.html" />
-    <EmbeddedResource Include="Resources\client\spec\ScriptableObjectSpec.js" />
+    <EmbeddedResource Include="Resources\client\spec\JSBindingSpec.js" />
     <EmbeddedResource Include="Resources\client\spec\SpecHelper.js" />
   </ItemGroup>
   <ItemGroup>
@@ -203,8 +210,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\client\eventFlowTest.html" />
   </ItemGroup>
+  <Import Project="..\CefGlue.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\DefaultProject.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

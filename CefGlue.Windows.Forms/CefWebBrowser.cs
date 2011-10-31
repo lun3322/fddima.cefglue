@@ -5,28 +5,19 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Drawing;
+    using System.Drawing.Drawing2D;
     using System.Linq;
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-#if DIAGNOSTICS
-    using Diagnostics;
-#endif
+    using CefGlue.WebBrowser;
 
     [ToolboxBitmap(typeof(CefWebBrowser))]
     public partial class CefWebBrowser : Control
     {
-        // TODO: move most of this fields to BrowserCore/BrowserContext
-        private SynchronizationContext synchronizationContext;
+        private CefWebBrowserCore core;
 
-        private CefBrowserSettings settings;
-
-        private Client client;
-
-        private CefBrowser browser;
-        private IntPtr browserWindowHandle;
-
-        private CefV8Context mainFrameV8Context;
+        private bool handleCreatedHandled;
 
         public CefWebBrowser()
             : this(new CefBrowserSettings())
@@ -34,7 +25,7 @@
         }
 
         public CefWebBrowser(CefBrowserSettings settings)
-            : this(settings, "about:blank")
+            : this(settings, null)
         {
         }
 
@@ -45,11 +36,8 @@
 
         public CefWebBrowser(CefBrowserSettings settings, string startUrl)
         {
-            this.synchronizationContext = SynchronizationContext.Current;
-            if (this.synchronizationContext == null) throw new InvalidOperationException("SynchronizationContext required. Try create control on UI thread.");
-
-            this.settings = settings;
-            this.StartUrl = startUrl;
+            this.core = new CefWebBrowserCore(this, settings, startUrl);
+            this.core.Created += new EventHandler(core_Created);
 
             this.SetStyle(
                 ControlStyles.ContainerControl
@@ -57,7 +45,6 @@
                 | ControlStyles.FixedWidth
                 | ControlStyles.FixedHeight
                 | ControlStyles.StandardClick
-                //| ControlStyles.Selectable
                 | ControlStyles.UserMouse
                 | ControlStyles.SupportsTransparentBackColor
                 | ControlStyles.StandardDoubleClick
@@ -67,9 +54,8 @@
                 | ControlStyles.DoubleBuffer
                 | ControlStyles.OptimizedDoubleBuffer
                 | ControlStyles.UseTextForAccessibility
-
-                // | ControlStyles.Opaque
-                , false);
+                | ControlStyles.Opaque,
+                false);
 
             this.SetStyle(
                 ControlStyles.UserPaint
@@ -81,19 +67,7 @@
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-
-            // TODO: give to associated CefWebBrowser.Client's to know that we are disposing,
-            // in this case client must not generate events for control.
-
-            this.Close();
-
-            // FIXME: browser here
-            if (this.browser != null) { this.browser.Dispose(); this.browser = null; }
-            this.client = null;
-            // if (this.client != null) { this.client.Dispose(); this.client = null; }
-            if (this.mainFrameV8Context != null) { this.mainFrameV8Context.Dispose(); this.mainFrameV8Context = null; }
         }
-
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -101,10 +75,18 @@
 
             if (this.DesignMode)
             {
-                this.Paint += new PaintEventHandler(DesignModePaint);
+                if (!this.handleCreatedHandled)
+                {
+                    this.Paint += new PaintEventHandler(this.DesignModePaint);
+                }
             }
             else
             {
+                if (this.handleCreatedHandled)
+                {
+                    throw new InvalidOperationException("Handle already created.");
+                }
+
                 // TODO: fix when browser still creating, but control already disposed
                 // it can be done via setting client to detached state, and onaftercreated
                 // force browser to be closed.
@@ -112,91 +94,59 @@
                 var windowInfo = new CefWindowInfo();
                 windowInfo.SetAsChild(this.Handle, 0, 0, this.Width, this.Height);
 
-                this.client = CreateClient();
-
-                CefBrowser.Create(windowInfo, client, this.StartUrl, this.settings);
+                this.core.Create(windowInfo);
 
                 windowInfo.Dispose();
             }
-        }
 
-        private void DesignModePaint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.DrawRectangle(SystemPens.ControlDark, 0, 0, this.Width - 1, this.Height - 1);
+            this.handleCreatedHandled = true;
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-
-            ResizeBrowserWindow();
+            ResizeWindow(this.core.WindowHandle, this.Width, this.Height);
         }
 
-        private void ResizeBrowserWindow()
+        private void core_Created(object sender, EventArgs e)
         {
-            if (this.browserWindowHandle != IntPtr.Zero)
+            ResizeWindow(this.core.WindowHandle, this.Width, this.Height);
+        }
+
+        private void DesignModePaint(object sender, PaintEventArgs e)
+        {
+            var width = this.Width;
+            var height = this.Height;
+            if (width > 1 && height > 1)
             {
-                NativeMethods.SetWindowPos(this.browserWindowHandle, IntPtr.Zero,
-                    0, 0, this.Width, this.Height,
+                var brush = new SolidBrush(this.ForeColor);
+                var pen = new Pen(this.ForeColor);
+                pen.DashStyle = DashStyle.Dash;
+
+                e.Graphics.DrawRectangle(pen, 0, 0, width - 1, height - 1);
+
+                var fontHeight = (int)(this.Font.GetHeight(e.Graphics) * 1.25);
+
+                var x = 3;
+                var y = 3;
+
+                e.Graphics.DrawString("CefWebBrowser", this.Font, brush, x, y + (0 * fontHeight));
+                e.Graphics.DrawString(string.Format("StartUrl: {0}", this.StartUrl), this.Font, brush, x, y + (1 * fontHeight));
+
+                brush.Dispose();
+                pen.Dispose();
+            }
+        }
+
+        private static void ResizeWindow(IntPtr handle, int width, int height)
+        {
+            if (handle != IntPtr.Zero)
+            {
+                NativeMethods.SetWindowPos(handle, IntPtr.Zero,
+                    0, 0, width, height,
                     SetWindowPosFlags.NoMove | SetWindowPosFlags.NoZOrder
                     );
             }
-        }
-
-        /*
-        protected override void WndProc(ref Message m)
-        {
-            Cef.Logger.Info(LogTarget.Default, "CefWebBrowser.WndProc: Msg=[{0}]", ((WM)m.Msg));
-            base.WndProc(ref m);
-        }
-        */
-
-        public override bool Focused
-        {
-            get
-            {
-                var handle = NativeMethods.GetFocus();
-                return handle != IntPtr.Zero && this.browserWindowHandle == handle;
-            }
-        }
-
-        protected override void OnGotFocus(EventArgs e)
-        {
-            // base.OnGotFocus(e);
-
-            if (!Focused)
-            {
-                if (this.browser != null)
-                {
-#if DIAGNOSTICS
-                    Cef.Logger.Info(LogTarget.Default, "OnGotFocus");
-#endif
-                    //this.browser.SendFocusEvent(true);
-                    // FIXME: this is to avoid dead lock with Invoke from CEF UI thread, may be we must execute this call on CEF UI thread async
-                    CefTask.Post(CefThreadId.UI, () => { this.browser.SetFocus(true); });
-                    // this.browser.SendFocusEvent(true);
-                }
-            }
-        }
-
-        protected override void OnLostFocus(EventArgs e)
-        {
-            if (Focused)
-            {
-                if (this.browser != null)
-                {
-                    // Cef.Logger.Info(LogTarget.Default, "OnLostFocus");
-                    CefTask.Post(CefThreadId.UI, () => this.browser.SetFocus(false));
-                    // this.browser.SendFocusEvent(false);
-                    // FIXME: this is to avoid dead lock with Invoke from CEF UI thread, may be we must execute this call on CEF UI thread async
-                }
-            }
-        }
-
-        private Client CreateClient()
-        {
-            var client = new Client(this);
-            return client;
         }
     }
 }
