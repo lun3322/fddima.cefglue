@@ -87,6 +87,21 @@
             }
         }
 
+        /// <summary>
+        /// Disable default navigation resulting from drag &amp; drop of URLs.
+        /// </summary>
+        public bool LoadDropsDisabled
+        {
+            get
+            {
+                return this._ptr->load_drops_disabled;
+            }
+            set
+            {
+                this._ptr->load_drops_disabled = value;
+            }
+        }
+
         // The below values map to WebPreferences settings.
 
         //
@@ -661,6 +676,22 @@
             set
             {
                 this._ptr->accelerated_compositing_enabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Set to true to enable threaded compositing.
+        /// This is currently only supported by the command buffer graphics implementation.
+        /// </summary>
+        public bool ThreadedCompositingEnabled
+        {
+            get
+            {
+                return this._ptr->threaded_compositing_enabled;
+            }
+            set
+            {
+                this._ptr->threaded_compositing_enabled = value;
             }
         }
 

@@ -88,6 +88,14 @@
         ///
         public uint session_storage_quota;
 
+#if OS_WIN
+        ///
+        // Set to true (1) to use the system proxy resolver on Windows when 
+        // "Automatically detect settings" is checked. This setting is disabled
+        // by default for performance reasons.
+        ///
+        public bool_t auto_detect_proxy_settings_enabled;
+#endif
 
         public static void Clear(cef_settings_t* self)
         {

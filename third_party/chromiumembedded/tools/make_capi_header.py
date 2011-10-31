@@ -92,6 +92,7 @@ extern "C" {
 #include "internal/cef_string.h"
 #include "internal/cef_string_list.h"
 #include "internal/cef_string_map.h"
+#include "internal/cef_string_multimap.h"
 #include "internal/cef_types.h"
 
 """
@@ -122,7 +123,7 @@ typedef struct _cef_base_t
 // Check that the structure |s|, which is defined with a cef_base_t member named
 // |base|, is large enough to contain the specified member |f|.
 #define CEF_MEMBER_EXISTS(s, f)   \\
-  ((int)&((s)->f) - (int)(s) + sizeof((s)->f) <= (s)->base.size)
+  ((intptr_t)&((s)->f) - (intptr_t)(s) + sizeof((s)->f) <= (s)->base.size)
 
 #define CEF_MEMBER_MISSING(s, f)  (!CEF_MEMBER_EXISTS(s, f) || !((s)->f))
 
@@ -163,7 +164,7 @@ typedef struct _cef_base_t
 
 
 def write_capi_header(header, file, backup):
-    if file_exists(file):
+    if path_exists(file):
         oldcontents = read_file(file)
     else:
         oldcontents = ''

@@ -79,9 +79,9 @@ namespace CefGlue
         /// <summary>
         /// Get the header values.
         /// </summary>
-        public CefStringMap GetHeaderMap()
+        public CefStringMultiMap GetHeaderMap()
         {
-            var map = new CefStringMap();
+            var map = new CefStringMultiMap();
             cef_request_t.invoke_get_header_map(this.ptr, map.GetNativeHandle());
             return map;
         }
@@ -89,7 +89,7 @@ namespace CefGlue
         /// <summary>
         /// Set the header values.
         /// </summary>
-        public void SetHeaderMap(CefStringMap headerMap)
+        public void SetHeaderMap(CefStringMultiMap headerMap)
         {
             cef_request_t.invoke_set_header_map(this.ptr, headerMap.GetNativeHandle());
         }
@@ -97,7 +97,7 @@ namespace CefGlue
         /// <summary>
         /// Set all values at one time.
         /// </summary>
-        public void Set(string url, string method, CefPostData postData, CefStringMap headerMap)
+        public void Set(string url, string method, CefPostData postData, CefStringMultiMap headerMap)
         {
             fixed (char* url_str = url)
             fixed (char* method_str = method)

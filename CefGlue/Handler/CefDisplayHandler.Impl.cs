@@ -46,6 +46,26 @@
         }
 
         /// <summary>
+        /// Called when the size of the content area has changed.
+        /// </summary>
+        private void on_contents_size_change(cef_display_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, int width, int height)
+        {
+            ThrowIfObjectDisposed();
+
+            var mBrowser = CefBrowser.From(browser);
+            var mFrame = CefFrame.From(frame);
+
+            this.OnContentsSizeChange(mBrowser, mFrame, width, height);
+        }
+
+        /// <summary>
+        /// Called when the size of the content area has changed.
+        /// </summary>
+        protected virtual void OnContentsSizeChange(CefBrowser browser, CefFrame frame, int width, int height)
+        {
+        }
+
+        /// <summary>
         /// Called when the page title changes.
         /// </summary>
         private void on_title_change(cef_display_handler_t* self, cef_browser_t* browser, /*const*/ cef_string_t* title)

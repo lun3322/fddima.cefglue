@@ -224,5 +224,17 @@ namespace CefGlue
             cef_frame_t.invoke_visit_dom(this.ptr, visitor.GetNativePointerAndAddRef());
         }
 
+        /// <summary>
+        /// Get the V8 context associated with the frame.
+        /// This method should only be called on the UI thread.
+        /// </summary>
+        public CefV8Context GetV8Context()
+        {
+            // TODO: check that we are on UI thread in debug mode?
+            return CefV8Context.FromOrDefault(
+                cef_frame_t.invoke_get_v8context(this.ptr)
+                );
+        }
+
     }
 }

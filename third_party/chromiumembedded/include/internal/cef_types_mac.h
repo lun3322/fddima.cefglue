@@ -1,5 +1,4 @@
-// Copyright (c) 2009 The Chromium Embedded Framework Authors. All rights
-// reserved.
+// Copyright (c) 2010 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -28,27 +27,70 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _CEF_EXPORT_H
-#define _CEF_EXPORT_H
 
-#include "cef_build.h"
+#ifndef _CEF_TYPES_MAC_H
+#define _CEF_TYPES_MAC_H
 
-#if defined(COMPILER_MSVC)
+#if defined(OS_MACOSX)
+#include "cef_string.h"
 
-#ifdef BUILDING_CEF_SHARED
-#define CEF_EXPORT __declspec(dllexport)
-#elif USING_CEF_SHARED
-#define CEF_EXPORT __declspec(dllimport)
+// Window handle.
+#ifdef __cplusplus
+#ifdef __OBJC__
+@class NSView;
 #else
-#define CEF_EXPORT
+class NSView;
 #endif
-#define CEF_CALLBACK __stdcall
+#define cef_window_handle_t NSView*
+#else
+#define cef_window_handle_t void*
+#endif
+#define cef_cursor_handle_t void*
 
-#elif defined(COMPILER_GCC)
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define CEF_EXPORT __attribute__ ((visibility("default")))
-#define CEF_CALLBACK
+///
+// Supported graphics implementations.
+///
+enum cef_graphics_implementation_t
+{
+  DESKTOP_IN_PROCESS = 0,
+  DESKTOP_IN_PROCESS_COMMAND_BUFFER,
+};
 
-#endif  // COMPILER_GCC
+///
+// Class representing window information.
+///
+typedef struct _cef_window_info_t
+{
+  cef_string_t m_windowName;
+  int m_x;
+  int m_y;
+  int m_nWidth;
+  int m_nHeight;
+  int m_bHidden;
 
-#endif // _CEF_EXPORT_H
+  // NSView pointer for the parent view.
+  cef_window_handle_t m_ParentView;
+  
+  // NSView pointer for the new browser view.
+  cef_window_handle_t m_View;
+} cef_window_info_t;
+
+///
+// Class representing print context information.
+///
+typedef struct _cef_print_info_t
+{
+  double m_Scale;
+} cef_print_info_t;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // OS_MACOSX
+
+#endif // _CEF_TYPES_MAC_H

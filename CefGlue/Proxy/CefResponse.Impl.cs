@@ -82,9 +82,9 @@ namespace CefGlue
         /// <summary>
         /// Get all response header fields.
         /// </summary>
-        public CefStringMap GetHeaderMap()
+        public CefStringMultiMap GetHeaderMap()
         {
-            var map = new CefStringMap();
+            var map = new CefStringMultiMap();
             cef_response_t.invoke_get_header_map(this.ptr, map.GetNativeHandle());
             return map;
         }
@@ -92,7 +92,7 @@ namespace CefGlue
         /// <summary>
         /// Set all response header fields.
         /// </summary>
-        public void SetHeaderMap(CefStringMap headerMap)
+        public void SetHeaderMap(CefStringMultiMap headerMap)
         {
             cef_response_t.invoke_set_header_map(this.ptr, headerMap.GetNativeHandle());
         }

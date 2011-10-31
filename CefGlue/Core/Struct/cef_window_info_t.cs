@@ -29,6 +29,10 @@
         //BOOL m_bWindowRenderingDisabled;
         public int m_bWindowRenderingDisabled;
 
+        // Set to true to enable transparent painting.
+        //BOOL m_bTransparentPainting;
+        public int m_bTransparentPainting;
+
         // Handle for the new browser window.
         public IntPtr m_hWnd;
 

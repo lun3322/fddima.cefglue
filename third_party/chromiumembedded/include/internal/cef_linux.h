@@ -1,4 +1,4 @@
-// Copyright (c) 2008 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2010 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -28,85 +28,70 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#ifndef _CEF_WIN_H
-#define _CEF_WIN_H
+#ifndef _CEF_LINUX_H
+#define _CEF_LINUX_H
 
-#if defined(OS_WIN)
-#include <windows.h>
-#include "cef_types_win.h"
+#if defined(OS_LINUX)
+#include <pthread.h>
+#include "cef_types_linux.h"
 #include "cef_types_wrappers.h"
 
-///
 // Atomic increment and decrement.
-///
-#define CefAtomicIncrement(p) InterlockedIncrement(p)
-#define CefAtomicDecrement(p) InterlockedDecrement(p)
+inline long CefAtomicIncrement(long volatile *pDest)
+{
+  return __sync_add_and_fetch(pDest, 1);
+}
+inline long CefAtomicDecrement(long volatile *pDest)
+{
+  return __sync_sub_and_fetch(pDest, 1);
+}
 
-///
 // Critical section wrapper.
-///
 class CefCriticalSection
 {
 public:
   CefCriticalSection()
   {
-    memset(&m_sec, 0, sizeof(CRITICAL_SECTION));
-    InitializeCriticalSection(&m_sec);
+    pthread_mutexattr_init(&attr_);
+    pthread_mutexattr_settype(&attr_, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&lock_, &attr_);
   }
   virtual ~CefCriticalSection()
   {
-    DeleteCriticalSection(&m_sec);
+    pthread_mutex_destroy(&lock_);
+    pthread_mutexattr_destroy(&attr_);
   }
   void Lock()
   {
-    EnterCriticalSection(&m_sec);
+    pthread_mutex_lock(&lock_);
   }
   void Unlock()
   {
-    LeaveCriticalSection(&m_sec);
+    pthread_mutex_unlock(&lock_);
   }
 
-  CRITICAL_SECTION m_sec;
+  pthread_mutex_t lock_;
+  pthread_mutexattr_t attr_;
 };
 
-///
 // Handle types.
-///
 #define CefWindowHandle cef_window_handle_t
 #define CefCursorHandle cef_cursor_handle_t
-
 
 struct CefWindowInfoTraits {
   typedef cef_window_info_t struct_type;
 
   static inline void init(struct_type* s) {}
-
-  static inline void clear(struct_type* s)
-  {
-    cef_string_clear(&s->m_windowName);
-  }
+  static inline void clear(struct_type* s) {}
 
   static inline void set(const struct_type* src, struct_type* target, bool copy)
   {
-    target->m_dwExStyle = src->m_dwExStyle;
-    cef_string_set(src->m_windowName.str, src->m_windowName.length,
-        &target->m_windowName, copy);
-    target->m_dwStyle = src->m_dwStyle;
-    target->m_x = src->m_x;
-    target->m_y = src->m_y;
-    target->m_nWidth = src->m_nWidth;
-    target->m_nHeight = src->m_nHeight;
-    target->m_hWndParent = src->m_hWndParent;
-    target->m_hMenu = src->m_hMenu;
-    target->m_bWindowRenderingDisabled = src->m_bWindowRenderingDisabled;
-    target->m_bTransparentPainting = src->m_bTransparentPainting;
-    target->m_hWnd = src->m_hWnd;
+    target->m_Widget = src->m_Widget;
+    target->m_ParentWidget = src->m_ParentWidget;
   }
 };
 
-///
 // Class representing window information.
-///
 class CefWindowInfo : public CefStructBase<CefWindowInfoTraits>
 {
 public:
@@ -116,42 +101,11 @@ public:
   CefWindowInfo(const cef_window_info_t& r) : parent(r) {}
   CefWindowInfo(const CefWindowInfo& r) : parent(r) {}
   
-  void SetAsChild(HWND hWndParent, RECT windowRect)
+  void SetAsChild(CefWindowHandle ParentWidget)
   {
-    m_dwStyle = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_TABSTOP |
-                WS_VISIBLE;
-    m_hWndParent = hWndParent;
-    m_x = windowRect.left;
-    m_y = windowRect.top;
-    m_nWidth = windowRect.right - windowRect.left;
-    m_nHeight = windowRect.bottom - windowRect.top;
-  }
-
-  void SetAsPopup(HWND hWndParent, const CefString& windowName)
-  {
-    m_dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS |
-                WS_VISIBLE;
-    m_hWndParent = hWndParent;
-    m_x = CW_USEDEFAULT;
-    m_y = CW_USEDEFAULT;
-    m_nWidth = CW_USEDEFAULT;
-    m_nHeight = CW_USEDEFAULT;
-
-    cef_string_copy(windowName.c_str(), windowName.length(), &m_windowName);
-  }
-
-  void SetAsOffScreen(HWND hWndParent)
-  {
-    m_bWindowRenderingDisabled = TRUE;
-    m_hWndParent = hWndParent;
-  }
-
-  void SetTransparentPainting(BOOL transparentPainting)
-  {
-    m_bTransparentPainting = transparentPainting;
+    m_ParentWidget = ParentWidget;
   }
 };
-
 
 struct CefPrintInfoTraits {
   typedef cef_print_info_t struct_type;
@@ -161,17 +115,13 @@ struct CefPrintInfoTraits {
 
   static inline void set(const struct_type* src, struct_type* target, bool copy)
   {
-    target->m_hDC = src->m_hDC;
-    target->m_Rect = src->m_Rect;
     target->m_Scale = src->m_Scale;
   }
 };
 
-///
 // Class representing print context information.
-///
 typedef CefStructBase<CefPrintInfoTraits> CefPrintInfo;
 
-#endif // OS_WIN
+#endif // OS_LINUX
 
-#endif // _CEF_WIN_H
+#endif // _CEF_LINUX_H

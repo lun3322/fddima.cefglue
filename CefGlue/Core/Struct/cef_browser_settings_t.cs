@@ -24,6 +24,11 @@
         ///
         public bool_t drag_drop_disabled;
 
+        ///
+        // Disable default navigation resulting from drag & drop of URLs.
+        ///
+        public bool_t load_drops_disabled;
+
         // The below values map to WebPreferences settings.
 
         ///
@@ -186,11 +191,17 @@
         public bool_t webgl_disabled;
 
         ///
-        /// Set to true (1) to enable accelerated compositing. This is turned off by
-        /// default because the current in-process GPU implementation does not
-        /// support it correctly.
+        // Set to true (1) to enable accelerated compositing. This is turned off by
+        // default because the current in-process GPU implementation does not
+        // support it correctly.
         ///
         public bool_t accelerated_compositing_enabled;
+
+        ///
+        // Set to true (1) to enable threaded compositing. This is currently only
+        // supported by the command buffer graphics implementation.
+        ///
+        public bool_t threaded_compositing_enabled;
 
         ///
         // Set to true (1) to disable accelerated layers. This affects features like

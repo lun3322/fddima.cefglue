@@ -45,6 +45,7 @@ extern "C" {
 #include "internal/cef_string.h"
 #include "internal/cef_string_list.h"
 #include "internal/cef_string_map.h"
+#include "internal/cef_string_multimap.h"
 #include "internal/cef_types.h"
 
 
@@ -373,7 +374,7 @@ typedef struct _cef_base_t
 // Check that the structure |s|, which is defined with a cef_base_t member named
 // |base|, is large enough to contain the specified member |f|.
 #define CEF_MEMBER_EXISTS(s, f)   \
-  ((int)&((s)->f) - (int)(s) + sizeof((s)->f) <= (s)->base.size)
+  ((intptr_t)&((s)->f) - (intptr_t)(s) + sizeof((s)->f) <= (s)->base.size)
 
 #define CEF_MEMBER_MISSING(s, f)  (!CEF_MEMBER_EXISTS(s, f) || !((s)->f))
 
@@ -854,6 +855,13 @@ typedef struct _cef_frame_t
   void (CEF_CALLBACK *visit_dom)(struct _cef_frame_t* self,
       struct _cef_domvisitor_t* visitor);
 
+  ///
+  // Get the V8 context associated with the frame. This function should only be
+  // called on the UI thread.
+  ///
+  struct _cef_v8context_t* (CEF_CALLBACK *get_v8context)(
+      struct _cef_frame_t* self);
+
 } cef_frame_t;
 
 
@@ -1077,6 +1085,13 @@ typedef struct _cef_display_handler_t
       const cef_string_t* url);
 
   ///
+  // Called when the size of the content area has changed.
+  ///
+  void (CEF_CALLBACK *on_contents_size_change)(
+      struct _cef_display_handler_t* self, struct _cef_browser_t* browser,
+      struct _cef_frame_t* frame, int width, int height);
+
+  ///
   // Called when the page title changes.
   ///
   void (CEF_CALLBACK *on_title_change)(struct _cef_display_handler_t* self,
@@ -1138,6 +1153,18 @@ typedef struct _cef_focus_handler_t
   int (CEF_CALLBACK *on_set_focus)(struct _cef_focus_handler_t* self,
       struct _cef_browser_t* browser, enum cef_handler_focus_source_t source);
 
+  ///
+  // Called when a new node in the the browser gets focus. The |node| value may
+  // be NULL if no specific node has gained focus. The node object passed to
+  // this function represents a snapshot of the DOM at the time this function is
+  // executed. DOM objects are only valid for the scope of this function. Do not
+  // keep references to or attempt to access any DOM objects outside the scope
+  // of this function.
+  ///
+  void (CEF_CALLBACK *on_focused_node_changed)(
+      struct _cef_focus_handler_t* self, struct _cef_browser_t* browser,
+      struct _cef_frame_t* frame, struct _cef_domnode_t* node);
+
 } cef_focus_handler_t;
 
 
@@ -1151,13 +1178,14 @@ typedef struct _cef_keyboard_handler_t
   cef_base_t base;
 
   ///
-  // Called when the browser component receives a keyboard event. |type| is the
-  // type of keyboard event, |code| is the windows scan-code for the event,
-  // |modifiers| is a set of bit-flags describing any pressed modifier keys and
-  // |isSystemKey| is true (1) if Windows considers this a 'system key' message
-  // (see http://msdn.microsoft.com/en-us/library/ms646286(VS.85).aspx). Return
-  // true (1) if the keyboard event was handled or false (0) to allow the
-  // browser component to handle the event.
+  // Called when the browser component receives a keyboard event that has not
+  // been intercepted via JavaScript. |type| is the type of keyboard event,
+  // |code| is the windows scan-code for the event, |modifiers| is a set of bit-
+  // flags describing any pressed modifier keys and |isSystemKey| is true (1) if
+  // Windows considers this a 'system key' message (see
+  // http://msdn.microsoft.com/en-us/library/ms646286(VS.85).aspx). Return true
+  // (1) if the keyboard event was handled or false (0) to allow the browser
+  // component to handle the event.
   ///
   int (CEF_CALLBACK *on_key_event)(struct _cef_keyboard_handler_t* self,
       struct _cef_browser_t* browser, enum cef_handler_keyevent_type_t type,
@@ -1566,20 +1594,20 @@ typedef struct _cef_request_t
   // Get the header values.
   ///
   void (CEF_CALLBACK *get_header_map)(struct _cef_request_t* self,
-      cef_string_map_t headerMap);
+      cef_string_multimap_t headerMap);
 
   ///
   // Set the header values.
   ///
   void (CEF_CALLBACK *set_header_map)(struct _cef_request_t* self,
-      cef_string_map_t headerMap);
+      cef_string_multimap_t headerMap);
 
   ///
   // Set all values at one time.
   ///
   void (CEF_CALLBACK *set)(struct _cef_request_t* self, const cef_string_t* url,
       const cef_string_t* method, struct _cef_post_data_t* postData,
-      cef_string_map_t headerMap);
+      cef_string_multimap_t headerMap);
 
   ///
   // Get the flags used in combination with cef_web_urlrequest_t.
@@ -1781,13 +1809,13 @@ typedef struct _cef_response_t
   // Get all response header fields.
   ///
   void (CEF_CALLBACK *get_header_map)(struct _cef_response_t* self,
-      cef_string_map_t headerMap);
+      cef_string_multimap_t headerMap);
 
   ///
   // Set all response header fields.
   ///
   void (CEF_CALLBACK *set_header_map)(struct _cef_response_t* self,
-      cef_string_map_t headerMap);
+      cef_string_multimap_t headerMap);
 
 } cef_response_t;
 
@@ -3044,6 +3072,18 @@ typedef struct _cef_domnode_t
   // Returns true (1) if this is an element node.
   ///
   int (CEF_CALLBACK *is_element)(struct _cef_domnode_t* self);
+
+  ///
+  // Returns true (1) if this is a form control element node.
+  ///
+  int (CEF_CALLBACK *is_form_control_element)(struct _cef_domnode_t* self);
+
+  ///
+  // Returns the type of this form control element node.
+  ///
+  // The resulting string must be freed by calling cef_string_userfree_free().
+  cef_string_userfree_t (CEF_CALLBACK *get_form_control_element_type)(
+      struct _cef_domnode_t* self);
 
   ///
   // Returns true (1) if this object is pointing to the same handle as |that|

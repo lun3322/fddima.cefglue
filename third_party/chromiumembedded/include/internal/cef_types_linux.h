@@ -1,5 +1,4 @@
-// Copyright (c) 2009 The Chromium Embedded Framework Authors. All rights
-// reserved.
+// Copyright (c) 2010 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -28,27 +27,55 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _CEF_EXPORT_H
-#define _CEF_EXPORT_H
 
-#include "cef_build.h"
+#ifndef _CEF_TYPES_LINUX_H
+#define _CEF_TYPES_LINUX_H
 
-#if defined(COMPILER_MSVC)
+#if defined(OS_LINUX)
+#include <gtk/gtk.h>
+#include "cef_string.h"
 
-#ifdef BUILDING_CEF_SHARED
-#define CEF_EXPORT __declspec(dllexport)
-#elif USING_CEF_SHARED
-#define CEF_EXPORT __declspec(dllimport)
-#else
-#define CEF_EXPORT
+#ifdef __cplusplus
+extern "C" {
 #endif
-#define CEF_CALLBACK __stdcall
 
-#elif defined(COMPILER_GCC)
+// Window handle.
+#define cef_window_handle_t GtkWidget*
+#define cef_cursor_handle_t void*
 
-#define CEF_EXPORT __attribute__ ((visibility("default")))
-#define CEF_CALLBACK
+///
+// Supported graphics implementations.
+///
+enum cef_graphics_implementation_t
+{
+  DESKTOP_IN_PROCESS = 0,
+  DESKTOP_IN_PROCESS_COMMAND_BUFFER,
+};
 
-#endif  // COMPILER_GCC
+///
+// Class representing window information.
+///
+typedef struct _cef_window_info_t
+{
+  // Pointer for the parent GtkBox widget.
+  cef_window_handle_t m_ParentWidget;
+  
+  // Pointer for the new browser widget.
+  cef_window_handle_t m_Widget;
+} cef_window_info_t;
 
-#endif // _CEF_EXPORT_H
+///
+// Class representing print context information.
+///
+typedef struct _cef_print_info_t
+{
+  double m_Scale;
+} cef_print_info_t;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // OS_LINUX
+
+#endif // _CEF_TYPES_LINUX_H

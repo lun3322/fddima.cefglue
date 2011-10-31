@@ -2,6 +2,7 @@
 # reserved. Use of this source code is governed by a BSD-style license that
 # can be found in the LICENSE file.
 
+from file_util import *
 import os
 import re
 import shutil
@@ -14,46 +15,6 @@ import time
 def notify(msg):
     """ Display a message. """
     sys.stdout.write('  NOTE: '+msg+'\n')
-    
-
-def read_file(name, normalize = True):
-    """ Function for reading a file. """
-    try:
-        f = open(name, 'r')
-        # read the data
-        data = f.read()
-        if normalize:
-            # normalize line endings
-            data = data.replace("\r\n", "\n")
-        return data
-    except IOError, (errno, strerror):
-        sys.stderr.write('Failed to read file '+filename+': '+strerror)
-        raise
-    else:
-        f.close()
- 
-def write_file(name, data):
-    """ Function for writing a file. """
-    notify('Writing file '+name)
-    try:
-        f = open(name, 'w')
-        # write the data
-        f.write(data)
-    except IOError, (errno, strerror):
-       sys.stderr.write('Failed to write file '+name+': '+strerror)
-       raise
-    else:
-        f.close()
-        
-def file_exists(name):
-    """ Returns true if the file currently exists. """
-    return os.path.exists(name)
-
-def backup_file(name):
-    """ Renames the file to a name that includes the current time stamp. """
-    notify('Creating a backup of file '+name)
-    shutil.move(name, name+'.'+time.strftime('%Y-%m-%d-%H-%M-%S'))
-
 
 def wrap_text(text, indent = '', maxchars = 80):
     """ Wrap the text to the specified number of characters. If
@@ -662,11 +623,6 @@ class obj_class:
     def get_capi_name(self):
         """ Return the CAPI structure name for this class. """
         return get_capi_name(self.name, True)
-
-    def get_cefglue_name(self):
-        result = re.sub("DOM", "Dom", self.name)
-        result = re.sub("URL", "Url", result)
-        return result
     
     def get_comment(self):
         """ Return the class comment as an array of lines. """
@@ -718,6 +674,11 @@ class obj_class:
     def is_client_side(self):
         """ Returns true if the class is implemented by the client. """
         return self.attribs['source'] == 'client'
+
+    def get_cefglue_name(self):
+        result = re.sub("DOM", "Dom", self.name)
+        result = re.sub("URL", "Url", result)
+        return result
 
 
 class obj_typedef:
@@ -853,6 +814,36 @@ class obj_function:
                  '('+string.join(parts['args'], ', ')+')'
         return result
                
+    def get_cpp_parts(self, isimpl = False):
+        """ Return the parts of the C++ function definition. """
+        retval = str(self.retval)
+        name = self.name
+        
+        args = []
+        if len(self.arguments) > 0:
+            for cls in self.arguments:
+                args.append(str(cls))
+                
+        if isimpl and isinstance(self, obj_function_virtual):
+            # enumeration return values must be qualified with the class name
+            type = self.get_retval().get_type()
+            if type.is_result_struct() and not type.is_byref() \
+                and not type.is_byaddr():
+                retval = self.parent.get_name()+'::'+retval
+        
+        return { 'retval' : retval, 'name' : name, 'args' : args }
+        
+    def get_cpp_proto(self, classname = None):
+        """ Return the prototype of the C++ function. """
+        parts = self.get_cpp_parts()
+        result = parts['retval']+' '
+        if not classname is None:
+            result += classname+'::'
+        result += parts['name']+'('+string.join(parts['args'], ', ')+')'
+        if isinstance(self, obj_function_virtual) and self.is_const():
+            result += ' const'
+        return result
+
     def get_cefglue_parts(self, defined_structs = [], prefix = None):
         """ Return the parts of the C API C# source function definition. """
         retval = ''
@@ -902,36 +893,6 @@ class obj_function:
         name = re.sub("^cef_", "", name)
         result = parts['retval']+' ' + name + \
                  '('+string.join(parts['args'], ', ')+')'
-        return result
-
-    def get_cpp_parts(self, isimpl = False):
-        """ Return the parts of the C++ function definition. """
-        retval = str(self.retval)
-        name = self.name
-        
-        args = []
-        if len(self.arguments) > 0:
-            for cls in self.arguments:
-                args.append(str(cls))
-                
-        if isimpl and isinstance(self, obj_function_virtual):
-            # enumeration return values must be qualified with the class name
-            type = self.get_retval().get_type()
-            if type.is_result_struct() and not type.is_byref() \
-                and not type.is_byaddr():
-                retval = self.parent.get_name()+'::'+retval
-        
-        return { 'retval' : retval, 'name' : name, 'args' : args }
-        
-    def get_cpp_proto(self, classname = None):
-        """ Return the prototype of the C++ function. """
-        parts = self.get_cpp_parts()
-        result = parts['retval']+' '
-        if not classname is None:
-            result += classname+'::'
-        result += parts['name']+'('+string.join(parts['args'], ', ')+')'
-        if isinstance(self, obj_function_virtual) and self.is_const():
-            result += ' const'
         return result
 
 
@@ -1098,6 +1059,17 @@ class obj_analysis:
         if value.find('std::map') == 0:
             self.result_type = 'map'
             vals = string.split(value[9:-1], ',')
+            if len(vals) == 2:
+                self.result_value = [
+                    self._get_basic(string.strip(vals[0])),
+                    self._get_basic(string.strip(vals[1]))
+                ]
+                return True
+
+        # check for multimaps
+        if value.find('std::multimap') == 0:
+            self.result_type = 'multimap'
+            vals = string.split(value[14:-1], ',')
             if len(vals) == 2:
                 self.result_value = [
                     self._get_basic(string.strip(vals[0])),
@@ -1311,7 +1283,7 @@ class obj_analysis:
     
     def is_result_map(self):
         """ Returns true if this is a map type. """
-        return (self.result_type == 'map')
+        return (self.result_type == 'map' or self.result_type == 'multimap')
     
     def get_result_map_type(self, defined_structs = []):
         """ Return the map type. """
@@ -1319,10 +1291,16 @@ class obj_analysis:
             raise Exception('Cannot use map as a return type')
         if self.result_value[0]['result_type'] == 'string' \
             and self.result_value[1]['result_type'] == 'string':
-            return {
-                'value' : 'cef_string_map_t',
-                'format' : 'single'
-            }
+            if self.result_type == 'map':
+                return {
+                    'value' : 'cef_string_map_t',
+                    'format' : 'single'
+                }
+            elif self.result_type == 'multimap':
+                return {
+                    'value' : 'cef_string_multimap_t',
+                    'format' : 'multi'
+                }
         raise Exception('Only mappings of strings to strings are supported')
 
     def get_capi(self, defined_structs = []):
@@ -1339,10 +1317,10 @@ class obj_analysis:
             result += self.get_result_string_type()
         elif self.is_result_map():
             resdict = self.get_result_map_type(defined_structs)
-            if resdict['format'] == 'single':
+            if resdict['format'] == 'single' or resdict['format'] == 'multi':
                 result += resdict['value']
             else:
-                raise Exception('Only single-value map types are supported')
+                raise Exception('Unsupported map type')
         elif self.is_result_vector():
             resdict = self.get_result_vector_type(defined_structs)
             if resdict['format'] != 'single':
@@ -1368,7 +1346,7 @@ class obj_analysis:
             result += self.get_cefglue_result_string_type()
         elif self.is_result_map():
             resdict = self.get_cefglue_result_map_type(defined_structs)
-            if resdict['format'] == 'single':
+            if resdict['format'] == 'single' or resdict['format'] == 'multi':
                 result += resdict['value']
             else:
                 raise Exception('Only single-value map types are supported')
@@ -1488,18 +1466,21 @@ class obj_analysis:
             result['format'] = 'multi-func'
         return result
     
+    #def get_cefglue_result_map_type(self, defined_structs = []):
+    #    """ Return the map type. """
+    #    if not self.has_name():
+    #        raise Exception('Cannot use map as a return type')
+    #    if self.result_value[0]['result_type'] == 'string' \
+    #        and self.result_value[1]['result_type'] == 'string':
+    #        return {
+    #            'value' : 'cef_string_map_t',
+    #            'format' : 'single'
+    #        }
+    #    raise Exception('Only mappings of strings to strings are supported')
+
     def get_cefglue_result_map_type(self, defined_structs = []):
-        """ Return the map type. """
-        if not self.has_name():
-            raise Exception('Cannot use map as a return type')
-        if self.result_value[0]['result_type'] == 'string' \
-            and self.result_value[1]['result_type'] == 'string':
-            return {
-                'value' : 'cef_string_map_t',
-                'format' : 'single'
-            }
-        raise Exception('Only mappings of strings to strings are supported')
-    	
+        return self.get_result_map_type(defined_structs);
+
 
 # test the module
 if __name__ == "__main__":

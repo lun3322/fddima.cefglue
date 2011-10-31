@@ -56,5 +56,38 @@ namespace CefGlue
             return false;
         }
 
+        /// <summary>
+        /// Called when a new node in the the browser gets focus. The |node|
+        /// value may be empty if no specific node has gained focus. The node
+        /// object passed to this method represents a snapshot of the DOM at the
+        /// time this method is executed. DOM objects are only valid for the
+        /// scope of this method. Do not keep references to or attempt to access
+        /// any DOM objects outside the scope of this method.
+        /// </summary>
+        private void on_focused_node_changed(cef_focus_handler_t* self, cef_browser_t* browser, cef_frame_t* frame, cef_domnode_t* node)
+        {
+            ThrowIfObjectDisposed();
+
+            var mBrowser = CefBrowser.From(browser);
+            var mFrame = CefFrame.From(frame);
+            var mNode = CefDomNode.From(node);
+
+            // TODO: DOM nodes context
+            this.OnFocusedNodeChanged(mBrowser, mFrame, mNode);
+
+            mNode.Dispose();
+        }
+
+        /// <summary>
+        /// Called when a new node in the the browser gets focus.
+        /// The |node| value may be empty if no specific node has gained focus.
+        /// The node object passed to this method represents a snapshot of the DOM at the time this method is executed.
+        /// DOM objects are only valid for the scope of this method.
+        /// Do not keep references to or attempt to access any DOM objects outside the scope of this method.
+        /// </summary>
+        protected virtual void OnFocusedNodeChanged(CefBrowser browser, CefFrame frame, CefDomNode node)
+        {
+        }
+
     }
 }

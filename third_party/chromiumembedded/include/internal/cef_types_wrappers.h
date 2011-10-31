@@ -281,6 +281,13 @@ struct CefSettingsTraits {
         copy);
     target->log_severity = src->log_severity;
     target->graphics_implementation = src->graphics_implementation;
+    target->local_storage_quota = src->local_storage_quota;
+    target->session_storage_quota = src->session_storage_quota;
+
+#if defined(OS_WIN)
+    target->auto_detect_proxy_settings_enabled =
+        src->auto_detect_proxy_settings_enabled;
+#endif
   }
 };
 
@@ -313,6 +320,7 @@ struct CefBrowserSettingsTraits {
   static inline void set(const struct_type* src, struct_type* target, bool copy)
   {
     target->drag_drop_disabled = src->drag_drop_disabled;
+    target->load_drops_disabled = src->load_drops_disabled;
 
     cef_string_set(src->standard_font_family.str,
         src->standard_font_family.length, &target->standard_font_family, copy);
@@ -377,6 +385,7 @@ struct CefBrowserSettingsTraits {
     target->webgl_disabled = src->webgl_disabled;
     target->accelerated_compositing_enabled =
         src->accelerated_compositing_enabled;
+    target->threaded_compositing_enabled = src->threaded_compositing_enabled;
     target->accelerated_layers_disabled = src->accelerated_layers_disabled;
     target->accelerated_video_disabled = src->accelerated_video_disabled;
     target->accelerated_2d_canvas_disabled =

@@ -461,7 +461,7 @@ def write_cefglue(header, cefgluedir, backup):
     if not os.path.isdir(filedir):
         os.makedirs(filedir);
 
-    if file_exists(file):
+    if path_exists(file):
         oldcontents = read_file(file)
     else:
         oldcontents = ''
@@ -482,7 +482,7 @@ def write_cefglue_file(dir, file, contents):
     #sys.stdout.write(file + "... ");
     file = dir + "/" + file;
 
-    if file_exists(file):
+    if path_exists(file):
         oldcontents = read_file(file)
     else:
         oldcontents = ''
