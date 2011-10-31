@@ -15,6 +15,16 @@ Latest [on-line documentation](http://cefglue.dmitriid.com/doc/) available.
 CefGlue support and related discussion is available on the [CefGlue discussion group](https://groups.google.com/forum/#!forum/cefglue).
 
 
+### Version 0.4.8 (CEF R306)
+
+Download [CefGlue-0.4.8-cef-r306.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.8-cef-r306.zip), [cef_binary_r306_windows.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r306_windows.zip)
+
+- Added BeforeMenu, MenuAction event.
+
+There is a final version. Latest sources of 0.4 version are available under branch named "0.4".
+Next upcoming version is 0.5, and will be available on default branch.
+
+
 ### Version 0.4.7-cef-r306
 
 Download [CefGlue-0.4.7-cef-r306.zip](https://bitbucket.org/fddima/cefglue/downloads/CefGlue-0.4.7-cef-r306.zip), [cef_binary_r306_windows.zip](http://chromiumembedded.googlecode.com/files/cef_binary_r306_windows.zip)
