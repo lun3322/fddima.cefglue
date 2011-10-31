@@ -84,7 +84,7 @@ if not options.capiheader is None:
 if not options.cefgluedir is None:
     #output the C API C# source
     if not options.quiet:
-        sys.stdout.write('Generating CefGlue source...\n')
+        sys.stdout.write('Generating CefGlue interop files...\n')
     writect += write_cefglue(header, options.cefgluedir, not options.nobackup)
 
 # build the list of classes to parse
