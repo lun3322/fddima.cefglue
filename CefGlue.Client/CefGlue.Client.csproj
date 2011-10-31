@@ -10,9 +10,16 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CefGlue.Client</RootNamespace>
     <AssemblyName>CefGlue.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <!-- target framework (this settings will be overriden in CefGlue.targets) -->
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <!-- sign assembly -->
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\CefGlue.snk</AssemblyOriginatorKeyFile>
+    <!-- other properties -->
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -37,21 +44,6 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile />
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\CefGlue.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup />
-  <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -212,8 +204,7 @@
   </ItemGroup>
   <Import Project="..\CefGlue.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+  <!--
   <Target Name="BeforeBuild">
   </Target>
   -->
