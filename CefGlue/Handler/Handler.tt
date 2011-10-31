@@ -1,12 +1,10 @@
 ﻿<#@ template language="C#" hostspecific="false" debug="false" #>
 <#@ output extension=".g.cs" #>
 <#@ include file="../Templates/CefGlue.ttinclude" #>
-<#@ include file="../Templates/HandlerSchema.ttinclude" #>
+<#@ include file="../Templates/HandlerSchema.g.ttinclude" #>
 <#@ include file="Handler.ttinclude" #><#
 
     HandlerSchema["CefClient"].ReversibleNativePointer = true;
-    HandlerSchema["CefClient"].Disposable = true;
-
     HandlerSchema["CefV8Handler"].ReversibleNativePointer = true;
 
     var def = new HandlerDef(){

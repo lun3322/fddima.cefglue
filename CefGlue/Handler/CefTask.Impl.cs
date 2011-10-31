@@ -1,8 +1,9 @@
 namespace CefGlue
 {
     using System;
-    using Core;
-    using Diagnostics;
+    using CefGlue.Core;
+    using CefGlue.Diagnostics;
+    using CefGlue.Threading;
 
     unsafe partial class CefTask
     {
@@ -78,20 +79,5 @@ namespace CefGlue
         /// </summary>
         /// <param name="threadId">Thread executing the call.</param>
         protected abstract void Execute(CefThreadId threadId);
-    }
-
-    internal sealed class CefActionTask : CefTask
-    {
-        private Action action;
-
-        public CefActionTask(Action action)
-        {
-            this.action = action;
-        }
-
-        protected override void Execute(CefThreadId threadId)
-        {
-            this.action();
-        }
     }
 }

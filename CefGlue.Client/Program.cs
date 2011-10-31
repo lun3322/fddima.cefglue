@@ -8,7 +8,7 @@
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using CefGlue.ScriptableObject;
+    using CefGlue.JSBinding;
 
     static class Program
     {
@@ -44,7 +44,8 @@
             #if DIAGNOSTICS
             Cef.Logger.SetAllTargets(false);
             // Cef.Logger.SetTarget(Diagnostics.LogTarget.ScriptableObject, true);
-            Cef.Logger.SetTarget(Diagnostics.LogTarget.CefWebBrowser, true);
+            // Cef.Logger.SetTarget(Diagnostics.LogTarget.CefWebBrowser, true);
+            Cef.Logger.SetTarget(Diagnostics.LogTarget.CefLoadHandler, true);
             Cef.Logger.SetTarget(Diagnostics.LogTarget.Default, true);
             #endif
 
@@ -54,6 +55,12 @@
             @"
 var cefGlue = cefGlue || {};
 Object.defineProperty(cefGlue, ""version"", { value: """ + version + @""", configurable: false });
+
+cefGlue.getDocumentState = function() {
+    cefGlue.client.log('Querying document state... (cefGlue.getDocumentState)');
+    return true;
+}
+
 if (!cefGlue.client) {
     cefGlue.client = {
         dump: function() {
@@ -134,21 +141,26 @@ if (!cefGlue.client) {
 };
 ", new ClientV8Handler());
 
-            Cef.RegisterScriptableObject(
+            Cef.JSBinding.BindJSObject(
                 "cefGlue.tests.scriptableObject.v8Extension",
                 new TestScriptableObject(),
-                ScriptableObjectOptions.Extension
+                JSBindingOptions.Extension | JSBindingOptions.Public
                 );
 
             // TODO: must be cefglue.scriptableObject.tests.jsBinding
-            Cef.RegisterScriptableObject(
+            Cef.JSBinding.BindJSObject(
                 "testScriptableObject",
                 new TestScriptableObject()
                 );
 
+            Cef.JSBinding.BindJSObject<IJSObject>(
+                "iJSObject",
+                new TestScriptableObject()
+                );
+
             var testObject1 = new CefGlue.Client.Examples.ScriptableObject.TestObject1();
-            Cef.RegisterScriptableObject(testObject1, ScriptableObjectOptions.Extension);
-            Cef.RegisterScriptableObject("myTestObject1", testObject1, ScriptableObjectOptions.Extension);
+            Cef.JSBinding.BindJSObject(testObject1, JSBindingOptions.Extension | JSBindingOptions.Public);
+            Cef.JSBinding.BindJSObject("myTestObject1", testObject1, JSBindingOptions.Extension | JSBindingOptions.Public);
 
             Cef.RegisterCustomScheme("res", true, true, false);
             Cef.RegisterSchemeHandlerFactory("res", null, new ClientSchemeHandlerFactory());

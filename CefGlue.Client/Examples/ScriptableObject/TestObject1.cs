@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using CefGlue.ScriptableObject;
+    using CefGlue.JSBinding;
 
+    // TODO: drop this, make normal jsobject feature samples
     internal sealed class TestObject1
     {
         public bool Enabled { get; set; }
@@ -15,12 +16,12 @@
             return a - b;
         }
 
-        [Scriptable]
+        [JSBind]
         private void ScriptOnlyMethod()
         {
         }
 
-        [Scriptable(false)]
+        [JSBind(false)]
         public void HostOnlyMethod()
         {
         }

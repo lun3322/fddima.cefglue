@@ -49,8 +49,8 @@
                     <td><input id="sIterations" type="text" value="1000" required pattern="[0-9]+" /></td>
                 </tr>
                 <tr>
-                    <td class="right">Probes:</td>
-                    <td><input id="sProbes" type="text" value="100" required pattern="[0-9]+" /></td>
+                    <td class="right">Samples:</td>
+                    <td><input id="sSamples" type="text" value="100" required pattern="[0-9]+" /></td>
                 </tr>
                 <tr>
                     <td class="right">Mode:</td>
@@ -72,7 +72,7 @@
             <thead>
                 <tr>
                     <td class="center" style="width:10%">Name</td>
-                    <td class="center" style="width:5%">Probes x Iterations</td>
+                    <td class="center" style="width:5%">Samples x Iterations</td>
                     <td class="center" style="width:5%">Min,&nbsp;ms</td>
                     <td class="center" style="width:5%">Avg,&nbsp;ms</td>
                     <td class="center" style="width:5%">Max,&nbsp;ms</td>
@@ -93,10 +93,10 @@
 (function () {
     var asyncExecution = true;
     var testIterations = 1000;
-    var totalProbes = 100;
-    var probeDelay = 0;
+    var totalSamples = 100;
+    var sampleDelay = 0;
 
-    var collectProbes = false;
+    var collectSamples = false;
 
     var tests = [];
     var testIndex = -1;
@@ -116,7 +116,7 @@
     function execTest(test) {
         function nextStep() {
             if (asyncExecution) {
-                setTimeout(function () { execTest(test); }, probeDelay);
+                setTimeout(function () { execTest(test); }, sampleDelay);
             } else {
                 execTest(test);
             }
@@ -141,8 +141,8 @@
             }
         }
 
-        if (test.probe >= test.totalProbes) {
-            test.avg = test.total / test.totalProbes;
+        if (test.sample >= test.totalSamples) {
+            test.avg = test.total / test.totalSamples;
             test.endMemory = cefGlue.client.privateWorkingSet;
             return nextTest();
         }
@@ -154,10 +154,10 @@
             else if (test.min > elapsed) test.min = elapsed;
             if (!test.max) test.max = elapsed;
             else if (test.max < elapsed) test.max = elapsed;
-            if (collectProbes) {
+            if (collectSamples) {
                 test.results.push(elapsed);
             }
-            test.probe++;
+            test.sample++;
             return nextStep();
         } else {
             return nextTest();
@@ -168,12 +168,12 @@
         var statusBox = document.getElementById("statusBox");
         var progressBox = document.getElementById("progressBox");
 
-        if (test.error || test.probe >= test.totalProbes) {
+        if (test.error || test.sample >= test.totalSamples) {
             statusBox.innerText = "";
             progressBox.style.display = "none";
         } else {
-            statusBox.innerText = (testIndex + 1) + "/" + tests.length + ": " + test.name + " (" + test.probe + "/" + test.totalProbes + ")";
-            progressBox.value = (test.probe / test.totalProbes);
+            statusBox.innerText = (testIndex + 1) + "/" + tests.length + ": " + test.name + " (" + test.sample + "/" + test.totalSamples + ")";
+            progressBox.value = (test.sample / test.totalSamples);
             progressBox.style.display = "inline";
         }
     }
@@ -190,7 +190,7 @@
 
         var markup = ["<tr id='" + id + "'>",
                       "<td class='left'>", test.name, "</td>",
-                      "<td class='right'>", test.totalProbes, "x", test.totalIterations, "</td>",
+                      "<td class='right'>", test.totalSamples, "x", test.totalIterations, "</td>",
                       "<td class='right'>", test.error || !test.prepared ? "-" : test.min.toFixed(2), "</td>",
                       "<td class='right'>", test.error || !test.prepared ? "-" : test.avg.toFixed(2), "</td>",
                       "<td class='right'>", test.error || !test.prepared ? "-" : test.max.toFixed(2), "</td>",
@@ -219,7 +219,7 @@
             test.index = i;
             test.prepared = false;
             test.warmedUp = false;
-            test.probe = 0;
+            test.sample = 0;
             test.total = 0;
             test.results = [];
             test.error = false;
@@ -229,10 +229,10 @@
             test.beginMemory = null;
             test.endMemory = null;
             test.totalIterations = parseInt(testIterations / test.complex);
-            test.totalProbes = parseInt(totalProbes / test.complex);
+            test.totalSamples = parseInt(totalSamples / test.complex);
 
             if (test.totalIterations <= 0) test.totalIterations = 1;
-            if (test.totalProbes <= 0) test.totalProbes = 1;
+            if (test.totalSamples <= 0) test.totalSamples = 1;
 
             appendResult(test);
             test.prepared = true;
@@ -271,7 +271,7 @@
 
     function setSettingsState(disabled) {
         document.getElementById('sIterations').disabled = disabled;
-        document.getElementById('sProbes').disabled = disabled;
+        document.getElementById('sSamples').disabled = disabled;
         document.getElementById('sAsync').disabled = disabled;
         document.getElementById('sSync').disabled = disabled;
         document.getElementById('sRun').disabled = disabled;
@@ -285,7 +285,7 @@
         setSettingsState(true);
 
         testIterations = parseInt(document.getElementById('sIterations').value);
-        totalProbes = parseInt(document.getElementById('sProbes').value);
+        totalSamples = parseInt(document.getElementById('sSamples').value);
         asyncExecution = document.getElementById('sAsync').checked;
 
         setTimeout(execQueuedTests, 0);

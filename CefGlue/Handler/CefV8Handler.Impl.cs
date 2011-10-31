@@ -3,7 +3,7 @@ namespace CefGlue
     using System;
     using System.Runtime.CompilerServices;
     using Core;
-    using ScriptableObject;
+    using JSBinding;
 
     unsafe partial class CefV8Handler
     {

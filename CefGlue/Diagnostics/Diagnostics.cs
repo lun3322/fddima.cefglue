@@ -1,5 +1,6 @@
 ﻿namespace CefGlue.Diagnostics
 {
-    // Define CefGlue.Diagnostics namespace even if DIAGNOSTICS is not defined.
-
+    // TODO: implement CefGlue.Diagnostics - mainly logging stuff
+    // TODO: Remove this file completely
+    public static class Dummy { }
 }

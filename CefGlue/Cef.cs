@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Core;
-    using Diagnostics;
+    using CefGlue.Core;
+    using CefGlue.Diagnostics;
+    using CefGlue.JSBinding;
+    using CefGlue.Threading;
 
     // TODO: allow specify libcef.dll location (and other libraries?)
     // TODO: do exception checking in handler impls, and reporting about them
@@ -14,6 +16,7 @@
     {
         private static CefSettings s_currentSettings;
         private static bool s_multiThreadedMessageLoop;
+        private static JSBindingContext jsBindingContext = new JSBindingContext(null);
 
         public static CefSettings CurrentSettings
         {
@@ -118,6 +121,16 @@
 #if DIAGNOSTICS
             Logger.Close();
 #endif
+        }
+
+        internal static JSBindingContext JSBindingContext
+        {
+            get { return jsBindingContext; }
+        }
+
+        public static IJSBindingContext JSBinding
+        {
+            get { return jsBindingContext; }
         }
 
         /// <summary>
@@ -570,7 +583,6 @@
                 return libcef.delete_storage((cef_storage_type_t)type, &nOrigin, &nKey) != 0;
             }
         }
-
 
         private static void ThrowIfNotInitialized()
         {

@@ -4,10 +4,17 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using CefGlue.ScriptableObject;
+    using CefGlue.JSBinding;
+
+    public interface IJSObject
+    {
+        bool EchoBoolean(bool value);
+        string ReadWriteProperty { get; set; }
+    }
+
 
     [CLSCompliant(false)]
-    public sealed class TestScriptableObject
+    public sealed class TestScriptableObject : IJSObject
     {
         public void EchoVoid() { }
 
@@ -83,14 +90,14 @@
         }
 
         // TODO: this must be hidden automatically, 'cause we have more priority signature (int arg1)
-        [Scriptable(false)]
+        [JSBind(false)]
         public string Overload(short arg1)
         {
             return "#4";
         }
 
-        // TODO:
-        [Scriptable(false)]
+        // TODO: overload by type variance
+        [JSBind(false)]
         public string Overload(int arg1, string arg2)
         {
             return "#4";

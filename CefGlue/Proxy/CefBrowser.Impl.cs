@@ -14,6 +14,10 @@ namespace CefGlue
         /// </summary>
         public static void Create(CefWindowInfo windowInfo, CefClient client, string url, CefBrowserSettings settings)
         {
+            if (windowInfo == null) throw new ArgumentNullException("windowInfo");
+            if (client == null) throw new ArgumentNullException("client");
+            if (settings == null) throw new ArgumentNullException("settings");
+
             fixed (char* url_str = url)
             {
                 cef_string_t n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
@@ -35,6 +39,10 @@ namespace CefGlue
         /// </summary>
         public static CefBrowser CreateSync(CefWindowInfo windowInfo, CefClient client, string url, CefBrowserSettings settings)
         {
+            if (windowInfo == null) throw new ArgumentNullException("windowInfo");
+            if (client == null) throw new ArgumentNullException("client");
+            if (settings == null) throw new ArgumentNullException("settings");
+
             fixed (char* url_str = url)
             {
                 cef_string_t n_url = new cef_string_t(url_str, url != null ? url.Length : 0);

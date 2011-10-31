@@ -37,7 +37,7 @@
     <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
@@ -58,59 +58,39 @@
     <Compile Include="..\CefGlue.Version.cs">
       <Link>Properties\CefGlue.Version.cs</Link>
     </Compile>
-    <Compile Include="CefWebBrowser+Client.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser+DisplayHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser+LifeSpanHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser+LoadHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ConsoleMessageEventArgs.cs" />
-    <Compile Include="CefWebBrowser+JSBindingHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser+JSDialogHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser+KeyboardHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser+RequestHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="BeforeBrowseEventArgs.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="StatusMessageEventArgs.cs" />
     <Compile Include="CefWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CefWebBrowser.Events.cs">
-      <SubType>Component</SubType>
+    <Compile Include="CefWebView.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CefWebBrowser.Properties.cs">
-      <SubType>Component</SubType>
+    <Compile Include="CefWebView.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CefWebView.tt</DependentUpon>
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CefWebBrowser.Methods.cs">
+    <Compile Include="CefWebBrowser.g.cs">
+      <DependentUpon>CefWebBrowser.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetWindowPosFlags.cs" />
-    <Compile Include="WM.cs" />
-    <Compile Include="CefWebBrowser+MenuHandler.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="BeforeMenuEventArgs.cs" />
-    <Compile Include="MenuActionEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CefGlue.snk">
       <Link>Properties\CefGlue.snk</Link>
+    </None>
+    <None Include="CefWebView.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CefWebView.g.cs</LastGenOutput>
+    </None>
+    <None Include="CefWebBrowser.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CefWebBrowser.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -122,8 +102,11 @@
   <ItemGroup>
     <EmbeddedResource Include="CefWebBrowser.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="..\CefGlue.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\DefaultProject.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
