@@ -6,11 +6,12 @@ namespace CefGlue
     unsafe partial class CefKeyboardHandler
     {
         /// <summary>
-        /// Called when the browser component receives a keyboard event. |type|
-        /// is the type of keyboard event, |code| is the windows scan-code for
-        /// the event, |modifiers| is a set of bit-flags describing any pressed
-        /// modifier keys and |isSystemKey| is true if Windows considers this a
-        /// 'system key' message (see http://msdn.microsoft.com/en-
+        /// Called when the browser component receives a keyboard event that has
+        /// not been intercepted via JavaScript. |type| is the type of keyboard
+        /// event, |code| is the windows scan-code for the event, |modifiers| is
+        /// a set of bit- flags describing any pressed modifier keys and
+        /// |isSystemKey| is true if Windows considers this a 'system key'
+        /// message (see http://msdn.microsoft.com/en-
         /// us/library/ms646286(VS.85).aspx). Return true if the keyboard event
         /// was handled or false to allow the browser component to handle the
         /// event.
@@ -29,13 +30,12 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Called when the browser component receives a keyboard event.
+        /// Called when the browser component receives a keyboard event that has not been intercepted via JavaScript.
         /// |type| is the type of keyboard event,
         /// |code| is the windows scan-code for the event,
-        /// |modifiers| is a set of bit-flags describing any pressed modifier keys 
-        /// and |isSystemKey| is true if Windows considers this a 'system key' message (see http://msdn.microsoft.com/en-us/library/ms646286(VS.85).aspx).
-        /// Return true if the keyboard event was handled 
-        /// or false to allow the browser component to handle the event.
+        /// |modifiers| is a set of bit- flags describing any pressed modifier keys and
+        /// |isSystemKey| is true if Windows considers this a 'system key' message (see http://msdn.microsoft.com/en-us/library/ms646286(VS.85).aspx).
+        /// Return true if the keyboard event was handled or false to allow the browser component to handle the event.
         /// </summary>
         protected virtual bool OnKeyEvent(CefBrowser browser, CefHandlerKeyEventType type, int code, CefHandlerKeyEventModifiers modifiers, bool isSystemKey)
         {

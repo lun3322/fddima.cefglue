@@ -21,6 +21,10 @@
 		<CefGlueMacOSX Condition=" '$(CefGlueMacOSX)' == '' and '$(OS)' == 'OSX' ">true</CefGlueMacOSX>
 		<CefGlueMacOSX Condition=" '$(CefGlueMacOSX)' != 'true' ">false</CefGlueMacOSX>
 
+		<!-- Posix -->
+		<Posix Condition=" $(CefGlueUnix) or $(CefGlueMacOSX) ">true</Posix>
+		<Posix Condition=" $(Posix) != 'true' ">false</Posix>
+
 		<!-- MONO -->
 		<CefGlueMono Condition=" '$(CefGlueMono)' == '' and !$(CefGlueWindows) ">true</CefGlueMono>
 		<CefGlueMono Condition=" '$(CefGlueMono)' != 'true' ">false</CefGlueMono>
@@ -60,6 +64,7 @@
 		<DefineConstants Condition=" $(CefGlueWindows) ">$(DefineConstants);OS_WIN</DefineConstants>
 		<DefineConstants Condition=" $(CefGlueUnix) ">$(DefineConstants);OS_UNIX</DefineConstants>
 		<DefineConstants Condition=" $(CefGlueMacOSX) ">$(DefineConstants);OS_MACOSX</DefineConstants>
+		<DefineConstants Condition=" $(Posix) ">$(DefineConstants);OS_POSIX</DefineConstants>
 
 		<!-- TODO: obsolete -->
 		<CefGlueDiagnostics>false</CefGlueDiagnostics>

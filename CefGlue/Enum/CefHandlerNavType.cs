@@ -14,5 +14,6 @@
         Reload = cef_handler_navtype_t.NAVTYPE_RELOAD,
         FormResubmitted = cef_handler_navtype_t.NAVTYPE_FORMRESUBMITTED,
         Other = cef_handler_navtype_t.NAVTYPE_OTHER,
+        LinkDropped = cef_handler_navtype_t.NAVTYPE_LINKDROPPED,
     }
 }

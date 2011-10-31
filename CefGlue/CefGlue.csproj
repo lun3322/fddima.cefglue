@@ -31,8 +31,10 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile></DocumentationFile>
-    <NoWarn></NoWarn>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DefineConstants>TRACE</DefineConstants>
@@ -60,8 +62,10 @@
     </Compile>
     <Compile Include="Base\CefStringList.cs" />
     <Compile Include="Base\CefStringMap.cs" />
+    <Compile Include="Base\CefStringMultiMap.cs" />
     <Compile Include="Base\ResourceHelper.cs" />
     <Compile Include="Cef.cs" />
+    <Compile Include="Core\Base\cef_string_multimap_t.cs" />
     <Compile Include="Core\Enum\cef_storage_type_t.cs" />
     <Compile Include="Core\Enum\cef_handler_focus_source_t.cs" />
     <Compile Include="Enum\CefHandlerFocusSource.cs" />
@@ -288,8 +292,10 @@
     <None Include="..\CefGlue.snk">
       <Link>Properties\CefGlue.snk</Link>
     </None>
-    <None Include="Core\alloc.tt"></None>
-    <None Include="Handler\Handler.tt"></None>
+    <None Include="Core\alloc.tt">
+    </None>
+    <None Include="Handler\Handler.tt">
+    </None>
     <None Include="Handler\Handler.ttinclude" />
     <None Include="Proxy\Proxy.tt" />
     <None Include="Proxy\Proxy.ttinclude" />

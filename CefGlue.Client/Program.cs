@@ -31,6 +31,7 @@
             settings.CachePath = Path.GetDirectoryName(Application.ExecutablePath) + "/cache";
             settings.LogFile = Path.GetDirectoryName(Application.ExecutablePath) + "/CEF.log";
             settings.LogSeverity = CefLogSeverity.Verbose;
+            // settings.GraphicsImplementation = CefGraphicsImplementation.DesktopInProcess;
             try
             {
                 Cef.Initialize(settings);

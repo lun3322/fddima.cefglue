@@ -108,7 +108,7 @@
             
             if (responseLength != -1)
             {
-                var headers = new CefStringMap();
+                var headers = new CefStringMultiMap();
                 headers.Append("Content-Length", responseLength.ToString());
                 response.SetHeaderMap(headers);
             }

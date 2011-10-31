@@ -5,12 +5,12 @@
 import sys
 from cef_parser import *
 from make_capi_header import *
-from make_cefglue import *
 from make_cpptoc_header import *
 from make_cpptoc_impl import *
 from make_ctocpp_header import *
 from make_ctocpp_impl import *
 from optparse import OptionParser
+from make_cefglue import *
 
 
 # cannot be loaded as a module
@@ -63,7 +63,7 @@ if options.cppheader is None:
     sys.exit()
 
 # make sure the header exists
-if not file_exists(options.cppheader):
+if not path_exists(options.cppheader):
     sys.stderr.write('File '+options.cppheader+' does not exist.')
     sys.exit()
 

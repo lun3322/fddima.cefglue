@@ -39,6 +39,29 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Returns true if this is a form control element node.
+        /// </summary>
+        public bool IsFormControlElement
+        {
+            get
+            {
+                return cef_domnode_t.invoke_is_form_control_element(this.ptr) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Returns the type of this form control element node.
+        /// </summary>
+        public string FormControlElementType
+        {
+            get
+            {
+                var n_name = cef_domnode_t.invoke_get_form_control_element_type(this.ptr);
+                return n_name.GetStringAndFree();
+            }
+        }
+
+        /// <summary>
         /// Returns true if this object is pointing to the same handle as |that| object.
         /// </summary>
         public bool IsSame(CefDomNode that)

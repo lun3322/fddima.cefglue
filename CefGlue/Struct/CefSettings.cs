@@ -27,6 +27,9 @@
         private CefGraphicsImplementation graphicsImplementation;
         private uint localStorageQuota;
         private uint sessionStorageQuota;
+#if OS_WIN
+        private bool autoDetectProxySettingsEnabled;
+#endif
 
         public CefSettings()
         {
@@ -192,6 +195,21 @@
             }
         }
 
+#if OS_WIN
+        /// <summary>
+        /// Set to true to use the system proxy resolver on Windows when "Automatically detect settings" is checked.
+        /// This setting is disabled by default for performance reasons.
+        /// </summary>
+        public bool AutoDetectProxySettingsEnabled
+        {
+            get { return this.autoDetectProxySettingsEnabled; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.autoDetectProxySettingsEnabled = value;
+            }
+        }
+#endif
 
         internal bool IsReadOnly
         {
@@ -220,6 +238,10 @@
             ptr->graphics_implementation = (cef_graphics_implementation_t)this.GraphicsImplementation;
             ptr->local_storage_quota = this.LocalStorageQuota;
             ptr->session_storage_quota = this.SessionStorageQuota;
+
+#if OS_WIN
+            ptr->auto_detect_proxy_settings_enabled = this.AutoDetectProxySettingsEnabled;
+#endif
 
             return ptr;
         }

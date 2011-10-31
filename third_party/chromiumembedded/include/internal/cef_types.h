@@ -151,6 +151,15 @@ typedef struct _cef_settings_t
   // Quota limit for sessionStorage data per namespace. Default size is 5MB.
   ///
   unsigned int session_storage_quota;
+
+#if defined(OS_WIN)
+  ///
+  // Set to true (1) to use the system proxy resolver on Windows when 
+  // "Automatically detect settings" is checked. This setting is disabled
+  // by default for performance reasons.
+  ///
+  bool auto_detect_proxy_settings_enabled;
+#endif
 } cef_settings_t;
 
 ///
@@ -169,6 +178,11 @@ typedef struct _cef_browser_settings_t
   // Disable drag & drop of URLs from other windows.
   ///
   bool drag_drop_disabled;
+
+  ///
+  // Disable default navigation resulting from drag & drop of URLs.
+  ///
+  bool load_drops_disabled;
 
   // The below values map to WebPreferences settings.
 
@@ -342,6 +356,12 @@ typedef struct _cef_browser_settings_t
   // support it correctly.
   ///
   bool accelerated_compositing_enabled;
+
+  ///
+  // Set to true (1) to enable threaded compositing. This is currently only
+  // supported by the command buffer graphics implementation.
+  ///
+  bool threaded_compositing_enabled;
 
   ///
   // Set to true (1) to disable accelerated layers. This affects features like
@@ -519,6 +539,7 @@ enum cef_handler_navtype_t
   NAVTYPE_RELOAD,
   NAVTYPE_FORMRESUBMITTED,
   NAVTYPE_OTHER,
+  NAVTYPE_LINKDROPPED,
 };
 
 ///
