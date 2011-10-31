@@ -59,7 +59,8 @@
             Console.WriteLine("OnResourceResponse: {0} ({1})", url, response.GetHeader("Content-Length"));
             Console.ForegroundColor = prevColor;
 
-            filter = new CefWebProgressContentFilter();
+            filter = null;
+            // filter = new CefWebProgressContentFilter();
         }
     }
 }
