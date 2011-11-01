@@ -1,0 +1,10 @@
+[repository]
+native = LF
+
+[patterns]
+**.cs = native
+**.csproj = native
+**.proj = native
+**.sh = native
+**.html = native
+**.cmd = CRLF
