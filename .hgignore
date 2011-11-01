@@ -1,9 +1,7 @@
+glob:bin
+glob:obj
 relre:/\.svn/
-relre:^build/
-relre:^chromiumembedded/tools/cefglue/
 relre:^chromiumembedded/(?!include|tools|README\.txt)
-relre:bin/
-relre:obj/
 relre:\.suo$
 relre:\.sdf$
 relre:\.opensdf$
@@ -14,5 +12,7 @@ relre:\.pdb/
 relre:^CefGlue.shfbproj_\w*$
 relre:\.pidb$
 relre:\.userprefs$
+#
+#
 relre:\.g\.cs$
 relre:\.g\.ttinclude$

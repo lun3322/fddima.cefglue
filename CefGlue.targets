@@ -52,10 +52,12 @@
 		<CefGlueConfigName Condition=" '$(Platform)' != 'x86' and '$(Platform)' != 'x64' and '$(Platform)' != 'AnyCPU' ">$(CefGlueConfigName)-$(Platform)</CefGlueConfigName>
 
 		<!-- set paths -->
+		<!--
 		<BaseIntermediateOutputPath>$(CefGlueObjPath)\$(CefGlueConfigName)\</BaseIntermediateOutputPath>
 		<IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(AssemblyName)\</IntermediateOutputPath>
 		<OutputPath>$(CefGlueBinPath)\$(CefGlueConfigName)\</OutputPath>
 		<DocumentationFile Condition=" '$(DocumentationFile)' != '' ">$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		-->
 
 		<!-- define compiler constants -->
 		<DefineConstants Condition=" $(CefGlueMono) ">$(DefineConstants);MONO</DefineConstants>
