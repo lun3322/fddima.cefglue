@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{432E4102-0457-4123-AD92-301AC6883C1B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CefGlue.Windows.Forms</RootNamespace>
-    <AssemblyName>CefGlue.Windows.Forms</AssemblyName>
-    <FileAlignment>512</FileAlignment>
+    <ProjectGuid>{6CCCE690-3982-4474-9F13-32F281F9C40C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CefGlue.UnitTests</RootNamespace>
+    <AssemblyName>CefGlue.UnitTests</AssemblyName>
     <ReleaseVersion>0.5.0</ReleaseVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\CefGlue.snk</AssemblyOriginatorKeyFile>
@@ -25,6 +23,8 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile />
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
@@ -36,9 +36,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile />
-    <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'release|linux-x86' ">
@@ -49,9 +50,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'debug|linux-x86' ">
@@ -64,45 +66,17 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile />
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CefGlue.AssemblyInfo.cs">
-      <Link>Properties\CefGlue.AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\CefGlue.Version.cs">
-      <Link>Properties\CefGlue.Version.cs</Link>
-    </Compile>
-    <Compile Include="CefWebBrowser.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CefWebView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CefWebView.g.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CefWebBrowser.g.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="NativeMethods.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetWindowPosFlags.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\CefGlue.snk">
-      <Link>Properties\CefGlue.snk</Link>
-    </None>
-    <None Include="CefWebView.tt" />
-    <None Include="CefWebBrowser.tt" />
+    <Reference Include="NUnitLite">
+      <HintPath>..\third_party\nunitlite\NUnitLite.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CefGlue\CefGlue.csproj">
@@ -111,16 +85,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CefWebBrowser.bmp" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\CefGlue.AssemblyInfo.cs">
+      <Link>Properties\CefGlue.AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\CefGlue.Version.cs">
+      <Link>Properties\CefGlue.Version.cs</Link>
+    </Compile>
+    <Compile Include="CefStringListTests.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
-  <Import Project="..\CefGlue.targets" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- 
-  <Target Name="BeforeBuild">
-  </Target>
-  -->
-  <!--
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
