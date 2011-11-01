@@ -1,10 +1,19 @@
-[repository]
-native = LF
-
 [patterns]
-**.cs = native
-**.csproj = native
-**.proj = native
-**.sh = native
-**.html = native
+#
+# Source and project files
+#
+**.cs = LF
+**.csproj = LF
+**.proj = LF
+**.py = LF
+
+#
+# Shell scripts
+#
+**.sh = LF
 **.cmd = CRLF
+
+#
+# Resources
+#
+**.html = LF
