@@ -61,10 +61,14 @@
 		<DefineConstants Condition=" $(CefGlueMono) ">$(DefineConstants);MONO</DefineConstants>
 		<DefineConstants Condition=" $(CefGlueNet) ">$(DefineConstants);NET</DefineConstants>
 
-		<DefineConstants Condition=" $(CefGlueWindows) ">$(DefineConstants);OS_WIN</DefineConstants>
-		<DefineConstants Condition=" $(CefGlueUnix) ">$(DefineConstants);OS_UNIX</DefineConstants>
-		<DefineConstants Condition=" $(CefGlueMacOSX) ">$(DefineConstants);OS_MACOSX</DefineConstants>
-		<DefineConstants Condition=" $(Posix) ">$(DefineConstants);OS_POSIX</DefineConstants>
+		<DefineConstants Condition=" $(CefGlueWindows) ">$(DefineConstants);WINDOWS</DefineConstants>
+		<DefineConstants Condition=" $(CefGlueMacOSX) ">$(DefineConstants);MACOSX</DefineConstants>
+		<DefineConstants Condition=" $(Posix) ">$(DefineConstants);POSIX</DefineConstants>
+		<DefineConstants Condition=" $(CefGlueUnix) ">$(DefineConstants);UNIX;LINUX</DefineConstants>
+
+		<DefineConstants Condition=" '$(Platform)' == 'x86' ">$(DefineConstants);ARCH_X86;INTPTR32</DefineConstants>
+		<DefineConstants Condition=" '$(Platform)' == 'x64' ">$(DefineConstants);ARCH_X64;INTPTR64</DefineConstants>
+		<DefineConstants Condition=" '$(Platform)' == 'AnyCPU' ">$(DefineConstants);ARCH_ANYCPU</DefineConstants>
 
 		<!-- TODO: obsolete -->
 		<CefGlueDiagnostics>false</CefGlueDiagnostics>
