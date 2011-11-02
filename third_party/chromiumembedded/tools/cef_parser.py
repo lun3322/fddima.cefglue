@@ -1369,14 +1369,13 @@ class obj_analysis:
 
     def get_cefglue_type(self, name):
         if name == 'int64':
-            name = 'long'
-            return name
+            return 'long'
         if name == 'uint64':
-            name = 'ulong'
-            return name
+            return 'ulong'
         if name == 'size_t':
-            name = 'int'
-            return name
+            return 'int'  # TODO: X64 is not a INT! there is must be IntPtr-size!
+        # if name == 'cef_string_map_t':
+        #    return 'cef_string_map*'
         return name
 
     def get_cefglue_result_simple_type(self):
@@ -1467,7 +1466,12 @@ class obj_analysis:
         return result
 
     def get_cefglue_result_map_type(self, defined_structs = []):
-        return self.get_result_map_type(defined_structs);
+        dict = self.get_result_map_type(defined_structs);
+        if dict['value'] == 'cef_string_map_t':
+            dict['value'] = 'cef_string_map*';
+        elif dict['value'] == 'cef_string_multimap_t':
+            dict['value'] = 'cef_string_multimap*';
+        return dict;
 
 
 # test the module

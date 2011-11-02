@@ -10,19 +10,19 @@ namespace CefGlue
     /// </summary>
     public sealed unsafe class CefStringMultiMap
     {
-        private cef_string_multimap_t map;
+        private cef_string_multimap* handle;
 
         /// <summary>
         /// Allocate a new string multimap.
         /// </summary>
         public CefStringMultiMap()
         {
-            this.map = NativeMethods.cef_string_multimap_alloc();
+            this.handle = NativeMethods.cef_string_multimap_alloc();
         }
 
         ~CefStringMultiMap()
         {
-            this.Dispose();
+            this.Dispose(false);
         }
 
         /// <summary>
@@ -30,17 +30,25 @@ namespace CefGlue
         /// </summary>
         public void Dispose()
         {
-            if (this.map != cef_string_multimap_t.Null)
-            {
-                NativeMethods.cef_string_multimap_free(this.map);
-                this.map = cef_string_multimap_t.Null;
-            }
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        internal cef_string_multimap_t GetNativeHandle()
+        private void Dispose(bool disposing)
         {
-            return this.map;
+            if (this.handle != null)
+            {
+                NativeMethods.cef_string_multimap_free(this.handle);
+                this.handle = null;
+            }
+        }
+
+        internal cef_string_multimap* Handle
+        {
+            get
+            {
+                return this.handle;
+            }
         }
 
         /// <summary>
@@ -48,7 +56,7 @@ namespace CefGlue
         /// </summary>
         public int Count
         {
-            get { return NativeMethods.cef_string_multimap_size(this.map); }
+            get { return NativeMethods.cef_string_multimap_size(this.handle); }
         }
 
         /// <summary>
@@ -58,9 +66,9 @@ namespace CefGlue
         {
             fixed (char* key_str = key)
             {
-                var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
+                var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return NativeMethods.cef_string_multimap_find_count(this.map, &n_key);
+                return NativeMethods.cef_string_multimap_find_count(this.handle, &nKey);
             }
         }
 
@@ -74,7 +82,7 @@ namespace CefGlue
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                var success = NativeMethods.cef_string_multimap_enumerate(this.map, &n_key, valueIndex, &n_value) != 0;
+                var success = NativeMethods.cef_string_multimap_enumerate(this.handle, &n_key, valueIndex, &n_value) != 0;
                 var result = success ? cef_string_t.ToString(&n_value) : null;
                 cef_string_t.Clear(&n_value);
                 // TODO: throw if failed
@@ -88,7 +96,7 @@ namespace CefGlue
         public string GetKey(int index)
         {
             cef_string_t n_key = new cef_string_t();
-            var success = NativeMethods.cef_string_multimap_key(this.map, index, &n_key) != 0;
+            var success = NativeMethods.cef_string_multimap_key(this.handle, index, &n_key) != 0;
             var result = success ? cef_string_t.ToString(&n_key) : null;
             cef_string_t.Clear(&n_key);
             // TODO: throw if failed
@@ -101,7 +109,7 @@ namespace CefGlue
         public string GetValue(int index)
         {
             cef_string_t n_value = new cef_string_t();
-            var success = NativeMethods.cef_string_multimap_value(this.map, index, &n_value) != 0;
+            var success = NativeMethods.cef_string_multimap_value(this.handle, index, &n_value) != 0;
             var result = success ? cef_string_t.ToString(&n_value) : null;
             cef_string_t.Clear(&n_value);
             // TODO: throw if failed
@@ -119,7 +127,7 @@ namespace CefGlue
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
                 var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
 
-                var result = NativeMethods.cef_string_multimap_append(this.map, &n_key, &n_value);
+                var result = NativeMethods.cef_string_multimap_append(this.handle, &n_key, &n_value);
 
                 if (result == 0) throw new InvalidOperationException("CefStringMultiMap.Append failed.");
             }
@@ -130,7 +138,7 @@ namespace CefGlue
         /// </summary>
         public void Clear()
         {
-            NativeMethods.cef_string_multimap_clear(this.map);
+            NativeMethods.cef_string_multimap_clear(this.handle);
         }
     }
 }
