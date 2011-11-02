@@ -303,8 +303,8 @@ namespace CefGlue
         /// </summary>
         public string GetStringValue()
         {
-            var n_result = cef_v8value_t.invoke_get_string_value(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_v8value_t.invoke_get_string_value(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
 
@@ -481,8 +481,8 @@ namespace CefGlue
         /// </summary>
         public string GetFunctionName()
         {
-            var n_result = cef_v8value_t.invoke_get_function_name(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_v8value_t.invoke_get_function_name(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>

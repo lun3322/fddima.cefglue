@@ -133,7 +133,7 @@ namespace CefGlue
             if (cef_v8value_t.invoke_is_string(value) != 0)
             {
                 var nResult = cef_v8value_t.invoke_get_string_value(value);
-                return nResult.GetStringAndFree();
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
             else if (cef_v8value_t.invoke_is_null(value) != 0
                      || cef_v8value_t.invoke_is_undefined(value) != 0)
@@ -381,15 +381,15 @@ namespace CefGlue
             else if (cef_v8value_t.invoke_is_string(value) != 0)
             {
                 var nResult = cef_v8value_t.invoke_get_string_value(value);
-                if (nResult.Length == 1)
+                if (cef_string_userfree.GetLength(nResult) == 1)
                 {
-                    var result = nResult.GetFirstCharOrDefault();
-                    nResult.Free();
+                    var result = cef_string_userfree.GetFirstCharOrDefault(nResult);
+                    cef_string_userfree.Free(nResult);
                     return result;
                 }
                 else
                 {
-                    nResult.Free();
+                    cef_string_userfree.Free(nResult);
                     throw new InvalidCastException();
                 }
             }
@@ -861,15 +861,15 @@ namespace CefGlue
             else if (cef_v8value_t.invoke_is_string(value) != 0)
             {
                 var nResult = cef_v8value_t.invoke_get_string_value(value);
-                if (nResult.Length == 1)
+                if (cef_string_userfree.GetLength(nResult) == 1)
                 {
-                    var result = nResult.GetFirstCharOrDefault();
-                    nResult.Free();
+                    var result = cef_string_userfree.GetFirstCharOrDefault(nResult);
+                    cef_string_userfree.Free(nResult);
                     return result;
                 }
                 else
                 {
-                    nResult.Free();
+                    cef_string_userfree.Free(nResult);
                     throw new InvalidCastException();
                 }
             }
@@ -973,7 +973,7 @@ namespace CefGlue
             else if (cef_v8value_t.invoke_is_string(value) != 0)
             {
                 var nResult = cef_v8value_t.invoke_get_string_value(value);
-                return nResult.GetStringAndFree();
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
             else if (cef_v8value_t.invoke_is_null(value) != 0 || cef_v8value_t.invoke_is_undefined(value) != 0)
             {

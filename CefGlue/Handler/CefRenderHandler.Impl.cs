@@ -187,7 +187,7 @@ namespace CefGlue
         /// <summary>
         /// Called when the browser window's cursor has changed.
         /// </summary>
-        private void on_cursor_change(cef_render_handler_t* self, cef_browser_t* browser, cef_cursor_handle_t cursor)
+        private void on_cursor_change(cef_render_handler_t* self, cef_browser_t* browser, cef_cursor_handle* cursor)
         {
             ThrowIfObjectDisposed();
 

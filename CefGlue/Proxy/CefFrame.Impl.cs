@@ -84,8 +84,8 @@ namespace CefGlue
         /// </summary>
         public string GetSource()
         {
-            cef_string_userfree_t n_source = cef_frame_t.invoke_get_source(this.ptr);
-            return n_source.GetStringAndFree();
+            var nResult = cef_frame_t.invoke_get_source(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace CefGlue
         /// </summary>
         public string GetText()
         {
-            cef_string_userfree_t n_text = cef_frame_t.invoke_get_text(this.ptr);
-            return n_text.GetStringAndFree();
+            var nResult = cef_frame_t.invoke_get_text(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -192,8 +192,8 @@ namespace CefGlue
         /// </summary>
         public string GetName()
         {
-            cef_string_userfree_t n_name = cef_frame_t.invoke_get_name(this.ptr);
-            return n_name.GetStringAndFree();
+            var nResult = cef_frame_t.invoke_get_name(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -202,8 +202,8 @@ namespace CefGlue
         /// </summary>
         public string GetURL()
         {
-            cef_string_userfree_t n_url = cef_frame_t.invoke_get_url(this.ptr);
-            return n_url.GetStringAndFree();
+            var nResult = cef_frame_t.invoke_get_url(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>

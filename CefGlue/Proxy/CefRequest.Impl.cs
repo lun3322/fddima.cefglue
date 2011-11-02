@@ -20,8 +20,8 @@ namespace CefGlue
         /// </summary>
         public string GetURL()
         {
-            var n_result = cef_request_t.invoke_get_url(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_request_t.invoke_get_url(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace CefGlue
         {
             fixed (char* url_str = url)
             {
-                var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
-                cef_request_t.invoke_set_url(this.ptr, &n_url);
+                var nUrl = new cef_string_t(url_str, url != null ? url.Length : 0);
+                cef_request_t.invoke_set_url(this.ptr, &nUrl);
             }
         }
 
@@ -42,8 +42,8 @@ namespace CefGlue
         /// </summary>
         public string GetMethod()
         {
-            var n_result = cef_request_t.invoke_get_method(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_request_t.invoke_get_method(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -133,8 +133,8 @@ namespace CefGlue
         /// </summary>
         public string GetFirstPartyForCookies()
         {
-            var n_result = cef_request_t.invoke_get_first_party_for_cookies(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_request_t.invoke_get_first_party_for_cookies(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>

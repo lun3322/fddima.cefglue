@@ -26,8 +26,8 @@ namespace CefGlue
         /// </summary>
         public string GetStatusText()
         {
-            var n_result = cef_response_t.invoke_get_status_text(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_response_t.invoke_get_status_text(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace CefGlue
         /// </summary>
         public string GetMimeType()
         {
-            var n_result = cef_response_t.invoke_get_mime_type(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_response_t.invoke_get_mime_type(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace CefGlue
             {
                 var n_name = new cef_string_t(name_str, name != null ? name.Length : 0);
 
-                var n_result = cef_response_t.invoke_get_header(this.ptr, &n_name);
-                return n_result.GetStringAndFree();
+                var nResult = cef_response_t.invoke_get_header(this.ptr, &n_name);
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
         }
 

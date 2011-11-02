@@ -51,8 +51,8 @@ namespace CefGlue
         /// </summary>
         public string GetTitle()
         {
-            var n_result = cef_domdocument_t.invoke_get_title(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_domdocument_t.invoke_get_title(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -131,8 +131,8 @@ namespace CefGlue
         /// </summary>
         public string GetSelectionAsMarkup()
         {
-            var n_result = cef_domdocument_t.invoke_get_selection_as_markup(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_domdocument_t.invoke_get_selection_as_markup(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace CefGlue
         /// </summary>
         public string GetSelectionAsText()
         {
-            var n_result = cef_domdocument_t.invoke_get_selection_as_text(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_domdocument_t.invoke_get_selection_as_text(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -149,8 +149,8 @@ namespace CefGlue
         /// </summary>
         public string GetBaseURL()
         {
-            var n_result = cef_domdocument_t.invoke_get_base_url(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_domdocument_t.invoke_get_base_url(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -161,8 +161,8 @@ namespace CefGlue
             fixed (char* partialUrl_str = partialUrl)
             {
                 var n_partialUrl = new cef_string_t(partialUrl_str, partialUrl != null ? partialUrl.Length : 0);
-                var n_result = cef_domdocument_t.invoke_get_complete_url(this.ptr, &n_partialUrl);
-                return n_result.GetStringAndFree();
+                var nResult = cef_domdocument_t.invoke_get_complete_url(this.ptr, &n_partialUrl);
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
         }
 

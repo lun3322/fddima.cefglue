@@ -5,9 +5,10 @@ namespace CefGlue.Interop
 
     /// <summary>
     /// CEF string list.
-    /// CEF original type is cef_string_list_t.
-    /// CefGlue equivalent is cef_string_list*.
     /// </summary>
+    /// <remarks>
+    ///<c>cef_string_list*</c> === <c>cef_string_list_t</c>.
+    /// </remarks>
     internal struct cef_string_list { }
 
     internal static unsafe partial class NativeMethods

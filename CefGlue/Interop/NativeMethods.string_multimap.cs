@@ -5,9 +5,10 @@ namespace CefGlue.Interop
 
     /// <summary>
     /// CEF string map.
-    /// CEF original type is cef_string_multimap_t.
-    /// CefGlue equivalent is cef_string_multimap*.
     /// </summary>
+    /// <remarks>
+    ///<c>cef_string_multimap*</c> === <c>cef_string_multimap_t</c>.
+    /// </remarks>
     internal struct cef_string_multimap { }
 
     internal static unsafe partial class NativeMethods

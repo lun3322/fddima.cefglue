@@ -21,7 +21,7 @@
             file = new CefThreadSynchronizationContext(CefThreadId.File);
         }
 
-        // TODO: Remove CefThread.PlatformUI -> never use it -> managing of this it is end-user code zone
+        [Obsolete("CefThread.PlatformUI thread is obsolete. CefGlue never will be control main UI thread.")]
         public static SynchronizationContext PlatformUI
         {
             get { return platformUI; }
@@ -42,6 +42,7 @@
             get { return file; }
         }
 
+        [Obsolete]
         internal static void InitPlatformUI()
         {
             if (platformUI == null)

@@ -92,8 +92,11 @@
                 // force browser to be closed.
 
                 var windowInfo = new CefWindowInfo();
+#if WINDOWS
                 windowInfo.SetAsChild(this.Handle, 0, 0, this.Width, this.Height);
-
+#else
+#error Only windows supported.
+#endif
                 this.core.Create(windowInfo);
 
                 windowInfo.Dispose();

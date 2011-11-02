@@ -66,8 +66,8 @@ namespace CefGlue
         /// </summary>
         public string GetFileName()
         {
-            var n_result = cef_zip_reader_t.invoke_get_file_name(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_zip_reader_t.invoke_get_file_name(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace CefGlue
         /// </summary>
         public DateTime GetFileLastModified()
         {
-            var n_result = cef_zip_reader_t.invoke_get_file_last_modified(this.ptr);
-            return n_result.ToDateTime();
+            var nResult = cef_zip_reader_t.invoke_get_file_last_modified(this.ptr);
+            return UnixTime.ToDateTime(nResult);
         }
 
         /// <summary>
