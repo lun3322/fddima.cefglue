@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Interop
+namespace CefGlue.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     /// <summary>
     /// URL component parts.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
     internal unsafe partial struct cef_urlparts_t
     {
         ///

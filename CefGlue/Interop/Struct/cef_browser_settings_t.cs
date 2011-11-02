@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Interop
+namespace CefGlue.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +11,7 @@
     // default values. The consequences of using custom values may not be well
     // tested.
     ///
-    [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
     internal unsafe partial struct cef_browser_settings_t
     {
         /// <summary>

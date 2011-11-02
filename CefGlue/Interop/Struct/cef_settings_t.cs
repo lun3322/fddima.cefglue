@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Interop
+namespace CefGlue.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,7 @@
     // Initialization settings. Specify NULL or 0 to get the recommended default
     // values.
     ///
-    [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
     internal unsafe partial struct cef_settings_t
     {
         ///

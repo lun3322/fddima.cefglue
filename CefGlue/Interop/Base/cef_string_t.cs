@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Interop
+namespace CefGlue.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@
     /// <remarks>
     /// This is assumes that CEF builded with the UTF16 string type as default (CEF_STRING_TYPE_UTF16).
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
     internal unsafe partial struct cef_string_t
     {
         /// <summary></summary>
@@ -32,7 +32,7 @@
         /// <remarks>void (*dtor)(char16_t* str);</remarks>
         internal IntPtr dtor;
 
-        [UnmanagedFunctionPointer(libcef.Call), SuppressUnmanagedCodeSecurity]
+        [UnmanagedFunctionPointer(NativeMethods.CefCall), SuppressUnmanagedCodeSecurity]
         public delegate void dtor_delegate(char* str);
 
         /// <summary>
@@ -68,7 +68,7 @@
 
         private static void copy_impl(string src, cef_string_t* dst)
         {
-            libcef.string_clear(dst);
+            NativeMethods.string_clear(dst);
 
             if (string.IsNullOrEmpty(src))
             {
@@ -109,7 +109,7 @@
                 }
                 else
 #endif
-                libcef.string_set(ptr, src == null ? 0 : src.Length, dst, copy ? 1 : 0);
+                NativeMethods.cef_string_set(ptr, src == null ? 0 : src.Length, dst, copy ? 1 : 0);
             }
         }
 
@@ -124,38 +124,13 @@
                 }
                 else
 #endif
-                libcef.string_set(ptr, src == null ? 0 : src.Length, dst, 1);
+                NativeMethods.cef_string_set(ptr, src == null ? 0 : src.Length, dst, 1);
             }
         }
 
         public static void Clear(cef_string_t* str)
         {
-            libcef.string_clear(str);
+            NativeMethods.cef_string_clear(str);
         }
-    }
-
-    unsafe partial class libcef
-    {
-        /// <summary>
-        /// These functions set string values. If |copy| is true (1) the value will be
-        /// copied instead of referenced. It is up to the user to properly manage
-        /// the lifespan of references.
-        /// </summary>
-        /// <remarks>
-        /// CEF_EXPORT int cef_string_utf16_set(const char16_t* src, size_t src_len,
-        ///                                     cef_string_utf16_t* output, int copy);
-        /// </remarks>
-        [DllImport(libcef.DllName, EntryPoint = "cef_string_utf16_set", CallingConvention = libcef.Call)]
-        public static extern int string_set(char* src, int src_len, cef_string_t* output, int copy);
-
-        /// <summary>
-        /// These functions clear string values. The structure itself is not freed.
-        /// </summary>
-        /// <param name="str"></param>
-        /// <remarks>
-        /// CEF_EXPORT void cef_string_utf16_clear(cef_string_utf16_t* str);
-        /// </remarks>
-        [DllImport(libcef.DllName, EntryPoint = "cef_string_utf16_clear", CallingConvention = libcef.Call)]
-        public static extern void string_clear(cef_string_t* str);
     }
 }

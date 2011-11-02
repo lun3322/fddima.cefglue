@@ -16,7 +16,7 @@ namespace CefGlue
                 var n_uri = new cef_string_t(uri_str, uri != null ? uri.Length : 0);
 
                 return CefXmlReader.From(
-                    libcef.xml_reader_create(
+                    NativeMethods.cef_xml_reader_create(
                         stream.GetNativePointerAndAddRef(),
                         (cef_xml_encoding_type_t)encodingType,
                         &n_uri)

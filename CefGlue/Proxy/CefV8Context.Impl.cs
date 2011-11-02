@@ -11,7 +11,7 @@ namespace CefGlue
         public static CefV8Context GetCurrentContext()
         {
             return CefV8Context.From(
-                libcef.v8context_get_current_context()
+                NativeMethods.cef_v8context_get_current_context()
                 );
         }
 
@@ -21,7 +21,7 @@ namespace CefGlue
         public static CefV8Context GetEnteredContext()
         {
             return CefV8Context.From(
-                libcef.v8context_get_entered_context()
+                NativeMethods.cef_v8context_get_entered_context()
                 );
         }
 

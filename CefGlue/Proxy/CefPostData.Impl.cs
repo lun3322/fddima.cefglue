@@ -11,7 +11,7 @@ namespace CefGlue
         public static CefPostData Create()
         {
             return CefPostData.From(
-                libcef.post_data_create()
+                NativeMethods.cef_post_data_create()
                 );
         }
 

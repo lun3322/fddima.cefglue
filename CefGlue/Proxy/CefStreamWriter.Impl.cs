@@ -15,7 +15,7 @@ namespace CefGlue
             {
                 var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
                 return CefStreamWriter.From(
-                    libcef.stream_writer_create_for_file(&n_fileName)
+                    NativeMethods.cef_stream_writer_create_for_file(&n_fileName)
                     );
             }
         }
@@ -26,7 +26,7 @@ namespace CefGlue
         public static CefStreamWriter Create(CefWriteHandler handler)
         {
             return CefStreamWriter.From(
-                libcef.stream_writer_create_for_handler(handler.GetNativePointerAndAddRef())
+                NativeMethods.cef_stream_writer_create_for_handler(handler.GetNativePointerAndAddRef())
                 );
         }
 

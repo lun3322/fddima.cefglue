@@ -11,7 +11,7 @@ namespace CefGlue
         public static CefWebUrlRequest Create(CefRequest request, CefWebUrlRequestClient client)
         {
             return CefWebUrlRequest.From(
-                libcef.web_urlrequest_create(
+                NativeMethods.cef_web_urlrequest_create(
                     request.GetNativePointerAndAddRef(),
                     client.GetNativePointerAndAddRef()
                     )

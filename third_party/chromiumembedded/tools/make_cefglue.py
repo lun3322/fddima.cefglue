@@ -219,7 +219,7 @@ def make_cefglue_proxyimpl(cls, cefgluedir):
     return
 
 def make_cefglue_structlayout():
-    result = '[StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]'
+    result = '[StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]'
     return result
 
 def make_cefglue_struct_suppressmessage():
@@ -227,7 +227,7 @@ def make_cefglue_struct_suppressmessage():
     return result
 
 def make_cefglue_unmanaged_function_pointer():
-	result = '[UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]'
+	result = '[UnmanagedFunctionPointer(NativeMethods.CefCallback), SuppressUnmanagedCodeSecurity]'
 	return result
 
 def make_struct_decl():
@@ -235,7 +235,7 @@ def make_struct_decl():
 	return result
 
 def make_nativemethods_decl():
-	result = 'internal static unsafe partial class libcef'
+	result = 'internal static unsafe partial class NativeMethods'
 	return result
 
 def format_comment_cefglue(comment, indent, translate_map = None, maxchars = 80):
@@ -260,7 +260,8 @@ def make_cefglue_global_funcs(funcs, defined_names, translate_map, indent):
             result += indent + '/// <remarks>\n' + indent + '/// The resulting string must be freed by calling cef_string_userfree_free().\n' + indent + '/// </remarks>\n'
 
         parts = func.get_cefglue_parts()
-        result += indent + "[DllImport(DllName, EntryPoint = \"" + parts['name'] + "\", CallingConvention = Call)]\n";
+        # result += indent + "[DllImport(CefDllName, EntryPoint = \"" + parts['name'] + "\", CallingConvention = CefCall)]\n";
+        result += indent + "[DllImport(CefDllName, CallingConvention = CefCall)]\n";
         result += indent + "public static extern " + func.get_cefglue_proto(defined_names) + ";\n"
 
         #result += wrap_code(indent+'CEF_EXPORT '+
@@ -397,10 +398,10 @@ namespace CefGlue.Interop
 #endif
     """ + make_nativemethods_decl() + """
     {
-        internal const int StructPack = 0;
-        internal const CallingConvention Call = CallingConvention.Cdecl;
-        internal const CallingConvention Callback = CallingConvention.StdCall;
-        internal const string DllName = "libcef.dll";
+        internal const int CefStructPack = 0;
+        internal const CallingConvention CefCall = CallingConvention.Cdecl;
+        internal const CallingConvention CefCallback = CallingConvention.StdCall;
+        internal const string CefDllName = "libcef.dll";
 
 """
 
@@ -412,8 +413,8 @@ namespace CefGlue.Interop
 """
     }
 
-"""	
-   
+"""
+
     # output classes
     classes = header.get_classes()
     for cls in classes:
@@ -429,9 +430,9 @@ namespace CefGlue.Interop
                                          not is_handler_class(cls), # make method invoke only to proxies
                                          '        ')
         result += '\n    };\n\n'
-        
+
         defined_names.append(cls.get_capi_name())
-        
+
         # static functions become global
         funcs = cls.get_static_funcs()
         if len(funcs) > 0:
@@ -440,7 +441,7 @@ namespace CefGlue.Interop
             result += make_cefglue_global_funcs(funcs, defined_names,
                                              translate_map, '        ')+'\n'
             result += '    ' + '}\n'
-    
+
     # footer string
     result += \
 """
@@ -456,7 +457,7 @@ namespace CefGlue.Interop
 
 def write_cefglue(header, cefgluedir, backup):
     filedir = cefgluedir;
-    file = filedir + '/libcef.g.cs'
+    file = filedir + '/NativeMethods.g.cs'
 
     if not os.path.isdir(filedir):
         os.makedirs(filedir);
@@ -465,14 +466,14 @@ def write_cefglue(header, cefgluedir, backup):
         oldcontents = read_file(file)
     else:
         oldcontents = ''
-    
+
     newcontents = make_cefglue(header, cefgluedir)
     if newcontents != oldcontents:
         if backup and oldcontents != '':
             backup_file(file)
         write_file(file, newcontents)
         return True
-    
+
     return False
 
 def write_cefglue_file(dir, file, contents):
@@ -486,12 +487,12 @@ def write_cefglue_file(dir, file, contents):
         oldcontents = read_file(file)
     else:
         oldcontents = ''
-        
+
     if contents != oldcontents:
         write_file(file, contents)
         #sys.stdout.write("updated.\n");
         return True
-    
+
     #sys.stdout.write("up-to-date.\n");
     return False
 
@@ -499,14 +500,14 @@ def write_cefglue_file(dir, file, contents):
 # test the module
 if __name__ == "__main__":
     import sys
-    
+
     # verify that the correct number of command-line arguments are provided
     if len(sys.argv) < 2:
         sys.stderr.write('Usage: '+sys.argv[0]+' <infile>')
         sys.exit()
-        
+
     # create the header object
     header = obj_header(sys.argv[1])
-    
+
     # dump the result to stdout
     sys.stdout.write(make_cefglue_header(header))

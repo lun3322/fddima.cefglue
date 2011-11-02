@@ -1,4 +1,4 @@
-﻿namespace CefGlue
+namespace CefGlue
 {
     using System;
     using System.Collections.Generic;
@@ -40,7 +40,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(bool value)
         {
-            return libcef.v8value_create_bool(value ? 1 : 0);
+            return NativeMethods.cef_v8value_create_bool(value ? 1 : 0);
         }
 
         #endregion
@@ -75,7 +75,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(int value)
         {
-            return libcef.v8value_create_int(value);
+            return NativeMethods.cef_v8value_create_int(value);
         }
 
         #endregion
@@ -111,7 +111,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(double value)
         {
-            return libcef.v8value_create_double(value);
+            return NativeMethods.cef_v8value_create_double(value);
         }
 
         #endregion
@@ -154,14 +154,14 @@
         {
             if (value == null)
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
             else
             {
                 fixed (char* value_str = value)
                 {
                     var nValue = new cef_string_t(value_str, value.Length);
-                    return libcef.v8value_create_string(&nValue);
+                    return NativeMethods.cef_v8value_create_string(&nValue);
                 }
             }
         }
@@ -200,7 +200,7 @@
         internal static cef_v8value_t* ToNativeV8Value(DateTime value)
         {
             cef_time_t nDate = new cef_time_t(value);
-            return libcef.v8value_create_date(&nDate);
+            return NativeMethods.cef_v8value_create_date(&nDate);
         }
 
         #endregion
@@ -238,7 +238,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(byte value)
         {
-            return libcef.v8value_create_int(value);
+            return NativeMethods.cef_v8value_create_int(value);
         }
 
         #endregion
@@ -276,7 +276,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(sbyte value)
         {
-            return libcef.v8value_create_int(value);
+            return NativeMethods.cef_v8value_create_int(value);
         }
 
         #endregion
@@ -314,7 +314,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(short value)
         {
-            return libcef.v8value_create_int(value);
+            return NativeMethods.cef_v8value_create_int(value);
         }
 
         #endregion
@@ -352,7 +352,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(ushort value)
         {
-            return libcef.v8value_create_int(value);
+            return NativeMethods.cef_v8value_create_int(value);
         }
 
         #endregion
@@ -405,7 +405,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(char value)
         {
-            return libcef.v8value_create_int(value);
+            return NativeMethods.cef_v8value_create_int(value);
         }
 
         #endregion
@@ -441,7 +441,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(float value)
         {
-            return libcef.v8value_create_double(value);
+            return NativeMethods.cef_v8value_create_double(value);
         }
 
         #endregion
@@ -483,11 +483,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_bool(value.Value ? 1 : 0);
+                return NativeMethods.cef_v8value_create_bool(value.Value ? 1 : 0);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -530,11 +530,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_int(value.Value);
+                return NativeMethods.cef_v8value_create_int(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -578,11 +578,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_double(value.Value);
+                return NativeMethods.cef_v8value_create_double(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -627,11 +627,11 @@
             if (value.HasValue)
             {
                 cef_time_t nDate = new cef_time_t(value.Value);
-                return libcef.v8value_create_date(&nDate);
+                return NativeMethods.cef_v8value_create_date(&nDate);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -677,11 +677,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_int(value.Value);
+                return NativeMethods.cef_v8value_create_int(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -727,11 +727,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_int(value.Value);
+                return NativeMethods.cef_v8value_create_int(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -777,11 +777,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_int(value.Value);
+                return NativeMethods.cef_v8value_create_int(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -827,11 +827,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_int(value.Value);
+                return NativeMethods.cef_v8value_create_int(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -892,11 +892,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_int(value.Value);
+                return NativeMethods.cef_v8value_create_int(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -940,11 +940,11 @@
         {
             if (value.HasValue)
             {
-                return libcef.v8value_create_double(value.Value);
+                return NativeMethods.cef_v8value_create_double(value.Value);
             }
             else
             {
-                return libcef.v8value_create_null();
+                return NativeMethods.cef_v8value_create_null();
             }
         }
 
@@ -1000,7 +1000,7 @@
         [ChangeType]
         internal static cef_v8value_t* ToNativeV8Value(object value)
         {
-            if (value == null) return libcef.v8value_create_null();
+            if (value == null) return NativeMethods.cef_v8value_create_null();
 
             switch (Type.GetTypeCode(value.GetType()))
             {
