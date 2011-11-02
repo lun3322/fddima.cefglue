@@ -13,6 +13,8 @@ native = LF
 **.sln = CRLF
 **.proj = LF
 **.py = LF
+**.tt = LF
+**.ttinclude = LF
 
 # Shell scripts
 **.sh = LF
