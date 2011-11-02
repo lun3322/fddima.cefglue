@@ -11,7 +11,7 @@ namespace CefGlue
         public static CefRequest Create()
         {
             return CefRequest.From(
-                libcef.request_create()
+                NativeMethods.cef_request_create()
                 );
         }
 

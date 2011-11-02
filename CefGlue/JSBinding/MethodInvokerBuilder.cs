@@ -1,4 +1,4 @@
-﻿namespace CefGlue.JSBinding
+namespace CefGlue.JSBinding
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +36,7 @@
 
         static unsafe MethodInvokerBuilder()
         {
-            createUndefinedNativeV8ValueMethod = new MethodInvokerHelper.CreateUndefinedNativeV8Value(libcef.v8value_create_undefined).Method;
+            createUndefinedNativeV8ValueMethod = new MethodInvokerHelper.CreateUndefinedNativeV8Value(NativeMethods.cef_v8value_create_undefined).Method;
             throwArgumentCountMismatchMethod = new Action(MethodInvokerHelper.ThrowArgumentCountMismatch).Method;
         }
 

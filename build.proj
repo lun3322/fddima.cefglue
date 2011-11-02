@@ -24,7 +24,7 @@
 			/>
 
 		<!-- copy generated files to source code base -->
-		<Copy SourceFiles="$(InteropIntermediateOutputPath)/libcef.g.cs"
+		<Copy SourceFiles="$(InteropIntermediateOutputPath)/NativeMethods.g.cs"
 			DestinationFolder="$(CefGlueRootPath)/CefGlue/Interop/"
 			SkipUnchangedFiles="true" />
 

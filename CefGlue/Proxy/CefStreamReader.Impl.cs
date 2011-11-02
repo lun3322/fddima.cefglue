@@ -16,7 +16,7 @@ namespace CefGlue
                 var n_fileName = new cef_string_t(fileName_str, fileName != null ? fileName.Length : 0);
 
                 return CefStreamReader.From(
-                    libcef.stream_reader_create_for_file(&n_fileName)
+                    NativeMethods.cef_stream_reader_create_for_file(&n_fileName)
                     );
             }
         }
@@ -29,7 +29,7 @@ namespace CefGlue
         public static unsafe CefStreamReader Create(void* data, int size)
         {
             return CefStreamReader.From(
-                libcef.stream_reader_create_for_data(data, size)
+                NativeMethods.cef_stream_reader_create_for_data(data, size)
                 );
         }
 
@@ -39,7 +39,7 @@ namespace CefGlue
         public static CefStreamReader Create(CefReadHandler handler)
         {
             return CefStreamReader.From(
-                libcef.stream_reader_create_for_handler(handler.GetNativePointerAndAddRef())
+                NativeMethods.cef_stream_reader_create_for_handler(handler.GetNativePointerAndAddRef())
                 );
         }
 

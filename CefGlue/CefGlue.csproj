@@ -294,7 +294,6 @@
     <Compile Include="Interop\Enum\cef_xml_encoding_type_t.cs" />
     <Compile Include="Interop\Enum\cef_xml_node_type_t.cs" />
     <Compile Include="Interop\Enum\cef_drag_operations_mask_t.cs" />
-    <Compile Include="Interop\libcef.g.cs" />
     <Compile Include="Interop\Struct\cef_browser_settings_t.cs" />
     <Compile Include="Interop\Struct\cef_cookie_t.cs" />
     <Compile Include="Interop\Struct\cef_handler_menuinfo_t.cs" />
@@ -312,6 +311,11 @@
     <Compile Include="Interop\win\RECT.cs" />
     <Compile Include="Interop\win\WindowStyles.cs" />
     <Compile Include="Interop\win\WindowStylesEx.cs" />
+    <Compile Include="Interop\NativeMethods.g.cs" />
+    <Compile Include="Interop\NativeMethods.string_multimap.cs" />
+    <Compile Include="Interop\NativeMethods.string_list.cs" />
+    <Compile Include="Interop\NativeMethods.string_map.cs" />
+    <Compile Include="Interop\NativeMethods.string.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CefGlue.snk">

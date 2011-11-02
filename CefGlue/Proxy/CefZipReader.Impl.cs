@@ -12,7 +12,7 @@ namespace CefGlue
         public static CefZipReader Create(CefStreamReader stream)
         {
             return CefZipReader.From(
-                libcef.zip_reader_create(stream.GetNativePointerAndAddRef())
+                NativeMethods.cef_zip_reader_create(stream.GetNativePointerAndAddRef())
                 );
         }
 

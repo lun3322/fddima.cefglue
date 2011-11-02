@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Interop
+namespace CefGlue.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.Security;
     using System.Text;
 
-    [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack)]
+    [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
     internal unsafe struct cef_base_t
     {
         /// <summary>
@@ -23,7 +23,7 @@
         /// </remarks>
         public IntPtr add_ref;
 
-        [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
+        [UnmanagedFunctionPointer(NativeMethods.CefCallback), SuppressUnmanagedCodeSecurity]
         public delegate int add_ref_delegate(cef_base_t* self);
 
         /// <summary>
@@ -34,7 +34,7 @@
         /// </remarks>
         public IntPtr release;
 
-        [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
+        [UnmanagedFunctionPointer(NativeMethods.CefCallback), SuppressUnmanagedCodeSecurity]
         public delegate int release_delegate(cef_base_t* self);
 
         /// <summary>
@@ -45,7 +45,7 @@
         /// </remarks>
         public IntPtr get_refct;
 
-        [UnmanagedFunctionPointer(libcef.Callback), SuppressUnmanagedCodeSecurity]
+        [UnmanagedFunctionPointer(NativeMethods.CefCallback), SuppressUnmanagedCodeSecurity]
         public delegate int get_refct_delegate(cef_base_t* self);
     }
 }

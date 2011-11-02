@@ -1,4 +1,4 @@
-﻿namespace CefGlue
+namespace CefGlue
 {
     using System;
     using CefGlue.Interop;
@@ -33,7 +33,7 @@
                 {
                     var n_url = new cef_string_t(url_str, url.Length);
 
-                    if (libcef.parse_url(&n_url, &n_urlparts) == 0)
+                    if (NativeMethods.cef_parse_url(&n_url, &n_urlparts) == 0)
                     {
                         throw new ArgumentException("Invalid url.");
                     }
@@ -87,7 +87,7 @@
                 cef_string_t n_url;
                 try
                 {
-                    if (libcef.create_url(&n_urlparts, &n_url) != 0)
+                    if (NativeMethods.cef_create_url(&n_urlparts, &n_url) != 0)
                     {
                         return cef_string_t.ToString(&n_url);
                     }

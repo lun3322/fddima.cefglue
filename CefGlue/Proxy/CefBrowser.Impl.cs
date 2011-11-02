@@ -22,7 +22,7 @@ namespace CefGlue
             {
                 cef_string_t n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
 
-                var result = libcef.browser_create(
+                var result = NativeMethods.cef_browser_create(
                     windowInfo.NativePointer,
                     client.GetNativePointerAndAddRef(),
                     &n_url,
@@ -47,7 +47,7 @@ namespace CefGlue
             {
                 cef_string_t n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
 
-                var browser = libcef.browser_create_sync(
+                var browser = NativeMethods.cef_browser_create_sync(
                     windowInfo.NativePointer,
                     client.GetNativePointerAndAddRef(),
                     &n_url,

@@ -11,7 +11,7 @@ namespace CefGlue
         public static CefV8Value CreateUndefined()
         {
             return CefV8Value.From(
-                libcef.v8value_create_undefined()
+                NativeMethods.cef_v8value_create_undefined()
                 );
         }
 
@@ -21,7 +21,7 @@ namespace CefGlue
         public static CefV8Value CreateNull()
         {
             return CefV8Value.From(
-                libcef.v8value_create_null()
+                NativeMethods.cef_v8value_create_null()
                 );
         }
 
@@ -31,7 +31,7 @@ namespace CefGlue
         public static CefV8Value CreateBool(bool value)
         {
             return CefV8Value.From(
-                libcef.v8value_create_bool(value ? 1 : 0)
+                NativeMethods.cef_v8value_create_bool(value ? 1 : 0)
                 );
         }
 
@@ -41,7 +41,7 @@ namespace CefGlue
         public static CefV8Value CreateInt(int value)
         {
             return CefV8Value.From(
-                libcef.v8value_create_int(value)
+                NativeMethods.cef_v8value_create_int(value)
                 );
         }
 
@@ -51,7 +51,7 @@ namespace CefGlue
         public static CefV8Value CreateDouble(double value)
         {
             return CefV8Value.From(
-                libcef.v8value_create_double(value)
+                NativeMethods.cef_v8value_create_double(value)
                 );
         }
 
@@ -62,7 +62,7 @@ namespace CefGlue
         {
             cef_time_t n_date = new cef_time_t(value);
             return CefV8Value.From(
-                libcef.v8value_create_date(&n_date)
+                NativeMethods.cef_v8value_create_date(&n_date)
                 );
         }
 
@@ -75,7 +75,7 @@ namespace CefGlue
             {
                 var n_value = new cef_string_t(value_str, value != null ? value.Length : 0);
                 return CefV8Value.From(
-                    libcef.v8value_create_string(&n_value)
+                    NativeMethods.cef_v8value_create_string(&n_value)
                     );
             }
         }
@@ -93,7 +93,7 @@ namespace CefGlue
         /// </summary>
         public static CefV8Value CreateObject(CefUserData userData)
         {
-            return CefV8Value.From(libcef.v8value_create_object(
+            return CefV8Value.From(NativeMethods.cef_v8value_create_object(
                 (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null)
                 ));
         }
@@ -111,7 +111,7 @@ namespace CefGlue
         /// </summary>
         public static CefV8Value CreateObject(CefUserData userData, CefV8Accessor accessor)
         {
-            return CefV8Value.From(libcef.v8value_create_object_with_accessor(
+            return CefV8Value.From(NativeMethods.cef_v8value_create_object_with_accessor(
                     (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null),
                     accessor.GetNativePointerAndAddRef()
                 ));
@@ -123,7 +123,7 @@ namespace CefGlue
         public static CefV8Value CreateArray()
         {
             return CefV8Value.From(
-                libcef.v8value_create_array()
+                NativeMethods.cef_v8value_create_array()
                 );
         }
 
@@ -137,7 +137,7 @@ namespace CefGlue
                 var n_name = new cef_string_t(name_str, name != null ? name.Length : 0);
 
                 return CefV8Value.From(
-                    libcef.v8value_create_function(&n_name, handler.GetNativePointerAndAddRef())
+                    NativeMethods.cef_v8value_create_function(&n_name, handler.GetNativePointerAndAddRef())
                     );
             }
         }

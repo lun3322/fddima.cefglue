@@ -890,7 +890,7 @@ class obj_function:
         """ Return the prototype of the C API C# source function. """
         parts = self.get_cefglue_parts(defined_structs, prefix)
         name = parts['name']
-        name = re.sub("^cef_", "", name)
+        # name = re.sub("^cef_", "", name)
         result = parts['retval']+' ' + name + \
                  '('+string.join(parts['args'], ', ')+')'
         return result

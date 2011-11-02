@@ -1,4 +1,4 @@
-﻿namespace CefGlue
+namespace CefGlue
 {
     using System;
     using System.Collections.Generic;
@@ -84,7 +84,7 @@
 #endif
 
             var n_settings = settings.CreateNative();
-            var initialized = libcef.initialize(n_settings) != 0;
+            var initialized = NativeMethods.cef_initialize(n_settings) != 0;
             cef_settings_t.Free(n_settings);
 
             if (!initialized) throw new CefException("CEF failed to initialize.");
@@ -116,7 +116,7 @@
             ObjectCt.WriteDump();
 #endif
 
-            libcef.shutdown();
+            NativeMethods.cef_shutdown();
 
 #if DIAGNOSTICS
             Logger.Close();
@@ -143,7 +143,7 @@
         /// </summary>
         public static void DoMessageLoopWork()
         {
-            libcef.do_message_loop_work();
+            NativeMethods.cef_do_message_loop_work();
         }
 
         /// <summary>
@@ -156,7 +156,7 @@
         /// </summary>
         public static void RunMessageLoop()
         {
-            libcef.run_message_loop();
+            NativeMethods.cef_run_message_loop();
         }
 
 
@@ -224,7 +224,7 @@
                 var n_extensionName = new cef_string_t(extensionName_str, extensionName.Length);
                 var n_javascriptCode = new cef_string_t(javasriptCode_str, javascriptCode.Length);
 
-                return libcef.register_extension(
+                return NativeMethods.cef_register_extension(
                     &n_extensionName,
                     &n_javascriptCode,
                     handler.GetNativePointerAndAddRef()
@@ -277,7 +277,7 @@
             {
                 var n_schemeName = new cef_string_t(schemeName_str, schemeName.Length);
 
-                return libcef.register_custom_scheme(
+                return NativeMethods.cef_register_custom_scheme(
                     &n_schemeName,
                     isStandard ? 1 : 0,
                     isLocal ? 1 : 0,
@@ -304,7 +304,7 @@
                 var n_schemeName = new cef_string_t(schemeName_str, schemeName.Length);
                 var n_domainName = new cef_string_t(domainName_str, domainName != null ? domainName.Length : 0);
 
-                return libcef.register_scheme_handler_factory(
+                return NativeMethods.cef_register_scheme_handler_factory(
                     &n_schemeName,
                     &n_domainName,
                     factory.GetNativePointerAndAddRef()
@@ -319,7 +319,7 @@
         /// </summary>
         public static bool ClearSchemeHandlerFactories()
         {
-            return libcef.clear_scheme_handler_factories() != 0;
+            return NativeMethods.cef_clear_scheme_handler_factories() != 0;
         }
 
         /// <summary>
@@ -362,7 +362,7 @@
                 var n_targetProtocol = new cef_string_t(targetProtocol_str, targetProtocol.Length);
                 var n_targetDomain = new cef_string_t(targetDomain_str, targetDomain.Length);
 
-                return libcef.add_cross_origin_whitelist_entry(
+                return NativeMethods.cef_add_cross_origin_whitelist_entry(
                     &n_sourceOrigin,
                     &n_targetProtocol,
                     &n_targetDomain,
@@ -385,7 +385,7 @@
                 var n_targetProtocol = new cef_string_t(targetProtocol_str, targetProtocol.Length);
                 var n_targetDomain = new cef_string_t(targetDomain_str, targetDomain.Length);
 
-                return libcef.remove_cross_origin_whitelist_entry(
+                return NativeMethods.cef_remove_cross_origin_whitelist_entry(
                     &n_sourceOrigin,
                     &n_targetProtocol,
                     &n_targetDomain,
@@ -400,7 +400,7 @@
         /// </summary>
         public static bool ClearCrossOriginWhitelist()
         {
-            return libcef.clear_cross_origin_whitelist() != 0;
+            return NativeMethods.cef_clear_cross_origin_whitelist() != 0;
         }
 
         /// <summary>
@@ -414,7 +414,7 @@
         /// </summary>
         public static bool CurrentlyOn(CefThreadId threadId)
         {
-            return libcef.currently_on((cef_thread_id_t)threadId) != 0;
+            return NativeMethods.cef_currently_on((cef_thread_id_t)threadId) != 0;
         }
 
         /// <summary>
@@ -423,7 +423,7 @@
         /// </summary>
         public static void PostTask(CefThreadId threadId, CefTask task)
         {
-            var result = libcef.post_task((cef_thread_id_t)threadId, task.GetNativePointerAndAddRef()) != 0;
+            var result = NativeMethods.cef_post_task((cef_thread_id_t)threadId, task.GetNativePointerAndAddRef()) != 0;
             if (!result) ThrowPostTaskError();
         }
 
@@ -433,7 +433,7 @@
         /// </summary>
         public static void PostTask(CefThreadId threadId, CefTask task, long delayMs)
         {
-            var result = libcef.post_delayed_task((cef_thread_id_t)threadId, task.GetNativePointerAndAddRef(), delayMs) != 0;
+            var result = NativeMethods.cef_post_delayed_task((cef_thread_id_t)threadId, task.GetNativePointerAndAddRef(), delayMs) != 0;
             if (!result) ThrowPostTaskError();
         }
 
@@ -459,7 +459,7 @@
         /// </summary>
         public static bool VisitAllCookies(CefCookieVisitor visitor)
         {
-            return libcef.visit_all_cookies(visitor.GetNativePointerAndAddRef()) != 0;
+            return NativeMethods.cef_visit_all_cookies(visitor.GetNativePointerAndAddRef()) != 0;
         }
 
         /// <summary>
@@ -475,7 +475,7 @@
             {
                 var n_url = new cef_string_t(url_str, url.Length);
 
-                return libcef.visit_url_cookies(
+                return NativeMethods.cef_visit_url_cookies(
                     &n_url,
                     includeHttpOnly ? 1 : 0,
                     visitor.GetNativePointerAndAddRef()
@@ -496,7 +496,7 @@
             {
                 var n_url = new cef_string_t(url_str, url.Length);
 
-                return libcef.set_cookie(
+                return NativeMethods.cef_set_cookie(
                     &n_url,
                     cookie.GetNativeHandle()
                     ) != 0;
@@ -521,7 +521,7 @@
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
                 var n_cookieName = new cef_string_t(cookieName_str, cookieName != null ? cookieName.Length : 0);
 
-                return libcef.delete_cookies(&n_url, &n_cookieName) != 0;
+                return NativeMethods.cef_delete_cookies(&n_url, &n_cookieName) != 0;
             }
         }
 
@@ -541,7 +541,7 @@
                 var nOrigin = new cef_string_t(origin_str, origin != null ? origin.Length : 0);
                 var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return libcef.visit_storage((cef_storage_type_t)type, &nOrigin, &nKey, visitor.GetNativePointerAndAddRef()) != 0;
+                return NativeMethods.cef_visit_storage((cef_storage_type_t)type, &nOrigin, &nKey, visitor.GetNativePointerAndAddRef()) != 0;
             }
         }
 
@@ -560,7 +560,7 @@
                 var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
                 var nValue = new cef_string_t(value_str, value != null ? value.Length : 0);
 
-                return libcef.set_storage((cef_storage_type_t)type, &nOrigin, &nKey, &nValue) != 0;
+                return NativeMethods.cef_set_storage((cef_storage_type_t)type, &nOrigin, &nKey, &nValue) != 0;
             }
         }
 
@@ -580,7 +580,7 @@
                 var nOrigin = new cef_string_t(origin_str, origin != null ? origin.Length : 0);
                 var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return libcef.delete_storage((cef_storage_type_t)type, &nOrigin, &nKey) != 0;
+                return NativeMethods.cef_delete_storage((cef_storage_type_t)type, &nOrigin, &nKey) != 0;
             }
         }
 

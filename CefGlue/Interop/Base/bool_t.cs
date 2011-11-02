@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Interop
+namespace CefGlue.Interop
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using System.Runtime.InteropServices;
     using System.Text;
 
-    [StructLayout(LayoutKind.Sequential, Pack = libcef.StructPack, Size = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack, Size = 1)]
     internal unsafe struct bool_t
     {
         private byte value;
