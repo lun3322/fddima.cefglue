@@ -57,7 +57,7 @@ namespace CefGlue.Interop
         // List of fully qualified paths to plugins (including plugin name) that will
         // be loaded in addition to any plugins found in the default search paths.
         ///
-        public cef_string_list_t extra_plugin_paths;
+        public cef_string_list* extra_plugin_paths;
 
         ///
         // The directory and file name to use for the debug log. If empty, the
@@ -88,7 +88,7 @@ namespace CefGlue.Interop
         ///
         public uint session_storage_quota;
 
-#if OS_WIN
+#if WINDOWS
         ///
         // Set to true (1) to use the system proxy resolver on Windows when 
         // "Automatically detect settings" is checked. This setting is disabled
@@ -103,7 +103,7 @@ namespace CefGlue.Interop
             cef_string_t.Clear(&self->user_agent);
             cef_string_t.Clear(&self->product_version);
             cef_string_t.Clear(&self->locale);
-            self->extra_plugin_paths.Free();
+            // FIXME: self->extra_plugin_paths.Free();
             cef_string_t.Clear(&self->log_file);
         }
     }

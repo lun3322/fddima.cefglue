@@ -11,7 +11,7 @@ namespace CefGlue.Interop
         /// <returns></returns>
         // CEF_EXPORT cef_string_list_t cef_string_list_alloc();
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern cef_string_list_t cef_string_list_alloc();
+        public static extern cef_string_list* cef_string_list_alloc();
 
         /// <summary>
         /// Return the number of elements in the string list.
@@ -20,7 +20,7 @@ namespace CefGlue.Interop
         /// <returns></returns>
         // CEF_EXPORT int cef_string_list_size(cef_string_list_t list);
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern int cef_string_list_size(cef_string_list_t list);
+        public static extern int cef_string_list_size(cef_string_list* list);
 
         /// <summary>
         /// Retrieve the value at the specified zero-based string list index.
@@ -34,7 +34,7 @@ namespace CefGlue.Interop
         // CEF_EXPORT int cef_string_list_value(cef_string_list_t list,
         //                                      int index, cef_string_t* value);
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern int cef_string_list_value(cef_string_list_t list, int index, ref cef_string_t value);
+        public static extern int cef_string_list_value(cef_string_list* list, int index, ref cef_string_t value);
 
         /// <summary>
         /// Append a new value at the end of the string list.
@@ -44,7 +44,7 @@ namespace CefGlue.Interop
         // CEF_EXPORT void cef_string_list_append(cef_string_list_t list,
         //                                       const cef_string_t* value);
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern void cef_string_list_append(cef_string_list_t list, cef_string_t* value);
+        public static extern void cef_string_list_append(cef_string_list* list, cef_string_t* value);
 
         /// <summary>
         /// Clear the string list.
@@ -52,7 +52,7 @@ namespace CefGlue.Interop
         /// <param name="list"></param>
         // CEF_EXPORT void cef_string_list_clear(cef_string_list_t list);
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern void cef_string_list_clear(cef_string_list_t list);
+        public static extern void cef_string_list_clear(cef_string_list* list);
 
         /// <summary>
         /// Free the string list.
@@ -61,7 +61,7 @@ namespace CefGlue.Interop
         /// <remarks>Method doen't allow NULLs.</remarks>
         // CEF_EXPORT void cef_string_list_free(cef_string_list_t list);
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern void cef_string_list_free(cef_string_list_t list);
+        public static extern void cef_string_list_free(cef_string_list* list);
 
         /// <summary>
         /// Creates a copy of an existing string list.
@@ -70,6 +70,6 @@ namespace CefGlue.Interop
         /// <returns></returns>
         // CEF_EXPORT cef_string_list_t cef_string_list_copy(cef_string_list_t list);
         [DllImport(CefDllName, CallingConvention = CefCall)]
-        public static extern cef_string_list_t cef_string_list_copy(cef_string_list_t list);
+        public static extern cef_string_list* cef_string_list_copy(cef_string_list* list);
     }
 }

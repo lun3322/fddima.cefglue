@@ -5,90 +5,143 @@
     using System.Linq;
     using CefGlue.Interop;
 
-    public sealed class CefStringList
+    public sealed unsafe class CefStringList
     {
-        private cef_string_list_t list;
+        internal static cef_string_list* CreateHandle()
+        {
+            return NativeMethods.cef_string_list_alloc();
+        }
+
+        internal static cef_string_list* CreateHandle(IEnumerable<string> collection)
+        {
+            var handle = CreateHandle();
+            foreach (var value in collection)
+            {
+                fixed (char* str = value)
+                {
+                    cef_string_t nValue = new cef_string_t(str, value != null ? value.Length : 0);
+                    NativeMethods.cef_string_list_append(handle, &nValue);
+                }
+            }
+            return handle;
+        }
+
+        internal static void DestroyHandle(cef_string_list* handle)
+        {
+            NativeMethods.cef_string_list_free(handle);
+        }
+
+        private cef_string_list* handle;
 
         /// <summary>
         /// Create new empty string list.
         /// </summary>
         public CefStringList()
         {
-            this.list = cef_string_list_t.Create();
+            this.handle = CreateHandle();
         }
 
         public CefStringList(IEnumerable<string> collection)
         {
-            this.list = cef_string_list_t.Create(collection);
+            throw new NotImplementedException();
+            // this.list = cef_string_list_t.Create(collection);
         }
 
-        internal CefStringList(cef_string_list_t list)
+        internal CefStringList(cef_string_list* list)
         {
-            this.list = list;
+            // TODO: make static FromHandle method, and use private ctor
+            this.handle = list;
         }
 
         ~CefStringList()
         {
-            this.list.Free();
+            this.Dispose(false);
         }
 
         internal void Dispose()
         {
-            this.list.Free();
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        internal cef_string_list_t GetNativeHandle()
+        private void Dispose(bool disposing)
         {
-            return this.list;
+            if (this.handle != null)
+            {
+                DestroyHandle(this.handle);
+                this.handle = null;
+            }
         }
 
-        public int Count { get { return this.list.Count; } }
+        internal cef_string_list* Handle
+        {
+            get
+            {
+                return this.handle;
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                // TODO: debug checks
+                return NativeMethods.cef_string_list_size(this.handle);
+            }
+        }
 
         public bool TryGetValue(int index, out string value)
         {
-            return this.list.Value(index, out value);
-        }
-
-        public string GetValue(int index)
-        {
-            string value;
-            if (TryGetValue(index, out value))
-            {
-                return value;
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
+            cef_string_t nValue = new cef_string_t();
+            var result = NativeMethods.cef_string_list_value(this.handle, index, ref nValue) != 0;
+            value = result ? cef_string_t.ToString(&nValue) : null;
+            cef_string_t.Clear(&nValue);
+            return result;
         }
 
         public string this[int index]
         {
-            get { return GetValue(index); }
+            get
+            {
+                string value;
+                if (this.TryGetValue(index, out value))
+                {
+                    return value;
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
         }
 
         public void Add(string value)
         {
-            this.list.Append(value);
+            // TODO: debug checks
+            fixed (char* str = value)
+            {
+                cef_string_t nValue = new cef_string_t(str, value != null ? value.Length : 0);
+                NativeMethods.cef_string_list_append(this.handle, &nValue);
+            }
         }
 
         public void Clear()
         {
-            this.list.Clear();
+            NativeMethods.cef_string_list_clear(this.handle);
         }
 
         public CefStringList Clone()
         {
-            return new CefStringList(this.list.Copy());
+            return new CefStringList(
+                NativeMethods.cef_string_list_copy(this.handle)
+                );
         }
 
-        private static IEnumerable<string> emptySequence = new string[0];
+        private static IEnumerable<string> emptySequence = new List<string>();
 
         public IEnumerable<string> AsEnumerable()
         {
             // TODO: CefStringList must be IEnumerable<string>
-            // TODO: create empty enumerator for empty list
 
             var count = this.Count;
             if (count == 0)

@@ -421,8 +421,21 @@ namespace CefGlue
         /// </summary>
         public bool TryGetKeys(out CefStringList keys)
         {
-            keys = new CefStringList();
-            return cef_v8value_t.invoke_get_keys(this.ptr, keys.GetNativeHandle()) != 0;
+            var nList = CefStringList.CreateHandle();
+
+            var success = cef_v8value_t.invoke_get_keys(this.ptr, nList) != 0;
+
+            if (success)
+            {
+                keys = new CefStringList(nList);
+                return true;
+            }
+            else
+            {
+                CefStringList.DestroyHandle(nList);
+                keys = null;
+                return false;
+            }
         }
 
         /// <summary>
