@@ -1,7 +1,7 @@
 ﻿namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
 
     /// <summary>
     /// The cef_handler_menuinfo_t editFlags value will be a combination of the following values.

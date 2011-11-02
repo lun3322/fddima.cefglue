@@ -1,7 +1,7 @@
 namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
     using System.IO;
 
     unsafe partial class CefStreamWriter

@@ -5,7 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Text;
-    using Core;
+    using CefGlue.Interop;
 
     internal sealed class DispatchTable<T>
         where T : DispatchTableEntry

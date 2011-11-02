@@ -2,7 +2,7 @@ namespace CefGlue
 {
     using System;
     using System.IO;
-    using Core;
+    using CefGlue.Interop;
 
     unsafe partial class CefReadHandler
     {

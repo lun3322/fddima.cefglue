@@ -1,7 +1,7 @@
 namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
 
     unsafe partial class CefJSDialogHandler
     {

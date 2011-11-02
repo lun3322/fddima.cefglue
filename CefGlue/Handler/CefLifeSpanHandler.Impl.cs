@@ -2,7 +2,7 @@
 {
     using System;
     using System.Runtime.InteropServices;
-    using Core;
+    using CefGlue.Interop;
     using Diagnostics;
 
     unsafe partial class CefLifeSpanHandler

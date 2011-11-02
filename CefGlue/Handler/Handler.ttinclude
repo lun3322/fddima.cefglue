@@ -13,8 +13,8 @@ namespace CefGlue
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Threading;
-    using Core;
-    using Diagnostics;
+    using CefGlue.Interop;
+    using CefGlue.Diagnostics;
 <#+ foreach (var handler in this.HandlerSchema.Values) {
         GenerateHandlerClass(handler);
     } #>

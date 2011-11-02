@@ -6,7 +6,7 @@
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Text;
-    using Core;
+    using CefGlue.Interop;
 
     public static unsafe class CefConvert
     {

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Core;
+    using CefGlue.Interop;
     using Diagnostics;
 
     // TODO: all handlers require optimization like this:

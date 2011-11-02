@@ -1,6 +1,6 @@
 ﻿namespace CefGlue
 {
-    using CefGlue.Core;
+    using CefGlue.Interop;
 
     /// <summary>
     /// Storage types.
