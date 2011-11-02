@@ -31,6 +31,6 @@ namespace CefGlue.Interop
         public bool_t fullscreen;
         public bool_t dialog;
 
-        public cef_string_list_t additionalFeatures;
+        public cef_string_list* additionalFeatures;
     }
 }

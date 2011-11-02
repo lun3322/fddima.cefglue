@@ -238,9 +238,9 @@ namespace CefGlue
         /// </summary>
         public CefStringList GetFrameNames()
         {
-            var list = new CefStringList();
-            cef_browser_t.invoke_get_frame_names(this.ptr, list.GetNativeHandle());
-            return list;
+            var result = new CefStringList();
+            cef_browser_t.invoke_get_frame_names(this.ptr, result.Handle);
+            return result;
         }
 
         /// <summary>

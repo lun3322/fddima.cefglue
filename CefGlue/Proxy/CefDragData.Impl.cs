@@ -117,17 +117,17 @@ namespace CefGlue
         /// </summary>
         public CefStringList GetFileNames()
         {
-            CefStringList result = new CefStringList();
-            
-            var success = cef_drag_data_t.invoke_get_file_names(this.ptr, result.GetNativeHandle()) != 0;
+            var nList = CefStringList.CreateHandle();
+
+            var success = cef_drag_data_t.invoke_get_file_names(this.ptr, nList) != 0;
 
             if (success)
             {
-                return result;
+                return new CefStringList(nList);
             }
             else
             {
-                result.Dispose();
+                CefStringList.DestroyHandle(nList);
                 return null;
             }
         }

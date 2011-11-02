@@ -150,10 +150,14 @@
         {
             get
             {
-                if (this.ptr->additionalFeatures.IsAllocated)
+                if (this.ptr->additionalFeatures != null)
                 {
-                    return new CefStringList(this.ptr->additionalFeatures.Copy()).AsEnumerable();
+                    return new CefStringList(
+                        NativeMethods.cef_string_list_copy(this.ptr->additionalFeatures)
+                        )
+                        .AsEnumerable();
                 }
+                // TODO: return empty sequence
                 return null;
             }
         }

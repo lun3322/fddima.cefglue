@@ -1439,7 +1439,7 @@ class obj_analysis:
         
         result = {}
         if type == 'string':
-            result['value'] = 'cef_string_list_t'
+            result['value'] = 'cef_string_list*'
             result['format'] = 'single'
             return result
         
@@ -1465,18 +1465,6 @@ class obj_analysis:
             # size and another function to get the element at a specified index
             result['format'] = 'multi-func'
         return result
-    
-    #def get_cefglue_result_map_type(self, defined_structs = []):
-    #    """ Return the map type. """
-    #    if not self.has_name():
-    #        raise Exception('Cannot use map as a return type')
-    #    if self.result_value[0]['result_type'] == 'string' \
-    #        and self.result_value[1]['result_type'] == 'string':
-    #        return {
-    #            'value' : 'cef_string_map_t',
-    #            'format' : 'single'
-    #        }
-    #    raise Exception('Only mappings of strings to strings are supported')
 
     def get_cefglue_result_map_type(self, defined_structs = []):
         return self.get_result_map_type(defined_structs);

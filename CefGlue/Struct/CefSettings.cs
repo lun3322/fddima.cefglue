@@ -27,7 +27,7 @@
         private CefGraphicsImplementation graphicsImplementation;
         private uint localStorageQuota;
         private uint sessionStorageQuota;
-#if OS_WIN
+#if WINDOWS
         private bool autoDetectProxySettingsEnabled;
 #endif
 
@@ -195,7 +195,7 @@
             }
         }
 
-#if OS_WIN
+#if WINDOWS
         /// <summary>
         /// Set to true to use the system proxy resolver on Windows when "Automatically detect settings" is checked.
         /// This setting is disabled by default for performance reasons.
@@ -232,14 +232,14 @@
             cef_string_t.Copy(this.UserAgent, &ptr->user_agent);
             cef_string_t.Copy(this.ProductVersion, &ptr->product_version);
             cef_string_t.Copy(this.Locale, &ptr->locale);
-            ptr->extra_plugin_paths = cef_string_list_t.Create(this.ExtraPluginPaths);
+            ptr->extra_plugin_paths = CefStringList.CreateHandle(this.ExtraPluginPaths);
             cef_string_t.Copy(this.LogFile, &ptr->log_file);
             ptr->log_severity = (cef_log_severity_t)this.LogSeverity;
             ptr->graphics_implementation = (cef_graphics_implementation_t)this.GraphicsImplementation;
             ptr->local_storage_quota = this.LocalStorageQuota;
             ptr->session_storage_quota = this.SessionStorageQuota;
 
-#if OS_WIN
+#if WINDOWS
             ptr->auto_detect_proxy_settings_enabled = this.AutoDetectProxySettingsEnabled;
 #endif
 
