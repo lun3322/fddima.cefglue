@@ -31,8 +31,6 @@
 
         public CefWebBrowserCore(object owner, CefBrowserSettings settings, string startUrl)
         {
-            CefThread.InitPlatformUI();
-
             this.owner = owner;
             this.settings = settings;
             this.startUrl = startUrl;

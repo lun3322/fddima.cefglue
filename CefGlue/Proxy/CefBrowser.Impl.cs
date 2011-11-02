@@ -147,7 +147,7 @@ namespace CefGlue
         {
             get
             {
-                return cef_browser_t.invoke_get_window_handle(this.ptr);
+                return (IntPtr)cef_browser_t.invoke_get_window_handle(this.ptr);
             }
         }
 
@@ -160,7 +160,7 @@ namespace CefGlue
         {
             get
             {
-                return cef_browser_t.invoke_get_opener_window_handle(this.ptr);
+                return (IntPtr)cef_browser_t.invoke_get_opener_window_handle(this.ptr);
             }
         }
 

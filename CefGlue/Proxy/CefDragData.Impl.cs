@@ -44,7 +44,7 @@ namespace CefGlue
         public string GetLinkURL()
         {
             var nResult = cef_drag_data_t.invoke_get_link_url(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace CefGlue
         public string GetLinkTitle()
         {
             var nResult = cef_drag_data_t.invoke_get_link_title(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace CefGlue
         public string GetLinkMetadata()
         {
             var nResult = cef_drag_data_t.invoke_get_link_metadata(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace CefGlue
         public string GetFragmentText()
         {
             var nResult = cef_drag_data_t.invoke_get_fragment_text(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace CefGlue
         public string GetFragmentHtml()
         {
             var nResult = cef_drag_data_t.invoke_get_fragment_html(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace CefGlue
         public string GetFragmentBaseURL()
         {
             var nResult = cef_drag_data_t.invoke_get_fragment_base_url(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace CefGlue
         public string GetFileExtension()
         {
             var nResult = cef_drag_data_t.invoke_get_file_extension(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace CefGlue
         public string GetFileName()
         {
             var nResult = cef_drag_data_t.invoke_get_file_name(this.ptr);
-            return nResult.GetStringAndFree();
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>

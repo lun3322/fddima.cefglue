@@ -399,8 +399,16 @@ namespace CefGlue.Interop
     """ + make_nativemethods_decl() + """
     {
         internal const int CefStructPack = 0;
+
         internal const CallingConvention CefCall = CallingConvention.Cdecl;
-        internal const CallingConvention CefCallback = CallingConvention.StdCall;
+
+        internal const CallingConvention CefCallback
+#if WINDOWS
+            = CallingConvention.StdCall;
+#else
+            = CallingConvention.Cdecl;
+#endif
+
         internal const string CefDllName = "libcef.dll";
 
 """

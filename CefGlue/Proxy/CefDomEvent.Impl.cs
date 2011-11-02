@@ -12,8 +12,8 @@ namespace CefGlue
         {
             get
             {
-                var n_type = cef_domevent_t.invoke_get_type(this.ptr);
-                return n_type.GetStringAndFree();
+                var nResult = cef_domevent_t.invoke_get_type(this.ptr);
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
         }
 

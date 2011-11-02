@@ -62,8 +62,8 @@ namespace CefGlue
         /// </summary>
         public string GetFile()
         {
-            var n_result = cef_post_data_element_t.invoke_get_file(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_post_data_element_t.invoke_get_file(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>

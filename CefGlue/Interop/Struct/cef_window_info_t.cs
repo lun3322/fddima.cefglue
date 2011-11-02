@@ -12,6 +12,7 @@ namespace CefGlue.Interop
     [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
     internal unsafe partial struct cef_window_info_t
     {
+#if WINDOWS
         // Standard parameters required by CreateWindowEx()
         public WindowStylesEx m_dwExStyle;
         public cef_string_t m_windowName;
@@ -35,11 +36,21 @@ namespace CefGlue.Interop
 
         // Handle for the new browser window.
         public IntPtr m_hWnd;
+#elif LINUX
+        // Pointer for the parent GtkBox widget.
+        public cef_window_handle* m_ParentWidget;
 
+        // Pointer for the new browser widget.
+        public cef_window_handle* m_Widget;
+#else
+#error cef_window_info_t not supported current OS.
+#endif
 
         public static void Clear(cef_window_info_t* self)
         {
+#if WINDOWS
             cef_string_t.Clear(&self->m_windowName);
+#endif
         }
     }
 }

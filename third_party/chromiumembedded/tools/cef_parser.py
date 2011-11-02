@@ -1374,8 +1374,12 @@ class obj_analysis:
             return 'ulong'
         if name == 'size_t':
             return 'int'  # TODO: X64 is not a INT! there is must be IntPtr-size!
-        # if name == 'cef_string_map_t':
-        #    return 'cef_string_map*'
+        if name == 'cef_window_handle_t':
+            return 'cef_window_handle*'
+        if name == 'cef_cursor_handle_t':
+            return 'cef_cursor_handle*'
+        if name == 'time_t':
+            return 'int' # there is same on X64? or on linux?
         return name
 
     def get_cefglue_result_simple_type(self):
@@ -1420,7 +1424,7 @@ class obj_analysis:
         if not self.has_name():
             # Return values are string structs that the user must free. Use
             # the name of the structure as a hint.
-            return 'cef_string_userfree_t'
+            return 'cef_string_userfree*'
         elif not self.is_const() and (self.is_byref() or self.is_byaddr()):
             # Parameters passed by reference or address. Use the normal
             # non-const string struct.

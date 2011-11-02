@@ -65,8 +65,8 @@ namespace CefGlue
         /// </summary>
         public string GetError()
         {
-            var n_result = cef_xml_reader_t.invoke_get_error(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_error(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
 
@@ -97,8 +97,8 @@ namespace CefGlue
         /// </summary>
         public string GetLocalName()
         {
-            var n_result = cef_xml_reader_t.invoke_get_local_name(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_local_name(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace CefGlue
         /// </summary>
         public string GetPrefix()
         {
-            var n_result = cef_xml_reader_t.invoke_get_prefix(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_prefix(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace CefGlue
         /// </summary>
         public string GetQualifiedName()
         {
-            var n_result = cef_xml_reader_t.invoke_get_qualified_name(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_qualified_name(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -127,8 +127,8 @@ namespace CefGlue
         /// </summary>
         public string GetNamespaceURI()
         {
-            var n_result = cef_xml_reader_t.invoke_get_namespace_uri(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_namespace_uri(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -137,8 +137,8 @@ namespace CefGlue
         /// </summary>
         public string GetBaseURI()
         {
-            var n_result = cef_xml_reader_t.invoke_get_base_uri(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_base_uri(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace CefGlue
         /// </summary>
         public string GetXmlLang()
         {
-            var n_result = cef_xml_reader_t.invoke_get_xml_lang(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_xml_lang(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -173,8 +173,8 @@ namespace CefGlue
         /// </summary>
         public string GetValue()
         {
-            var n_result = cef_xml_reader_t.invoke_get_value(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_value(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -198,8 +198,8 @@ namespace CefGlue
         /// </summary>
         public string GetAttribute(int index)
         {
-            var n_result = cef_xml_reader_t.invoke_get_attribute_byindex(this.ptr, index);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_attribute_byindex(this.ptr, index);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -211,8 +211,8 @@ namespace CefGlue
             {
                 var n_qualifiedName = new cef_string_t(qualifiedName_str, qualifiedName != null ? qualifiedName.Length : 0);
 
-                var n_result = cef_xml_reader_t.invoke_get_attribute_byqname(this.ptr, &n_qualifiedName);
-                return n_result.GetStringAndFree();
+                var nResult = cef_xml_reader_t.invoke_get_attribute_byqname(this.ptr, &n_qualifiedName);
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
         }
 
@@ -227,8 +227,8 @@ namespace CefGlue
                 var n_localName = new cef_string_t(localName_str, localName != null ? localName.Length : 0);
                 var n_namespaceUri = new cef_string_t(namespaceUri_str, namespaceUri != null ? namespaceUri.Length : 0);
 
-                var n_result = cef_xml_reader_t.invoke_get_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri);
-                return n_result.GetStringAndFree();
+                var nResult = cef_xml_reader_t.invoke_get_attribute_bylname(this.ptr, &n_localName, &n_namespaceUri);
+                return cef_string_userfree.GetStringAndFree(nResult);
             }
         }
 
@@ -237,8 +237,8 @@ namespace CefGlue
         /// </summary>
         public string GetInnerXml()
         {
-            var n_result = cef_xml_reader_t.invoke_get_inner_xml(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_inner_xml(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>
@@ -246,8 +246,8 @@ namespace CefGlue
         /// </summary>
         public string GetOuterXml()
         {
-            var n_result = cef_xml_reader_t.invoke_get_outer_xml(this.ptr);
-            return n_result.GetStringAndFree();
+            var nResult = cef_xml_reader_t.invoke_get_outer_xml(this.ptr);
+            return cef_string_userfree.GetStringAndFree(nResult);
         }
 
         /// <summary>

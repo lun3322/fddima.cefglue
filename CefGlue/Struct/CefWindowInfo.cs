@@ -72,6 +72,7 @@
             throw new ObjectDisposedException("{0} is disposed.", this.GetType().Name);
         }
 
+#if WINDOWS
         /// <summary>
         /// Standard parameter required by CreateWindowEx().
         /// </summary>
@@ -206,6 +207,12 @@
             WindowRenderingDisabled = true;
             ParentWindowHandle = parentWindowHandle;
         }
+#elif LINUX
+        public void SetAsChild(IntPtr parentWindowHandle)
+        {
+            this._ptr->m_ParentWidget = (cef_window_handle*)parentWindowHandle;
+        }
+#endif
 
     }
 }
