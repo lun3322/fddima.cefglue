@@ -94,6 +94,8 @@
     </Compile>
     <Compile Include="CefStringListTests.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="CefStringMapTests.cs" />
+    <Compile Include="CefStringMultiMapTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

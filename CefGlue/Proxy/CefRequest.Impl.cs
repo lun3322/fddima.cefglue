@@ -81,9 +81,9 @@ namespace CefGlue
         /// </summary>
         public CefStringMultiMap GetHeaderMap()
         {
-            var map = new CefStringMultiMap();
-            cef_request_t.invoke_get_header_map(this.ptr, map.GetNativeHandle());
-            return map;
+            var result = new CefStringMultiMap();
+            cef_request_t.invoke_get_header_map(this.ptr, result.Handle);
+            return result;
         }
 
         /// <summary>
@@ -91,7 +91,8 @@ namespace CefGlue
         /// </summary>
         public void SetHeaderMap(CefStringMultiMap headerMap)
         {
-            cef_request_t.invoke_set_header_map(this.ptr, headerMap.GetNativeHandle());
+            // TOOD: check args
+            cef_request_t.invoke_set_header_map(this.ptr, headerMap.Handle);
         }
 
         /// <summary>
@@ -99,13 +100,15 @@ namespace CefGlue
         /// </summary>
         public void Set(string url, string method, CefPostData postData, CefStringMultiMap headerMap)
         {
+            // TODO: check args
+
             fixed (char* url_str = url)
             fixed (char* method_str = method)
             {
                 var n_url = new cef_string_t(url_str, url != null ? url.Length : 0);
                 var n_method = new cef_string_t(method_str, method != null ? method.Length : 0);
 
-                cef_request_t.invoke_set(this.ptr, &n_url, &n_method, postData.GetNativePointerAndAddRef(), headerMap.GetNativeHandle());
+                cef_request_t.invoke_set(this.ptr, &n_url, &n_method, postData.GetNativePointerAndAddRef(), headerMap.Handle);
             }
         }
 

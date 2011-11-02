@@ -258,9 +258,9 @@ namespace CefGlue
         /// </remarks>
         public CefStringMap GetElementAttributes()
         {
-            var map = new CefStringMap();
-            cef_domnode_t.invoke_get_element_attributes(this.ptr, map.GetNativeHandle());
-            return map;
+            var result = new CefStringMap();
+            cef_domnode_t.invoke_get_element_attributes(this.ptr, result.Handle);
+            return result;
         }
 
         /// <summary>

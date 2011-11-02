@@ -258,8 +258,6 @@
     <Compile Include="Interop\alloc.g.cs" />
     <Compile Include="Interop\Base\bool_t.cs" />
     <Compile Include="Interop\Base\cef_cursor_handle_t.cs" />
-    <Compile Include="Interop\Base\cef_string_list_t.cs" />
-    <Compile Include="Interop\Base\cef_string_map_t.cs" />
     <Compile Include="Interop\Base\cef_string_t.cs" />
     <Compile Include="Interop\Base\cef_string_userfree_t.cs" />
     <Compile Include="Interop\Base\cef_window_handle_t.cs" />

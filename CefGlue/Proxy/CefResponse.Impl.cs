@@ -84,9 +84,9 @@ namespace CefGlue
         /// </summary>
         public CefStringMultiMap GetHeaderMap()
         {
-            var map = new CefStringMultiMap();
-            cef_response_t.invoke_get_header_map(this.ptr, map.GetNativeHandle());
-            return map;
+            var result = new CefStringMultiMap();
+            cef_response_t.invoke_get_header_map(this.ptr, result.Handle);
+            return result;
         }
 
         /// <summary>
@@ -94,7 +94,9 @@ namespace CefGlue
         /// </summary>
         public void SetHeaderMap(CefStringMultiMap headerMap)
         {
-            cef_response_t.invoke_set_header_map(this.ptr, headerMap.GetNativeHandle());
+            // TODO: check args
+
+            cef_response_t.invoke_set_header_map(this.ptr, headerMap.Handle);
         }
 
     }
