@@ -1,7 +1,7 @@
 namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
     using Diagnostics;
 
     unsafe partial class CefFindHandler

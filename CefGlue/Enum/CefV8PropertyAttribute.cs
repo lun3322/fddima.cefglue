@@ -1,7 +1,7 @@
 ﻿namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
 
     /// <summary>
     /// V8 property attribute values.

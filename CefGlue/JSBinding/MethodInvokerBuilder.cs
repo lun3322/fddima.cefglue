@@ -6,7 +6,7 @@
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Text;
-    using Core;
+    using CefGlue.Interop;
     using Diagnostics;
     using Emit;
 

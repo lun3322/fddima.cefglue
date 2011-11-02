@@ -1,7 +1,7 @@
 ﻿namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
 
     /// <summary>
     /// "Verb" of a drag-and-drop operation as negotiated between the source and destination.

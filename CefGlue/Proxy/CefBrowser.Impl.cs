@@ -2,7 +2,7 @@ namespace CefGlue
 {
     using System;
     using System.Collections.Generic;
-    using Core;
+    using CefGlue.Interop;
     using Diagnostics;
 
     unsafe partial class CefBrowser

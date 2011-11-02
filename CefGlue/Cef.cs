@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using CefGlue.Core;
+    using CefGlue.Interop;
     using CefGlue.Diagnostics;
     using CefGlue.JSBinding;
     using CefGlue.Threading;

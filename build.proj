@@ -25,7 +25,7 @@
 
 		<!-- copy generated files to source code base -->
 		<Copy SourceFiles="$(InteropIntermediateOutputPath)/libcef.g.cs"
-			DestinationFolder="$(CefGlueRootPath)/CefGlue/Core/"
+			DestinationFolder="$(CefGlueRootPath)/CefGlue/Interop/"
 			SkipUnchangedFiles="true" />
 
 		<Copy SourceFiles="$(InteropIntermediateOutputPath)/HandlerSchema.g.ttinclude"
@@ -37,7 +37,7 @@
 			SkipUnchangedFiles="true" />
 
 		<!-- apply T4 templates -->
-		<Exec Command="$(CefGlueTextTransformExe) -o alloc alloc.tt " WorkingDirectory="$(CefGlueRootPath)/CefGlue/Core/" />
+		<Exec Command="$(CefGlueTextTransformExe) -o alloc alloc.tt " WorkingDirectory="$(CefGlueRootPath)/CefGlue/Interop/" />
 
 		<Exec Command="$(CefGlueTextTransformExe) -o Handler Handler.tt " WorkingDirectory="$(CefGlueRootPath)/CefGlue/Handler/" />
 		<Exec Command="$(CefGlueTextTransformExe) -o Proxy Proxy.tt " WorkingDirectory="$(CefGlueRootPath)/CefGlue/Proxy/" />

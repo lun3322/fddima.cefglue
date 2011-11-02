@@ -6,7 +6,7 @@
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Text;
-    using Core;
+    using CefGlue.Interop;
 
     /// <summary>
     /// Initialization settings.

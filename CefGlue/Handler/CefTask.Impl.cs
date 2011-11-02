@@ -1,7 +1,7 @@
 namespace CefGlue
 {
     using System;
-    using CefGlue.Core;
+    using CefGlue.Interop;
     using CefGlue.Diagnostics;
     using CefGlue.Threading;
 

@@ -1,7 +1,7 @@
 ﻿namespace CefGlue
 {
     using System;
-    using Core;
+    using CefGlue.Interop;
 
     /// <summary>
     /// Post data elements may represent either bytes or files.

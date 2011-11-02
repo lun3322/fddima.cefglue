@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Core;
+    using CefGlue.Interop;
 
     public sealed unsafe class CefBrowserSettings
     {
