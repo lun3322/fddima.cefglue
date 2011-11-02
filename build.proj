@@ -53,10 +53,20 @@
 
 	<!-- Build CefGlue WebBrowser Decorators -->
 	<Target Name="BuildDecorator" DependsOnTargets="BuildCore">
+		<!-- Get CefGlue project target path -->
+		<MSBuild Projects="$(CefGlueRootPath)/CefGlue/CefGlue.csproj"
+			Targets="GetTargetPath"
+			Properties="Configuration=$(Configuration);Platform=$(Platform)">
+			<Output TaskParameter="TargetOutputs" ItemName="_CefGlueTargetPath" />
+		</MSBuild>
+		<CreateProperty Value="%(_CefGlueTargetPath.FullPath)">
+			<Output TaskParameter="Value" PropertyName="CefGlueTargetPath" />
+		</CreateProperty>
+
 		<!-- CefGlue.Windows.Forms -->
-		<Exec Command="$(CefGlueTextTransformExe) -r=&quot;$(OutputPath)/CefGlue.dll&quot; -o CefWebBrowser CefWebBrowser.tt "
+		<Exec Command="$(CefGlueTextTransformExe) -r=&quot;$(CefGlueTargetPath)&quot; -o CefWebBrowser CefWebBrowser.tt "
 			WorkingDirectory="$(CefGlueRootPath)/CefGlue.Windows.Forms/" />
-		<Exec Command="$(CefGlueTextTransformExe) -r=&quot;$(OutputPath)/CefGlue.dll&quot; -o CefWebView CefWebView.tt "
+		<Exec Command="$(CefGlueTextTransformExe) -r=&quot;$(CefGlueTargetPath)&quot; -o CefWebView CefWebView.tt "
 			WorkingDirectory="$(CefGlueRootPath)/CefGlue.Windows.Forms/" />
 
 		<!-- ... -->
