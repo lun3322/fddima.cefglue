@@ -524,14 +524,30 @@ namespace CefGlue
                 return NativeMethods.cef_delete_cookies(&n_url, &n_cookieName) != 0;
             }
         }
+        
+        /// <summary>
+        /// Sets the directory path that will be used for storing cookie data.
+        /// If |path| is empty data will be stored in memory only.
+        /// By default the cookie path is the same as the cache path.
+        /// Returns false if cookies cannot be accessed.
+        /// </summary>
+        public static bool CefSetCookiePath(string path)
+        {
+            fixed (char* path_str = path)
+            {
+                var nPath = new cef_string_t(path_str, path != null ? path.Length : 0);
+                return NativeMethods.cef_set_cookie_path(&nPath) != 0;
+            }
+        }
 
         /// <summary>
         /// Visit storage of the specified type.
         /// If |origin| is non-empty only data matching that origin will be visited.
         /// If |key| is non-empty only data matching that key will be visited.
         /// Otherwise, all data for the storage type will be visited.
-        /// Returns false if the storage cannot be accessed.
         /// Origin should be of the form scheme://domain.
+        /// If no origin is specified only data currently in memory will be returned.
+        /// Returns false if the storage cannot be accessed.
         /// </summary>
         public static bool VisitStorage(CefStorageType type, string origin, string key, CefStorageVisitor visitor)
         {
@@ -581,6 +597,23 @@ namespace CefGlue
                 var nKey = new cef_string_t(key_str, key != null ? key.Length : 0);
 
                 return NativeMethods.cef_delete_storage((cef_storage_type_t)type, &nOrigin, &nKey) != 0;
+            }
+        }
+        
+        /// <summary>
+        /// Sets the directory path that will be used for storing data of the specified type.
+        /// Currently only the ST_LOCALSTORAGE type is supported by this method.
+        /// If |path| is empty data will be stored in memory only.
+        /// By default the storage path is the same as the cache path.
+        /// Returns false if the storage cannot be accessed.
+        /// </summary>
+        public static bool SetStoragePath(CefStorageType type, string path)
+        {
+            fixed (char* path_str = path)
+            {
+                var nPath = new cef_string_t(path_str, path != null ? path.Length : 0);
+
+                return NativeMethods.cef_set_storage_path((cef_storage_type_t)type, &nPath) != 0;
             }
         }
 
