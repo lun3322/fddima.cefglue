@@ -5,15 +5,22 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Windows.Forms;
     using CefGlue.Threading;
     using CefGlue.WebBrowser;
 
     public partial class MainForm : Form
     {
+        // TODO: move it out to Program/Main class.
+        public static SynchronizationContext SynchronizationContext { get; private set; }
+
         public MainForm()
         {
             InitializeComponent();
+
+            // Get current synchronization context to interact with WinForms UI thread.
+            MainForm.SynchronizationContext = SynchronizationContext.Current;
 
             var browser = (IWebBrowser)this.browser;
 
@@ -82,7 +89,7 @@
 
         private void browser_TitleChanged(object sender, EventArgs e)
         {
-            CefThread.PlatformUI.Post((_) =>
+            MainForm.SynchronizationContext.Post((_) =>
             {
                 this.Text = ((IWebBrowser)sender).Title;
             }, null);
