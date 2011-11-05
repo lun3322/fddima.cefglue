@@ -3,22 +3,22 @@ native = LF
 
 [patterns]
 # Mercurial settings files.
-.hgignore = LF
-.hgtags = LF
-.hgeol = LF
+.hgignore = native
+.hgtags = native
+.hgeol = native
 
 # Source and project files
-**.cs = LF
-**.csproj = LF
+**.cs = native
+**.csproj = native
+**.proj = native
+**.py = native
+**.tt = native
+**.ttinclude = native
 **.sln = CRLF
-**.proj = LF
-**.py = LF
-**.tt = LF
-**.ttinclude = LF
 
 # Shell scripts
-**.sh = LF
-**.cmd = CRLF
+**.sh = native
+**.cmd = native
 
 # Resources
-**.html = LF
+**.html = native
