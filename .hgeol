@@ -7,7 +7,11 @@ native = LF
 .hgtags = native
 .hgeol = native
 
-# Source and project files
+# chromiumembedded eol-style
+third_party/chromiumembedded/include/**.h = LF
+third_party/chromiumembedded/version.h = native
+
+# Source and project files.
 **.cs = native
 **.csproj = native
 **.proj = native
@@ -15,6 +19,10 @@ native = LF
 **.tt = native
 **.ttinclude = native
 **.sln = CRLF
+**.h = native
+**.c = native
+**.cc = native
+**.cpp = native
 
 # Shell scripts
 **.sh = native
