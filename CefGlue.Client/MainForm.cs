@@ -11,12 +11,15 @@
     using System.Threading;
     using System.Windows.Forms;
     using CefGlue;
+    using CefGlue.Threading;
     using CefGlue.WebBrowser;
     using CefGlue.Windows.Forms;
-    using CefGlue.Threading;
 
     public partial class MainForm : Form
     {
+        // TODO: move it out to Program/Main class.
+        public static SynchronizationContext SynchronizationContext { get; private set; }
+
         private const string homeUrl = "res://client/index.html";
 
         private string caption;
@@ -33,6 +36,10 @@
         public MainForm()
         {
             InitializeComponent();
+
+            // Get synchronization context to interact with WinForms UI thread.
+            MainForm.SynchronizationContext = SynchronizationContext.Current;
+            
             // this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             this.caption = this.Text;
@@ -113,7 +120,7 @@
 
         void browser_CanGoBackChanged(object sender, EventArgs e)
         {
-            CefThread.PlatformUI.Post((_) =>
+            MainForm.SynchronizationContext.Post((_) =>
             {
                 var browser = (IWebBrowser)sender;
                 goBackButton.Enabled = browser.CanGoBack;
@@ -122,7 +129,7 @@
 
         void browser_CanGoForwardChanged(object sender, EventArgs e)
         {
-            CefThread.PlatformUI.Post((_) =>
+            MainForm.SynchronizationContext.Post((_) =>
             {
                 var browser = (IWebBrowser)sender;
                 goForwardButton.Enabled = browser.CanGoForward;
@@ -131,7 +138,7 @@
 
         void browser_AddressChanged(object sender, EventArgs e)
         {
-            CefThread.PlatformUI.Post((_) =>
+            MainForm.SynchronizationContext.Post((_) =>
             {
                 var browser = ((IWebBrowser)sender);
                 addressTextBox.Text = browser.Address;
@@ -140,7 +147,7 @@
 
         void browser_TitleChanged(object sender, EventArgs e)
         {
-            CefThread.PlatformUI.Post(_ =>
+            MainForm.SynchronizationContext.Post(_ =>
             {
                 var browser = ((IWebBrowser)sender);
                 var documentTitle = browser.Title;
@@ -310,7 +317,7 @@
                 }
                 sw.Stop();
 
-                CefThread.PlatformUI.Post((state) =>
+                MainForm.SynchronizationContext.Post((state) =>
                 {
                     MessageBox.Show(string.Format("{0} calls from CEF UI thread of browser.InvokeScript(\"eval\", \"1+2\") tooks {1}ms", count, sw.ElapsedMilliseconds));
                 }, null);
@@ -335,7 +342,7 @@
                 using (var body = document.GetBody())
                 {
                     var name = body.GetName();
-                    CefThread.PlatformUI.Post((_) =>
+                    MainForm.SynchronizationContext.Post((_) =>
                     {
                         MessageBox.Show(name);
                     }, null);

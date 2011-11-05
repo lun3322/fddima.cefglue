@@ -29,7 +29,7 @@
 
         public void CloseView()
         {
-            CefThread.PlatformUI.Post((_) => { this.Close(); }, null);
+            MainForm.SynchronizationContext.Post((_) => { this.Close(); }, null);
         }
 
         public void OpenUrl(string url)
