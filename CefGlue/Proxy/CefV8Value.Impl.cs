@@ -384,13 +384,13 @@ namespace CefGlue
         /// <summary>
         /// Associate a value with the specified identifier.
         /// </summary>
-        public bool SetValue(string key, CefV8Value value)
+        public bool SetValue(string key, CefV8Value value, CefV8PropertyAttribute attribute = CefV8PropertyAttribute.None)
         {
             fixed (char* key_str = key)
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
 
-                return cef_v8value_t.invoke_set_value_bykey(this.ptr, &n_key, value.GetNativePointerAndAddRef()) != 0;
+                return cef_v8value_t.invoke_set_value_bykey(this.ptr, &n_key, value.GetNativePointerAndAddRef(), (cef_v8_propertyattribute_t)attribute) != 0;
             }
         }
 
