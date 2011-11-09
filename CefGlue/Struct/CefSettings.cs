@@ -27,6 +27,7 @@
         private CefGraphicsImplementation graphicsImplementation;
         private uint localStorageQuota;
         private uint sessionStorageQuota;
+        private string javaScriptFlags;
 #if WINDOWS
         private bool autoDetectProxySettingsEnabled;
 #endif
@@ -195,6 +196,20 @@
             }
         }
 
+        /// <summary>
+        /// Custom flags that will be used when initializing the V8 JavaScript engine.
+        /// The consequences of using custom flags may not be well tested.
+        /// </summary>
+        public string JavaScriptFlags
+        {
+            get { return this.javaScriptFlags; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.javaScriptFlags = value;
+            }
+        }
+
 #if WINDOWS
         /// <summary>
         /// Set to true to use the system proxy resolver on Windows when "Automatically detect settings" is checked.
@@ -238,6 +253,7 @@
             ptr->graphics_implementation = (cef_graphics_implementation_t)this.GraphicsImplementation;
             ptr->local_storage_quota = this.LocalStorageQuota;
             ptr->session_storage_quota = this.SessionStorageQuota;
+            cef_string_t.Copy(this.JavaScriptFlags, &ptr->javascript_flags);
 
 #if WINDOWS
             ptr->auto_detect_proxy_settings_enabled = this.AutoDetectProxySettingsEnabled;

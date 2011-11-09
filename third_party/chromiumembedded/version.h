@@ -2,7 +2,7 @@
 #ifndef _VERSION_H
 #define _VERSION_H
 
-#define CEF_REVISION 360
+#define CEF_REVISION 365
 #define COPYRIGHT_YEAR 2011
 
 #define CHROME_VERSION_MAJOR 17

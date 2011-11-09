@@ -10,24 +10,16 @@ namespace CefGlue
         /// Begin processing the request. To handle the request return true and
         /// call HeadersAvailable() once the response header information is
         /// available (HeadersAvailable() can also be called from inside this
-        /// method if header information is available immediately). To redirect
-        /// the request to a new URL set |redirectUrl| to the new URL and return
-        /// true. To cancel the request return false.
+        /// method if header information is available immediately). To cancel the request return false.
         /// </summary>
-        private int process_request(cef_scheme_handler_t* self, cef_request_t* request, cef_string_t* redirectUrl, cef_scheme_handler_callback_t* callback)
+        private int process_request(cef_scheme_handler_t* self, cef_request_t* request, cef_scheme_handler_callback_t* callback)
         {
             ThrowIfObjectDisposed();
 
             var mRequest = CefRequest.From(request);
-            string mRedirectUrl = null;
             var mCallback = CefSchemeHandlerCallback.From(callback);
 
-            var handled = this.ProcessRequest(mRequest, ref mRedirectUrl, mCallback);
-
-            if (handled)
-            {
-                cef_string_t.Copy(mRedirectUrl, redirectUrl);
-            }
+            var handled = this.ProcessRequest(mRequest, mCallback);
 
             return handled ? 1 : 0;
         }
@@ -39,11 +31,9 @@ namespace CefGlue
         /// available (HeadersAvailable() can also be called from inside this
         /// method if header information is available immediately).
         /// 
-        /// To redirect the request to a new URL set |redirectUrl| to the new URL and return true.
-        /// 
         /// To cancel the request return false.
         /// </summary>
-        protected abstract bool ProcessRequest(CefRequest request, ref string redirectUrl, CefSchemeHandlerCallback callback);
+        protected abstract bool ProcessRequest(CefRequest request, CefSchemeHandlerCallback callback);
 
 
         /// <summary>
@@ -54,17 +44,22 @@ namespace CefGlue
         /// called until it returns false or the specified number of bytes have
         /// been read. Use the |response| object to set the mime type, http
         /// status code and other optional header values.
+        /// To redirect the request to a new URL set |redirectUrl| to the new URL.
         /// </summary>
-        private void get_response_headers(cef_scheme_handler_t* self, cef_response_t* response, long* response_length)
+        private void get_response_headers(cef_scheme_handler_t* self, cef_response_t* response, long* response_length, cef_string_t* redirectUrl)
         {
             ThrowIfObjectDisposed();
 
             var mResponse = CefResponse.From(response);
             long mResponseLength;
+            string mRedirectUrl = null;
 
-            this.GetResponseHeaders(mResponse, out mResponseLength);
+            this.GetResponseHeaders(mResponse, out mResponseLength, ref mRedirectUrl);
 
             *response_length = mResponseLength;
+            if (mRedirectUrl != null) {
+                cef_string_t.Copy(mRedirectUrl, redirectUrl);
+            }
         }
 
         /// <summary>
@@ -77,8 +72,10 @@ namespace CefGlue
         /// been read.
         /// 
         /// Use the |response| object to set the mime type, http status code and other optional header values.
+        ///
+        /// To redirect the request to a new URL set |redirectUrl| to the new URL.
         /// </summary>
-        protected abstract void GetResponseHeaders(CefResponse response, out long responseLength);
+        protected abstract void GetResponseHeaders(CefResponse response, out long responseLength, ref string redirectUrl);
 
 
         /// <summary>
