@@ -87,6 +87,12 @@ namespace CefGlue.Interop
         // Quota limit for sessionStorage data per namespace. Default size is 5MB.
         ///
         public uint session_storage_quota;
+		
+		///
+		// Custom flags that will be used when initializing the V8 JavaScript engine.
+		// The consequences of using custom flags may not be well tested.
+		///
+		public cef_string_t javascript_flags;
 
 #if WINDOWS
         ///
@@ -103,8 +109,10 @@ namespace CefGlue.Interop
             cef_string_t.Clear(&self->user_agent);
             cef_string_t.Clear(&self->product_version);
             cef_string_t.Clear(&self->locale);
-            // FIXME: self->extra_plugin_paths.Free();
+            // FIXME: null check?
+            CefStringList.DestroyHandle(self->extra_plugin_paths);
             cef_string_t.Clear(&self->log_file);
+            cef_string_t.Clear(&self->javascript_flags);
         }
     }
 }

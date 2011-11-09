@@ -37,7 +37,7 @@
             base.Dispose(disposing);
         }
 
-        protected override bool ProcessRequest(CefRequest request, ref string redirectUrl, CefSchemeHandlerCallback callback)
+        protected override bool ProcessRequest(CefRequest request, CefSchemeHandlerCallback callback)
         {
             var urlString = request.GetURL();
 
@@ -102,7 +102,7 @@
             this.Close();
         }
 
-        protected override void GetResponseHeaders(CefResponse response, out long responseLength)
+        protected override void GetResponseHeaders(CefResponse response, out long responseLength, ref string redirectUrl)
         {
             responseLength = this.responseLength;
             
