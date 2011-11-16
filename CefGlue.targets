@@ -86,9 +86,9 @@
 		<CefGlueTextTransformExe Condition=" $(CefGlueWindows) and '$(Platform)' == 'windows-x86' ">"$(CefGlueRootPath)\third_party\Mono.TextTemplating\TextTransform-x86.exe"</CefGlueTextTransformExe>
 
 		<!-- Python -->
-		<PythonExe Condition=" '$(PythonExe)' == '' and $(CefGlueWindows) and Exists('c:/python26/python.exe') ">"c:/python26/python.exe"</PythonExe>
-		<PythonExe Condition=" '$(PythonExe)' == '' and $(CefGlueWindows) and Exists('c:/python27/python.exe') ">"c:/python27/python.exe"</PythonExe>
-		<PythonExe Condition=" '$(PythonExe)' == '' ">"python"</PythonExe>
+		<Python Condition=" '$(Python)' == '' and $(CefGlueWindows) and Exists('c:/python26/python.exe') ">c:/python26/python.exe</Python>
+		<Python Condition=" '$(Python)' == '' and $(CefGlueWindows) and Exists('c:/python27/python.exe') ">c:/python27/python.exe</Python>
+		<Python Condition=" '$(Python)' == '' ">python</Python>
 	</PropertyGroup>
 
 </Project>

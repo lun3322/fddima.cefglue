@@ -25,7 +25,7 @@
 	<Target Name="BuildInterop">
 		<!-- execute CEF translator tool -->
 		<MakeDir Directories="$(InteropIntermediateOutputPath)" />
-		<Exec Command="$(PythonExe) &quot;$(ChromiumEmbeddedPath)/tools/translator.py&quot; --no-backup --cpp-header &quot;$(ChromiumEmbeddedPath)/include/cef.h&quot; --cefglue-dir=&quot;.&quot;"
+		<Exec Command="&quot;$(Python)&quot; &quot;$(ChromiumEmbeddedPath)/tools/translator.py&quot; --no-backup --cpp-header &quot;$(ChromiumEmbeddedPath)/include/cef.h&quot; --cefglue-dir=&quot;.&quot;"
 			WorkingDirectory="$(InteropIntermediateOutputPath)"
 			/>
 
