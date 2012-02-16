@@ -207,18 +207,18 @@
         /// <summary>
         /// Return the handler for JavaScript binding events.
         /// </summary>
-        private cef_jsbinding_handler_t* get_jsbinding_handler(cef_client_t* self)
+        private cef_v8context_handler_t* get_v8context_handler(cef_client_t* self)
         {
             ThrowIfObjectDisposed();
 
-            var handler = GetJSBindingHandler();
+            var handler = GetV8ContextHandler();
             return handler == null ? null : handler.GetNativePointerAndAddRef();
         }
 
         /// <summary>
         /// Return the handler for JavaScript binding events.
         /// </summary>
-        protected virtual CefJSBindingHandler GetJSBindingHandler()
+        protected virtual CefV8ContextHandler GetV8ContextHandler()
         {
             return null;
         }

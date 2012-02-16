@@ -84,7 +84,9 @@ namespace CefGlue
 #endif
 
             var n_settings = settings.CreateNative();
-            var initialized = NativeMethods.cef_initialize(n_settings) != 0;
+
+            // FIXME: not sure if application should be null
+            var initialized = NativeMethods.cef_initialize(n_settings, null) != 0;
             cef_settings_t.Free(n_settings);
 
             if (!initialized) throw new CefException("CEF failed to initialize.");

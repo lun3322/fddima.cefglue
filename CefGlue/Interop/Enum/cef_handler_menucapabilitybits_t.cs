@@ -6,7 +6,7 @@
     using System.Text;
 
     ///
-    // The cef_handler_menuinfo_t editFlags value will be a combination of the
+    // The cef_menu_info_t editFlags value will be a combination of the
     // following values.
     ///
     internal enum cef_handler_menucapabilitybits_t : int

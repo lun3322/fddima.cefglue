@@ -6,20 +6,20 @@
     /// <summary>
     /// Menu information.
     /// </summary>
-    public sealed unsafe class CefHandlerMenuInfo : IDisposable
+    public sealed unsafe class CefMenuInfo : IDisposable
     {
-        internal static CefHandlerMenuInfo From(cef_handler_menuinfo_t* ptr)
+        internal static CefMenuInfo From(cef_menu_info_t* ptr)
         {
-            return new CefHandlerMenuInfo(ptr);
+            return new CefMenuInfo(ptr);
         }
 
-        private cef_handler_menuinfo_t* ptr;
-        private CefHandlerMenuInfo(cef_handler_menuinfo_t* ptr)
+        private cef_menu_info_t* ptr;
+        private CefMenuInfo(cef_menu_info_t* ptr)
         {
             this.ptr = ptr;
         }
 
-        ~CefHandlerMenuInfo()
+        ~CefMenuInfo()
         {
             this.ptr = null;
         }

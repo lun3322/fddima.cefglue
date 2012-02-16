@@ -17,7 +17,7 @@
         private readonly CefPrintHandler printHandler;
         private readonly CefFindHandler findHandler;
         private readonly CefJSDialogHandler jsDialogHandler;
-        private readonly CefJSBindingHandler jsBindingHandler;
+        private readonly CefV8ContextHandler v8ContextHandler;
         private readonly CefRenderHandler renderHandler;
         private readonly CefDragHandler dragHandler;
 
@@ -34,7 +34,7 @@
             this.printHandler = null; // new CefWebPrintHandler(context);
             this.findHandler = null; // new CefWebFindHandler(context);
             this.jsDialogHandler = new CefWebJSDialogHandler(context);
-            this.jsBindingHandler = new CefWebJSBindingHandler(context);
+            //this.v8ContextHandler = new CefWebV8ContextHandler(context);
             this.renderHandler = null; // new CefWebRenderHandler(context);
             this.dragHandler = null; // new CefWebDragHandler(context);
         }
@@ -89,9 +89,9 @@
             return this.jsDialogHandler;
         }
 
-        protected override CefJSBindingHandler GetJSBindingHandler()
+        protected override CefV8ContextHandler GetV8ContextHandler()
         {
-            return this.jsBindingHandler;
+            return this.v8ContextHandler;
         }
 
         protected override CefRenderHandler GetRenderHandler()

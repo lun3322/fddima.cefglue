@@ -498,11 +498,11 @@ namespace CefGlue
         /// <summary>
         /// Execute the function using the current V8 context.
         /// </summary>
-        public bool ExecuteFunction(CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
+        public bool ExecuteFunction(CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out CefV8Exception exception, int rethrowException)
         {
             var n_arguments = CreateArgumentsArray(arguments);
             cef_v8value_t* n_retval = null;
-            cef_string_t n_exception;
+            cef_v8exception_t* n_exception;
             bool result;
 
             fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
@@ -513,14 +513,14 @@ namespace CefGlue
                     n_arguments != null ? n_arguments.Length : 0,
                     n_arguments_ptr,
                     &n_retval,
-                    &n_exception
+                    &n_exception, rethrowException
                     ) != 0;
             }
 
             returnValue = CefV8Value.FromOrDefault(n_retval);
 
-            exception = cef_string_t.ToString(&n_exception);
-            cef_string_t.Clear(&n_exception);
+            exception = CefV8Exception.FromOrDefault(n_exception);
+            //cef_string_t.Clear(&n_exception);
 
             return result;
         }
@@ -528,11 +528,11 @@ namespace CefGlue
         /// <summary>
         /// Execute the function using the specified V8 context.
         /// </summary>
-        public bool ExecuteFunctionWithContext(CefV8Context context, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
+        public bool ExecuteFunctionWithContext(CefV8Context context, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out CefV8Exception exception, int rethrowException)
         {
             var n_arguments = CreateArgumentsArray(arguments);
             cef_v8value_t* n_retval = null;
-            cef_string_t n_exception;
+            cef_v8exception_t* n_exception;
             bool result;
 
             fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
@@ -544,14 +544,14 @@ namespace CefGlue
                     n_arguments != null ? n_arguments.Length : 0,
                     n_arguments_ptr,
                     &n_retval,
-                    &n_exception
+                    &n_exception, rethrowException
                     ) != 0;
             }
 
             returnValue = CefV8Value.FromOrDefault(n_retval);
 
-            exception = cef_string_t.ToString(&n_exception);
-            cef_string_t.Clear(&n_exception);
+            exception = CefV8Exception.FromOrDefault(n_exception);
+            //cef_string_t.Clear(&n_exception);
 
             return result;
         }
