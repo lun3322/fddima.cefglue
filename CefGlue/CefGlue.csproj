@@ -112,6 +112,7 @@
     <Compile Include="WebBrowser\CefWebBrowserCore.IWebBrowser.cs" />
     <Compile Include="WebBrowser\Client\CefWebClient.cs" />
     <Compile Include="WebBrowser\Client\CefWebDisplayHandler.cs" />
+    <Compile Include="WebBrowser\Client\CefWebDragHandler.cs" />
     <Compile Include="WebBrowser\Client\CefWebJSDialogHandler.cs" />
     <Compile Include="WebBrowser\Client\CefWebKeyboardHandler.cs" />
     <Compile Include="WebBrowser\Client\CefWebLifeSpanHandler.cs" />
@@ -126,7 +127,11 @@
     <Compile Include="WebBrowser\CefReadyOptions.cs" />
     <Compile Include="WebBrowser\CefWebBrowserCore.ProgressState.cs" />
     <Compile Include="WebBrowser\Client\CefWebV8ContextHandler.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefAfterCreatedEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefBeforePopupEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefDragEventArgs.cs" />
     <Compile Include="WebBrowser\EventArgs\CefNavigatingEventArgs.cs" />
+    <Compile Include="WebBrowser\EventArgs\CefShowPopupEventArgs.cs" />
     <Compile Include="WebBrowser\EventArgs\ConsoleMessageEventArgs.cs" />
     <Compile Include="WebBrowser\EventArgs\CefNavigatedEventArgs.cs" />
     <Compile Include="WebBrowser\EventArgs\CefDocumentCompletedEventArgs.cs" />

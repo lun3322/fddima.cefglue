@@ -34,6 +34,16 @@
         //
         event EventHandler Ready;
 
+        event EventHandler<CefBeforePopupEventArgs> BeforePopup;
+
+        event EventHandler<CefAfterCreatedEventArgs> AfterCreated;
+
+        event EventHandler<CefDragEventArgs> DragStart;
+
+        event EventHandler<CefDragEventArgs> DragEnter;
+
+        event EventHandler<CefShowPopupEventArgs> ShowPopup;
+
         CefReadyOptions ReadyOptions { get; set; }
 
         int ReadyIdleThreshold { get; set; }

@@ -59,6 +59,8 @@
             Console.WriteLine("OnResourceResponse: {0} ({1})", url, response.GetHeader("Content-Length"));
             Console.ForegroundColor = prevColor;
 
+            response.GetHeaderMap().Append("Access-Control-Allow-Origin", "*");
+
             filter = null;
             // filter = new CefWebProgressContentFilter();
         }
