@@ -4,7 +4,7 @@
     using CefGlue.Interop;
 
     /// <summary>
-    /// The cef_handler_menuinfo_t typeFlags value will be a combination of the following values.
+    /// The cef_menu_info_t typeFlags value will be a combination of the following values.
     /// </summary>
     [Flags]
     public enum CefHandlerMenuTypeBits

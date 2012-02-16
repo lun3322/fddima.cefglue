@@ -21,8 +21,9 @@
         new StructDef("cef_print_handler_t",     hasBase:true),
         new StructDef("cef_find_handler_t",      hasBase:true),
         new StructDef("cef_jsdialog_handler_t",  hasBase:true),
-        new StructDef("cef_jsbinding_handler_t", hasBase:true),
+        new StructDef("cef_v8context_handler_t", hasBase:true),
         new StructDef("cef_render_handler_t",    hasBase:true),
+        new StructDef("cef_proxy_handler_t",    hasBase:true),
         new StructDef("cef_drag_handler_t",      hasBase:true),
 
         new StructDef("cef_download_handler_t",  hasBase:true),

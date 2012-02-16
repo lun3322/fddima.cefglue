@@ -9,16 +9,16 @@ namespace CefGlue
         /// Called before a context menu is displayed. Return false to display
         /// the default context menu or true to cancel the display.
         /// </summary>
-        private int on_before_menu(cef_menu_handler_t* self, cef_browser_t* browser, /*const*/ cef_handler_menuinfo_t* menuInfo)
+        private int on_before_menu(cef_menu_handler_t* self, cef_browser_t* browser, /*const*/ cef_menu_info_t* menuInfo)
         {
             ThrowIfObjectDisposed();
 
             var m_browser = CefBrowser.From(browser);
-            var m_menuInfo = CefHandlerMenuInfo.From(menuInfo);
+            var m_menuInfo = CefMenuInfo.From(menuInfo);
 
             var handled = this.OnBeforeMenu(m_browser, m_menuInfo);
 
-            m_menuInfo.Dispose();
+            //m_menuInfo.Dispose();
 
             return handled ? 1 : 0;
         }
@@ -28,7 +28,7 @@ namespace CefGlue
         /// Return false to display the default context menu
         /// or true to cancel the display.
         /// </summary>
-        protected virtual bool OnBeforeMenu(CefBrowser browser, CefHandlerMenuInfo menuInfo)
+        protected virtual bool OnBeforeMenu(CefBrowser browser, CefMenuInfo menuInfo)
         {
             return false;
         }
@@ -38,7 +38,7 @@ namespace CefGlue
         /// item. |label| contains the default text and may be modified to
         /// substitute alternate text.
         /// </summary>
-        private void get_menu_label(cef_menu_handler_t* self, cef_browser_t* browser, cef_handler_menuid_t menuId, cef_string_t* label)
+        private void get_menu_label(cef_menu_handler_t* self, cef_browser_t* browser, cef_menu_id_t menuId, cef_string_t* label)
         {
             ThrowIfObjectDisposed();
 
@@ -68,7 +68,7 @@ namespace CefGlue
         /// Return false to execute the default action or true to cancel the
         /// action.
         /// </summary>
-        private int on_menu_action(cef_menu_handler_t* self, cef_browser_t* browser, cef_handler_menuid_t menuId)
+        private int on_menu_action(cef_menu_handler_t* self, cef_browser_t* browser, cef_menu_id_t menuId)
         {
             ThrowIfObjectDisposed();
 

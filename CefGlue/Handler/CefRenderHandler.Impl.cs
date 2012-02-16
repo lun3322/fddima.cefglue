@@ -155,21 +155,24 @@ namespace CefGlue
         /// <summary>
         /// Called when an element should be painted. |type| indicates whether
         /// the element is the view or the popup widget. |buffer| contains the
-        /// pixel data for the whole image. |dirtyRect| indicates the portion of
-        /// the image that has been repainted. On Windows |buffer| will be
+        /// pixel data for the whole image. |dirtyRects| contains the set of
+        /// rectangles that need to be repainted. On Windows |buffer| will be
         /// width*height*4 bytes in size and represents a BGRA image with an
         /// upper-left origin.
         /// </summary>
-        private void on_paint(cef_render_handler_t* self, cef_browser_t* browser, cef_paint_element_type_t type, /*const*/ cef_rect_t* dirtyRect, /*const*/ void* buffer)
+        private void on_paint(cef_render_handler_t* self, cef_browser_t* browser, cef_paint_element_type_t type, int dirtyRectCount, cef_rect_t dirtyRects, /*const*/ void* buffer)
         {
             ThrowIfObjectDisposed();
 
-            var m_browser = CefBrowser.From(browser);
-            var m_type = (CefPaintElementType)type;
-            var m_dirtyRect = CefRect.From(dirtyRect);
-            var m_buffer = (IntPtr)buffer;
+            throw new NotImplementedException();
 
-            this.OnPaint(m_browser, m_type, m_dirtyRect, m_buffer);
+            // FIXME: implement this
+//            var m_browser = CefBrowser.From(browser);
+//            var m_type = (CefPaintElementType)type;
+//            var m_dirtyRect = CefRect.From(dirtyRect);
+//            var m_buffer = (IntPtr)buffer;
+//
+//            this.OnPaint(m_browser, m_type, m_dirtyRect, m_buffer);
         }
 
         /// <summary>

@@ -75,6 +75,35 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Called on the IO thread when a resource load is redirected. The
+        /// |old_url| parameter will contain the old URL. The |new_url| parameter
+        /// will contain the new URL and can be changed if desired.
+        /// </summary>
+        private void on_resource_redirect(cef_request_handler_t* self, cef_browser_t* browser, /*const*/ cef_string_t* old_url, cef_string_t* new_url)
+        {
+            ThrowIfObjectDisposed();
+
+            var m_browser = CefBrowser.From(browser);
+
+            string oldUrl = "", newUrl = "";
+
+            cef_string_t.Copy(oldUrl, old_url);
+            cef_string_t.Copy(newUrl, new_url);
+            
+            this.OnResourceRedirect(m_browser, oldUrl, newUrl);
+        }
+
+        /// <summary>
+        /// Called on the IO thread when a resource load is redirected. The
+        /// |old_url| parameter will contain the old URL. The |new_url| parameter
+        /// will contain the new URL and can be changed if desired.
+        /// </summary>
+        protected virtual void OnResourceRedirect(CefBrowser browser, string oldUrl, string newUrl)
+        {
+            
+        }
+
+        /// <summary>
         /// Called on the IO thread before a resource is loaded.
         /// To allow the resource to load normally return false.
         /// To redirect the resource to a new url populate the |redirectUrl| value and return false.

@@ -10,7 +10,7 @@ namespace CefGlue.Interop
     // Structure representing menu information.
     ///
     [StructLayout(LayoutKind.Sequential, Pack = NativeMethods.CefStructPack)]
-    internal unsafe partial struct cef_handler_menuinfo_t
+    internal unsafe partial struct cef_menu_info_t
     {
         ///
         // Values from the cef_handler_menutypebits_t enumeration.
