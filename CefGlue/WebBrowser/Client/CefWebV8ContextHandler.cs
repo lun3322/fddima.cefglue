@@ -9,21 +9,32 @@
 
     public class CefWebV8ContextHandler : CefV8ContextHandler
     {
-        private readonly CefWebBrowserCore context;
+        private readonly CefWebBrowserCore _context;
 
         public CefWebV8ContextHandler(CefWebBrowserCore context)
         {
-            this.context = context;
+            _context = context;
         }
 
         protected override unsafe void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context)
         {
-            throw new NotImplementedException();
+            if (frame.IsMain)
+            {
+                _context.MainFrame.BindContext(context);
+            }
+
+            var obj = context.GetGlobal();
+            Cef.JSBindingContext.BindObjects(obj);
+            _context.JSBindingContext.BindObjects(obj);
+            obj.Dispose();
         }
 
         protected override unsafe void OnContextReleased(CefBrowser browser, CefFrame frame, CefV8Context context)
         {
-            throw new NotImplementedException();
+            if (_context.MainFrame != null)
+            {
+                _context.MainFrame.UnbindV8Context();
+            }
         }
     }
 }

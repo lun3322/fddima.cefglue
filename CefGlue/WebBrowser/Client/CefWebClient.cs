@@ -34,7 +34,7 @@
             this.printHandler = null; // new CefWebPrintHandler(context);
             this.findHandler = null; // new CefWebFindHandler(context);
             this.jsDialogHandler = new CefWebJSDialogHandler(context);
-            //this.v8ContextHandler = new CefWebV8ContextHandler(context);
+            this.v8ContextHandler = new CefWebV8ContextHandler(context);
             this.renderHandler = null; // new CefWebRenderHandler(context);
             this.dragHandler = null; // new CefWebDragHandler(context);
         }
