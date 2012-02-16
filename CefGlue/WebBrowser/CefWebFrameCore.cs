@@ -46,6 +46,7 @@
             get { return this.frame; }
         }
 
+        [Obsolete("Remove it method, it is no more required.")]
         public void BindCurrentV8Context()
         {
             if (this.v8Context != null) throw new InvalidOperationException();
@@ -53,6 +54,17 @@
             var context = CefV8Context.GetCurrentContext();
             if (context == null) throw new InvalidOperationException();
             this.v8Context = context;
+        }
+
+        public void BindContext(CefV8Context v8Context)
+        {
+            if (this.v8Context != null)
+                throw new InvalidOperationException();
+
+            if (v8Context == null)
+                throw new ArgumentNullException("v8Context");
+
+            this.v8Context = v8Context;
         }
 
         public void UnbindV8Context()
