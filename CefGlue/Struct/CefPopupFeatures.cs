@@ -56,6 +56,14 @@
             {
                 return this.ptr->xSet ? (int?)this.ptr->x : null;
             }
+            set
+            {
+                if (value != null)
+                {
+                    this.ptr->x = (int) value;
+                    this.ptr->xSet = true;
+                }
+            }
         }
 
         public int? Y
@@ -71,6 +79,14 @@
             get
             {
                 return this.ptr->widthSet ? (int?)this.ptr->width : null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    this.ptr->width = (int) value;
+                    this.ptr->widthSet = true;
+                }
             }
         }
 

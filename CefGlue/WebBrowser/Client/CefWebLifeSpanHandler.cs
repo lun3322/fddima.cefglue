@@ -53,10 +53,11 @@
                 #endif
                 */
 
+            this.context.OnBeforePopup(parentBrowser, popupFeatures, windowInfo, url, ref client, settings);
+
             // TODO: create webview here
             // TODO: do not inherit browser settings for devtools
             client = CefWebClientFactory.Default.Create(new CefWebBrowserCore(null, this.context.Settings, url));
-
 
             // TODO: create new browsercontext for popup windows
 
@@ -68,6 +69,8 @@
             #if DIAGNOSTICS
             Cef.Logger.Trace(LogTarget.CefLifeSpanHandler, "OnAfterCreated");
             #endif
+
+            this.context.OnAfterCreated(browser);
 
             // TODO: check context state, it can be already closed
             this.context.Attach(browser);

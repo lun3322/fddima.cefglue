@@ -35,6 +35,16 @@
 
         public event EventHandler Ready;
 
+        public event EventHandler<CefBeforePopupEventArgs> BeforePopup;
+
+        public event EventHandler<CefAfterCreatedEventArgs> AfterCreated;
+
+        public event EventHandler<CefDragEventArgs> DragStart;
+
+        public event EventHandler<CefDragEventArgs> DragEnter;
+
+        public event EventHandler<CefShowPopupEventArgs> ShowPopup;
+
         public CefReadyOptions ReadyOptions
         {
             get { return this.readyOptions; }

@@ -246,5 +246,54 @@
                 handler(this.owner, EventArgs.Empty);
             }
         }
+
+        public void OnBeforePopup(CefBrowser parentBrowser, CefPopupFeatures popupFeatures, CefWindowInfo windowInfo, string url, ref CefClient client, CefBrowserSettings settings)
+        {
+            var handler = this.BeforePopup;
+            if (handler != null)
+            {
+                handler(this.owner, new CefBeforePopupEventArgs(parentBrowser, popupFeatures, windowInfo, url, ref client, settings));
+            }
+        }
+
+        public void OnAfterCreated(CefBrowser browser)
+        {
+            var handler = this.AfterCreated;
+            if (handler != null)
+            {
+                handler(this.owner, new CefAfterCreatedEventArgs(browser));
+            }
+        }
+
+        public bool OnDragStart(CefBrowser browser, CefDragData dragData, CefDragOperations mask)        
+        {
+            var handler = this.DragStart;
+            if (handler != null)
+            {
+                handler(this.owner, new CefDragEventArgs(browser, dragData, mask));
+            }
+
+            return false;
+        }
+
+        public bool OnDragEnter(CefBrowser browser, CefDragData dragData, CefDragOperations mask)
+        {
+            var handler = this.DragEnter;
+            if (handler != null)
+            {
+                handler(this.owner, new CefDragEventArgs(browser, dragData, mask));
+            }
+
+            return false;
+        }
+
+        public void OnShowPopup(CefBrowser browser, bool show)
+        {
+            var handler = this.ShowPopup;
+            if (handler != null)
+            {
+                handler(this.owner, new CefShowPopupEventArgs(browser, show));
+            }
+        }
     }
 }
