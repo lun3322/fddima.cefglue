@@ -1742,7 +1742,12 @@ class obj_analysis:
         """ Format the value for the C API. """
         result = ''
         format = 'single'
-        if self.is_result_simple():
+
+        # HACK: Didn't find a propery way to deal with type cef_rect_t const*
+        if self.has_name() and self.get_name() == 'dirtyRects':
+            format = 'multi-arg'
+            result += 'cef_rect_t*'
+        elif self.is_result_simple():
             result += self.get_cefglue_result_simple_type()
         elif self.is_result_refptr():
             result += self.get_cefglue_result_refptr_type(defined_structs)

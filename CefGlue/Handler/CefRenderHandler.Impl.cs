@@ -160,29 +160,31 @@ namespace CefGlue
         /// width*height*4 bytes in size and represents a BGRA image with an
         /// upper-left origin.
         /// </summary>
-        private void on_paint(cef_render_handler_t* self, cef_browser_t* browser, cef_paint_element_type_t type, int dirtyRectCount, cef_rect_t dirtyRects, /*const*/ void* buffer)
+        private void on_paint(cef_render_handler_t* self, cef_browser_t* browser, cef_paint_element_type_t type, int dirtyRectCount, cef_rect_t* dirtyRects, /*const*/ void* buffer)
         {
             ThrowIfObjectDisposed();
 
-            throw new NotImplementedException();
+            var m_browser = CefBrowser.From(browser);
+            var m_type = (CefPaintElementType)type;
+            var m_dirtyRects = new CefRect[dirtyRectCount];
+            for (int i = 0; i < m_dirtyRects.Length; i++) 
+            {
+                m_dirtyRects[i] = CefRect.From(dirtyRects);
+                dirtyRects++;
+            }
+            var m_buffer = (IntPtr)buffer;
 
-            // FIXME: implement this
-//            var m_browser = CefBrowser.From(browser);
-//            var m_type = (CefPaintElementType)type;
-//            var m_dirtyRect = CefRect.From(dirtyRect);
-//            var m_buffer = (IntPtr)buffer;
-//
-//            this.OnPaint(m_browser, m_type, m_dirtyRect, m_buffer);
+            this.OnPaint(m_browser, m_type, m_dirtyRects, m_buffer);
         }
 
         /// <summary>
         /// Called when an element should be painted.
         /// |type| indicates whether the element is the view or the popup widget.
         /// |buffer| contains the pixel data for the whole image.
-        /// |dirtyRect| indicates the portion of the image that has been repainted.
+        /// |dirtyRects| indicates the portions of the image that have been repainted.
         /// On Windows |buffer| will be width*height*4 bytes in size and represents a BGRA image with an upper-left origin.
         /// </summary>
-        protected virtual void OnPaint(CefBrowser browser, CefPaintElementType type, CefRect dirtyRect, IntPtr buffer)
+        protected virtual void OnPaint(CefBrowser browser, CefPaintElementType type, CefRect[] dirtyRect, IntPtr buffer)
         {
         }
 
