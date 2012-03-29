@@ -38,6 +38,9 @@
             {
                 try
                 {
+                    // FIXME: CEF doesn't report that v8 context created for pages without script blocks so we need explicitedly get v8 context.
+                    var context = V8Context ?? this.frame.GetV8Context();
+
                     result = InvokeScript(this.V8Context, name, args);
                 }
                 catch (Exception ex)
