@@ -85,18 +85,19 @@ namespace CefGlue
         /// </summary>
         public static CefV8Value CreateObject()
         {
-            return CreateObject((CefUserData)null);
+            //return CreateObject((CefUserData)null);
+            return CreateObject((CefV8Accessor)null);
         }
 
         /// <summary>
         /// Create a new CefV8Value object of type object.
         /// </summary>
-        public static CefV8Value CreateObject(CefUserData userData)
-        {
-            return CefV8Value.From(NativeMethods.cef_v8value_create_object(
-                (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null)
-                ));
-        }
+        //public static CefV8Value CreateObject(CefUserData userData)
+        //{
+        //    return CefV8Value.From(NativeMethods.cef_v8value_create_object(
+        //        (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null)
+        //        ));
+        //}
 
         /// <summary>
         /// Create a new CefV8Value object of type object with accessors.

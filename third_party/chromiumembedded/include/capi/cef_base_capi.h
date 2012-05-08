@@ -1,4 +1,4 @@
-// Copyright (c) 2010 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2011 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -28,69 +28,58 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#ifndef _CEF_TYPES_MAC_H
-#define _CEF_TYPES_MAC_H
-
-#if defined(OS_MACOSX)
-#include "cef_string.h"
-
-// Window handle.
-#ifdef __cplusplus
-#ifdef __OBJC__
-@class NSView;
-#else
-class NSView;
-#endif
-#define cef_window_handle_t NSView*
-#else
-#define cef_window_handle_t void*
-#endif
-#define cef_cursor_handle_t void*
+#ifndef CEF_INCLUDE_CAPI_CEF_BASE_CAPI_H_
+#define CEF_INCLUDE_CAPI_CEF_BASE_CAPI_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-///
-// Supported graphics implementations.
-///
-enum cef_graphics_implementation_t
-{
-  DESKTOP_IN_PROCESS = 0,
-  DESKTOP_IN_PROCESS_COMMAND_BUFFER,
-};
+#include "include/internal/cef_export.h"
+#include "include/internal/cef_string.h"
+#include "include/internal/cef_string_list.h"
+#include "include/internal/cef_string_map.h"
+#include "include/internal/cef_string_multimap.h"
+#include "include/internal/cef_types.h"
 
 ///
-// Class representing window information.
+// Structure defining the reference count implementation functions. All
+// framework structures must include the cef_base_t structure first.
 ///
-typedef struct _cef_window_info_t
-{
-  cef_string_t m_windowName;
-  int m_x;
-  int m_y;
-  int m_nWidth;
-  int m_nHeight;
-  int m_bHidden;
+typedef struct _cef_base_t {
+  ///
+  // Size of the data structure.
+  ///
+  size_t size;
 
-  // NSView pointer for the parent view.
-  cef_window_handle_t m_ParentView;
-  
-  // NSView pointer for the new browser view.
-  cef_window_handle_t m_View;
-} cef_window_info_t;
+  ///
+  // Increment the reference count.
+  ///
+  int (CEF_CALLBACK *add_ref)(struct _cef_base_t* self);
 
-///
-// Class representing print context information.
-///
-typedef struct _cef_print_info_t
-{
-  double m_Scale;
-} cef_print_info_t;
+  ///
+  // Decrement the reference count.  Delete this object when no references
+  // remain.
+  ///
+  int (CEF_CALLBACK *release)(struct _cef_base_t* self);
+
+  ///
+  // Returns the current number of references.
+  ///
+  int (CEF_CALLBACK *get_refct)(struct _cef_base_t* self);
+} cef_base_t;
+
+
+// Check that the structure |s|, which is defined with a cef_base_t member named
+// |base|, is large enough to contain the specified member |f|.
+#define CEF_MEMBER_EXISTS(s, f)   \
+  ((intptr_t)&((s)->f) - (intptr_t)(s) + sizeof((s)->f) <= (s)->base.size)
+
+#define CEF_MEMBER_MISSING(s, f)  (!CEF_MEMBER_EXISTS(s, f) || !((s)->f))
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // OS_MACOSX
-
-#endif // _CEF_TYPES_MAC_H
+#endif  // CEF_INCLUDE_CAPI_CEF_BASE_CAPI_H_

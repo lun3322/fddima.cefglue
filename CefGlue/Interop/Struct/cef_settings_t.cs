@@ -103,6 +103,30 @@ namespace CefGlue.Interop
         public bool_t auto_detect_proxy_settings_enabled;
 #endif
 
+        ///
+        // The fully qualified path for the cef.pak file. If this value is empty
+        // the cef.pak file must be located in the module directory. This value is
+        // ignored on Mac OS X where pack files are always loaded from the app bundle
+        // resource directory.
+        ///
+        public cef_string_t pack_file_path;
+
+        ///
+        // The fully qualified path for the locales directory. If this value is empty
+        // the locales directory must be located in the module directory. This value
+        // is ignored on Mac OS X where pack files are always loaded from the app
+        // bundle resource directory.
+        ///
+        public cef_string_t locales_dir_path;
+
+        ///
+        // Set to true (1) to disable loading of pack files for resources and locales.
+        // A resource bundle handler must be provided for the browser and renderer
+        // processes via CefApp::GetResourceBundleHandler() if loading of pack files
+        // is disabled.
+        ///
+        public bool_t pack_loading_disabled;
+
         public static void Clear(cef_settings_t* self)
         {
             cef_string_t.Clear(&self->cache_path);
@@ -113,6 +137,8 @@ namespace CefGlue.Interop
             CefStringList.DestroyHandle(self->extra_plugin_paths);
             cef_string_t.Clear(&self->log_file);
             cef_string_t.Clear(&self->javascript_flags);
+            cef_string_t.Clear(&self->pack_file_path);
+            cef_string_t.Clear(&self->locales_dir_path);
         }
     }
 }

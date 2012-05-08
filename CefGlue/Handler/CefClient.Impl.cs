@@ -167,6 +167,25 @@
         }
 
         /// <summary>
+        /// Return the handler for permission events.
+        /// </summary>
+        private cef_permission_handler_t* get_permission_handler(cef_client_t* self)
+        {
+            ThrowIfObjectDisposed();
+
+            var handler = GetPermissionHandler();
+            return handler == null ? null : handler.GetNativePointerAndAddRef();
+        }
+
+        /// <summary>
+        /// Return the handler for permission events.
+        /// </summary>
+        protected virtual CefPermissionHandler GetPermissionHandler()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Return the handler for find result events.
         /// </summary>
         private cef_find_handler_t* get_find_handler(cef_client_t* self)

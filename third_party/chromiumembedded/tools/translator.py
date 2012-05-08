@@ -9,6 +9,7 @@ from make_cpptoc_header import *
 from make_cpptoc_impl import *
 from make_ctocpp_header import *
 from make_ctocpp_impl import *
+from make_gypi_file import *
 from optparse import OptionParser
 from make_cefglue import *
 
@@ -25,10 +26,10 @@ This utility generates files for the CEF C++ to C API translation layer.
 """
 
 parser = OptionParser(description=disc)
-parser.add_option('--cpp-header', dest='cppheader', metavar='FILE',
-                  help='source CEF C++ header file [required]')
-parser.add_option('--capi-header', dest='capiheader', metavar='FILE',
-                  help='output CEF C API header file')
+parser.add_option('--cpp-header-dir', dest='cppheaderdir', metavar='DIR',
+                  help='input directory for C++ header files [required]')
+parser.add_option('--capi-header-dir', dest='capiheaderdir', metavar='DIR',
+                  help='output directory for C API header files')
 parser.add_option('--cpptoc-global-impl', dest='cpptocglobalimpl', metavar='FILE',
                   help='input/output file for CppToC global translations')
 parser.add_option('--ctocpp-global-impl', dest='ctocppglobalimpl', metavar='FILE',
@@ -37,6 +38,8 @@ parser.add_option('--cpptoc-dir', dest='cpptocdir', metavar='DIR',
                   help='input/output directory for CppToC class translations')
 parser.add_option('--ctocpp-dir', dest='ctocppdir', metavar='DIR',
                   help='input/output directory for CppToC class translations')
+parser.add_option('--gypi-file', dest='gypifile', metavar='FILE',
+                  help='output file for path information')
 parser.add_option('--no-cpptoc-header',
                   action='store_true', dest='nocpptocheader', default=False,
                   help='do not output the CppToC headers')
@@ -62,35 +65,48 @@ parser.add_option('--cefglue-dir', dest='cefgluedir', metavar='FILE',
 (options, args) = parser.parse_args()
 
 # the cppheader option is required
-if options.cppheader is None:
+if options.cppheaderdir is None:
     parser.print_help(sys.stdout)
     sys.exit()
 
 # make sure the header exists
-if not path_exists(options.cppheader):
-    sys.stderr.write('File '+options.cppheader+' does not exist.')
+if not path_exists(options.cppheaderdir):
+    sys.stderr.write('File '+options.cppheaderdir+' does not exist.')
     sys.exit()
 
 # create the header object
 if not options.quiet:
-    sys.stdout.write('Parsing '+options.cppheader+'...\n')
-header = obj_header(options.cppheader)
+    sys.stdout.write('Parsing C++ headers from '+options.cppheaderdir+'...\n')
+header = obj_header()
+header.add_directory(options.cppheaderdir)
 
 writect = 0
 
-if not options.capiheader is None:
+if not options.capiheaderdir is None:
     #output the C API header
     if not options.quiet:
-        sys.stdout.write('Generating C API header...\n')
-    writect += write_capi_header(header, options.capiheader,
-                                 not options.nobackup)
-    
+        sys.stdout.write('In C API header directory '+options.capiheaderdir+'...\n')
+    filenames = sorted(header.get_file_names())
+    for filename in filenames:
+        if not options.quiet:
+            sys.stdout.write('Generating '+filename+' C API header...\n')
+        writect += write_capi_header(header,
+                                     os.path.join(options.capiheaderdir, filename),
+                                     not options.nobackup)
+
 if not options.cefgluedir is None:
     #output the C API C# source
     if not options.quiet:
-        sys.stdout.write('Generating CefGlue interop files...\n')
-    writect += write_cefglue(header, options.cefgluedir, not options.nobackup)
-
+        sys.stdout.write('In CefGlue interop directory '+options.cefgluedir+'...\n')
+    filenames = sorted(header.get_file_names())
+    for filename in filenames:
+        if not options.quiet:
+            sys.stdout.write('Generating '+filename+' CefGlue interop file...\n')
+        writect += write_cefglue(header,
+                                     os.path.join(options.cefgluedir, filename),
+                                     options.cefgluedir,
+                                     not options.nobackup)
+    
 # build the list of classes to parse
 allclasses = header.get_class_names()
 if not options.classes is None:
@@ -119,7 +135,7 @@ if not options.ctocppglobalimpl is None:
                                  not options.nobackup)
 
 if not options.cpptocdir is None:
-    #output CppToC class files
+    # output CppToC class files
     if not options.quiet:
         sys.stdout.write('In CppToC directory '+options.cpptocdir+'...\n')
     
@@ -136,7 +152,7 @@ if not options.cpptocdir is None:
                                          not options.nobackup)
 
 if not options.ctocppdir is None:
-    #output CppToC class files
+    # output CppToC class files
     if not options.quiet:
         sys.stdout.write('In CToCpp directory '+options.ctocppdir+'...\n')
     for cls in classes:
@@ -150,6 +166,12 @@ if not options.ctocppdir is None:
                 sys.stdout.write('Generating '+cls+'CToCpp class implementation...\n')
             writect += write_ctocpp_impl(header, cls, options.ctocppdir,
                                          not options.nobackup)
+
+if not options.gypifile is None:
+    # output the gypi file
+    if not options.quiet:
+        sys.stdout.write('Generating '+options.gypifile+' file...\n')
+    writect += write_gypi_file(header, options.gypifile, not options.nobackup)
 
 if not options.quiet:
     sys.stdout.write('Done - Wrote '+str(writect)+' files.\n')

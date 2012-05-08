@@ -24,13 +24,13 @@ def make_cpptoc_function_impl_existing(name, func, impl, defined_names):
         notify(name+' prototype changed')
     
     return wrap_code(make_cpptoc_impl_proto(name, func, parts))+'{'+ \
-           changes+impl['body']+'\n}\n\n'
+           changes+impl['body']+'\n}\n'
     return result
 
 def make_cpptoc_function_impl_new(name, func, defined_names):
     # retrieve the C API prototype parts
     parts = func.get_capi_parts(defined_names)
-    result = make_cpptoc_impl_proto(name, func, parts)+'\n{'
+    result = make_cpptoc_impl_proto(name, func, parts)+' {'
     
     invalid = []
     
@@ -118,7 +118,7 @@ def make_cpptoc_function_impl_new(name, func, defined_names):
         index_params = arg.parent.get_attrib_list('index_param')
         if not index_params is None and arg_name in index_params:
             result += comment+\
-                      '\n  DCHECK('+arg_name+' >= 0);'\
+                      '\n  DCHECK_GE('+arg_name+', 0);'\
                       '\n  if ('+arg_name+' < 0)'\
                       '\n    return'+retval_default+';'
 
@@ -200,12 +200,12 @@ def make_cpptoc_function_impl_new(name, func, defined_names):
             params.append(arg_name+'List')
         elif arg_type == 'string_map_single_byref' or arg_type == 'string_map_single_byref_const':
             result += comment+\
-                      '\n  std::map<CefString,CefString> '+arg_name+'Map;'\
+                      '\n  std::map<CefString, CefString> '+arg_name+'Map;'\
                       '\n  transfer_string_map_contents('+arg_name+', '+arg_name+'Map);'
             params.append(arg_name+'Map')
         elif arg_type == 'string_map_multi_byref' or arg_type == 'string_map_multi_byref_const':
             result += comment+\
-                      '\n  std::multimap<CefString,CefString> '+arg_name+'Multimap;'\
+                      '\n  std::multimap<CefString, CefString> '+arg_name+'Multimap;'\
                       '\n  transfer_string_multimap_contents('+arg_name+', '+arg_name+'Multimap);'
             params.append(arg_name+'Multimap')
         elif arg_type == 'simple_vec_byref' or arg_type == 'bool_vec_byref' or \
@@ -371,8 +371,8 @@ def make_cpptoc_function_impl_new(name, func, defined_names):
             result += '\n#ifndef NDEBUG'\
                       '\n  // Check that all wrapper objects have been destroyed'
             for name in names:
-                result += '\n  DCHECK('+name+'::DebugObjCt == 0);';
-            result += '\n#endif // !NDEBUG'
+                result += '\n  DCHECK_EQ('+name+'::DebugObjCt, 0);';
+            result += '\n#endif  // !NDEBUG'
     
     if len(result) != result_len:
         result += '\n'
@@ -396,7 +396,7 @@ def make_cpptoc_function_impl_new(name, func, defined_names):
     if len(result) != result_len:
         result += '\n'
     
-    result += '}\n\n'
+    result += '}\n'
     return wrap_code(result)
 
 def make_cpptoc_function_impl(funcs, existing, prefixname, defined_names):
@@ -461,7 +461,7 @@ def make_cpptoc_class_impl(header, clsname, impl):
     
     const =  '// CONSTRUCTOR - Do not edit by hand.\n\n'+ \
              clsname+'CppToC::'+clsname+'CppToC('+clsname+'* cls)\n'+ \
-             '    : CefCppToC<'+clsname+'CppToC, '+clsname+', '+capiname+'>(cls)\n'+ \
+             '    : CefCppToC<'+clsname+'CppToC, '+clsname+', '+capiname+'>(cls) '+ \
              '{\n';
                 
     funcs = cls.get_virtual_funcs()
@@ -489,10 +489,21 @@ def make_cpptoc_global_impl(header, impl):
     if len(impl) > 0:
         impl = '\n// GLOBAL FUNCTIONS - Body may be edited by hand.\n\n'+impl
       
+    includes = ''
+
+    # include required headers for global functions
+    filenames = []
+    for func in header.get_funcs():
+        filename = func.get_file_name()
+        if not filename in filenames:
+            includes += '#include "include/'+func.get_file_name()+'"\n' \
+                        '#include "include/capi/'+func.get_capi_file_name()+'"\n'
+            filenames.append(filename)
+        
     # determine what includes are required by identifying what translation
     # classes are being used
-    includes = format_translation_includes(impl)
-    
+    includes += format_translation_includes(impl)
+
     # build the final output
     result = get_copyright()
 
@@ -536,7 +547,8 @@ if __name__ == "__main__":
         sys.exit()
         
     # create the header object
-    header = obj_header(sys.argv[1])
+    header = obj_header()
+    header.add_file(sys.argv[1])
     
     # read the existing implementation file into memory
     try:
@@ -548,4 +560,4 @@ if __name__ == "__main__":
         f.close()
     
     # dump the result to stdout
-    sys.stdout.write(make_cpptoc_impl(header, sys.argv[2], data))
+    sys.stdout.write(make_cpptoc_class_impl(header, sys.argv[2], data))

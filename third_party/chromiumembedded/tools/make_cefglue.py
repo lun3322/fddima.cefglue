@@ -463,9 +463,10 @@ namespace CefGlue.Interop
     return result
 
 
-def write_cefglue(header, cefgluedir, backup):
+def write_cefglue(header, filename, cefgluedir, backup):
     filedir = cefgluedir;
     file = filedir + '/NativeMethods.g.cs'
+    #file = filedir + '/' + os.path.basename(filename) + '.g.cs'
 
     if not os.path.isdir(filedir):
         os.makedirs(filedir);

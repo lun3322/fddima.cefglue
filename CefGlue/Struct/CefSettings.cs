@@ -31,6 +31,9 @@
 #if WINDOWS
         private bool autoDetectProxySettingsEnabled;
 #endif
+        private string packFilePath;
+        private string localesDirPath;
+        private bool packLoadingDisabled;
 
         public CefSettings()
         {
@@ -226,6 +229,54 @@
         }
 #endif
 
+        /// <summary>
+        /// The fully qualified path for the cef.pak file. If this value is empty
+        /// the cef.pak file must be located in the module directory. This value is
+        /// ignored on Mac OS X where pack files are always loaded from the app bundle
+        /// resource directory.
+        /// </summary>
+        public string PackFilePath
+        {
+            get { return this.packFilePath; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.packFilePath = value;
+            }
+        }
+
+        /// <summary>
+        /// The fully qualified path for the locales directory. If this value is empty
+        /// the locales directory must be located in the module directory. This value
+        /// is ignored on Mac OS X where pack files are always loaded from the app
+        /// bundle resource directory.
+        /// </summary>
+        public string LocalesDirPath
+        {
+            get { return this.localesDirPath; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.localesDirPath = value;
+            }
+        }
+
+        /// <summary>
+        /// Set to true to disable loading of pack files for resources and locales.
+        /// A resource bundle handler must be provided for the browser and renderer
+        /// processes via CefApp::GetResourceBundleHandler() if loading of pack files
+        /// is disabled.
+        /// </summary>
+        public bool PackLoadingDisabled
+        {
+            get { return this.packLoadingDisabled; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.packLoadingDisabled = value;
+            }
+        }
+
         internal bool IsReadOnly
         {
             get { return _isReadOnly; }
@@ -258,6 +309,10 @@
 #if WINDOWS
             ptr->auto_detect_proxy_settings_enabled = this.AutoDetectProxySettingsEnabled;
 #endif
+
+            cef_string_t.Copy(this.PackFilePath, &ptr->pack_file_path);
+            cef_string_t.Copy(this.LocalesDirPath, &ptr->locales_dir_path);
+            ptr->pack_loading_disabled = this.PackLoadingDisabled;
 
             return ptr;
         }

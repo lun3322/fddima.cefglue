@@ -105,3 +105,7 @@ def make_dir(name, quiet = True):
     except IOError, (errno, strerror):
         sys.stderr.write('Failed to create directory '+name+': '+strerror)
         raise
+
+def get_files(search_glob):
+    """ Returns all files matching the search glob. """
+    return iglob(search_glob)
