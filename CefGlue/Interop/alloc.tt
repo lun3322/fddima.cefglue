@@ -18,6 +18,7 @@
         new StructDef("cef_focus_handler_t",     hasBase:true),
         new StructDef("cef_keyboard_handler_t",  hasBase:true),
         new StructDef("cef_menu_handler_t",      hasBase:true),
+        new StructDef("cef_permission_handler_t",hasBase:true),
         new StructDef("cef_print_handler_t",     hasBase:true),
         new StructDef("cef_find_handler_t",      hasBase:true),
         new StructDef("cef_jsdialog_handler_t",  hasBase:true),
@@ -27,6 +28,7 @@
         new StructDef("cef_drag_handler_t",      hasBase:true),
 
         new StructDef("cef_download_handler_t",  hasBase:true),
+        new StructDef("cef_resource_bundle_handler_t",  hasBase:true),
 
         new StructDef("cef_scheme_handler_factory_t",  hasBase:true),
         new StructDef("cef_scheme_handler_t",          hasBase:true),

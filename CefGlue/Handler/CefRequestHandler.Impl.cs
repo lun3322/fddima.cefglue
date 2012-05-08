@@ -280,5 +280,33 @@ namespace CefGlue
             return false;
         }
 
+        /// <summary>
+        /// Called on the IO thread to retrieve the cookie manager. |main_url| is the
+        /// URL of the top-level frame. Cookies managers can be unique per browser or
+        /// shared across multiple browsers. The global cookie manager will be used if
+        /// this method returns NULL.
+        /// </summary>
+        private cef_cookie_manager_t* get_cookie_manager(cef_request_handler_t* self, cef_browser_t* browser, /*const*/ cef_string_t* main_url)
+        {
+            ThrowIfObjectDisposed();
+
+            var m_browser = CefBrowser.From(browser);
+            var m_mainUrl = cef_string_t.ToString(main_url);
+
+            var cookieManager = this.GetCookieManager(m_browser, m_mainUrl);
+
+            return cookieManager != null ? cookieManager.GetNativePointerAndAddRef() : null;
+        }
+
+        /// <summary>
+        /// Called on the IO thread to retrieve the cookie manager. |main_url| is the
+        /// URL of the top-level frame. Cookies managers can be unique per browser or
+        /// shared across multiple browsers. The global cookie manager will be used if
+        /// this method returns NULL.
+        /// </summary>
+        protected virtual CefCookieManager GetCookieManager(CefBrowser browser, string mainUrl)
+        {
+            return null;
+        }
     }
 }

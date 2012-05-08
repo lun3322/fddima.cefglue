@@ -93,14 +93,17 @@
     <Compile Include="Enum\CefHandlerFocusSource.cs" />
     <Compile Include="Enum\CefStorageType.cs" />
     <Compile Include="Handler\CefProxyHandler.Impl.cs" />
+    <Compile Include="Handler\CefResourceBundleHandler.Impl.cs" />
     <Compile Include="Handler\CefStorageVisitor.Impl.cs" />
     <Compile Include="Handler\CefV8ContextHandler.Impl.cs" />
+    <Compile Include="Handler\CefPermissionHandler.Impl.cs" />
     <Compile Include="Interop\Enum\cef_menu_id_t.cs" />
     <Compile Include="Interop\Enum\cef_proxy_type_t.cs" />
     <Compile Include="Interop\Struct\cef_menu_info_t.cs" />
     <Compile Include="Interop\Struct\cef_proxy_info_t.cs" />
     <Compile Include="JSBinding\JSBindingContext.cs" />
     <Compile Include="Proxy\CefV8Exception.Impl.cs" />
+    <Compile Include="Proxy\CefCookieManager.Impl.cs" />
     <Compile Include="Struct\CefMenuInfo.cs" />
     <Compile Include="Threading\CefActionTask.cs" />
     <Compile Include="Threading\CefSendOrPostCallbackTask.cs" />
@@ -326,8 +329,7 @@
     <None Include="..\CefGlue.snk">
       <Link>Properties\CefGlue.snk</Link>
     </None>
-    <None Include="Handler\Handler.tt">
-    </None>
+    <None Include="Handler\Handler.tt" />
     <None Include="Handler\Handler.ttinclude" />
     <None Include="Proxy\Proxy.tt" />
     <None Include="Proxy\Proxy.ttinclude" />

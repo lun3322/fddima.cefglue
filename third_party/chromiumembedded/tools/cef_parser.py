@@ -94,6 +94,10 @@ def wrap_code(code, indent = '    ', maxchars = 80, splitchars = '(=,'):
     
     return output
 
+def get_capi_file_name(cppname):
+    """ Convert a C++ header file name to a C API header file name. """
+    return cppname[:-2]+'_capi.h'
+
 def get_capi_name(cppname, isclassname, prefix = None):
     """ Convert a C++ CamelCaps name to a C API underscore name. """
     result = ''
@@ -193,7 +197,7 @@ def format_comment(comment, indent, translate_map = None, maxchars = 80):
                     if didremovespace:
                         result += ' '+line
                     else:
-                        result += line;
+                        result += line
                 result += '\n'
             else:
                 # add to the current paragraph
@@ -321,8 +325,12 @@ def dict_to_str(dict):
     str = []
     for name in dict.keys():
         if not isinstance(dict[name], list):
-            # currently a string value
-            str.append(name+'='+dict[name])
+            if dict[name] is True:
+                # currently a bool value
+                str.append(name)
+            else:
+                # currently a string value
+                str.append(name+'='+dict[name])
         else:
             # currently a list value
             for val in dict[name]:
@@ -334,8 +342,10 @@ def dict_to_str(dict):
 _cre_attrib = '/\*--cef\(([A-Za-z0-9_ ,=:\n]{0,})\)--\*/'
 # regex for matching class and function names
 _cre_cfname = '([A-Za-z0-9_]{1,})'
-# regex for matching typedef values and function return values
+# regex for matching function return values
 _cre_retval = '([A-Za-z0-9_<>:,\*\&]{1,})'
+# regex for matching typedef value and name combination
+_cre_typedef = '([A-Za-z0-9_<>:,\*\& ]{1,})'
 # regex for matching function return value and name combination
 _cre_func   = '([A-Za-z][A-Za-z0-9_<>:,\*\& ]{1,})'
 # regex for matching virtual function modifiers
@@ -343,6 +353,28 @@ _cre_vfmod = '([A-Za-z0-9_]{0,})'
 # regex for matching arbitrary whitespace
 _cre_space =  '[\s]{1,}'
 
+# Simple translation types. Format is:
+#   'cpp_type' : ['capi_type', 'capi_default_value']
+_simpletypes = {
+    'void' : ['void', ''],
+    'void*' : ['void*', 'NULL'],
+    'int' : ['int', '0'],
+    'int64' : ['int64', '0'],
+    'uint64' : ['uint64', '0'],
+    'double' : ['double', '0'],
+    'long' : ['long', '0'],
+    'unsigned long' : ['unsigned long', '0'],
+    'long long' : ['long long', '0'],
+    'size_t' : ['size_t', '0'],
+    'time_t' : ['time_t', '0'],
+    'bool' : ['int', '0'],
+    'char* const': ['char* const', 'NULL'],
+    'CefCursorHandle' : ['cef_cursor_handle_t', 'NULL'],
+    'CefWindowHandle' : ['cef_window_handle_t', 'NULL'],
+    'CefRect' : ['cef_rect_t', 'CefRect()'],
+    'CefThreadId' : ['cef_thread_id_t', 'TID_UI'],
+    'CefTime' : ['cef_time_t', 'CefTime()'],
+}
 
 def get_function_impls(content, ident):
     """ Retrieve the function parts from the specified contents as a set of
@@ -420,52 +452,81 @@ def get_copyright():
 class obj_header:
     """ Class representing a C++ header file. """
     
-    def __init__(self, filename):
-        self.filename = filename;
+    def __init__(self):
+        self.filenames = []
+        self.typedefs = []
+        self.funcs = []
+        self.classes = []
+    
+    def add_directory(self, directory):
+        """ Add all header files from the specified directory. """
+        files = get_files(os.path.join(directory, '*.h'))
+        for file in files:
+            self.add_file(file)
+
+    def add_file(self, filepath):
+        """ Add a header file. """
+        
+        filename = os.path.split(filepath)[1]
+        added = False
         
         # read the input file into memory
-        data = read_file(filename)
+        data = read_file(filepath)
         
         # remove space from between template definition end brackets
         data = data.replace("> >", ">>")
         
         # extract global typedefs
-        p = re.compile('\ntypedef'+_cre_space+_cre_retval+
-                       _cre_space+_cre_cfname+';',
+        p = re.compile('\ntypedef'+_cre_space+_cre_typedef+';',
                        re.MULTILINE | re.DOTALL)
         list = p.findall(data)
-        
-        # build the global typedef objects
-        self.typedefs = []
-        for value, alias in list:
-            self.typedefs.append(obj_typedef(self, value, alias))
+        if len(list) > 0:
+            # build the global typedef objects
+            for value in list:
+                pos = value.rfind(' ')
+                if pos < 0:
+                  raise Exception('Invalid typedef: '+value)
+                alias = value[pos+1:]
+                value = value[:pos]
+                self.typedefs.append(obj_typedef(self, filename, value, alias))
             
         # extract global functions
         p = re.compile('\n'+_cre_attrib+'\n'+_cre_func+'\((.*?)\)',
                        re.MULTILINE | re.DOTALL)
         list = p.findall(data)
+        if len(list) > 0:
+            added = True
+
+            # build the global function objects
+            for attrib, retval, argval in list:
+                comment = get_comment(data, retval+'('+argval+');')
+                self.funcs.append(obj_function(self, filename, attrib, retval,
+                                               argval, comment))
         
-        # build the global function objects
-        self.funcs = []
-        for attrib, retval, argval in list:
-            comment = get_comment(data, retval+'('+argval+');')
-            self.funcs.append(obj_function(self, attrib, retval, argval,
-                                           comment))
+        # extract forward declarations
+        p = re.compile('\nclass'+_cre_space+_cre_cfname+';')
+        forward_declares = p.findall(data)
         
         # extract classes
         p = re.compile('\n'+_cre_attrib+
                        '\nclass'+_cre_space+_cre_cfname+_cre_space+
                        ':'+_cre_space+'public'+_cre_space+'virtual'+
-                       _cre_space+'CefBase'+
-                       '\n{(.*?)};', re.MULTILINE | re.DOTALL)
+                       _cre_space+'CefBase'+_cre_space+
+                       '{(.*?)};', re.MULTILINE | re.DOTALL)
         list = p.findall(data)
-        
-        # build the class objects
-        self.classes = []
-        for attrib, name, body in list:
-            comment = get_comment(data, name+' : public virtual CefBase')
-            self.classes.append(
-                obj_class(self, attrib, name, body, comment))
+        if len(list) > 0:
+            added = True
+
+            # build the class objects
+            for attrib, name, body in list:
+                comment = get_comment(data, name+' : public virtual CefBase')
+                self.classes.append(
+                    obj_class(self, filename, attrib, name, body, comment,
+                              forward_declares))
+
+        if added:
+            # a global function or class was read from the header file
+            self.filenames.append(filename)
 
     def __repr__(self):
         result = ''
@@ -490,21 +551,37 @@ class obj_header:
         
         return result
     
-    def get_file_name(self):
-        """ Return the file name. """
-        return self.filename
+    def get_file_names(self):
+        """ Return the array of header file names. """
+        return self.filenames
     
     def get_typedefs(self):
         """ Return the array of typedef objects. """
         return self.typedefs
     
-    def get_funcs(self):
+    def get_funcs(self, filename = None):
         """ Return the array of function objects. """
-        return self.funcs
+        if filename is None:
+            return self.funcs
+        else:
+            # only return the functions in the specified file
+            res = []
+            for func in self.funcs:
+                if func.get_file_name() == filename:
+                    res.append(func)
+            return res
     
-    def get_classes(self):
+    def get_classes(self, filename = None):
         """ Return the array of class objects. """
-        return self.classes
+        if filename is None:
+            return self.classes
+        else:
+            # only return the classes in the specified file
+            res = []
+            for cls in self.classes:
+                if cls.get_file_name() == filename:
+                    res.append(cls)
+            return res
     
     def get_class(self, classname, defined_structs = None):
         """ Return the specified class or None if not found. """
@@ -544,8 +621,7 @@ class obj_header:
     
     def get_defined_structs(self):
         """ Return a list of names already defined structure names. """
-        return ['cef_print_info_t', 'cef_window_info_t',
-                'cef_handler_menuinfo_t', 'cef_base_t']
+        return ['cef_print_info_t', 'cef_window_info_t', 'cef_base_t']
     
     def get_capi_translations(self):
         """ Return a dictionary that maps C++ terminology to C API terminology.
@@ -585,25 +661,32 @@ class obj_header:
 class obj_class:
     """ Class representing a C++ class. """
     
-    def __init__(self, parent, attrib, name, body, comment):
+    def __init__(self, parent, filename, attrib, name, body, comment,
+                 forward_declares):
         if not isinstance(parent, obj_header):
             raise Exception('Invalid parent object type')
         
         self.parent = parent
+        self.filename = filename
         self.attribs = str_to_dict(attrib)
         self.name = name
         self.comment = comment
+        self.forward_declares = forward_declares
         
         # extract typedefs
-        p = re.compile('\n'+_cre_space+'typedef'+_cre_space+_cre_retval+
-                       _cre_space+_cre_cfname+';',
+        p = re.compile('\n'+_cre_space+'typedef'+_cre_space+_cre_typedef+';',
                        re.MULTILINE | re.DOTALL)
         list = p.findall(body)
-        
+
         # build the typedef objects
         self.typedefs = []
-        for value, alias in list:
-            self.typedefs.append(obj_typedef(self, value, alias))
+        for value in list:
+            pos = value.rfind(' ')
+            if pos < 0:
+              raise Exception('Invalid typedef: '+value)
+            alias = value[pos+1:]
+            value = value[:pos]
+            self.typedefs.append(obj_typedef(self, filename, value, alias))
             
         # extract static functions
         p = re.compile('\n'+_cre_space+_cre_attrib+'\n'+_cre_space+'static'+
@@ -659,9 +742,17 @@ class obj_class:
         result += "\n};\n"
         return result
     
+    def get_file_name(self):
+        """ Return the C++ header file name. """
+        return self.filename
+    
+    def get_capi_file_name(self):
+        """ Return the CAPI header file name. """
+        return get_capi_file_name(self.filename)
+    
     def get_name(self):
         """ Return the class name. """
-        return self.name;
+        return self.name
     
     def get_capi_name(self):
         """ Return the CAPI structure name for this class. """
@@ -670,6 +761,11 @@ class obj_class:
     def get_comment(self):
         """ Return the class comment as an array of lines. """
         return self.comment
+    
+    def get_forward_declares(self):
+        """ Return the list of classes that are forward declared for this
+            class. """
+        return self.forward_declares
     
     def get_attribs(self):
         """ Return all attributes as a dictionary. """
@@ -688,7 +784,7 @@ class obj_class:
             else:
                 # the value is a string
                 return self.attribs[name]
-        return None;
+        return None
     
     def get_attrib_list(self, name):
         """ Return all values for specified attribute as a list. """
@@ -699,19 +795,19 @@ class obj_class:
             else:
                 # convert the value to a list
                 return [self.attribs[name]]
-        return None;
+        return None
     
     def get_typedefs(self):
         """ Return the array of typedef objects. """
-        return self.typedefs;
+        return self.typedefs
     
     def get_static_funcs(self):
         """ Return the array of static function objects. """
-        return self.staticfuncs;
+        return self.staticfuncs
     
     def get_virtual_funcs(self):
         """ Return the array of virtual function objects. """
-        return self.virtualfuncs;
+        return self.virtualfuncs
     
     def get_types(self, list):
         """ Return a dictionary mapping data types to analyzed values. """
@@ -743,7 +839,7 @@ class obj_class:
     def is_client_side(self):
         """ Returns true if the class is implemented by the client. """
         return self.attribs['source'] == 'client'
-
+        
     def get_cefglue_name(self):
         result = re.sub("DOM", "Dom", self.name)
         result = re.sub("URL", "Url", result)
@@ -753,17 +849,26 @@ class obj_class:
 class obj_typedef:
     """ Class representing a typedef statement. """
     
-    def __init__(self, parent, value, alias):
+    def __init__(self, parent, filename, value, alias):
         if not isinstance(parent, obj_header) \
             and not isinstance(parent, obj_class):
             raise Exception('Invalid parent object type')
         
         self.parent = parent
+        self.filename = filename
         self.alias = alias
         self.value = self.parent.get_analysis(value, False)
 
     def __repr__(self):
         return 'typedef '+self.value.get_type()+' '+self.alias+';'
+    
+    def get_file_name(self):
+        """ Return the C++ header file name. """
+        return self.filename
+    
+    def get_capi_file_name(self):
+        """ Return the CAPI header file name. """
+        return get_capi_file_name(self.filename)
     
     def get_alias(self):
         """ Return the alias. """
@@ -779,14 +884,15 @@ class obj_typedef:
         """ Return a dictionary mapping data types to analyzed values. """
         name = self.value.get_type()
         if not name in list:
-            list[name] = self.value;
+            list[name] = self.value
     
     
 class obj_function:
     """ Class representing a function. """
     
-    def __init__(self, parent, attrib, retval, argval, comment):
+    def __init__(self, parent, filename, attrib, retval, argval, comment):
         self.parent = parent
+        self.filename = filename
         self.attribs = str_to_dict(attrib)
         self.retval = obj_argument(self, retval)
         self.name = self.retval.remove_name()
@@ -813,6 +919,14 @@ class obj_function:
 
     def __repr__(self):
         return '/* '+dict_to_str(self.attribs)+' */ '+self.get_cpp_proto()
+    
+    def get_file_name(self):
+        """ Return the C++ header file name. """
+        return self.filename
+    
+    def get_capi_file_name(self):
+        """ Return the CAPI header file name. """
+        return get_capi_file_name(self.filename)
     
     def get_name(self):
         """ Return the function name. """
@@ -854,7 +968,7 @@ class obj_function:
             else:
                 # the value is a string
                 return self.attribs[name]
-        return None;
+        return None
     
     def get_attrib_list(self, name):
         """ Return all values for specified attribute as a list. """
@@ -865,7 +979,7 @@ class obj_function:
             else:
                 # convert the value to a list
                 return [self.attribs[name]]
-        return None;
+        return None
     
     def get_retval(self):
         """ Return the return value object. """
@@ -1033,7 +1147,8 @@ class obj_function_static(obj_function):
     def __init__(self, parent, attrib, retval, argval, comment):
         if not isinstance(parent, obj_class):
             raise Exception('Invalid parent object type')
-        obj_function.__init__(self, parent, attrib, retval, argval, comment)
+        obj_function.__init__(self, parent, parent.filename, attrib, retval,
+                              argval, comment)
 
     def __repr__(self):
         return 'static '+obj_function.__repr__(self)+';'
@@ -1051,7 +1166,8 @@ class obj_function_virtual(obj_function):
     def __init__(self, parent, attrib, retval, argval, comment, vfmod):
         if not isinstance(parent, obj_class):
             raise Exception('Invalid parent object type')
-        obj_function.__init__(self, parent, attrib, retval, argval, comment)
+        obj_function.__init__(self, parent, parent.filename, attrib, retval,
+                              argval, comment)
         if vfmod == 'const':
             self.isconst = True
         else:
@@ -1123,8 +1239,8 @@ class obj_argument:
         """ Returns the count function for this argument. """
         # The 'count_func' attribute value format is name:function
         if not self.parent.has_attrib('count_func'):
-            return None;
-        name = self.type.get_name();
+            return None
+        name = self.type.get_name()
         vals = self.parent.get_attrib_list('count_func')
         for val in vals:
             parts = string.split(val, ':')
@@ -1249,7 +1365,7 @@ class obj_argument:
                 return 'string_map_multi_byref_const'
             return 'string_map_multi_byref'
         
-        return 'invalid';
+        return 'invalid'
 
     def get_retval_type(self):
         """ Returns the retval type as defined in translator.README.txt. """
@@ -1282,7 +1398,7 @@ class obj_argument:
             else:
                 return 'refptr_diff'
 
-        return 'invalid';
+        return 'invalid'
 
     def get_retval_default(self, for_capi):
         """ Returns the default return value based on the retval type. """
@@ -1295,7 +1411,7 @@ class obj_argument:
                     return '1'
                 if retval == 'false':
                     return '0'
-            return retval;
+            return retval
         
         # next look at the retval type value.
         type = self.get_retval_type()
@@ -1440,30 +1556,11 @@ class obj_analysis:
             }
         
         # check for simple direct translations
-        simpletypes = {
-            'void' : ['void', ''],
-            'int' : ['int', '0'],
-            'int64' : ['int64', '0'],
-            'uint64' : ['uint64', '0'],
-            'double' : ['double', '0'],
-            'long' : ['long', '0'],
-            'unsigned long' : ['unsigned long', '0'],
-            'long long' : ['long long', '0'],
-            'size_t' : ['size_t', '0'],
-            'time_t' : ['time_t', '0'],
-            'bool' : ['int', '0'],
-            'char* const': ['char* const', 'NULL'],
-            'CefCursorHandle' : ['cef_cursor_handle_t', 'NULL'],
-            'CefWindowHandle' : ['cef_window_handle_t', 'NULL'],
-            'CefRect' : ['cef_rect_t', 'CefRect()'],
-            'CefThreadId' : ['cef_thread_id_t', 'TID_UI'],
-            'CefTime' : ['cef_time_t', 'CefTime()'],
-        }
-        if value in simpletypes.keys():
+        if value in _simpletypes.keys():
             return {
                 'result_type' : 'simple',
-                'result_value' : simpletypes[value][0],
-                'result_default' : simpletypes[value][1],
+                'result_value' : _simpletypes[value][0],
+                'result_default' : _simpletypes[value][1],
             }
         
         # check if already a C API structure
@@ -1734,7 +1831,7 @@ class obj_analysis:
             result += resdict['value']
         
         if self.has_name():
-            result += ' '+self.get_name();
+            result += ' '+self.get_name()
         
         return {'format' : format, 'value' : result}
 
@@ -1902,13 +1999,14 @@ if __name__ == "__main__":
     
     # verify that the correct number of command-line arguments are provided
     if len(sys.argv) != 2:
-        sys.stderr.write('Usage: '+sys.argv[0]+' <infile>')
+        sys.stderr.write('Usage: '+sys.argv[0]+' <directory>')
         sys.exit()
         
     pp = pprint.PrettyPrinter(indent=4)
     
     # create the header object
-    header = obj_header(sys.argv[1])
+    header = obj_header()
+    header.add_directory(sys.argv[1])
     
     # output the type mapping
     types = {}
