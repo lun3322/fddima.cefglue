@@ -68,7 +68,7 @@ namespace CefGlue.Interop
 
         private static void copy_impl(string src, cef_string_t* dst)
         {
-            NativeMethods.string_clear(dst);
+            NativeMethods.cef_string_clear(dst);
 
             if (string.IsNullOrEmpty(src))
             {
