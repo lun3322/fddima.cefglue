@@ -23,7 +23,8 @@
     <DefineConstants>DEBUG;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile />
+    <DocumentationFile>
+    </DocumentationFile>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x86</PlatformTarget>
@@ -104,6 +105,7 @@
     <Compile Include="JSBinding\JSBindingContext.cs" />
     <Compile Include="Proxy\CefV8Exception.Impl.cs" />
     <Compile Include="Proxy\CefCookieManager.Impl.cs" />
+    <Compile Include="Proxy\CefWebPluginInfo.Impl.cs" />
     <Compile Include="Struct\CefMenuInfo.cs" />
     <Compile Include="Threading\CefActionTask.cs" />
     <Compile Include="Threading\CefSendOrPostCallbackTask.cs" />

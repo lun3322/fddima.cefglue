@@ -531,6 +531,39 @@ namespace CefGlue
             }
         }
 
+        /// <summary>
+        /// Returns the number of installed web plugins. This function must be
+        /// called on the UI thread.
+        /// </summary>
+        public static int GetWebPluginCount()
+        {
+            return NativeMethods.cef_get_web_plugin_count();
+        }
+
+        /// <summary>
+        /// Returns information for web plugin at the specified zero-based index.
+        /// This function must be called on the UI thread.
+        /// </summary>
+        public static CefWebPluginInfo GetWebPluginInfo(int index)
+        {
+            var webPluginInfo = NativeMethods.cef_get_web_plugin_info(index);
+            return CefWebPluginInfo.FromOrDefault(webPluginInfo);
+        }
+
+        /// <summary>
+        /// Returns information for web plugin with the specified name. This
+        /// function must be called on the UI thread.
+        /// </summary>
+        public static CefWebPluginInfo GetWebPluginInfo(string name)
+        {
+            fixed (char* str = name)
+            {
+                var nName = new cef_string_t(str, name != null ? name.Length : 0);
+                var webPluginInfo = NativeMethods.cef_get_web_plugin_info_byname(&nName);
+                return CefWebPluginInfo.FromOrDefault(webPluginInfo);
+            }
+        }
+
         private static void ThrowIfNotInitialized()
         {
             if (!IsInitialized) throw new CefException("CEF is not initialized.");
