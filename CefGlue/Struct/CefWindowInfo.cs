@@ -165,6 +165,15 @@
         }
 
         /// <summary>
+        /// Set to true to enable transparent painting.
+        /// </summary>
+        public bool TransparentPainting
+        {
+            get { return NativePointer->m_bTransparentPainting != 0; }
+            set { NativePointer->m_bTransparentPainting = value ? 1 : 0; }
+        }
+
+        /// <summary>
         /// Handle for the new browser window.
         /// </summary>
         public IntPtr WindowHandle
