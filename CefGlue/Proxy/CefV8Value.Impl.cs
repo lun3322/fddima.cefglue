@@ -114,7 +114,7 @@ namespace CefGlue
         {
             return CefV8Value.From(NativeMethods.cef_v8value_create_object_with_accessor(
                     (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null),
-                    accessor.GetNativePointerAndAddRef()
+                    accessor != null ? accessor.GetNativePointerAndAddRef() : null
                 ));
         }
 
