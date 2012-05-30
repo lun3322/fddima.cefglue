@@ -70,12 +70,12 @@ namespace CefGlue
 
             var mBrowser = CefBrowser.From(browser);
             var mFrame = CefFrame.From(frame);
-            var mNode = CefDomNode.From(node);
+            var mNode = CefDomNode.FromOrDefault(node);
 
             // TODO: DOM nodes context
             this.OnFocusedNodeChanged(mBrowser, mFrame, mNode);
 
-            mNode.Dispose();
+            if (mNode != null) mNode.Dispose();
         }
 
         /// <summary>
