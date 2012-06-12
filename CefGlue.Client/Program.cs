@@ -31,6 +31,7 @@
             settings.CachePath = Path.GetDirectoryName(Application.ExecutablePath) + "/cache";
             settings.LogFile = Path.GetDirectoryName(Application.ExecutablePath) + "/CEF.log";
             settings.LogSeverity = CefLogSeverity.Verbose;
+            settings.JavaScriptFlags = "--expose_gc";
             // settings.GraphicsImplementation = CefGraphicsImplementation.DesktopInProcess;
             try
             {
@@ -137,7 +138,12 @@ if (!cefGlue.client) {
         log: function(message) {
             native function Log();
             return Log.apply(this, arguments);
-        }
+        },
+
+        leakTestV8Func: function() {
+            native function leakTestV8Func();
+            return leakTestV8Func();
+        },
     };
 };
 ", new ClientV8Handler());

@@ -11,6 +11,15 @@
     using CefGlue.Diagnostics;
 #endif
 
+    internal class TestV8Handler : CefV8Handler
+    {
+        protected override void Dispose(bool disposing)
+        {
+            ;
+            base.Dispose(disposing);
+        }
+    }
+
     internal class ClientV8Handler : CefV8Handler
     {
         protected override bool Execute(string name, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out string exception)
@@ -152,6 +161,16 @@
                 {
                     var result = Process.GetCurrentProcess().PrivateMemorySize64 / (1024.0 * 1024.0);
                     returnValue = CefV8Value.CreateDouble(result);
+                }
+                else if (name == "leakTestV8Func")
+                {
+                    var handler = new TestV8Handler();
+                    for (var i = 0; i < 100000; i++)
+                    {
+                        var x = CefV8Value.CreateFunction("LeakTest", handler);
+                        x.Dispose();
+                    }
+                    returnValue = CefV8Value.CreateBool(true);
                 }
                 else
                 {
