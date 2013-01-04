@@ -99,11 +99,7 @@
                     }
                 }
 
-                CefV8Value v8RetVal;
-                CefV8Exception exception;
-
-                // FIXME: not sure if we should propagate rethrow exception here, so for now, just rethrow anyway
-                target.ExecuteFunctionWithContext(context, obj, v8Args, out v8RetVal, out exception, 1);
+                var v8RetVal = target.ExecuteFunctionWithContext(context, obj, v8Args);
 
                 // force destroing of proxies, to avoid unneccessary GC load (CLR and V8)
                 foreach (var proxy in proxies) 
@@ -112,8 +108,11 @@
                 proxies.Clear();
 
                 // FIXME: not sure if exception CAN be null, this need to be checked
-                if (exception != null)
+                if (v8RetVal.HasException)
+                {
+                    var exception = v8RetVal.GetException();
                     throw new JavaScriptException(exception.GetMessage());
+                }
 
                 //if (!string.IsNullOrEmpty(exception)) 
                     

@@ -45,7 +45,8 @@ namespace CefGlue.Diagnostics
         CefV8Handler,
         CefWriteHandler,
         CefDragHandler,
-        CefStorageVisitor,
+        CefGeolocationHandler,
+        CefZoomHandler,
 
         // Proxies
         CefApp,
@@ -56,6 +57,7 @@ namespace CefGlue.Diagnostics
         CefDomEvent,
         CefDomNode,
         CefFrame,
+        CefGeolocationCallback,
         CefPostData,
         CefPostDataElement,
         CefRequest,
@@ -71,7 +73,9 @@ namespace CefGlue.Diagnostics
         CefZipReader,
         CefDragData,
         CefSchemeHandlerCallback,
-        CefWebPluginInfo
+        CefV8StackFrame,
+        CefV8StackTrace,
+        CefWebPluginInfo,
     }
 }
 #endif

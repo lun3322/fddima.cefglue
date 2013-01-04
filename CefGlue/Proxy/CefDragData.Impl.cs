@@ -94,15 +94,6 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Return the extension of the file being dragged out of the browser window.
-        /// </summary>
-        public string GetFileExtension()
-        {
-            var nResult = cef_drag_data_t.invoke_get_file_extension(this.ptr);
-            return cef_string_userfree.GetStringAndFree(nResult);
-        }
-
-        /// <summary>
         /// Return the name of the file being dragged out of the browser window.
         /// </summary>
         public string GetFileName()

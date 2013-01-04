@@ -26,6 +26,8 @@
         new StructDef("cef_render_handler_t",    hasBase:true),
         new StructDef("cef_proxy_handler_t",    hasBase:true),
         new StructDef("cef_drag_handler_t",      hasBase:true),
+        new StructDef("cef_geolocation_handler_t",      hasBase:true),
+        new StructDef("cef_zoom_handler_t",      hasBase:true),
 
         new StructDef("cef_download_handler_t",  hasBase:true),
         new StructDef("cef_resource_bundle_handler_t",  hasBase:true),
@@ -49,8 +51,6 @@
         new StructDef("cef_write_handler_t",     hasBase:true),
 
         new StructDef("cef_web_urlrequest_client_t", hasBase:true),
-
-        new StructDef("cef_storage_visitor_t",   hasBase:true),
 
         new StructDef("cefglue_userdata_t",      hasBase:true),
     };

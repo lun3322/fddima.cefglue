@@ -280,5 +280,46 @@
             return null;
         }
 
+        /// <summary>
+        /// Return the handler for geolocation permissions requests. If no handler is
+        /// provided geolocation access will be denied by default.
+        /// </summary>
+        private cef_geolocation_handler_t* get_geolocation_handler(cef_client_t* self)
+        {
+            ThrowIfObjectDisposed();
+
+            var handler = GetGeolocationHandler();
+            return handler == null ? null : handler.GetNativePointerAndAddRef();
+        }
+
+        /// <summary>
+        /// Return the handler for geolocation permissions requests. If no handler is
+        /// provided geolocation access will be denied by default.
+        /// </summary>
+        protected virtual CefGeolocationHandler GetGeolocationHandler()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Return the handler for zoom events. If no handler is provided the default
+        /// zoom behavior will be used.
+        /// </summary>
+        private cef_zoom_handler_t* get_zoom_handler(cef_client_t* self)
+        {
+            ThrowIfObjectDisposed();
+
+            var handler = GetZoomHandler();
+            return handler == null ? null : handler.GetNativePointerAndAddRef();
+        }
+
+        /// <summary>
+        /// Return the handler for zoom events. If no handler is provided the default
+        /// zoom behavior will be used.
+        /// </summary>
+        protected virtual CefZoomHandler GetZoomHandler()
+        {
+            return null;
+        }
     }
 }

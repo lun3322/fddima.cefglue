@@ -390,9 +390,12 @@ namespace CefGlue
         /// <summary>
         /// Send a key event to the browser.
         /// </summary>
-        public void SendKeyEvent(CefKeyType type, int key, CefHandlerKeyEventModifiers modifiers, bool sysChar, bool imeChar)
+        public void SendKeyEvent(CefKeyType type, CefKeyInfo keyInfo, CefHandlerKeyEventModifiers modifiers)
         {
-            cef_browser_t.invoke_send_key_event(this.ptr, (cef_key_type_t)type, key, (int)modifiers, sysChar ? 1 : 0, imeChar ? 1 : 0);
+            cef_key_info_t n_keyInfo;
+            keyInfo.To(&n_keyInfo);
+
+            cef_browser_t.invoke_send_key_event(this.ptr, (cef_key_type_t)type, &n_keyInfo, (int)modifiers);
         }
 
         /// <summary>
@@ -417,9 +420,9 @@ namespace CefGlue
         /// Send a mouse wheel event to the browser.
         /// The |x| and |y| coordinates are relative to the upper-left corner of the view.
         /// </summary>
-        public void SendMouseWheelEvent(int x, int y, int delta)
+        public void SendMouseWheelEvent(int x, int y, int deltaX, int deltaY)
         {
-            cef_browser_t.invoke_send_mouse_wheel_event(this.ptr, x, y, delta);
+            cef_browser_t.invoke_send_mouse_wheel_event(this.ptr, x, y, deltaX, deltaY);
         }
 
         /// <summary>

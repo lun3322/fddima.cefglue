@@ -31,7 +31,7 @@
 #if WINDOWS
         private bool autoDetectProxySettingsEnabled;
 #endif
-        private string packFilePath;
+        private string resourcesDirPath;
         private string localesDirPath;
         private bool packLoadingDisabled;
 
@@ -230,18 +230,18 @@
 #endif
 
         /// <summary>
-        /// The fully qualified path for the cef.pak file. If this value is empty
-        /// the cef.pak file must be located in the module directory. This value is
-        /// ignored on Mac OS X where pack files are always loaded from the app bundle
-        /// resource directory.
+        /// The fully qualified path for the resources directory. If this value is
+        /// empty the chrome.pak and/or devtools_resources.pak files must be located in
+        /// the module directory on Windows/Linux or the app bundle Resources directory
+        /// on Mac OS X.
         /// </summary>
-        public string PackFilePath
+        public string ResourcesDirPath
         {
-            get { return this.packFilePath; }
+            get { return this.resourcesDirPath; }
             set
             {
                 ThrowIfReadOnly();
-                this.packFilePath = value;
+                this.resourcesDirPath = value;
             }
         }
 
@@ -310,7 +310,7 @@
             ptr->auto_detect_proxy_settings_enabled = this.AutoDetectProxySettingsEnabled;
 #endif
 
-            cef_string_t.Copy(this.PackFilePath, &ptr->pack_file_path);
+            cef_string_t.Copy(this.ResourcesDirPath, &ptr->resources_dir_path);
             cef_string_t.Copy(this.LocalesDirPath, &ptr->locales_dir_path);
             ptr->pack_loading_disabled = this.PackLoadingDisabled;
 

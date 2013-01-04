@@ -29,6 +29,24 @@ namespace CefGlue.Interop
         ///
         public bool_t load_drops_disabled;
 
+        ///
+        // Disable history back/forward navigation.
+        ///
+        public bool_t history_disabled;
+
+        ///
+        // The number of frames per second (fps) for animation and windowless
+        // rendering. When window rendering is enabled and the JavaScript
+        // requestAnimationFrame method is used the browser client area will be
+        // invalidated at the rate specified. When window rendering is disabled the
+        // CefRenderHandler::OnPaint() method will be called at the rate specified.
+        // This value must be between 0 and 90. Specify a value of zero for the
+        // default frame rate of 30 fps. Changing this value may affect display
+        // performance and/or CPU usage.
+        ///
+        public int animation_frame_rate;
+
+
         // The below values map to WebPreferences settings.
 
         ///
@@ -163,6 +181,12 @@ namespace CefGlue.Interop
         // |user_style_sheet_location| must be set to the style sheet URL.
         ///
         public bool_t user_style_sheet_enabled;
+
+        ///
+        // Location of the user style sheet. This must be a data URL of the form
+        // "data:text/css;charset=utf-8;base64,csscontent" where "csscontent" is the
+        // base64 encoded contents of the CSS file.
+        ///
         public cef_string_t user_style_sheet_location;
 
         ///
@@ -198,12 +222,6 @@ namespace CefGlue.Interop
         public bool_t accelerated_compositing_enabled;
 
         ///
-        // Set to true (1) to enable threaded compositing. This is currently only
-        // supported by the command buffer graphics implementation.
-        ///
-        public bool_t threaded_compositing_enabled;
-
-        ///
         // Set to true (1) to disable accelerated layers. This affects features like
         // 3D CSS transforms.
         ///
@@ -220,9 +238,14 @@ namespace CefGlue.Interop
         public bool_t accelerated_2d_canvas_disabled;
 
         ///
-        // Set to true (1) to disable accelerated drawing.
+        // Set to true (1) to disable accelerated painting.
         ///
-        public bool_t accelerated_drawing_disabled;
+        public bool_t accelerated_painting_disabled;
+
+        ///
+        // Set to true (1) to disable accelerated filters.
+        ///
+        public bool_t accelerated_filters_disabled;
 
         ///
         // Set to true (1) to disable accelerated plugins.
@@ -233,5 +256,10 @@ namespace CefGlue.Interop
         // Set to true (1) to disable developer tools (WebKit inspector).
         ///
         public bool_t developer_tools_disabled;
+
+        ///
+        // Set to true (1) to enable fullscreen mode.
+        ///
+        public bool_t fullscreen_enabled;
     }
 }
