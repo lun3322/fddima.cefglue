@@ -46,6 +46,16 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Create a new CefV8Value object of type unsigned int.
+        /// </summary>
+        public static CefV8Value CreateUInt(uint value)
+        {
+            return CefV8Value.From(
+                NativeMethods.cef_v8value_create_uint(value)
+                );
+        }
+
+        /// <summary>
         /// Create a new CefV8Value object of type double.
         /// </summary>
         public static CefV8Value CreateDouble(double value)
@@ -85,35 +95,15 @@ namespace CefGlue
         /// </summary>
         public static CefV8Value CreateObject()
         {
-            //return CreateObject((CefUserData)null);
-            return CreateObject((CefV8Accessor)null);
+            return CreateObject(null);
         }
-
-        /// <summary>
-        /// Create a new CefV8Value object of type object.
-        /// </summary>
-        //public static CefV8Value CreateObject(CefUserData userData)
-        //{
-        //    return CefV8Value.From(NativeMethods.cef_v8value_create_object(
-        //        (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null)
-        //        ));
-        //}
 
         /// <summary>
         /// Create a new CefV8Value object of type object with accessors.
         /// </summary>
         public static CefV8Value CreateObject(CefV8Accessor accessor)
         {
-            return CreateObject(null, accessor);
-        }
-
-        /// <summary>
-        /// Create a new CefV8Value object of type object with accessors.
-        /// </summary>
-        public static CefV8Value CreateObject(CefUserData userData, CefV8Accessor accessor)
-        {
-            return CefV8Value.From(NativeMethods.cef_v8value_create_object_with_accessor(
-                    (cef_base_t*)(userData != null ? userData.GetNativePointerAndAddRef() : null),
+            return CefV8Value.From(NativeMethods.cef_v8value_create_object(
                     accessor != null ? accessor.GetNativePointerAndAddRef() : null
                 ));
         }
@@ -121,10 +111,10 @@ namespace CefGlue
         /// <summary>
         /// Create a new CefV8Value object of type array.
         /// </summary>
-        public static CefV8Value CreateArray()
+        public static CefV8Value CreateArray(int length)
         {
             return CefV8Value.From(
-                NativeMethods.cef_v8value_create_array()
+                NativeMethods.cef_v8value_create_array(length)
                 );
         }
 
@@ -184,6 +174,17 @@ namespace CefGlue
             get
             {
                 return cef_v8value_t.invoke_is_int(this.ptr) != 0;
+            }
+        }
+
+        /// <summary>
+        /// True if the value type is unsigned int.
+        /// </summary>
+        public bool IsUInt
+        {
+            get
+            {
+                return cef_v8value_t.invoke_is_uint(this.ptr) != 0;
             }
         }
 
@@ -254,6 +255,41 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Returns true if this is a user created object.
+        /// </summary>
+        public bool IsUserCreated
+        {
+            get
+            {
+                return cef_v8value_t.invoke_is_user_created(this.ptr) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the last method call resulted in an exception. This
+        /// attribute exists only in the scope of the current CEF value object.
+        /// </summary>
+        public bool HasException
+        {
+            get
+            {
+                return cef_v8value_t.invoke_has_exception(this.ptr) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if this object will re-throw future exceptions. This attribute
+        /// exists only in the scope of the current CEF value object.
+        /// </summary>
+        public bool WillRethrowExceptions
+        {
+            get
+            {
+                return cef_v8value_t.invoke_will_rethrow_exceptions(this.ptr) != 0;
+            }
+        }
+
+        /// <summary>
         /// Returns true if this object is pointing to the same handle as |that| object.
         /// </summary>
         public bool IsSame(CefV8Value that)
@@ -277,6 +313,15 @@ namespace CefGlue
         public int GetIntValue()
         {
             return cef_v8value_t.invoke_get_int_value(this.ptr);
+        }
+
+        /// <summary>
+        /// Return an unsigned int value.
+        /// The underlying data will be converted to if necessary.
+        /// </summary>
+        public uint GetUIntValue()
+        {
+            return cef_v8value_t.invoke_get_uint_value(this.ptr);
         }
 
         /// <summary>
@@ -337,7 +382,10 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Delete the value with the specified identifier.
+        /// Delete the value with the specified identifier and returns true on
+        /// success. Returns false if this method is called incorrectly or an exception
+        /// is thrown. For read-only and don't-delete values this method will return
+        /// true even though deletion failed.
         /// </summary>
         public bool DeleteValue(string key)
         {
@@ -350,7 +398,10 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Delete the value with the specified identifier.
+        /// Delete the value with the specified identifier and returns true on
+        /// success. Returns false if this method is called incorrectly, deletion fails
+        /// or an exception is thrown. For read-only and don't-delete values this
+        /// method will return true even though deletion failed.
         /// </summary>
         public bool DeleteValue(int index)
         {
@@ -358,7 +409,8 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Returns the value with the specified identifier.
+        /// Returns the value with the specified identifier on success. Returns null
+        /// if this method is called incorrectly or an exception is thrown.
         /// </summary>
         public CefV8Value GetValue(string key)
         {
@@ -373,7 +425,8 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Returns the value with the specified identifier.
+        /// Returns the value with the specified identifier on success. Returns null
+        /// if this method is called incorrectly or an exception is thrown.
         /// </summary>
         public CefV8Value GetValue(int index)
         {
@@ -383,7 +436,10 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Associate a value with the specified identifier.
+        /// Associates a value with the specified identifier and returns true on
+        /// success. Returns false if this method is called incorrectly or an exception
+        /// is thrown. For read-only values this method will return true even though
+        /// assignment failed.
         /// </summary>
         public bool SetValue(string key, CefV8Value value, CefV8PropertyAttribute attribute = CefV8PropertyAttribute.None)
         {
@@ -396,7 +452,10 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Associate a value with the specified identifier.
+        /// Associates a value with the specified identifier and returns true on
+        /// success. Returns false if this method is called incorrectly or an exception
+        /// is thrown. For read-only values this method will return true even though
+        /// assignment failed.
         /// </summary>
         public bool SetValue(int index, CefV8Value value)
         {
@@ -404,7 +463,11 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Register an identifier whose access will be forwarded to the CefV8Accessor instance passed to CefV8Value::CreateObject().
+        /// Registers an identifier and returns true on success. Access to the
+        /// identifier will be forwarded to the CefV8Accessor instance passed to
+        /// CefV8Value::CreateObject(). Returns false if this method is called
+        /// incorrectly or an exception is thrown. For read-only values this method
+        /// will return true even though assignment failed.
         /// </summary>
         public bool SetValue(string key, CefV8AccessControl settings, CefV8PropertyAttribute attribute)
         {
@@ -454,6 +517,19 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Sets the user data for this object and returns true on success. Returns
+        /// false if this method is called incorrectly. This method can only be called
+        /// on user created objects.
+        /// </summary>
+        public bool SetUserData(CefUserData userData)
+        {
+            return cef_v8value_t.invoke_set_user_data(
+                this.ptr,
+                (cef_base_t*)userData.GetNativePointerAndAddRef()
+            ) != 0;
+        }
+
+        /// <summary>
         /// Returns the user data, if any, specified when the object was created.
         /// </summary>
         public CefUserData GetUserData()
@@ -461,6 +537,31 @@ namespace CefGlue
             var n_base = cef_v8value_t.invoke_get_user_data(this.ptr);
             if (n_base == null) return null;
             return CefUserData.FromOrDefault((cefglue_userdata_t*)n_base);
+        }
+
+        /// <summary>
+        /// Returns the amount of externally allocated memory registered for the
+        /// object.
+        /// </summary>
+        public int GetExternallyAllocatedMemory()
+        {
+            return cef_v8value_t.invoke_get_externally_allocated_memory(this.ptr);
+        }
+
+        /// <summary>
+        /// Adjusts the amount of registered external memory for the object. Used to
+        /// give V8 an indication of the amount of externally allocated memory that is
+        /// kept alive by JavaScript objects. V8 uses this information to decide when
+        /// to perform global garbage collection. Each CefV8Value tracks the amount of
+        /// external memory associated with it and automatically decreases the global
+        /// total by the appropriate amount on its destruction. |change_in_bytes|
+        /// specifies the number of bytes to adjust by. This method returns the number
+        /// of bytes associated with the object after the adjustment. This method can
+        /// only be called on user created objects.
+        /// </summary>
+        public int AdjustExternallyAllocatedMemory(int change_in_bytes)
+        {
+            return cef_v8value_t.invoke_adjust_externally_allocated_memory(this.ptr, change_in_bytes);
         }
 
 
@@ -497,64 +598,87 @@ namespace CefGlue
         }
 
         /// <summary>
-        /// Execute the function using the current V8 context.
+        /// Returns the exception resulting from the last method call. This attribute
+        /// exists only in the scope of the current CEF value object.
         /// </summary>
-        public bool ExecuteFunction(CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out CefV8Exception exception, int rethrowException)
+        public CefV8Exception GetException()
         {
-            var n_arguments = CreateArgumentsArray(arguments);
-            cef_v8value_t* n_retval = null;
-            cef_v8exception_t* n_exception;
-            bool result;
-
-            fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
-            {
-                result = cef_v8value_t.invoke_execute_function(
-                    this.ptr,
-                    obj.GetNativePointerAndAddRef(),
-                    n_arguments != null ? n_arguments.Length : 0,
-                    n_arguments_ptr,
-                    &n_retval,
-                    &n_exception, rethrowException
-                    ) != 0;
-            }
-
-            returnValue = CefV8Value.FromOrDefault(n_retval);
-
-            exception = CefV8Exception.FromOrDefault(n_exception);
-            //cef_string_t.Clear(&n_exception);
-
-            return result;
+            return CefV8Exception.FromOrDefault(
+                cef_v8value_t.invoke_get_exception(this.ptr)
+            );
         }
 
         /// <summary>
-        /// Execute the function using the specified V8 context.
+        /// Clears the last exception and returns true on success.
         /// </summary>
-        public bool ExecuteFunctionWithContext(CefV8Context context, CefV8Value obj, CefV8Value[] arguments, out CefV8Value returnValue, out CefV8Exception exception, int rethrowException)
+        public bool ClearException()
+        {
+            return cef_v8value_t.invoke_clear_exception(this.ptr) != 0;
+        }
+
+        /// <summary>
+        /// Set whether this object will re-throw future exceptions. By default
+        /// exceptions are not re-thrown. If a exception is re-thrown the current
+        /// context should not be accessed again until after the exception has been
+        /// caught and not re-thrown. Returns true on success. This attribute exists
+        /// only in the scope of the current CEF value object.
+        /// </summary>
+        public bool SetRethrowExceptions(bool rethrow)
+        {
+            return cef_v8value_t.invoke_set_rethrow_exceptions(this.ptr, rethrow ? 1 : 0) != 0;
+        }
+
+        /// <summary>
+        /// Execute the function using the current V8 context. This method should only
+        /// be called from within the scope of a CefV8Handler or CefV8Accessor
+        /// callback, or in combination with calling Enter() and Exit() on a stored
+        /// CefV8Context reference. |object| is the receiver ('this' object) of the
+        /// function. If |object| is empty the current context's global object will be
+        /// used. |arguments| is the list of arguments that will be passed to the
+        /// function. Returns the function return value on success. Returns NULL if
+        /// this method is called incorrectly or an exception is thrown.
+        /// </summary>
+        public CefV8Value ExecuteFunction(CefV8Value obj, CefV8Value[] arguments)
         {
             var n_arguments = CreateArgumentsArray(arguments);
-            cef_v8value_t* n_retval = null;
-            cef_v8exception_t* n_exception;
-            bool result;
 
             fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
             {
-                result = cef_v8value_t.invoke_execute_function_with_context(
-                    this.ptr,
-                    context.GetNativePointerAndAddRef(),
-                    obj.GetNativePointerAndAddRef(),
-                    n_arguments != null ? n_arguments.Length : 0,
-                    n_arguments_ptr,
-                    &n_retval,
-                    &n_exception, rethrowException
-                    ) != 0;
+                return CefV8Value.FromOrDefault(
+                    cef_v8value_t.invoke_execute_function(
+                        this.ptr,
+                        obj.GetNativePointerAndAddRef(),
+                        n_arguments != null ? n_arguments.Length : 0,
+                        n_arguments_ptr
+                    )
+                );
             }
+        }
 
-            returnValue = CefV8Value.FromOrDefault(n_retval);
+        /// <summary>
+        /// Execute the function using the specified V8 context. |object| is the
+        /// receiver ('this' object) of the function. If |object| is empty the
+        /// specified context's global object will be used. |arguments| is the list of
+        /// arguments that will be passed to the function. Returns the function return
+        /// value on success. Returns NULL if this method is called incorrectly or an
+        /// exception is thrown.
+        /// </summary>
+        public CefV8Value ExecuteFunctionWithContext(CefV8Context context, CefV8Value obj, CefV8Value[] arguments)
+        {
+            var n_arguments = CreateArgumentsArray(arguments);
 
-            exception = CefV8Exception.FromOrDefault(n_exception);
-            //cef_string_t.Clear(&n_exception);
-
-            return result;
+            fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
+            {
+                return CefV8Value.FromOrDefault(
+                    cef_v8value_t.invoke_execute_function_with_context(
+                        this.ptr,
+                        context.GetNativePointerAndAddRef(),
+                        obj.GetNativePointerAndAddRef(),
+                        n_arguments != null ? n_arguments.Length : 0,
+                        n_arguments_ptr
+                    )
+                );
+            }
         }
 
         private static cef_v8value_t*[] CreateArgumentsArray(CefV8Value[] arguments)

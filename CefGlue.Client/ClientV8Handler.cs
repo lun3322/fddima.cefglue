@@ -74,7 +74,7 @@
                 }
                 else if (name == "ReturnArray")
                 {
-                    var array = CefV8Value.CreateArray();
+                    var array = CefV8Value.CreateArray(3);
                     array.SetValue(0, CefV8Value.CreateInt(123));
                     array.SetValue(1, CefV8Value.CreateString("hello!"));
                     array.SetValue(2, CefV8Value.CreateBool(false));
@@ -97,7 +97,7 @@
                     obj1.SetValue("reply", CefV8Value.CreateString("hello!"));
                     obj1.SetValue("success", CefV8Value.CreateBool(false));
 
-                    var array = CefV8Value.CreateArray();
+                    var array = CefV8Value.CreateArray(5);
                     array.SetValue(0, CefV8Value.CreateInt(123));
                     array.SetValue(1, CefV8Value.CreateString("hello!"));
                     array.SetValue(2, CefV8Value.CreateBool(false));

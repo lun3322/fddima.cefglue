@@ -104,12 +104,12 @@ namespace CefGlue.Interop
 #endif
 
         ///
-        // The fully qualified path for the cef.pak file. If this value is empty
-        // the cef.pak file must be located in the module directory. This value is
-        // ignored on Mac OS X where pack files are always loaded from the app bundle
-        // resource directory.
+        // The fully qualified path for the resources directory. If this value is
+        // empty the chrome.pak and/or devtools_resources.pak files must be located in
+        // the module directory on Windows/Linux or the app bundle Resources directory
+        // on Mac OS X.
         ///
-        public cef_string_t pack_file_path;
+        public cef_string_t resources_dir_path;
 
         ///
         // The fully qualified path for the locales directory. If this value is empty
@@ -137,7 +137,7 @@ namespace CefGlue.Interop
             CefStringList.DestroyHandle(self->extra_plugin_paths);
             cef_string_t.Clear(&self->log_file);
             cef_string_t.Clear(&self->javascript_flags);
-            cef_string_t.Clear(&self->pack_file_path);
+            cef_string_t.Clear(&self->resources_dir_path);
             cef_string_t.Clear(&self->locales_dir_path);
         }
     }

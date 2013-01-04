@@ -680,22 +680,6 @@
         }
 
         /// <summary>
-        /// Set to true to enable threaded compositing.
-        /// This is currently only supported by the command buffer graphics implementation.
-        /// </summary>
-        public bool ThreadedCompositingEnabled
-        {
-            get
-            {
-                return this._ptr->threaded_compositing_enabled;
-            }
-            set
-            {
-                this._ptr->threaded_compositing_enabled = value;
-            }
-        }
-
-        /// <summary>
         /// Set to true to disable accelerated layers.
         /// This affects features like 3D CSS transforms.
         /// </summary>
@@ -738,21 +722,6 @@
             set
             {
                 this._ptr->accelerated_2d_canvas_disabled = value;
-            }
-        }
-
-        /// <summary>
-        /// Set to true to disable accelerated drawing.
-        /// </summary>
-        public bool AcceleratedDrawingDisabled
-        {
-            get
-            {
-                return this._ptr->accelerated_drawing_disabled;
-            }
-            set
-            {
-                this._ptr->accelerated_drawing_disabled = value;
             }
         }
 

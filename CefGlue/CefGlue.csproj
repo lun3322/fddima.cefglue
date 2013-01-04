@@ -39,7 +39,8 @@
     <DefineConstants>WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile />
+    <DocumentationFile>
+    </DocumentationFile>
     <PlatformTarget>x86</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
@@ -95,18 +96,22 @@
     <Compile Include="Enum\CefStorageType.cs" />
     <Compile Include="Handler\CefProxyHandler.Impl.cs" />
     <Compile Include="Handler\CefResourceBundleHandler.Impl.cs" />
-    <Compile Include="Handler\CefStorageVisitor.Impl.cs" />
     <Compile Include="Handler\CefV8ContextHandler.Impl.cs" />
     <Compile Include="Handler\CefPermissionHandler.Impl.cs" />
+    <Compile Include="Handler\CefGeolocationHandler.Impl.cs" />
+    <Compile Include="Handler\CefZoomHandler.Impl.cs" />
     <Compile Include="Interop\Enum\cef_menu_id_t.cs" />
     <Compile Include="Interop\Enum\cef_proxy_type_t.cs" />
     <Compile Include="Interop\Struct\cef_menu_info_t.cs" />
     <Compile Include="Interop\Struct\cef_proxy_info_t.cs" />
+    <Compile Include="Interop\Struct\cef_key_info_t.cs" />
     <Compile Include="JSBinding\JSBindingContext.cs" />
     <Compile Include="Proxy\CefV8Exception.Impl.cs" />
     <Compile Include="Proxy\CefCookieManager.Impl.cs" />
     <Compile Include="Proxy\CefWebPluginInfo.Impl.cs" />
+    <Compile Include="Proxy\CefGeolocationCallback.Impl.cs" />
     <Compile Include="Struct\CefMenuInfo.cs" />
+    <Compile Include="Struct\CefKeyInfo.cs" />
     <Compile Include="Threading\CefActionTask.cs" />
     <Compile Include="Threading\CefSendOrPostCallbackTask.cs" />
     <Compile Include="Threading\CefThread.cs" />
