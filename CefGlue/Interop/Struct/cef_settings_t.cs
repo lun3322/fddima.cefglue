@@ -71,6 +71,11 @@ namespace CefGlue.Interop
         // logged.
         ///
         public cef_log_severity_t log_severity;
+
+        ///
+        // Enable DCHECK in release mode to ease debugging.
+        ///
+        public bool_t release_dcheck_enabled;
         
         ///
         // The graphics implementation that CEF will use for rendering GPU accelerated
@@ -126,6 +131,33 @@ namespace CefGlue.Interop
         // is disabled.
         ///
         public bool_t pack_loading_disabled;
+
+        ///
+        // The number of stack trace frames to capture for uncaught exceptions.
+        // Specify a positive value to enable the CefV8ContextHandler::
+        // OnUncaughtException() callback. Specify 0 (default value) and
+        // OnUncaughtException() will not be called.
+        ///
+        public int uncaught_exception_stack_size;
+
+        ///
+        // By default CEF V8 references will be invalidated (the IsValid() method will
+        // return false) after the owning context has been released. This reduces the
+        // need for external record keeping and avoids crashes due to the use of V8
+        // references after the associated context has been released.
+        //
+        // CEF currently offers two context safety implementations with different
+        // performance characteristics. The default implementation (value of 0) uses a
+        // map of hash values and should provide better performance in situations with
+        // a small number contexts. The alternate implementation (value of 1) uses a
+        // hidden value attached to each context and should provide better performance
+        // in situations with a large number of contexts.
+        //
+        // If you need better performance in the creation of V8 references and you
+        // plan to manually track context lifespan you can disable context safety by
+        // specifying a value of -1.
+        ///
+        public int context_safety_implementation;
 
         public static void Clear(cef_settings_t* self)
         {

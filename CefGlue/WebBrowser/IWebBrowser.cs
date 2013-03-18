@@ -44,6 +44,8 @@
 
         event EventHandler<CefShowPopupEventArgs> ShowPopup;
 
+        event EventHandler<CefUncaughtExceptionEventArgs> UncaughtException;
+
         CefReadyOptions ReadyOptions { get; set; }
 
         int ReadyIdleThreshold { get; set; }

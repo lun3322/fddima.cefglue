@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2013 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -121,6 +121,11 @@ typedef struct _cef_browser_t {
   ///
   cef_window_handle_t (CEF_CALLBACK *get_opener_window_handle)(
       struct _cef_browser_t* self);
+
+  ///
+  // Returns the globally unique identifier for this browser.
+  ///
+  int (CEF_CALLBACK *get_identifier)(struct _cef_browser_t* self);
 
   ///
   // Returns true (1) if the window is a popup window.

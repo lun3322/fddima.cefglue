@@ -45,6 +45,8 @@
 
         public event EventHandler<CefShowPopupEventArgs> ShowPopup;
 
+        public event EventHandler<CefUncaughtExceptionEventArgs> UncaughtException;
+
         public CefReadyOptions ReadyOptions
         {
             get { return this.readyOptions; }

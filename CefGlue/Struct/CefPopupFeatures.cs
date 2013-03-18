@@ -168,13 +168,10 @@
             {
                 if (this.ptr->additionalFeatures != null)
                 {
-                    return new CefStringList(
-                        NativeMethods.cef_string_list_copy(this.ptr->additionalFeatures)
-                        )
+                    return CefStringList.From(this.ptr->additionalFeatures)
                         .AsEnumerable();
                 }
-                // TODO: return empty sequence
-                return null;
+                return Enumerable.Empty<string>();
             }
         }
     }

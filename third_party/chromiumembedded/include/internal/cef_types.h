@@ -157,6 +157,11 @@ typedef struct _cef_settings_t {
   cef_log_severity_t log_severity;
 
   ///
+  // Enable DCHECK in release mode to ease debugging.
+  ///
+  bool release_dcheck_enabled;
+
+  ///
   // The graphics implementation that CEF will use for rendering GPU accelerated
   // content like WebGL, accelerated layers and 3D CSS.
   ///
@@ -210,6 +215,33 @@ typedef struct _cef_settings_t {
   // is disabled.
   ///
   bool pack_loading_disabled;
+
+  ///
+  // The number of stack trace frames to capture for uncaught exceptions.
+  // Specify a positive value to enable the CefV8ContextHandler::
+  // OnUncaughtException() callback. Specify 0 (default value) and
+  // OnUncaughtException() will not be called.
+  ///
+  int uncaught_exception_stack_size;
+
+  ///
+  // By default CEF V8 references will be invalidated (the IsValid() method will
+  // return false) after the owning context has been released. This reduces the
+  // need for external record keeping and avoids crashes due to the use of V8
+  // references after the associated context has been released.
+  //
+  // CEF currently offers two context safety implementations with different
+  // performance characteristics. The default implementation (value of 0) uses a
+  // map of hash values and should provide better performance in situations with
+  // a small number contexts. The alternate implementation (value of 1) uses a
+  // hidden value attached to each context and should provide better performance
+  // in situations with a large number of contexts.
+  //
+  // If you need better performance in the creation of V8 references and you
+  // plan to manually track context lifespan you can disable context safety by
+  // specifying a value of -1.
+  ///
+  int context_safety_implementation;
 } cef_settings_t;
 
 ///
@@ -1109,6 +1141,74 @@ typedef struct _cef_proxy_info_t {
   enum cef_proxy_type_t proxyType;
   cef_string_t proxyList;
 } cef_proxy_info_t;
+
+///
+// Geoposition error codes.
+///
+enum cef_geoposition_error_code_t {
+  GEOPOSITON_ERROR_NONE = 0,
+  GEOPOSITON_ERROR_PERMISSION_DENIED,
+  GEOPOSITON_ERROR_POSITION_UNAVAILABLE,
+  GEOPOSITON_ERROR_TIMEOUT,
+};
+
+///
+// Structure representing geoposition information. The properties of this
+// structure correspond to those of the JavaScript Position object although
+// their types may differ.
+///
+typedef struct _cef_geoposition_t {
+  ///
+  // Latitude in decimal degrees north (WGS84 coordinate frame).
+  ///
+  double latitude;
+
+  ///
+  // Longitude in decimal degrees west (WGS84 coordinate frame).
+  ///
+  double longitude;
+
+  ///
+  // Altitude in meters (above WGS84 datum).
+  ///
+  double altitude;
+
+  ///
+  // Accuracy of horizontal position in meters.
+  ///
+  double accuracy;
+
+  ///
+  // Accuracy of altitude in meters.
+  ///
+  double altitude_accuracy;
+
+  ///
+  // Heading in decimal degrees clockwise from true north.
+  ///
+  double heading;
+
+  ///
+  // Horizontal component of device velocity in meters per second.
+  ///
+  double speed;
+
+  ///
+  // Time of position measurement in miliseconds since Epoch in UTC time. This
+  // is taken from the host computer's system clock.
+  ///
+  cef_time_t timestamp;
+
+  ///
+  // Error code, see enum above.
+  ///
+  cef_geoposition_error_code_t error_code;
+
+  ///
+  // Human-readable error message.
+  ///
+  cef_string_t error_message;
+} cef_geoposition_t;
 
 #ifdef __cplusplus
 }

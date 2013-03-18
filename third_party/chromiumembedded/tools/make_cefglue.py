@@ -13,6 +13,7 @@ def is_handler_class(cls):
     return (re.match(".*handler_.*", name) != None 
             or re.match(".*_listener_.*", name) != None 
             or re.match(".*_filter_.*", name) != None 
+            or name == "cef_app_t"
             or name == "cef_client_t"
             or name == "cef_v8accessor_t"
             or name == "cef_task_t"

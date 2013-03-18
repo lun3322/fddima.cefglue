@@ -36,5 +36,10 @@
                 _context.MainFrame.UnbindV8Context();
             }
         }
+
+        protected override void OnUncaughtException(CefBrowser browser, CefFrame frame, CefV8Context context, CefV8Exception exception, CefV8StackTrace stackTrace)
+        {
+            _context.OnUncaughtException(browser, frame, context, exception, stackTrace);
+        }
     }
 }

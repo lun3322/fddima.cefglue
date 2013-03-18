@@ -5,7 +5,7 @@
     using System.Linq;
     using CefGlue.Interop;
 
-    public sealed unsafe class CefStringList
+    public sealed unsafe class CefStringList : IDisposable
     {
         internal static cef_string_list* CreateHandle()
         {
@@ -31,7 +31,13 @@
             NativeMethods.cef_string_list_free(handle);
         }
 
+        internal static CefStringList From(cef_string_list* handle, bool ownsHandle = false)
+        {
+            return new CefStringList(handle, ownsHandle);
+        }
+
         private cef_string_list* handle;
+        private bool ownsHandle;
 
         /// <summary>
         /// Create new empty string list.
@@ -39,18 +45,25 @@
         public CefStringList()
         {
             this.handle = CreateHandle();
+            this.ownsHandle = true;
         }
 
+        /// <summary>
+        /// Create new string list filled with values from collection.
+        /// </summary>
         public CefStringList(IEnumerable<string> collection)
         {
-            throw new NotImplementedException();
-            // this.list = cef_string_list_t.Create(collection);
+            this.handle = CreateHandle(collection);
+            this.ownsHandle = true;
         }
 
-        internal CefStringList(cef_string_list* list)
+        /// <summary>
+        /// Create string list wrapper.
+        /// </summary>
+        private CefStringList(cef_string_list* list, bool ownsHandle = false)
         {
-            // TODO: make static FromHandle method, and use private ctor
             this.handle = list;
+            this.ownsHandle = ownsHandle;
         }
 
         ~CefStringList()
@@ -58,7 +71,7 @@
             this.Dispose(false);
         }
 
-        internal void Dispose()
+        public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
@@ -68,7 +81,10 @@
         {
             if (this.handle != null)
             {
-                DestroyHandle(this.handle);
+                if (this.ownsHandle)
+                {
+                    DestroyHandle(this.handle);
+                }
                 this.handle = null;
             }
         }

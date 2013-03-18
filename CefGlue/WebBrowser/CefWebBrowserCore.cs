@@ -295,5 +295,14 @@
                 handler(this.owner, new CefShowPopupEventArgs(browser, show));
             }
         }
+
+        internal void OnUncaughtException(CefBrowser browser, CefFrame frame, CefV8Context context, CefV8Exception exception, CefV8StackTrace stackTrace)
+        {
+            var handler = this.UncaughtException;
+            if (handler != null)
+            {
+                handler(this, new CefUncaughtExceptionEventArgs(browser, frame, context, exception, stackTrace));
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2013 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -88,6 +88,12 @@ CEF_EXPORT void cef_run_message_loop();
 CEF_EXPORT void cef_quit_message_loop();
 
 ///
+// Set to true (1) before calling Windows APIs like TrackPopupMenu that enter a
+// modal message loop. Set to false (0) after exiting the modal message loop.
+///
+CEF_EXPORT void cef_set_osmodal_loop(int osModalLoop);
+
+///
 // Implement this structure to provide handler implementations. Methods will be
 // called on the thread indicated.
 ///
@@ -96,6 +102,13 @@ typedef struct _cef_app_t {
   // Base structure.
   ///
   cef_base_t base;
+
+  ///
+  // Provides an opportunity to register custom schemes. Do not keep a reference
+  // to the |registrar| object. This function is called on the UI thread.
+  ///
+  void (CEF_CALLBACK *on_register_custom_schemes)(struct _cef_app_t* self,
+      struct _cef_scheme_registrar_t* registrar);
 
   ///
   // Return the handler for resource bundle events. If

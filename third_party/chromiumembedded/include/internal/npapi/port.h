@@ -4,7 +4,6 @@
 
 #ifndef BASE_PORT_H_
 #define BASE_PORT_H_
-#pragma once
 
 #include <stdarg.h>
 // Include path modified for CEF Binary Distribution.

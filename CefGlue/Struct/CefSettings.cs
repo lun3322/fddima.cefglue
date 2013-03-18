@@ -24,6 +24,7 @@
         private IList<string> _extraPluginPaths;
         private string _logFile;
         private CefLogSeverity _logSeverity;
+        private bool release_dcheck_enabled;
         private CefGraphicsImplementation graphicsImplementation;
         private uint localStorageQuota;
         private uint sessionStorageQuota;
@@ -34,6 +35,8 @@
         private string resourcesDirPath;
         private string localesDirPath;
         private bool packLoadingDisabled;
+        private int uncaught_exception_stack_size;
+        private int context_safety_implementation;
 
         public CefSettings()
         {
@@ -153,6 +156,19 @@
             {
                 ThrowIfReadOnly();
                 _logSeverity = value;
+            }
+        }
+
+        /// <summary>
+        /// Enable DCHECK in release mode to ease debugging.
+        /// </summary>
+        public bool ReleaseDCheckEnabled
+        {
+            get { return this.release_dcheck_enabled; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.release_dcheck_enabled = value;
             }
         }
 
@@ -277,6 +293,49 @@
             }
         }
 
+        ///
+        // The number of stack trace frames to capture for uncaught exceptions.
+        // Specify a positive value to enable the CefV8ContextHandler::
+        // OnUncaughtException() callback. Specify 0 (default value) and
+        // OnUncaughtException() will not be called.
+        ///
+        public int UncaughtExceptionStackSize
+        {
+            get { return this.uncaught_exception_stack_size; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.uncaught_exception_stack_size = value;
+            }
+        }
+
+        ///
+        // By default CEF V8 references will be invalidated (the IsValid() method will
+        // return false) after the owning context has been released. This reduces the
+        // need for external record keeping and avoids crashes due to the use of V8
+        // references after the associated context has been released.
+        //
+        // CEF currently offers two context safety implementations with different
+        // performance characteristics. The default implementation (value of 0) uses a
+        // map of hash values and should provide better performance in situations with
+        // a small number contexts. The alternate implementation (value of 1) uses a
+        // hidden value attached to each context and should provide better performance
+        // in situations with a large number of contexts.
+        //
+        // If you need better performance in the creation of V8 references and you
+        // plan to manually track context lifespan you can disable context safety by
+        // specifying a value of -1.
+        ///
+        public int ContextSafetyImplementation
+        {
+            get { return this.context_safety_implementation; }
+            set
+            {
+                ThrowIfReadOnly();
+                this.context_safety_implementation = value;
+            }
+        }
+
         internal bool IsReadOnly
         {
             get { return _isReadOnly; }
@@ -301,6 +360,7 @@
             ptr->extra_plugin_paths = CefStringList.CreateHandle(this.ExtraPluginPaths);
             cef_string_t.Copy(this.LogFile, &ptr->log_file);
             ptr->log_severity = (cef_log_severity_t)this.LogSeverity;
+            ptr->release_dcheck_enabled = this.release_dcheck_enabled;
             ptr->graphics_implementation = (cef_graphics_implementation_t)this.GraphicsImplementation;
             ptr->local_storage_quota = this.LocalStorageQuota;
             ptr->session_storage_quota = this.SessionStorageQuota;
@@ -313,6 +373,8 @@
             cef_string_t.Copy(this.ResourcesDirPath, &ptr->resources_dir_path);
             cef_string_t.Copy(this.LocalesDirPath, &ptr->locales_dir_path);
             ptr->pack_loading_disabled = this.PackLoadingDisabled;
+            ptr->uncaught_exception_stack_size = this.uncaught_exception_stack_size;
+            ptr->context_safety_implementation = this.context_safety_implementation;
 
             return ptr;
         }
