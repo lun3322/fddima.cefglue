@@ -440,5 +440,16 @@ namespace CefGlue
         {
             cef_browser_t.invoke_send_capture_lost_event(this.ptr);
         }
+
+        /// <summary>
+        /// Returns the globally unique identifier for this browser.
+        /// </summary>
+        public int Identifier
+        {
+            get
+            {
+                return cef_browser_t.invoke_get_identifier(this.ptr);
+            }
+        }
     }
 }

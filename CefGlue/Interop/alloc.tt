@@ -9,7 +9,9 @@
         new StructDef("cef_browser_settings_t",  hasBase:false, hasSize:true,  hasClear:false), // FIXME: hasClear
         new StructDef("cef_popup_features_t",    hasBase:false, hasSize:false, hasClear:false),
         new StructDef("cef_cookie_t",            hasBase:false, hasSize:false, hasClear:true),
+        new StructDef("cef_geoposition_t",       hasBase:false, hasSize:false, hasClear:true),
 
+        new StructDef("cef_app_t",               hasBase:true),
         new StructDef("cef_client_t",            hasBase:true),
         new StructDef("cef_life_span_handler_t", hasBase:true),
         new StructDef("cef_load_handler_t",      hasBase:true),
@@ -54,25 +56,6 @@
 
         new StructDef("cefglue_userdata_t",      hasBase:true),
     };
-
-    var nonSizeStructs = new Dictionary<string, bool>();
-    nonSizeStructs["cef_handler_menuinfo_t"] = true;
-    nonSizeStructs["cef_paper_metrics"] = true;
-    nonSizeStructs["cef_popup_features_t"] = true;
-    nonSizeStructs["cef_print_info_t"] = true;
-    nonSizeStructs["cef_print_margins"] = true;
-    nonSizeStructs["cef_print_options_t"] = true;
-    nonSizeStructs["cef_rect_t"] = true;
-    nonSizeStructs["cef_string_t"] = true;
-    nonSizeStructs["cef_time_t"] = true;
-    nonSizeStructs["cef_urlparts_t"] = true;
-    nonSizeStructs["cef_window_info_t"] = true;
-    nonSizeStructs["cef_cookie_t"] = true;
-
-    var nonBaseStructs = new Dictionary<string, bool>();
-    nonBaseStructs["cef_browser_settings_t"] = true;
-    nonBaseStructs["cef_settings_t"] = true;
-
 #>
 namespace CefGlue.Interop
 {

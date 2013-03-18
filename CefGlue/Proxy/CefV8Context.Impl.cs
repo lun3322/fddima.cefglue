@@ -124,5 +124,17 @@ namespace CefGlue
                 }
             }
         }
+
+        /// <summary>
+        /// Returns true if this object is valid. Do not call any other methods if this
+        /// method returns false.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                return cef_v8context_t.invoke_is_valid(this.ptr) != 0;
+            }
+        }
     }
 }

@@ -134,12 +134,31 @@ namespace CefGlue
         }
 
         /// <summary>
+        /// Returns true if this object is valid. Do not call any other methods if this
+        /// method returns false.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                return cef_v8value_t.invoke_is_valid(this.ptr) != 0;
+            }
+        }
+
+        private void ThrowIfObjectIsInvalid()
+        {
+            if (!this.IsValid)
+                throw new InvalidOperationException();
+        }
+
+        /// <summary>
         /// True if the value type is undefined.
         /// </summary>
         public bool IsUndefined
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_undefined(this.ptr) != 0;
             }
         }
@@ -151,6 +170,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_null(this.ptr) != 0;
             }
         }
@@ -162,6 +182,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_bool(this.ptr) != 0;
             }
         }
@@ -173,6 +194,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_int(this.ptr) != 0;
             }
         }
@@ -184,6 +206,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_uint(this.ptr) != 0;
             }
         }
@@ -195,6 +218,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_double(this.ptr) != 0;
             }
         }
@@ -206,6 +230,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_date(this.ptr) != 0;
             }
         }
@@ -217,6 +242,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_string(this.ptr) != 0;
             }
         }
@@ -228,6 +254,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_object(this.ptr) != 0;
             }
         }
@@ -239,6 +266,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_array(this.ptr) != 0;
             }
         }
@@ -250,6 +278,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_function(this.ptr) != 0;
             }
         }
@@ -261,6 +290,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_is_user_created(this.ptr) != 0;
             }
         }
@@ -273,6 +303,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_has_exception(this.ptr) != 0;
             }
         }
@@ -285,6 +316,7 @@ namespace CefGlue
         {
             get
             {
+                ThrowIfObjectIsInvalid();
                 return cef_v8value_t.invoke_will_rethrow_exceptions(this.ptr) != 0;
             }
         }
@@ -294,6 +326,7 @@ namespace CefGlue
         /// </summary>
         public bool IsSame(CefV8Value that)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_is_same(this.ptr, that.GetNativePointerAndAddRef()) != 0;
         }
 
@@ -303,6 +336,7 @@ namespace CefGlue
         /// </summary>
         public bool GetBoolValue()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_get_bool_value(this.ptr) != 0;
         }
 
@@ -312,6 +346,7 @@ namespace CefGlue
         /// </summary>
         public int GetIntValue()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_get_int_value(this.ptr);
         }
 
@@ -321,6 +356,7 @@ namespace CefGlue
         /// </summary>
         public uint GetUIntValue()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_get_uint_value(this.ptr);
         }
 
@@ -330,6 +366,7 @@ namespace CefGlue
         /// </summary>
         public double GetDoubleValue()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_get_double_value(this.ptr);
         }
 
@@ -339,6 +376,7 @@ namespace CefGlue
         /// </summary>
         public DateTime GetDateValue()
         {
+            ThrowIfObjectIsInvalid();
             var n_result = cef_v8value_t.invoke_get_date_value(this.ptr);
             return n_result.ToDateTime();
         }
@@ -349,6 +387,7 @@ namespace CefGlue
         /// </summary>
         public string GetStringValue()
         {
+            ThrowIfObjectIsInvalid();
             var nResult = cef_v8value_t.invoke_get_string_value(this.ptr);
             return cef_string_userfree.GetStringAndFree(nResult);
         }
@@ -365,6 +404,7 @@ namespace CefGlue
         /// </summary>
         public bool HasValue(string key)
         {
+            ThrowIfObjectIsInvalid();
             fixed (char* key_str = key)
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
@@ -378,6 +418,7 @@ namespace CefGlue
         /// </summary>
         public bool HasValue(int index)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_has_value_byindex(this.ptr, index) != 0;
         }
 
@@ -389,6 +430,7 @@ namespace CefGlue
         /// </summary>
         public bool DeleteValue(string key)
         {
+            ThrowIfObjectIsInvalid();
             fixed (char* key_str = key)
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
@@ -405,6 +447,7 @@ namespace CefGlue
         /// </summary>
         public bool DeleteValue(int index)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_delete_value_byindex(this.ptr, index) != 0;
         }
 
@@ -414,6 +457,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Value GetValue(string key)
         {
+            ThrowIfObjectIsInvalid();
             fixed (char* key_str = key)
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
@@ -430,6 +474,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Value GetValue(int index)
         {
+            ThrowIfObjectIsInvalid();
             return CefV8Value.From(
                    cef_v8value_t.invoke_get_value_byindex(this.ptr, index)
                    );
@@ -443,6 +488,7 @@ namespace CefGlue
         /// </summary>
         public bool SetValue(string key, CefV8Value value, CefV8PropertyAttribute attribute = CefV8PropertyAttribute.None)
         {
+            ThrowIfObjectIsInvalid();
             fixed (char* key_str = key)
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
@@ -459,6 +505,7 @@ namespace CefGlue
         /// </summary>
         public bool SetValue(int index, CefV8Value value)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_set_value_byindex(this.ptr, index, value.GetNativePointerAndAddRef()) != 0;
         }
 
@@ -471,6 +518,7 @@ namespace CefGlue
         /// </summary>
         public bool SetValue(string key, CefV8AccessControl settings, CefV8PropertyAttribute attribute)
         {
+            ThrowIfObjectIsInvalid();
             fixed (char* key_str = key)
             {
                 var n_key = new cef_string_t(key_str, key != null ? key.Length : 0);
@@ -485,13 +533,14 @@ namespace CefGlue
         /// </summary>
         public bool TryGetKeys(out CefStringList keys)
         {
+            ThrowIfObjectIsInvalid();
             var nList = CefStringList.CreateHandle();
 
             var success = cef_v8value_t.invoke_get_keys(this.ptr, nList) != 0;
 
             if (success)
             {
-                keys = new CefStringList(nList);
+                keys = CefStringList.From(nList, true);
                 return true;
             }
             else
@@ -508,6 +557,7 @@ namespace CefGlue
         /// </summary>
         public CefStringList GetKeys()
         {
+            ThrowIfObjectIsInvalid();
             CefStringList keys;
             if (TryGetKeys(out keys))
             {
@@ -523,6 +573,7 @@ namespace CefGlue
         /// </summary>
         public bool SetUserData(CefUserData userData)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_set_user_data(
                 this.ptr,
                 (cef_base_t*)userData.GetNativePointerAndAddRef()
@@ -534,6 +585,7 @@ namespace CefGlue
         /// </summary>
         public CefUserData GetUserData()
         {
+            ThrowIfObjectIsInvalid();
             var n_base = cef_v8value_t.invoke_get_user_data(this.ptr);
             if (n_base == null) return null;
             return CefUserData.FromOrDefault((cefglue_userdata_t*)n_base);
@@ -545,6 +597,7 @@ namespace CefGlue
         /// </summary>
         public int GetExternallyAllocatedMemory()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_get_externally_allocated_memory(this.ptr);
         }
 
@@ -561,6 +614,7 @@ namespace CefGlue
         /// </summary>
         public int AdjustExternallyAllocatedMemory(int change_in_bytes)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_adjust_externally_allocated_memory(this.ptr, change_in_bytes);
         }
 
@@ -572,6 +626,7 @@ namespace CefGlue
         /// </summary>
         public int GetArrayLength()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_get_array_length(this.ptr);
         }
 
@@ -583,6 +638,7 @@ namespace CefGlue
         /// </summary>
         public string GetFunctionName()
         {
+            ThrowIfObjectIsInvalid();
             var nResult = cef_v8value_t.invoke_get_function_name(this.ptr);
             return cef_string_userfree.GetStringAndFree(nResult);
         }
@@ -592,6 +648,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Handler GetFunctionHandler()
         {
+            ThrowIfObjectIsInvalid();
             return CefV8Handler.FromOrDefault(
                 cef_v8value_t.invoke_get_function_handler(this.ptr)
             );
@@ -603,6 +660,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Exception GetException()
         {
+            ThrowIfObjectIsInvalid();
             return CefV8Exception.FromOrDefault(
                 cef_v8value_t.invoke_get_exception(this.ptr)
             );
@@ -613,6 +671,7 @@ namespace CefGlue
         /// </summary>
         public bool ClearException()
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_clear_exception(this.ptr) != 0;
         }
 
@@ -625,6 +684,7 @@ namespace CefGlue
         /// </summary>
         public bool SetRethrowExceptions(bool rethrow)
         {
+            ThrowIfObjectIsInvalid();
             return cef_v8value_t.invoke_set_rethrow_exceptions(this.ptr, rethrow ? 1 : 0) != 0;
         }
 
@@ -640,6 +700,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Value ExecuteFunction(CefV8Value obj, CefV8Value[] arguments)
         {
+            ThrowIfObjectIsInvalid();
             var n_arguments = CreateArgumentsArray(arguments);
 
             fixed (cef_v8value_t** n_arguments_ptr = n_arguments)
@@ -665,6 +726,7 @@ namespace CefGlue
         /// </summary>
         public CefV8Value ExecuteFunctionWithContext(CefV8Context context, CefV8Value obj, CefV8Value[] arguments)
         {
+            ThrowIfObjectIsInvalid();
             var n_arguments = CreateArgumentsArray(arguments);
 
             fixed (cef_v8value_t** n_arguments_ptr = n_arguments)

@@ -86,6 +86,26 @@
         }
 
         /// <summary>
+        /// Called when the Favicon URL for a page changes.
+        /// </summary>
+        private void on_favicon_urlchange(cef_display_handler_t* self, cef_browser_t* browser, cef_string_list* icon_urls)
+        {
+            ThrowIfObjectDisposed();
+
+            var m_browser = CefBrowser.From(browser);
+            var m_icon_urls = CefStringList.From(icon_urls);
+
+            this.OnFaviconChange(m_browser, m_icon_urls);
+        }
+
+        /// <summary>
+        /// Called when the Favicon URL for a page changes.
+        /// </summary>
+        protected virtual void OnFaviconChange(CefBrowser m_browser, CefStringList m_icon_urls)
+        {
+        }
+
+        /// <summary>
         /// Called when the browser is about to display a tooltip. |text|
         /// contains the text that will be displayed in the tooltip. To handle
         /// the display of the tooltip yourself return true. Otherwise, you can

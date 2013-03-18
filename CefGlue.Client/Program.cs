@@ -33,9 +33,11 @@
             settings.LogSeverity = CefLogSeverity.Verbose;
             settings.JavaScriptFlags = "--expose_gc";
             // settings.GraphicsImplementation = CefGraphicsImplementation.DesktopInProcess;
+
+            var app = new App();
             try
             {
-                Cef.Initialize(settings);
+                Cef.Initialize(settings, app);
             }
             catch (Exception ex)
             {
@@ -169,7 +171,8 @@ if (!cefGlue.client) {
             Cef.JSBinding.BindJSObject(testObject1, JSBindingOptions.Extension | JSBindingOptions.Public);
             Cef.JSBinding.BindJSObject("myTestObject1", testObject1, JSBindingOptions.Extension | JSBindingOptions.Public);
 
-            Cef.RegisterCustomScheme("res", true, true, false);
+            // res is registered in App.cs
+            // Cef.RegisterCustomScheme("res", true, true, false);
             Cef.RegisterSchemeHandlerFactory("res", null, new ClientSchemeHandlerFactory());
 
             // This is shows that handler works like zombie - when handler is used by native side only

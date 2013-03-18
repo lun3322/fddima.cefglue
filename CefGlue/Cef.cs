@@ -57,7 +57,7 @@ namespace CefGlue
         /// </summary>
         /// <param name="settings"></param>
         /// <exception cref="Exception"></exception>
-        public static void Initialize(CefSettings settings)
+        public static void Initialize(CefSettings settings, CefApp app = null)
         {
             if (IsInitialized) throw new CefException("CEF already initialized.");
 #if DIAGNOSTICS
@@ -84,9 +84,10 @@ namespace CefGlue
 #endif
 
             var n_settings = settings.CreateNative();
+            var n_app = app == null ? null : app.GetNativePointerAndAddRef();
 
             // FIXME: not sure if application should be null
-            var initialized = NativeMethods.cef_initialize(n_settings, null) != 0;
+            var initialized = NativeMethods.cef_initialize(n_settings, n_app) != 0;
             cef_settings_t.Free(n_settings);
 
             if (!initialized) throw new CefException("CEF failed to initialize.");
@@ -161,6 +162,15 @@ namespace CefGlue
             NativeMethods.cef_run_message_loop();
         }
 
+        /// <summary>
+        /// Set to true before calling Windows APIs like TrackPopupMenu that
+        /// enter a modal message loop. Set to false after exiting the modal
+        /// message loop.
+        /// </summary>
+        public static void SetOSModalLoop(bool osModalLoop)
+        {
+            NativeMethods.cef_set_osmodal_loop(osModalLoop ? 1 : 0);
+        }
 
         /// <summary>
         /// Register a new V8 extension with the specified JavaScript extension
@@ -230,60 +240,6 @@ namespace CefGlue
                     &n_extensionName,
                     &n_javascriptCode,
                     handler.GetNativePointerAndAddRef()
-                    ) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Register a custom scheme. This function should not be called for the
-        /// built-in HTTP, HTTPS, FILE, FTP, ABOUT and DATA schemes.
-        ///
-        /// If |is_standard| is true (1) the scheme will be treated as a standard
-        /// scheme. Standard schemes are subject to URL canonicalization and
-        /// parsing rules as defined in the Common Internet Scheme Syntax RFC
-        /// 1738 Section 3.1 available at http://www.ietf.org/rfc/rfc1738.txt
-        ///
-        /// In particular, the syntax for standard scheme URLs must be of the
-        /// form: &lt;pre&gt;
-        ///  [scheme]://[username]:[password]@[host]:[port]/[url-path]
-        /// &lt;/pre&gt; Standard scheme URLs must have a host component that is a
-        /// fully qualified domain name as defined in Section 3.5 of RFC 1034
-        /// [13] and Section 2.1 of RFC 1123. These URLs will be canonicalized to
-        /// "scheme://host/path" in the simplest case and
-        /// "scheme://username:password@host:port/path" in the most explicit
-        /// case. For example, "scheme:host/path" and "scheme:///host/path" will
-        /// both be canonicalized to "scheme://host/path".
-        ///
-        /// For non-standard scheme URLs only the "scheme:" component is parsed
-        /// and canonicalized. The remainder of the URL will be passed to the
-        /// handler as-is. For example, "scheme:///some%20text" will remain the
-        /// same. Non-standard scheme URLs cannot be used as a target for form
-        /// submission.
-        ///
-        /// If |is_local| is true (1) the scheme will be treated as local (i.e.,
-        /// with the same security rules as those applied to "file" URLs). This
-        /// means that normal pages cannot link to or access URLs of this scheme.
-        ///
-        /// If |is_display_isolated| is true (1) the scheme will be treated as
-        /// display- isolated. This means that pages cannot display these URLs
-        /// unless they are from the same scheme. For example, pages in another
-        /// origin cannot create iframes or hyperlinks to URLs with this scheme.
-        ///
-        /// This function may be called on any thread. It should only be called
-        /// once per unique |scheme_name| value. If |scheme_name| is already
-        /// registered or if an error occurs this function will return false (0).
-        /// </summary>
-        public static bool RegisterCustomScheme(string schemeName, bool isStandard, bool isLocal, bool isDisplayIsolated)
-        {
-            fixed (char* schemeName_str = schemeName)
-            {
-                var n_schemeName = new cef_string_t(schemeName_str, schemeName.Length);
-
-                return NativeMethods.cef_register_custom_scheme(
-                    &n_schemeName,
-                    isStandard ? 1 : 0,
-                    isLocal ? 1 : 0,
-                    isDisplayIsolated ? 1 : 0
                     ) != 0;
             }
         }

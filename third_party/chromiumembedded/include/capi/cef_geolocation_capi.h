@@ -34,8 +34,8 @@
 // more information.
 //
 
-#ifndef CEF_INCLUDE_CAPI_CEF_FIND_HANDLER_CAPI_H_
-#define CEF_INCLUDE_CAPI_CEF_FIND_HANDLER_CAPI_H_
+#ifndef CEF_INCLUDE_CAPI_CEF_GEOLOCATION_CAPI_H_
+#define CEF_INCLUDE_CAPI_CEF_GEOLOCATION_CAPI_H_
 #pragma once
 
 #ifdef __cplusplus
@@ -46,32 +46,35 @@ extern "C" {
 
 
 ///
-// Implement this structure to handle events related to find results. The
-// functions of this structure will be called on the UI thread.
+// Request a one-time geolocation update. This function bypasses any user
+// permission checks so should only be used by code that is allowed to access
+// location information.
 ///
-typedef struct _cef_find_handler_t {
+CEF_EXPORT int cef_get_geolocation(
+    struct _cef_get_geolocation_callback_t* callback);
+
+///
+// Implement this structure to receive geolocation updates. The functions of
+// this structure will be called on the browser process UI thread.
+///
+typedef struct _cef_get_geolocation_callback_t {
   ///
   // Base structure.
   ///
   cef_base_t base;
 
   ///
-  // Called to report find results returned by cef_browser_t::find().
-  // |identifer| is the identifier passed to cef_browser_t::find(), |count| is
-  // the number of matches currently identified, |selectionRect| is the location
-  // of where the match was found (in window coordinates), |activeMatchOrdinal|
-  // is the current position in the search results, and |finalUpdate| is true
-  // (1) if this is the last find notification.
+  // Called with the 'best available' location information or, if the location
+  // update failed, with error information.
   ///
-  void (CEF_CALLBACK *on_find_result)(struct _cef_find_handler_t* self,
-      struct _cef_browser_t* browser, int identifier, int count,
-      const cef_rect_t* selectionRect, int activeMatchOrdinal,
-      int finalUpdate);
-} cef_find_handler_t;
+  void (CEF_CALLBACK *on_location_update)(
+      struct _cef_get_geolocation_callback_t* self,
+      const struct _cef_geoposition_t* position);
+} cef_get_geolocation_callback_t;
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // CEF_INCLUDE_CAPI_CEF_FIND_HANDLER_CAPI_H_
+#endif  // CEF_INCLUDE_CAPI_CEF_GEOLOCATION_CAPI_H_

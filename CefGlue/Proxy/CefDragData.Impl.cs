@@ -114,7 +114,7 @@ namespace CefGlue
 
             if (success)
             {
-                return new CefStringList(nList);
+                return CefStringList.From(nList, true);
             }
             else
             {
@@ -122,7 +122,5 @@ namespace CefGlue
                 return null;
             }
         }
-
-
     }
 }

@@ -89,6 +89,5 @@
         {
             get { return this.context.JSBindingContext; }
         }
-
     }
 }
