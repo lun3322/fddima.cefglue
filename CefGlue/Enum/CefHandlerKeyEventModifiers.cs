@@ -9,6 +9,7 @@
     [Flags]
     public enum CefHandlerKeyEventModifiers
     {
+        None = 0,
         Shift = cef_handler_keyevent_modifiers_t.KEY_SHIFT,
         Ctrl = cef_handler_keyevent_modifiers_t.KEY_CTRL,
         Alt = cef_handler_keyevent_modifiers_t.KEY_ALT,
