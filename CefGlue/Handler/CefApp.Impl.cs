@@ -16,9 +16,10 @@ namespace CefGlue
         {
             ThrowIfObjectDisposed();
 
-            var m_registrar = CefSchemeRegistrar.From(registrar);
-
-            this.OnRegisterCustomSchemes(m_registrar);
+            using (var m_registrar = CefSchemeRegistrar.From(registrar))
+            {
+                this.OnRegisterCustomSchemes(m_registrar);
+            }
         }
 
         /// <summary>

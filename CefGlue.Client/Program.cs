@@ -32,6 +32,9 @@
             settings.LogFile = Path.GetDirectoryName(Application.ExecutablePath) + "/CEF.log";
             settings.LogSeverity = CefLogSeverity.Verbose;
             settings.JavaScriptFlags = "--expose_gc";
+#if DEBUG
+            settings.ReleaseDCheckEnabled = true;
+#endif
             // settings.GraphicsImplementation = CefGraphicsImplementation.DesktopInProcess;
 
             var app = new App();
