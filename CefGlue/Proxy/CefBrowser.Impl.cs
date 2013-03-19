@@ -4,6 +4,7 @@ namespace CefGlue
     using System.Collections.Generic;
     using CefGlue.Interop;
     using Diagnostics;
+    using System.Runtime.InteropServices;
 
     unsafe partial class CefBrowser
     {
@@ -394,9 +395,70 @@ namespace CefGlue
         {
             cef_key_info_t n_keyInfo;
             keyInfo.To(&n_keyInfo);
-
-            cef_browser_t.invoke_send_key_event(this.ptr, (cef_key_type_t)type, &n_keyInfo, (int)modifiers);
+#if WINDOWS
+            // Windows implementation assumes that n_keyInfo.key = WPARAM and n_modifiers = LPARAM
+            var n_modifiers = ToLParam(type, keyInfo, modifiers);
+#else
+            var n_modifiers = (int)modifiers;
+#endif
+            cef_browser_t.invoke_send_key_event(this.ptr, (cef_key_type_t)type, &n_keyInfo, n_modifiers);
         }
+
+#if WINDOWS
+        private static int ToLParam(CefKeyType type, CefKeyInfo keyInfo, CefHandlerKeyEventModifiers modifiers)
+        {
+            unchecked
+            {
+                var scanCode = MapVirtualKey((uint)keyInfo.Key, 0);
+                var lparam = 0x00000001 | (scanCode << 16); // Scan code, repeat=1
+                if (IsExtendedVirtualKey(keyInfo.Key))
+                    lparam |= (1u << 24); // Extended code if required
+
+                switch (type)
+                {
+                    case CefKeyType.KeyUp:
+                        lparam |= (1u << 30); // The previous key state. The value is always 1 for a WM_KEYUP message.
+                        lparam |= (1u << 31); // The transition state. The value is always 1 for a WM_KEYUP message.
+                        break;
+                    case CefKeyType.KeyDown:
+                        break;
+                    case CefKeyType.Char:
+                        if (keyInfo.Key > 0 && (modifiers & CefHandlerKeyEventModifiers.Alt) > 0)
+                            lparam |= (1u << 29); // The context code. The value is 1 if the ALT key is held down while the key is pressed; otherwise, the value is 0.
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                return (int)lparam;
+            }
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern uint MapVirtualKey(uint uCode, uint uMapType);
+
+        private static bool IsExtendedVirtualKey(int vk)
+        {
+            switch (vk)
+            {
+                case 33: // Page Up
+                case 34: // Page down
+                case 35: // End
+                case 36: // Home
+                case 37: // Left
+                case 38: // Up
+                case 39: // Right
+                case 40: // Down
+                case 45: // Insert
+                case 46: // Delete
+                case 163: // Right Ctrl
+                case 165: // Right Alt
+                    return true;
+                default:
+                    return false;
+            }
+        }
+#endif
 
         /// <summary>
         /// Send a mouse click event to the browser.
