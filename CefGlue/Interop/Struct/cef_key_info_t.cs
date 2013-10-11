@@ -13,7 +13,11 @@ namespace CefGlue.Interop
     internal unsafe partial struct cef_key_info_t
     {
         public int key;
-        public bool_t sysChar;
-        public bool_t imeChar;
+#if WINDOWS
+        // BOOL
+        public int sysChar;
+        // BOOL
+        public int imeChar;
+#endif
     }
 }
